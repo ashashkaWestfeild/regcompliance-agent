@@ -3,9 +3,9 @@
 Hard deadline is 11 Oct 23:59 IST. Target is **Sat 10 Oct, 15:00**; Sunday is the emergency
 buffer only.
 
-Revision 2 (26 Sep, 20:30): adds the Fri 2 Oct holiday, reflects what the corpus work found,
+Revision 2 (26 Sep, 20:14): adds the Fri 2 Oct holiday, reflects what the corpus work found,
 and folds in the patterns adopted from the reference material (section 3).
-Revision 3 (26 Sep, 21:00): aligned with the Unstop rules (section 7) and adds the guardrails
+Revision 3 (26 Sep, 20:40): aligned with the Unstop rules (section 7) and adds the guardrails
 layer (section 3a).
 
 ## 1. Status and budget
@@ -106,7 +106,7 @@ pipeline, and keeps the metadata logs updated. **Only you can do these:**
 | Tonight / Sun AM | Install WSL2 + Docker Desktop; create an API key with a spend cap | 1 h |
 | Tonight / Sun AM | Choose 2 of the 3 policy candidates (exclude your employer) | 5 min |
 | By Mon | Employer code of conduct (outside activities, IP clause) | 30 min |
-| By Mon | Post the AI-tools question in the Unstop Discussions tab (draft in PROJECT_LOG 21:00); open the logged-in Phase 2 "Submit" form and note every field; read the ET microsite (Claude cannot open it) | 30 min |
+| By Mon | Post the AI-tools question in the Unstop Discussions tab (draft in PROJECT_LOG 20:44); open the logged-in Phase 2 "Submit" form and note every field; read the ET microsite (Claude cannot open it) | 30 min |
 | Sun 27 | Review planted mutations for realism | 1 h |
 | Mon 28 – Tue 29 | **Blind-label ~30 obligation-to-control mappings** (15 per day) | 2 x 1 h |
 | Wed 7 | Manual baseline estimate: analyst hours per circular | 15 min |
