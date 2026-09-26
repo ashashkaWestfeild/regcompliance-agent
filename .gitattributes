@@ -1,0 +1,3 @@
+# Raw source documents must stay byte-identical: citation offsets and sha256 in
+# data/sources.yaml depend on it. Never let git rewrite line endings here.
+data/raw/** binary
