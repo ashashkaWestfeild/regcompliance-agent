@@ -5,6 +5,10 @@ RBI Directions number paragraphs ``1.``, ``2.`` ... and nest sub-clauses as ``(1
 A stack of marker *types* handles any order: a marker whose type is already open closes
 everything below it and becomes a sibling; a new type opens a child.
 
+Bank policies add other styles: ``a)``, ``iv.``, and decimal numbering (``2.2.8``). Marker
+variants are recognised for detection only; the stored text is never rewritten. Decimal numbers
+nest by their own components (``2.2.8`` is a child of ``2.2``).
+
 Unmarked blocks ("Explanation: ...", "Provided that ...") belong to the deepest open clause.
 Every clause span runs from its own first block to the start of the next clause at the same or
 a higher level, so ``text[start:end] == quote`` holds by construction.
@@ -15,8 +19,12 @@ from dataclasses import dataclass, field
 
 from regcomp.ingest.normalize import canonical
 
+_DEC = re.compile(r"^(\d{1,2}(?:\.\d{1,2})+)\.?\s+")
 _PARA = re.compile(r"^(\d{1,3})\.\s+")
-_PAREN = re.compile(r"^\(([0-9]{1,2}|[a-z]{1,2}|[ivxl]{1,6})\)\s*")
+_LABEL = r"[0-9]{1,2}|[a-z]{1,2}|[ivxl]{1,6}"
+_PAREN = re.compile(
+    rf"^(?:\((?P<p>{_LABEL})\)\s*|(?P<r>{_LABEL})\)\s+|(?P<d>[a-z]{{1,2}}|[ivxl]{{1,6}})\.\s+)"
+)
 _ROMAN = re.compile(r"^[ivxl]+$")
 _ROMAN_VALUES = {"i": 1, "v": 5, "x": 10, "l": 50}
 
@@ -34,8 +42,8 @@ class Block:
 class ParsedClause:
     ref: str  # "38", "38(2)", "5(1)(iv)(a)"
     label: str  # the marker itself: "38", "2", "iv", "a"
-    kind: str  # "para" | "num" | "roman" | "alpha"
-    depth: int  # 1 for numbered paragraphs
+    kind: str  # "para" | "dec" | "num" | "roman" | "alpha"
+    depth: int  # 1 for numbered paragraphs; number of components for decimals
     parent_ref: str | None
     chapter: str | None
     section: str | None
@@ -88,6 +96,9 @@ def build(blocks: list[Block]) -> ParsedDocument:
     opened: list[dict] = []  # clause dicts in document order
     open_nodes: list[dict] = []  # parallel to stack
     boundaries: list[tuple[int, int]] = []  # (position, depth) where clauses at >= depth end
+    seen: dict[str, int] = {}  # ref -> times used, for de-duplication
+    base_depth = 1
+    context: list[tuple[int, int, bool, str | None, str | None]] = []  # per block
 
     for block in blocks:
         text = canonical(block.text)
@@ -104,41 +115,51 @@ def build(blocks: list[Block]) -> ParsedDocument:
             else:
                 section = text
         else:
-            para = _PARA.match(text)
-            paren = None if para else _PAREN.match(text)
-            if para:
-                stack[:] = [("para", para.group(1))]
-                node = _new_node(para.group(1), "para", None, chapter, section, start)
-                boundaries.append((start, 1))
+            dec = _DEC.match(text)
+            para = None if dec else _PARA.match(text)
+            paren = None if (dec or para) else _PAREN.match(text)
+            if dec or para:
+                number = (dec or para).group(1)
+                depth = number.count(".") + 1
+                parent_ref = _decimal_parent(number, seen) if dec else None
+                ref = _unique(number, seen)
+                kind = "dec" if dec else "para"
+                base_depth = depth
+                stack[:] = [(kind, number)]
+                node = _new_node(ref, kind, parent_ref, chapter, section, start, depth=depth)
+                boundaries.append((start, depth))
                 opened.append(node)
                 open_nodes[:] = [node]
             elif paren and stack:
-                label = paren.group(1)
+                label = paren.group("p") or paren.group("r") or paren.group("d")
                 kind = _classify(label, stack)
                 types = [t for t, _ in stack]
-                if kind in types:
-                    cut = types.index(kind)
+                if kind in types[1:]:
+                    cut = types.index(kind, 1)
                     del stack[cut:]
                     del open_nodes[cut:]
                 parent = open_nodes[-1]
                 stack.append((kind, label))
+                depth = base_depth + len(stack) - 1
+                ref = _unique(f"{parent['ref']}({label})", seen)
                 node = _new_node(
-                    f"{parent['ref']}({label})",
+                    ref,
                     kind,
                     parent["ref"],
                     chapter,
                     section,
                     start,
                     label=label,
-                    depth=len(stack),
+                    depth=depth,
                 )
-                boundaries.append((start, len(stack)))
+                boundaries.append((start, depth))
                 opened.append(node)
                 open_nodes.append(node)
             # Unmarked block: nothing to open; it extends the deepest open clause.
             if block.amended_by and open_nodes:
                 open_nodes[-1]["amended_by"].extend(block.amended_by)
 
+        context.append((start, start + len(text), block.is_heading, chapter, section))
         parts.append(text)
         offset += len(text) + 1  # "\n" separator
 
@@ -164,7 +185,64 @@ def build(blocks: list[Block]) -> ParsedDocument:
                 amended_by=node["amended_by"],
             )
         )
+    clauses.extend(_unnumbered(doc_text, clauses, context))
+    clauses.sort(key=lambda c: c.char_start)
     return ParsedDocument(text=doc_text, clauses=clauses)
+
+
+UNNUMBERED_MIN_CHARS = 80
+
+
+def _unnumbered(doc_text, clauses, context) -> list[ParsedClause]:
+    """Body text outside every numbered clause (e.g. lists under a sub-heading, annex prose)
+    becomes clauses "U1", "U2", ... so nothing downstream silently loses it."""
+    covered = sorted((c.char_start, c.char_end) for c in clauses if c.depth == 1)
+    out: list[ParsedClause] = []
+    run: list[tuple[int, int, str | None, str | None]] = []
+
+    def flush():
+        if run and sum(e - s for s, e, _, _ in run) >= UNNUMBERED_MIN_CHARS:
+            s0, e0 = run[0][0], run[-1][1]
+            ref = f"U{len(out) + 1}"
+            out.append(
+                ParsedClause(
+                    ref=ref,
+                    label=ref,
+                    kind="unnumbered",
+                    depth=1,
+                    parent_ref=None,
+                    chapter=run[0][2],
+                    section=run[0][3],
+                    char_start=s0,
+                    char_end=e0,
+                    quote=doc_text[s0:e0],
+                )
+            )
+        run.clear()
+
+    for start, end, is_heading, chapter, section in context:
+        inside = any(cs <= start < ce for cs, ce in covered)
+        if inside or is_heading:
+            flush()
+        else:
+            run.append((start, end, chapter, section))
+    flush()
+    return out
+
+
+def _unique(ref: str, seen: dict[str, int]) -> str:
+    """Repeated numbering (e.g. a list restarting at "1.") gets "~2", "~3" suffixes."""
+    seen[ref] = seen.get(ref, 0) + 1
+    return ref if seen[ref] == 1 else f"{ref}~{seen[ref]}"
+
+
+def _decimal_parent(number: str, seen: dict[str, int]) -> str | None:
+    parts = number.split(".")
+    for i in range(len(parts) - 1, 0, -1):
+        prefix = ".".join(parts[:i])
+        if prefix in seen:
+            return prefix
+    return None
 
 
 def _new_node(ref, kind, parent, chapter, section, start, label=None, depth=1) -> dict:

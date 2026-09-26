@@ -75,3 +75,76 @@ def rbi_blocks(items: list[dict]) -> list[Block]:
 
 def parse_rbi_pdf(path: str | Path) -> ParsedDocument:
     return build(rbi_blocks(docling_items(path)))
+
+
+# ---------------------------------------------------------------- bank policies
+
+_MARKER = re.compile(
+    r"^(\d{1,2}(\.\d{1,2})+\.?|\d{1,3}\.|\([0-9a-z]{1,6}\)|[0-9a-z]{1,6}\)|[a-z]{1,2}\.|[ivxl]{1,6}\.)\s"
+)
+_TOC = re.compile(r"^(table of )?contents$", re.IGNORECASE)
+_BODY_START = re.compile(r"^(chapter\b|preamble|introduction|1\.\s|1\.1\b)", re.IGNORECASE)
+# In policies only these headings are hard boundaries; other sub-headings ("A. Terms ...",
+# "Example:") are ordinary text inside the current clause, so their lists keep a parent.
+_HARD_HEADING = re.compile(r"^(chapter|part|annex)", re.IGNORECASE)
+_FURNITURE_MIN_REPEATS = 8  # page headers repeat on every page; real text almost never does
+_SENTENCE_END = (".", ":", ";", "?", "!")
+
+
+def _furniture(items: list[dict]) -> set[str]:
+    counts: dict[str, int] = {}
+    for it in items:
+        key = " ".join(it["text"].split())
+        if key:
+            counts[key] = counts.get(key, 0) + 1
+    return {k for k, n in counts.items() if n >= _FURNITURE_MIN_REPEATS}
+
+
+def policy_blocks(items: list[dict]) -> list[Block]:
+    """Bank policy PDFs: drop page furniture, start after the table of contents, and re-join
+    paragraphs that a page break split in two."""
+    furniture = _furniture(items)
+    kept = [
+        it
+        for it in items
+        if it["label"] not in _SKIP_LABELS and " ".join(it["text"].split()) not in furniture
+    ]
+
+    toc = next((i for i, it in enumerate(kept) if _TOC.match(it["text"].strip())), -1)
+    start = next(
+        (
+            i
+            for i, it in enumerate(kept)
+            if i > toc and it["label"] != "table" and _BODY_START.match(it["text"].strip())
+        ),
+        0,
+    )
+
+    blocks: list[Block] = []
+    for it in kept[start:]:
+        text = it["text"].strip()
+        if not text:
+            continue
+        marked = bool(_MARKER.match(text))
+        heading = (
+            it["label"] in ("section_header", "title")
+            and not marked
+            and bool(_HARD_HEADING.match(text))
+        )
+        prev = blocks[-1] if blocks else None
+        if (
+            prev
+            and not prev.is_heading
+            and not heading
+            and not marked
+            and text[0].islower()
+            and not prev.text.rstrip().endswith(_SENTENCE_END)
+        ):
+            prev.text = f"{prev.text.rstrip()} {text}"
+            continue
+        blocks.append(Block(text=text, is_heading=heading))
+    return blocks
+
+
+def parse_policy_pdf(path: str | Path) -> ParsedDocument:
+    return build(policy_blocks(docling_items(path)))
