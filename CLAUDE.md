@@ -31,7 +31,7 @@ Declared not covered unless time remains after freeze: 13 cross-regulation, 14 r
 - Only public data goes to any LLM provider.
 
 ## Data and ground truth
-- Regulation: RBI KYC Master Direction + its amendment notifications (rbi.org.in). Need two versions for change intelligence. If the older version is unavailable, reconstruct it from amendment notifications.
+- Regulation: RBI (Commercial Banks – Know Your Customer) Directions, 2025 (RBI/DOR/2025-26/169, 28 Nov 2025). It replaced the 2016 KYC Master Direction, which is repealed; do not build on the 2016 MD. Three versions are on disk (original, after 29 Dec 2025 amendment, after 18 Sep 2026 amendment); provenance and sha256 in data/sources.yaml. STR/CTR numeric rules live in the PML Rules, not in the Directions.
 - Controls: publicly published KYC/AML policies of banks (not the user's employer).
 - Gap planting: a script mutates the public policies and writes an answer key. The answer key is committed to git BEFORE any system run (timestamped proof against "self-grading").
 - Mutation operators: delete control; weaken threshold/frequency; narrow scope; introduce contradiction; make stale (pre-amendment rule); strip owner/evidence (design deficiency).
