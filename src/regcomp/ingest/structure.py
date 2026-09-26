@@ -36,6 +36,8 @@ class Block:
     text: str
     is_heading: bool = False
     amended_by: list[str] = field(default_factory=list)  # e.g. "Inserted with effect from ..."
+    # (source item index, offset of that item's text inside this block's canonical text)
+    sources: list[tuple[int, int]] = field(default_factory=list)
 
 
 @dataclass
@@ -57,6 +59,7 @@ class ParsedClause:
 class ParsedDocument:
     text: str  # canonical text; every clause quote is a slice of it
     clauses: list[ParsedClause]
+    source_positions: dict[int, int] = field(default_factory=dict)  # source item -> char pos
 
 
 def _roman_to_int(s: str) -> int:
@@ -99,6 +102,7 @@ def build(blocks: list[Block]) -> ParsedDocument:
     seen: dict[str, int] = {}  # ref -> times used, for de-duplication
     base_depth = 1
     context: list[tuple[int, int, bool, str | None, str | None]] = []  # per block
+    source_positions: dict[int, int] = {}
 
     for block in blocks:
         text = canonical(block.text)
@@ -160,6 +164,8 @@ def build(blocks: list[Block]) -> ParsedDocument:
                 open_nodes[-1]["amended_by"].extend(block.amended_by)
 
         context.append((start, start + len(text), block.is_heading, chapter, section))
+        for item, off in block.sources:
+            source_positions[item] = start + off
         parts.append(text)
         offset += len(text) + 1  # "\n" separator
 
@@ -187,7 +193,7 @@ def build(blocks: list[Block]) -> ParsedDocument:
         )
     clauses.extend(_unnumbered(doc_text, clauses, context))
     clauses.sort(key=lambda c: c.char_start)
-    return ParsedDocument(text=doc_text, clauses=clauses)
+    return ParsedDocument(text=doc_text, clauses=clauses, source_positions=source_positions)
 
 
 UNNUMBERED_MIN_CHARS = 80

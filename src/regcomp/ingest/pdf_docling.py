@@ -9,6 +9,7 @@ import json
 import re
 from pathlib import Path
 
+from regcomp.ingest.normalize import canonical
 from regcomp.ingest.structure import Block, ParsedDocument, build
 
 CACHE_DIR = Path("data/parsed/docling_cache")
@@ -52,7 +53,9 @@ def docling_items(path: str | Path) -> list[dict]:
         items.append({"label": label, "text": text})
 
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    cache.write_text(json.dumps(items, ensure_ascii=False, indent=0), encoding="utf-8")
+    cache.write_text(
+        json.dumps(items, ensure_ascii=False, indent=0), encoding="utf-8", newline="\n"
+    )
     return items
 
 
@@ -153,8 +156,8 @@ def policy_blocks(items: list[dict]) -> list[Block]:
     paragraphs that a page break split in two."""
     furniture = _furniture(items)
     kept = [
-        it
-        for it in items
+        dict(it, _index=i)
+        for i, it in enumerate(items)
         if it["label"] not in _SKIP_LABELS and " ".join(it["text"].split()) not in furniture
     ]
 
@@ -170,7 +173,7 @@ def policy_blocks(items: list[dict]) -> list[Block]:
 
     blocks: list[Block] = []
     for it in kept[start:]:
-        text = it["text"].strip()
+        text = canonical(it["text"])
         if not text:
             continue
         marked = bool(_MARKER.match(text))
@@ -188,11 +191,17 @@ def policy_blocks(items: list[dict]) -> list[Block]:
             and text[0].islower()
             and not prev.text.rstrip().endswith(_SENTENCE_END)
         ):
-            prev.text = f"{prev.text.rstrip()} {text}"
+            prev.sources.append((it["_index"], len(prev.text) + 1))
+            prev.text = f"{prev.text} {text}"
             continue
-        blocks.append(Block(text=text, is_heading=heading))
+        blocks.append(Block(text=text, is_heading=heading, sources=[(it["_index"], 0)]))
     return blocks
 
 
 def parse_policy_pdf(path: str | Path) -> ParsedDocument:
-    return build(policy_blocks(docling_items(path)))
+    return parse_policy_items(docling_items(path))
+
+
+def parse_policy_items(items: list[dict]) -> ParsedDocument:
+    """Parse already-extracted items (used for mutated policies, which exist only as items)."""
+    return build(policy_blocks(items))
