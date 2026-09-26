@@ -9,7 +9,7 @@ All decisions below are settled unless the user reopens them.
 - Team: user (solo, part-time alongside a full-time job) + Claude. Budget ~90 hours (≈3 h weekdays, ≈9 h weekend days).
 - Goal: top 3. Optimize for the 8 evaluation criteria and a defensible grid claim.
 - Required deliverables (problem statement): (1) working demo covering every claimed area, (2) detailed structural architecture (process flow, actions, decisions, model usage, features). Self-declared 3x3 grid position with justification; over- AND under-claiming are penalized.
-- Unstop submission (checked 26 Sep): public GitHub repo URL, pitch deck (PDF/PPT), 2-4 minute demo video (hard limit), accessible demo link; uploads .pdf max 50 MB; one solution; editable until deadline. Plagiarism disqualifies: credit reference repos, never copy code verbatim. Rules say "Participants may use open-source tools and AI models"; no explicit ban on commercial LLMs or AI coding assistants, but the question has been raised with the organisers. Keep every stage runnable on an open-weights model via LiteLLM. Top 10 go to a virtual finale.
+- Unstop submission (checked 26 Sep): public GitHub repo URL, pitch deck (PDF/PPT), 2-4 minute demo video (hard limit), accessible demo link; uploads .pdf max 50 MB; one solution; editable until deadline. Plagiarism disqualifies: credit reference repos, never copy code verbatim. ET microsite rules (read 26 Sep from the user's PDF): "Open-source AI tools, libraries, datasets, and models are permitted." "All AI solutions, code, and assets must be original and developed during the hackathon." "Misconduct, cheating, or misuse of AI will result in disqualification." There is no explicit ban on commercial LLMs or AI coding assistants, but only open-source is explicitly permitted, so prefer open-weights models inside the product and disclose AI-assisted development in the README. Keep every stage runnable on an open-weights model via LiteLLM. Top 10 go to a virtual finale.
 
 ## Problem chosen: Problem 1 — Banking regulatory compliance agent
 Chain to implement and keep traceable over time:
@@ -106,7 +106,7 @@ Bank profile -> gaps with citations + one "why" panel (45 s) -> amendment arrive
 See docs/PLAN.md section 3a. Input (injection scanner, egress allowlist), output (schema, citation gate, number/negation fidelity, review queue), action (read-only what-if, blast-radius pause, humans close gaps, budget), data (LLM never sees raw evidence rows). No chat-topic rails; NeMo stays rejected.
 
 ## After submission
-Prepare a 5-minute pitch and a live-demo path for the finale (check finale date on Unstop).
+Prepare a 5-minute pitch and a live-demo path for the finale: virtual grand finale on 2 Nov 2026 (top 10 teams).
 
 ## Project metadata (outside the repo, not submitted)
 Folder: C:\Users\singh\OneDrive\Documents\AI Engineer\regcompliance-meta\
