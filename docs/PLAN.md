@@ -5,6 +5,8 @@ buffer only.
 
 Revision 2 (26 Sep, 20:30): adds the Fri 2 Oct holiday, reflects what the corpus work found,
 and folds in the patterns adopted from the reference material (section 3).
+Revision 3 (26 Sep, 21:00): aligned with the Unstop rules (section 7) and adds the guardrails
+layer (section 3a).
 
 ## 1. Status and budget
 
@@ -70,6 +72,30 @@ to the certified-copy route). See `data/sources.yaml`.
 | UI | Streamlit; replay mode can deploy to Streamlit Community Cloud if a live URL is required | reference repo `st_cloud_ui.py` |
 | **Not used** | Qdrant Cloud, Portkey, NeMo guardrails, AWS ECS, Batch API, Jev; RAGAS only as an optional extra metric on rationales | conflict with settled design or budget |
 
+## 3a. Guardrails (how they apply to a compliance agent)
+
+Chatbot-style topic rails (NeMo) do not fit: there is no open chat surface. The real risks are
+poisoned inputs, fabricated outputs and unsafe agent actions, so the guardrails sit there.
+Each one produces a number for the metrics page.
+
+| Layer | Guardrail | How | Metric | Built |
+|---|---|---|---|---|
+| Input | Indirect prompt injection in ingested docs (policies, draft circulars, feed items) | Documents always passed as delimited data. A deterministic scanner flags instruction-like text ("ignore previous", role/system phrases, "mark as covered") and quarantines the clause with a reviewer flag | Detection of planted injections; false flags on clean docs | Sun 27 (plant), Mon 28 (scanner) |
+| Input | Data egress | Only documents listed in `data/sources.yaml` or synthetic data may be sent to an LLM (allowlist check before each call) | Blocked-call count | Mon 28 |
+| Output | Schema | Strict Pydantic JSON; one repair-retry, then escalate | Repair rate | Mon 28 |
+| Output | Hallucinated citations | Citation gate: quote must equal `doc.text[start:end]` | Citation validity, rejection count | Wed 30 |
+| Output | Number and negation fidelity | Extracted threshold values must appear in the cited span; `must_not` requires a negation in the span | Mismatch rejections | Wed 30 |
+| Output | Low-confidence verdicts | Judges disagree or low confidence -> strong model -> human review queue | Auto-accept rate vs accuracy | Fri 2 |
+| Action | Least privilege | What-if mode gets read-only tools; only commit mode can write to the graph | Test: dry-run cannot write | Sat 3 |
+| Action | Blast radius | If a change event touches more than N% of mappings, the agent pauses for human approval | Pause count | Sat 3 |
+| Action | Humans in the lead | Agent may open gaps and draft remediation; closing a gap or accepting risk needs a reviewer | Reviewer actions logged | Sun 4 |
+| Action | Budget | Max tool calls / tokens / USD per change event -> escalate | Cost per circular | Sat 3 |
+| Data | PII in evidence | The LLM never sees raw evidence rows; the operating test is computed deterministically and only aggregates reach the LLM | Zero raw rows in prompts (trace check) | Sat 3 |
+
+The hackathon's own framing ("humans in the lead") and evaluation criterion 8 (hallucination,
+security, privacy, reliability, human oversight) map directly onto this table. It gets its own
+page in the deck.
+
 ## 4. Who does what
 
 Claude writes the code, tests and docs, explains each component as it is built, runs the
@@ -79,7 +105,8 @@ pipeline, and keeps the metadata logs updated. **Only you can do these:**
 |---|---|---|
 | Tonight / Sun AM | Install WSL2 + Docker Desktop; create an API key with a spend cap | 1 h |
 | Tonight / Sun AM | Choose 2 of the 3 policy candidates (exclude your employer) | 5 min |
-| By Mon | Hackathon rules (AI-code disclosure, "built during window", video length, deck/repo/URL format) + employer code of conduct | 1 h |
+| By Mon | Employer code of conduct (outside activities, IP clause) | 30 min |
+| By Mon | Post the AI-tools question in the Unstop Discussions tab (draft in PROJECT_LOG 21:00); open the logged-in Phase 2 "Submit" form and note every field; read the ET microsite (Claude cannot open it) | 30 min |
 | Sun 27 | Review planted mutations for realism | 1 h |
 | Mon 28 – Tue 29 | **Blind-label ~30 obligation-to-control mappings** (15 per day) | 2 x 1 h |
 | Wed 7 | Manual baseline estimate: analyst hours per circular | 15 min |
@@ -110,11 +137,11 @@ The final claim is decided on **Wed 7 Oct** from the evidence matrix.
 | **Sat 3 Oct** | 9 | **Change agent part 2**: re-extract, re-map affected edges only, recovery (repair-retry, escalate, cannot-assess), open gaps + remediation; injected-failure test. Evidence CSVs + design/operating tests | Agent handles the Sep 2026 amendment end to end, including one recovered failure |
 | **Sun 4 Oct** | 9 | What-if dry-run on a synthetic draft circular; reviewer override -> few-shot feedback; injection flagging; remediation polish; eval re-run | All claimed features exist. **CHECKPOINT 2** |
 | Mon 5 Oct | 3 | Streamlit: bank profile, gap dashboard, "why" panel, review queue | Core demo path clickable |
-| Tue 6 Oct | 3 | Streamlit: change timeline, metrics page, graph view; replay mode (optional Streamlit Cloud deploy) | Full demo path works offline |
+| Tue 6 Oct | 3 | Streamlit: change timeline, metrics page (including the guardrail report), graph view; replay mode; **deploy replay to Streamlit Community Cloud** (the rules make an accessible demo link mandatory) | Public demo URL works without API keys |
 | **Wed 7 Oct** | 3 | **FEATURE FREEZE.** Final eval, calibration plot, cost/latency; evidence matrix; decide claim | Numbers and claim frozen |
-| Thu 8 Oct | 3 | Architecture document | Written |
-| Fri 9 Oct | 3 | Rehearse the demo script; record the video; README / run instructions | Video recorded |
-| **Sat 10 Oct** | 6 | Fix what the rehearsal exposed; check against the submission format; **submit by 15:00** | Submitted |
+| Thu 8 Oct | 3 | Architecture document (`docs/ARCHITECTURE.md`) + **pitch deck** (PDF, 10-12 slides). **Submit v0 on Unstop tonight** (it can be replaced until the deadline) | Deck PDF; v0 submitted |
+| Fri 9 Oct | 3 | Rehearse; record the **2-4 minute** video (hard limit); upload unlisted and check the link while logged out; README / run instructions + AI-assistance disclosure | Video link works publicly |
+| **Sat 10 Oct** | 6 | Fix what the rehearsal exposed; check all links logged out; **final submit by 15:00** (edits allowed until 11 Oct 23:59) | Submitted |
 | Sun 11 Oct | - | Emergency buffer only | - |
 
 ### Checkpoints and cuts
@@ -125,20 +152,47 @@ The final claim is decided on **Wed 7 Oct** from the evidence matrix.
   cut what-if (feature 12).
 - **Docker still unavailable on Sun 27 midday:** switch to Neon (about 15 min). Parsers do not
   need a DB, so Sunday morning is unaffected.
-- **Cut order when slipping:** UI polish -> graph view -> Streamlit Cloud deploy -> reviewer
-  feedback loop -> what-if -> remediation depth -> evidence/effectiveness (6/7).
+- **Cut order when slipping:** UI polish -> graph view -> reviewer feedback loop -> what-if ->
+  remediation depth -> evidence/effectiveness (6/7). The public demo link is no longer
+  optional.
 - **Never cut:** answer key before first run, citation gate, eval harness, change agent,
   evidence matrix.
 
 ## 7. Submission package
 
-1. **Demo video (~5 min)**, following the script in CLAUDE.md.
-2. **Architecture document:** process flow, the agent graph (nodes, tools, decisions,
-   recovery), model per stage and why, reliability mechanisms, data provenance, grid claim with
-   the evidence matrix.
-3. **Repo:** README with one-command run, answer-key commit hash, and a statement that all
-   data is public or synthetic.
-4. **Evidence matrix:** feature | demo timestamp | architecture section | metric.
+Unstop rules, read 2026-09-26:
+- Deliverables: a working prototype (public GitHub URL), a **pitch deck (PDF or PPT)** and a
+  **2-4 minute demo video**.
+- Uploads in .pdf, max 50 MB. One solution per team.
+- All links public. Editable until the deadline; no late submissions.
+- Top 10 go to a virtual National Finale.
+
+1. **Public GitHub repo:**
+   - README with a one-command run and the public demo URL.
+   - The answer-key commit hash.
+   - A statement that all data is public or synthetic.
+   - An **AI-assistance disclosure** (Claude Code as coding assistant; LLM APIs used inside the
+     system).
+   - **Attribution** for patterns taken from the reference repos. The rules make plagiarism a
+     disqualifier, so we reuse ideas with credit and never copy code verbatim.
+2. **Pitch deck (PDF, 10-12 slides):**
+   - Problem and business impact.
+   - Architecture (process flow, agent graph, model per stage).
+   - Reliability and guardrails.
+   - Metrics.
+   - Evidence matrix.
+   - Grid claim F3/D2 with justification. The problem statement's "detailed structural
+     architecture" deliverable lives here plus `docs/ARCHITECTURE.md`.
+3. **Demo video, 2-4 minutes** (hard limit). The CLAUDE.md script is cut to fit:
+   - Bank profile -> gaps with citations and one "why" panel (45 s).
+   - Amendment arrives -> agent plans, re-maps, recovers from one failure, opens remediation
+     (75 s).
+   - What-if (20 s).
+   - Reviewer override (20 s).
+   - Metrics and guardrail report (30 s).
+   - Evidence matrix (10 s).
+4. **Accessible demo link:** replay mode on Streamlit Community Cloud. It needs no API keys and
+   no database.
 5. **Grid claim F3/D2**, justified by the matrix. Never D3 (no multimodal input).
 
 ## 8. Open decisions
@@ -146,4 +200,7 @@ The final claim is decided on **Wed 7 Oct** from the evidence matrix.
 - LLM provider/key. Plan assumes Anthropic; LiteLLM makes it swappable.
 - Docker Desktop (recommended) vs Neon.
 - Which 2 of Nainital / Central Bank of India / Dhanlaxmi (exclude employer).
-- Whether Unstop requires a live URL. This decides the Streamlit Cloud deploy.
+- Organisers' answer on commercial LLM APIs. Until then, keep every stage runnable on an
+  open-weights model via LiteLLM (config change only).
+- Whether the public repo should keep `CLAUDE.md`, which says you work at a bank. Recommend
+  keeping it but removing that phrase.

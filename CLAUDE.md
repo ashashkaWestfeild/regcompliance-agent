@@ -8,7 +8,8 @@ All decisions below are settled unless the user reopens them.
 - Phase 2 build sprint: 23 Sep 2026 11:00 IST -> 11 Oct 2026 23:59 IST. Target submission: Sat 10 Oct 15:00 IST (11 Oct is buffer only).
 - Team: user (solo, part-time alongside a full-time job) + Claude. Budget ~90 hours (≈3 h weekdays, ≈9 h weekend days).
 - Goal: top 3. Optimize for the 8 evaluation criteria and a defensible grid claim.
-- Required deliverables: (1) working demo covering every claimed area, (2) detailed structural architecture (process flow, actions, decisions, model usage, features). Self-declared 3x3 grid position with justification; over- AND under-claiming are penalized.
+- Required deliverables (problem statement): (1) working demo covering every claimed area, (2) detailed structural architecture (process flow, actions, decisions, model usage, features). Self-declared 3x3 grid position with justification; over- AND under-claiming are penalized.
+- Unstop submission (checked 26 Sep): public GitHub repo URL, pitch deck (PDF/PPT), 2-4 minute demo video (hard limit), accessible demo link; uploads .pdf max 50 MB; one solution; editable until deadline. Plagiarism disqualifies: credit reference repos, never copy code verbatim. Rules say "Participants may use open-source tools and AI models"; no explicit ban on commercial LLMs or AI coding assistants, but the question has been raised with the organisers. Keep every stage runnable on an open-weights model via LiteLLM. Top 10 go to a virtual finale.
 
 ## Problem chosen: Problem 1 — Banking regulatory compliance agent
 Chain to implement and keep traceable over time:
@@ -98,8 +99,11 @@ Superseded on 26 Sep (3-day slip). The live schedule, checkpoints, cut order, st
 ## Evidence matrix (build as you go)
 Columns: feature | demo timestamp | architecture section | metric. One row per claimed feature.
 
-## Demo script (~5 min)
-Bank profile -> applicable obligations with citations -> graph + prioritized gaps + one "why" panel -> new amendment arrives, agent plans, re-maps only affected edges, recovers from one injected failure, opens remediation -> what-if on a draft circular -> reviewer override changes a re-run -> metrics page -> evidence matrix.
+## Demo script (2-4 min hard limit; target 3:30)
+Bank profile -> gaps with citations + one "why" panel (45 s) -> amendment arrives, agent plans, re-maps only affected edges, recovers from one injected failure, opens remediation (75 s) -> what-if on a draft circular (20 s) -> reviewer override changes a re-run (20 s) -> metrics + guardrail report (30 s) -> evidence matrix (10 s).
+
+## Guardrails
+See docs/PLAN.md section 3a. Input (injection scanner, egress allowlist), output (schema, citation gate, number/negation fidelity, review queue), action (read-only what-if, blast-radius pause, humans close gaps, budget), data (LLM never sees raw evidence rows). No chat-topic rails; NeMo stays rejected.
 
 ## After submission
 Prepare a 5-minute pitch and a live-demo path for the finale (check finale date on Unstop).
