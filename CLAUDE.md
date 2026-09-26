@@ -103,6 +103,13 @@ Bank profile -> applicable obligations with citations -> graph + prioritized gap
 ## After submission
 Prepare a 5-minute pitch and a live-demo path for the finale (check finale date on Unstop).
 
+## Project metadata (outside the repo, not submitted)
+Folder: C:\Users\singh\OneDrive\Documents\AI Engineer\regcompliance-meta\
+- PROJECT_LOG.md: append a timestamped (IST) entry for every meaningful action: what was done, files/commits, decisions.
+- PROBLEMS_LOG.md: every problem hit, each attempted fix with timestamp, whether it worked and why, final solution. Update status as it changes.
+- project_chart.html: architecture, Gantt, feature status, blockers. Update stats, Gantt done/active tags, feature status and blockers at the end of each work session.
+Get the time with `date "+%Y-%m-%d %H:%M"`; never guess timestamps.
+
 ## Working agreement with the user
 - Direct, precise, no fluff or praise, no emojis. Explain intuition and first principles.
 - Challenge weak assumptions. Name analysis paralysis when scope refinement replaces building.

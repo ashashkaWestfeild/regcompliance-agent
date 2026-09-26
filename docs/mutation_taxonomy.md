@@ -14,7 +14,7 @@ Each operator maps to exactly one `GapType` (src/regcomp/schemas.py), so scoring
 | `weaken_threshold` | Loosen a number: longer deadline, lower frequency, higher monetary/percent threshold | `partial` | `weak_threshold` |
 | `narrow_scope` | Drop a customer segment / product / entity type from a control's scope | `partial` | `narrow_scope` |
 | `contradict` | Insert a second clause elsewhere in the policy that conflicts with an existing one | `partial` | `internal_contradiction` |
-| `make_stale` | Revert a control to the pre-amendment rule | `partial` (against new version), `covered` (against old) | `stale_control` |
+| `make_stale` | Revert a control to the pre-amendment rule (e.g. the 25% BO threshold) | `partial` (against new version), `covered` (against old) | `stale_control` |
 | `strip_design` | Remove owner and/or evidence/record-keeping language | `covered` on substance | `design_deficiency` |
 
 Not a text mutation: `operating_failure` is planted through the synthetic evidence CSVs
@@ -22,22 +22,32 @@ Not a text mutation: `operating_failure` is planted through the synthetic eviden
 
 ## Themes
 
-The themes come from public RBI penalty patterns. The user still has to check them against
-real KYC findings (generic only). Every example value below must be **verified against the
-Master Direction text before the answer key is generated**. I wrote them from memory and
-have not checked them.
+Regulation base: **RBI (Commercial Banks – Know Your Customer) Directions, 2025**, which
+replaced the 2016 Master Direction on 28 Nov 2025. Status column: checked against the
+current text (`data/raw/rbi/kycdir_v3_20260918.html`) on 2026-09-26. The user still has to
+confirm the themes match real-world KYC findings (generic only).
 
-| Theme | Obligation (to verify in MD) | Example mutation |
-|---|---|---|
-| `periodic_rekyc` | Periodic updation: high risk at least every 2 yrs, medium 8, low 10 | high risk 2 -> 5 yrs (`weaken_threshold`) |
-| `risk_categorization` | Customers risk-categorised; categorisation reviewed periodically | drop review clause (`delete_control`) |
-| `beneficial_owner` | Identify BO; company threshold lowered 25% -> 10% by the 2023 amendment | keep 25% (`make_stale`); drop trusts (`narrow_scope`) |
-| `ckycr_upload` | Upload KYC records to CKYCR within a fixed number of days of account opening | 10 -> 30 days (`weaken_threshold`) |
-| `str_ctr_reporting` | STR within 7 working days of the suspicion conclusion; CTR monthly for cash > INR 10 lakh | add "CTR filed quarterly" elsewhere (`contradict`) |
-| `tm_alert_review` | Transaction-monitoring alerts reviewed and closed with documented rationale | remove reviewer + record-keeping (`strip_design`) |
+| Theme | Obligation in the 2025 Directions | Status | Example mutation |
+|---|---|---|---|
+| `periodic_rekyc` | Periodic updation at least once every 2 yrs (high risk), 8 yrs (medium), 10 yrs (low) | verified | high risk 2 -> 5 yrs (`weaken_threshold`) |
+| `risk_categorization` | Periodic review of risk categorisation at least once every six months | verified | 6 -> 12 months (`weaken_threshold`); drop the review clause (`delete_control`) |
+| `beneficial_owner` | BO = natural person with more than 10% ownership/profits (company; partnership) | verified | revert to pre-2023 25% (`make_stale`); drop partnership/trust (`narrow_scope`) |
+| `ckycr_upload` | Upload KYC records to CKYCR within 10 days of commencement of an account-based relationship | verified | 10 -> 30 days (`weaken_threshold`) |
+| `fiu_reporting` | Furnish information under PML Rules 3/7 to FIU-IND; use FIU-IND e-filing utilities; Principal Officer arrangements | verified (see note) | remove Principal Officer arrangement (`strip_design`); contradictory filing channel (`contradict`) |
+| `ongoing_monitoring` | Align monitoring with risk category; intensified monitoring of high-risk accounts; money-mule diligence | verified, replaces `tm_alert_review` | drop high-risk intensified monitoring (`narrow_scope`); remove owner (`strip_design`) |
 
-The beneficial-owner threshold change is the best `make_stale` case. It is a real
-amendment, so the same fact also drives the change-intelligence demo.
+Notes:
+- **STR 7 working days / CTR ₹10 lakh are not in the Directions.** They come from the PML
+  (Maintenance of Records) Rules, 2005, which the Directions reference in para 52. Ingesting
+  the PML Rules would be cross-regulation (feature 13, out of scope), so mutations must not
+  target those numbers.
+- **`tm_alert_review` was dropped.** The Directions require systems that *generate* alerts but
+  say nothing about reviewing or closing them, so a mutation there would have no obligation
+  to score against.
+- The real amendments give the change-agent demo two cases:
+  - Dec 2025: CKYCR reliance Explanation, theme `ckycr_upload`.
+  - Sep 2026: FPIs added to the certified-copy alternative. Any policy naming only NRIs/PIOs
+    becomes a `narrow_scope` gap after the amendment.
 
 ## Design rules
 

@@ -1,0 +1,49 @@
+# Provenance for every input document. All public; no employer material.
+# sha256 values are of the files in data/raw/ as downloaded on 2026-09-26.
+
+regulation:
+  - id: kycdir_v1
+    title: "Reserve Bank of India (Commercial Banks – Know Your Customer) Directions, 2025"
+    reference_no: "RBI/DOR/2025-26/169 DOR.AML.REC.No.88/14.01.002/2025-26"
+    version_label: "KYCDIR-2025-orig"
+    issued_on: 2025-11-28
+    effective_from: 2025-11-28
+    file: data/raw/rbi/kycdir_v1_20251128.pdf
+    sha256: 76b24d359bb5d6b33c29c424cf1f7c0b8e3f9b0f16344b53388aa6ce4891f5c9
+    retrieved_from: "https://web.archive.org/web/20251130041311id_/https://rbidocs.rbi.org.in/rdocs/notification/PDFs/169MD.PDF"
+    note: "Original version; Wayback capture 2 days after issue."
+
+  - id: kycdir_v2
+    title: "... Directions, 2025 (Updated as on December 29, 2025)"
+    version_label: "KYCDIR-2025-upd-20251229"
+    effective_from: 2025-12-29
+    amended_by: "RBI (Commercial Banks – KYC) Amendment Directions, 2025, dated 2025-12-29 (RBI/2025-26/166)"
+    change_summary: "Inserts Explanation on reliance on CKYCR records: the RE that last uploaded/updated is responsible for identity/address verification; downloading bank need not re-verify if records are current, but stays responsible for the rest of CDD."
+    files:
+      - file: data/raw/rbi/kycdir_v2_20251229.pdf
+        sha256: 219315e5734312da46689ded59dafe1542339ac82d523eabf72f4b00e15175ea
+        retrieved_from: "https://web.archive.org/web/20260109000016id_/https://rbidocs.rbi.org.in/rdocs/notification/PDFs/169MD.PDF"
+      - file: data/raw/rbi/kycdir_v2_20251229.html
+        sha256: a232f92ab1bf1a2a89063cf6af8b0193856e40585316f9b1a1c66ef149220e3b
+        retrieved_from: "https://web.archive.org/web/20260318225113id_/https://rbi.org.in/scripts/BS_ViewMasDirections.aspx?id=13141"
+
+  - id: kycdir_v3
+    title: "... Directions, 2025 (Updated as on September 18, 2026)"
+    version_label: "KYCDIR-2025-upd-20260918"
+    effective_from: 2026-09-18
+    amended_by: "RBI (Commercial Banks – KYC) Amendment Directions, 2026, dated 2026-09-18"
+    change_summary: "Definition (v) 'Certified Copy': the alternative certification route for NRIs/PIOs is extended to Foreign Portfolio Investors (FPIs)."
+    file: data/raw/rbi/kycdir_v3_20260918.html
+    sha256: 595933edb9ac7ef5f82169e51c51c1e262c49b05d005947d6022f4701bf9f08d
+    retrieved_from: "https://rbi.org.in/scripts/BS_ViewMasDirections.aspx?id=13141"
+    note: "Current in-force version. PDF is behind a bot challenge; HTML used instead."
+
+reference_only:
+  - id: md2016
+    title: "Master Direction - Know Your Customer (KYC) Direction, 2016 (Updated as on August 14, 2025)"
+    status: "Repealed 2025-11-28 by the 2025 Directions; kept only for context."
+    file: data/raw/rbi/md2016_kyc_withdrawn.html
+    sha256: 14ffefc4e05fe4d2a331ffe5882093a112d52c88c0fc010d2fe80a38d4cac7ea
+    retrieved_from: "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11566"
+
+policies: []  # public bank KYC/AML policies; to be added after the user confirms the shortlist

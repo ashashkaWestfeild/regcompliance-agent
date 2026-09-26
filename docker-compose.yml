@@ -1,0 +1,22 @@
+# Local Postgres 16 + pgvector. db/schema.sql runs automatically on first start
+# (only when the data volume is empty; `docker compose down -v` to re-init).
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: regcomp-db
+    environment:
+      POSTGRES_USER: regcomp
+      POSTGRES_PASSWORD: regcomp_local_only
+      POSTGRES_DB: regcomp
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U regcomp -d regcomp"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  pgdata:
