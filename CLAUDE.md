@@ -26,14 +26,14 @@ Feature candidates (claim ≥8 only if proven): 1 ingestion, 2 change intelligen
 Declared not covered unless time remains after freeze: 13 cross-regulation, 14 regulatory contradiction detection.
 
 ## Hard rules
-- ZERO internal material from the user's employer (a bank). No policies, control libraries, templates, or data — not even anonymized. Public sources or synthetic only.
-- User must check: employer code of conduct (outside activities, IP clause); hackathon rules on AI-assisted code disclosure and "built during window"; Unstop submission format (video length, deck, repo, live URL).
+- ZERO internal material from any employer. No policies, control libraries, templates, or data, not even anonymized. Public sources or synthetic only.
+- Hackathon rules and submission format are recorded above; open questions are tracked in docs/PLAN.md section 8.
 - Commit daily so git history shows real progress.
 - Only public data goes to any LLM provider.
 
 ## Data and ground truth
 - Regulation: RBI (Commercial Banks – Know Your Customer) Directions, 2025 (RBI/DOR/2025-26/169, 28 Nov 2025). It replaced the 2016 KYC Master Direction, which is repealed; do not build on the 2016 MD. Three versions are on disk (original, after 29 Dec 2025 amendment, after 18 Sep 2026 amendment); provenance and sha256 in data/sources.yaml. STR/CTR numeric rules live in the PML Rules, not in the Directions.
-- Controls: publicly published KYC/AML policies of banks (not the user's employer).
+- Controls: publicly published KYC/AML policies of two commercial banks, Nainital Bank and Central Bank of India (data/sources.yaml).
 - Gap planting: a script mutates the public policies and writes an answer key. The answer key is committed to git BEFORE any system run (timestamped proof against "self-grading").
 - Mutation operators: delete control; weaken threshold/frequency; narrow scope; introduce contradiction; make stale (pre-amendment rule); strip owner/evidence (design deficiency).
 - Mutation themes (from public RBI penalty patterns; user to validate): periodic re-KYC, risk categorization, beneficial-owner identification, CKYCR upload timelines, STR/CTR reporting to FIU-IND, transaction-monitoring alert review.

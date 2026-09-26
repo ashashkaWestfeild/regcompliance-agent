@@ -14,3 +14,29 @@ jobs:
       - run: uv run ruff check .
       - run: uv run ruff format --check .
       - run: uv run pytest -q
+
+  schema:
+    # Loads db/schema.sql into a real Postgres 16 + pgvector, so the DDL is validated on every
+    # push without any local database.
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: regcomp
+          POSTGRES_PASSWORD: regcomp_ci_only
+          POSTGRES_DB: regcomp
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U regcomp -d regcomp"
+          --health-interval 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply schema
+        env:
+          PGPASSWORD: regcomp_ci_only
+        run: psql -h localhost -U regcomp -d regcomp -v ON_ERROR_STOP=1 -f db/schema.sql
+      - name: Smoke-check tables
+        env:
+          PGPASSWORD: regcomp_ci_only
+        run: psql -h localhost -U regcomp -d regcomp -v ON_ERROR_STOP=1 -c "SELECT count(*) FROM information_schema.tables WHERE table_schema='public';"

@@ -124,8 +124,8 @@ pipeline, and keeps the metadata logs updated. **Only you can do these:**
 |---|---|---|
 | Tonight / Sun AM | Enable CPU virtualisation (Intel VT-x) in BIOS, then install Podman Desktop (or Docker Desktop) and Ollama | 1 h |
 | Sun | Create a free account on one hosted open-weights provider (no card) for the strong model | 10 min |
-| Tonight / Sun AM | Choose 2 of the 3 policy candidates (exclude your employer) | 5 min |
-| By Mon | Employer code of conduct (outside activities, IP clause) | 30 min |
+| ~~Sat 26~~ | ~~Choose 2 policies~~: Nainital Bank + Central Bank of India (done 26 Sep 22:45) | - |
+| By Mon | Personal check: outside-activity approval, IP ownership, public-statement rules | 30 min |
 | By Mon | Post the AI-tools question in the Unstop Discussions tab (draft in PROJECT_LOG 20:44); open the logged-in Phase 2 "Submit" form and note every field; read the ET microsite (Claude cannot open it) | 30 min |
 | Sun 27 | Review planted mutations for realism | 1 h |
 | Mon 28 – Tue 29 | **Blind-label ~30 obligation-to-control mappings** (15 per day) | 2 x 1 h |
@@ -219,7 +219,6 @@ Unstop rules, read 2026-09-26:
 
 - Strong-model host for escalations (free open-weights tier); the local model is picked on Mon 28 by a small bake-off on the hand-labelled sample.
 - Docker Desktop (recommended) vs Neon.
-- Which 2 of Nainital / Central Bank of India / Dhanlaxmi (exclude employer).
 - Organisers' answer on commercial LLM APIs. Until then, keep every stage runnable on an
   open-weights model via LiteLLM (config change only).
 - Whether the public repo should keep `CLAUDE.md`, which says you work at a bank. Recommend

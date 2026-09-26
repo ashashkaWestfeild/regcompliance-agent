@@ -46,4 +46,28 @@ reference_only:
     sha256: 14ffefc4e05fe4d2a331ffe5882093a112d52c88c0fc010d2fe80a38d4cac7ea
     retrieved_from: "https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11566"
 
-policies: []  # public bank KYC/AML policies; to be added after the user confirms the shortlist
+# Public KYC/AML policies of two commercial banks (chosen 2026-09-26). Both predate the 2025
+# Directions and still cite the repealed 2016 Master Direction, so they may contain real,
+# unplanted gaps; those are labelled separately and never scored as false positives.
+policies:
+  - id: nainital
+    bank: "The Nainital Bank Ltd"
+    bank_type: "scheduled commercial bank (private sector)"
+    title: "Know Your Customer (KYC) and Anti-Money Laundering (AML) Policy"
+    pages: 80
+    note: "Document control says review due 31.10.2025; includes June 2025 MD changes."
+    file: data/raw/policies/nainital_kyc_aml_policy.pdf
+    sha256: 7f3ab8259d88352221fa0002d3013febff7667cc17b4d17981caf398c925cc54
+    retrieved_from: "https://www.nainitalbank.bank.in/pdf/KYC%20AMLPolicy.pdf"
+    retrieved_on: 2026-09-26
+
+  - id: centralbank
+    bank: "Central Bank of India"
+    bank_type: "scheduled commercial bank (public sector)"
+    title: "KYC / AML Policy 2025-26 (amended/updated up to 06.11.2024)"
+    pages: 129
+    note: "Bilingual header text (Hindi) on some pages."
+    file: data/raw/policies/centralbank_kyc_aml_policy_2025-26.pdf
+    sha256: 33e430e226be57e77e95a5b5596306b9f6579c7283716874ee6e82ca10cacf87
+    retrieved_from: "https://centralbank.bank.in/sites/default/files/2025-04/FINAL-KYCAML-Policy-2025-26-upto-06.11.2024.pdf"
+    retrieved_on: 2026-09-26

@@ -3,6 +3,7 @@ name = "regcomp"
 version = "0.1.0"
 description = "Agentic banking regulatory compliance (RBI KYC) - ET x Accenture hackathon"
 readme = "README.md"
+license = "Apache-2.0"
 authors = [
     { name = "ashashkaWestfeild", email = "priteshsingh101@gmail.com" }
 ]

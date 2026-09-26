@@ -51,7 +51,8 @@ Notes:
 
 ## Design rules
 
-1. **Base policies:** 2 or 3 public bank KYC/AML policies (never the user's employer). Record
+1. **Base policies:** 2 public commercial-bank KYC/AML policies (Nainital Bank, Central Bank of
+   India; never any employer's material). Record
    URL + sha256 in `data/sources.yaml`.
 2. **Density:** about 3 to 5 mutations per policy, at most one per section, so gaps stay
    attributable. Target around 25 to 30 planted gaps in total, enough to report per-operator
