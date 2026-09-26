@@ -51,10 +51,10 @@ Core schemas (fields, to be finalized on 24 Sep):
 - Bank profile: bank type, products, geography (drives applicability filter).
 
 Ingestion pipeline (deterministic workflow — deliberately NOT an agent):
-1. Structural parse by RBI paragraph numbering (no LLM; never fixed-size chunking).
+1. Structural parse by RBI paragraph numbering (no LLM; never fixed-size chunking). HTML sources via BeautifulSoup; PDFs (regulation v1, bank policies) via Docling (layout + tables, no OCR). Normalize text before any diff.
 2. Obligation extraction: cheap model, strict JSON, two passes; disagreement is flagged.
 3. Control extraction: same pattern.
-4. Candidate retrieval: local embeddings -> local reranker -> top 5 controls per obligation.
+4. Candidate retrieval: bge-m3 embeddings (top 20) -> FlashRank local reranker -> top 5 controls per obligation. If the reranker fails, fall back to embedding order (tenacity retry first).
 5. Mapping judge: cheap LLM judge (+ optional Jev as independent second judge). Agree + high confidence -> accept; else -> strong model -> human review queue.
 6. Citation verifier: every cited span must exist verbatim in source, else reject. Deterministic.
 7. Gap scoring: deterministic rules over control attributes + risk rubric; LLM writes rationale only.
@@ -72,14 +72,15 @@ Cross-cutting:
 - Routing: LiteLLM in-process. Eval mode = pinned model per stage, fallback OFF. Demo mode = fallback ON, served model logged per trace.
 - Cache: exact-match on (prompt hash, model, input hash). NEVER semantic cache (near-identical clauses differ in thresholds).
 - Batch API for offline extraction. Hard spend cap in provider console.
-- Tracing: Langfuse (self-hosted) or Logfire free tier.
+- Tracing: Logfire free tier (decided). Call logfire.configure() before any other app import; lazy-load heavy models (embedder, reranker).
 - Checkpointing: LangGraph Postgres checkpointer (resume after crash).
 - Security: uploaded docs treated as untrusted data; delimited in prompts; instruction-like content flagged.
 - Trainability: reviewer overrides stored and fed back as few-shot corrections + threshold recalibration.
 - Replay mode: deterministic demo from cache.
 - UI: Streamlit — graph view, gap dashboard, per-verdict "why" panel, review queue, metrics page, change timeline.
 
-Rejected tools (do not reintroduce without the user's say-so): OmniRoute (fallback mixes models into eval numbers; compression can drop "shall not"/thresholds; ToS risk), semantic caching, NeMo guardrails, AWS ECS deployment, multimodal parsing (ColPali/OCR), Neo4j.
+Rejected tools (do not reintroduce without the user's say-so): OmniRoute (fallback mixes models into eval numbers; compression can drop "shall not"/thresholds; ToS risk), semantic caching, NeMo guardrails, AWS ECS deployment, multimodal parsing (ColPali/OCR), Neo4j, Qdrant Cloud (vectors stay in pgvector next to the versioned graph), Portkey (external proxy; LiteLLM is in-process).
+Reference material: two Krish Naik 8-hour RAG marathons (repos d-hackmt/8hr-MARATHON, sourangshupal/8hr-MARATHON). Adopted from them: Docling, FlashRank, Logfire gotchas, tenacity retry + fallback, Postgres checkpointer setup, guardrail test cases in the golden set, optional Streamlit Cloud deploy of replay mode.
 Jev (TypeSafe AI, typed calibrated decisions): optional second judge only, added after eval harness exists, only if metrics improve. Pipeline must run without it. Verify its calibration with a reliability plot before thresholding on it.
 
 ## Metrics (the D2 proof)
