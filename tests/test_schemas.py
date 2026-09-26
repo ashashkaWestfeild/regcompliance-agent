@@ -5,8 +5,14 @@ import pytest
 from pydantic import ValidationError
 
 from regcomp.schemas import (
-    ControlTest, ControlTestKind, ControlTestResult, JudgeOutput, Mapping,
-    ReviewStatus, Span, Verdict,
+    ControlTest,
+    ControlTestKind,
+    ControlTestResult,
+    JudgeOutput,
+    Mapping,
+    ReviewStatus,
+    Span,
+    Verdict,
 )
 
 DOC = uuid4()
@@ -21,10 +27,19 @@ def judge(v=Verdict.MISSING):
 
 
 def mapping(**kw):
-    base = dict(key="m1", source_version="v1", effective_from=date(2024, 1, 1),
-                obligation_id=uuid4(), control_id=None, verdict=Verdict.MISSING,
-                rationale="r", obligation_citations=[span()], judges=[judge()],
-                confidence=0.9, status=ReviewStatus.AUTO)
+    base = dict(
+        key="m1",
+        source_version="v1",
+        effective_from=date(2024, 1, 1),
+        obligation_id=uuid4(),
+        control_id=None,
+        verdict=Verdict.MISSING,
+        rationale="r",
+        obligation_citations=[span()],
+        judges=[judge()],
+        confidence=0.9,
+        status=ReviewStatus.AUTO,
+    )
     return Mapping(**(base | kw))
 
 
@@ -53,8 +68,16 @@ def test_effective_interval_order():
 
 def test_operating_test_without_evidence_must_be_cannot_assess():
     with pytest.raises(ValidationError):
-        ControlTest(control_id=uuid4(), kind=ControlTestKind.OPERATING,
-                    result=ControlTestResult.EFFECTIVE, rationale="r")
-    ok = ControlTest(control_id=uuid4(), kind=ControlTestKind.OPERATING,
-                     result=ControlTestResult.CANNOT_ASSESS, rationale="no evidence")
+        ControlTest(
+            control_id=uuid4(),
+            kind=ControlTestKind.OPERATING,
+            result=ControlTestResult.EFFECTIVE,
+            rationale="r",
+        )
+    ok = ControlTest(
+        control_id=uuid4(),
+        kind=ControlTestKind.OPERATING,
+        result=ControlTestResult.CANNOT_ASSESS,
+        rationale="no evidence",
+    )
     assert ok.result is ControlTestResult.CANNOT_ASSESS

@@ -55,22 +55,41 @@ computes risk. That split is the "high demonstrable reliability" argument for D2
 Two real amendments drive the demo: 29 Dec 2025 (CKYCR reliance) and 18 Sep 2026 (FPIs added
 to the certified-copy route). See `data/sources.yaml`.
 
-## 3. Stack
+## 3. Stack (open-source first, user directive 26 Sep)
 
-| Piece | Choice | Source / reason |
-|---|---|---|
-| DB | Postgres 16 + pgvector in Docker (fallback: Neon free tier) | CLAUDE.md |
-| Regulation parsing | HTML (BeautifulSoup) for v2/v3; Docling for PDF v1 | HTML is clean; Docling fixes PDF word-splitting noise (P-012) |
-| Policy parsing | **Docling** (layout + tables, no OCR) | reference session 2; policies contain tables |
-| LLM routing | LiteLLM in-process; cheap = Claude Haiku 4.5, strong = Claude Sonnet 5 | provider to confirm |
-| Embeddings | bge-m3 local (sentence-transformers) | CLAUDE.md |
-| Reranker | **FlashRank** (local, CPU) with fall-back to embedding order on failure | reference session 1 |
-| Agent | LangGraph + Postgres checkpointer | reference repo has working checkpointer code |
-| Tracing | Logfire free tier; configure before imports, lazy-load models | reference repo gotchas |
-| Retries | tenacity (exponential backoff), then escalate | reference repo pattern |
-| Cache | exact-match table in Postgres | CLAUDE.md (never semantic cache) |
-| UI | Streamlit; replay mode can deploy to Streamlit Community Cloud if a live URL is required | reference repo `st_cloud_ui.py` |
-| **Not used** | Qdrant Cloud, Portkey, NeMo guardrails, AWS ECS, Batch API, Jev; RAGAS only as an optional extra metric on rationales | conflict with settled design or budget |
+Principle: every component is open source (OSI licence) unless no practical open option
+exists; the few exceptions are free hosting services, listed explicitly. Total cash cost
+target: **INR 0**.
+
+| Piece | Choice | Licence | Reason |
+|---|---|---|---|
+| DB | PostgreSQL 16 + pgvector | PostgreSQL / PostgreSQL | CLAUDE.md |
+| Containers | Podman Desktop (fully open source), running our `docker-compose.yml`; Docker Desktop is the fallback (free for personal use, proprietary app). Both need CPU virtualisation enabled in BIOS | Apache-2.0 | open-source first |
+| Regulation parsing | HTML via BeautifulSoup for v2/v3; Docling for PDF v1 | MIT / MIT | HTML is clean; Docling fixes PDF word-split noise (P-012) |
+| Policy parsing | Docling (layout + tables, no OCR) | MIT | reference session 2 |
+| **LLM (local)** | Ollama serving an 8B-14B open-weights instruct model on the RTX 4060 (8 GB): extraction passes, cheap judge, injection classifier | MIT (Ollama); model licence per model | free, private, on-prem story |
+| **LLM (strong)** | A larger open-weights model (70B-120B class) via a free hosted tier, used only for escalations | open-weights model; host is a free service | laptop cannot run 70B well; model stays open |
+| LLM routing | LiteLLM in-process; stage -> model mapping in config; a paid API model is possible only as an explicit, logged opt-in | MIT | swap without code changes |
+| Embeddings | bge-m3 local (sentence-transformers) | MIT | CLAUDE.md |
+| Reranker | FlashRank (local, CPU); fall back to embedding order on failure | Apache-2.0 | reference session 1 |
+| Agent | LangGraph + Postgres checkpointer | MIT | reference repo has checkpointer code |
+| Tracing + eval tracking | **MLflow** (local server): OpenTelemetry-compatible LLM traces plus experiment runs for every eval | Apache-2.0 | replaces Logfire, whose backend is SaaS; one tool for traces and metrics |
+| Retries | tenacity | Apache-2.0 | reference repo pattern |
+| Cache | exact-match table in Postgres | - | CLAUDE.md (never semantic cache) |
+| UI | Streamlit; replay mode deployed on Streamlit Community Cloud (free hosting service) | Apache-2.0 | public demo link is mandatory |
+| Quality | ruff (lint + format), pytest, pre-commit, GitHub Actions CI | MIT / MIT / MIT / free for public repos | industry standard |
+| **Not used** | Qdrant Cloud, Portkey, NeMo guardrails, AWS ECS, Batch API, Jev, Logfire; RAGAS only as an optional extra metric | - | conflict with settled design, SaaS, or budget |
+
+Business angle for the deck: open-weights models plus self-hosted components mean a bank can
+run the whole system inside its own perimeter, with no customer or policy data leaving it.
+
+### Engineering standards
+
+- `uv` lockfile; `ruff` lint and format; `pytest` unit tests; GitHub Actions CI on every push.
+- `.env.example` (no secrets in git); config in `pydantic-settings`; structured logging.
+- Architecture Decision Records in `docs/adr/` (one short file per settled decision; they feed
+  the architecture document).
+- Open-source licence file in the repo (Apache-2.0 proposed; the user decides).
 
 ## 3a. Guardrails (how they apply to a compliance agent)
 
@@ -103,7 +122,8 @@ pipeline, and keeps the metadata logs updated. **Only you can do these:**
 
 | When | Task | Time |
 |---|---|---|
-| Tonight / Sun AM | Install WSL2 + Docker Desktop; create an API key with a spend cap | 1 h |
+| Tonight / Sun AM | Enable CPU virtualisation (Intel VT-x) in BIOS, then install Podman Desktop (or Docker Desktop) and Ollama | 1 h |
+| Sun | Create a free account on one hosted open-weights provider (no card) for the strong model | 10 min |
 | Tonight / Sun AM | Choose 2 of the 3 policy candidates (exclude your employer) | 5 min |
 | By Mon | Employer code of conduct (outside activities, IP clause) | 30 min |
 | By Mon | Post the AI-tools question in the Unstop Discussions tab (draft in PROJECT_LOG 20:44); open the logged-in Phase 2 "Submit" form and note every field; read the ET microsite (Claude cannot open it) | 30 min |
@@ -197,7 +217,7 @@ Unstop rules, read 2026-09-26:
 
 ## 8. Open decisions
 
-- LLM provider/key. Plan assumes Anthropic; LiteLLM makes it swappable.
+- Strong-model host for escalations (free open-weights tier); the local model is picked on Mon 28 by a small bake-off on the hand-labelled sample.
 - Docker Desktop (recommended) vs Neon.
 - Which 2 of Nainital / Central Bank of India / Dhanlaxmi (exclude employer).
 - Organisers' answer on commercial LLM APIs. Until then, keep every stage runnable on an

@@ -15,7 +15,7 @@ lets the change agent re-map only affected edges.
 
 from __future__ import annotations
 
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from enum import StrEnum
 from typing import Annotated
 from uuid import UUID, uuid4
@@ -24,7 +24,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 def _now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 Confidence = Annotated[float, Field(ge=0.0, le=1.0)]
@@ -306,7 +306,9 @@ class Mapping(Versioned):
     def _control_consistency(self):
         if self.verdict is Verdict.MISSING and self.control_id is not None:
             raise ValueError("MISSING verdict must not name a control")
-        if self.verdict is not Verdict.MISSING and (self.control_id is None or not self.control_citations):
+        if self.verdict is not Verdict.MISSING and (
+            self.control_id is None or not self.control_citations
+        ):
             raise ValueError("COVERED/PARTIAL requires a control and its citations")
         return self
 

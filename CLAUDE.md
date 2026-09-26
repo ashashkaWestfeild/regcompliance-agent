@@ -70,10 +70,11 @@ Change agent (the agentic centerpiece, LangGraph):
 - What-if mode (feature 12): same agent on a draft circular, dry-run, outputs projected gap delta without committing.
 
 Cross-cutting:
+- Models: open-weights only by default (user directive 26 Sep). Local Ollama on the RTX 4060 for extraction and cheap judging; a larger open-weights model on a free hosted tier for escalations. A paid API model is only an explicit, logged opt-in.
 - Routing: LiteLLM in-process. Eval mode = pinned model per stage, fallback OFF. Demo mode = fallback ON, served model logged per trace.
 - Cache: exact-match on (prompt hash, model, input hash). NEVER semantic cache (near-identical clauses differ in thresholds).
 - Batch API for offline extraction. Hard spend cap in provider console.
-- Tracing: Logfire free tier (decided). Call logfire.configure() before any other app import; lazy-load heavy models (embedder, reranker).
+- Tracing and eval tracking: MLflow (Apache-2.0, local), replacing Logfire on 26 Sep per the user's open-source-first directive. Lazy-load heavy models (embedder, reranker).
 - Checkpointing: LangGraph Postgres checkpointer (resume after crash).
 - Security: uploaded docs treated as untrusted data; delimited in prompts; instruction-like content flagged.
 - Trainability: reviewer overrides stored and fed back as few-shot corrections + threshold recalibration.
@@ -114,6 +115,9 @@ Folder: C:\Users\singh\OneDrive\Documents\AI Engineer\regcompliance-meta\
 - PROBLEMS_LOG.md: every problem hit, each attempted fix with timestamp, whether it worked and why, final solution. Update status as it changes.
 - project_chart.html: architecture, Gantt, feature status, blockers. Update stats, Gantt done/active tags, feature status and blockers at the end of each work session.
 Get the time with `date "+%Y-%m-%d %H:%M"`; never guess timestamps.
+
+## Open-source-first directive (user, 26 Sep)
+Keep the project to industry standards and use open-source tools wherever practical. Stack and licences: docs/PLAN.md section 3. Any non-open component must be named as an exception with a reason.
 
 ## Working agreement with the user
 - Direct, precise, no fluff or praise, no emojis. Explain intuition and first principles.
