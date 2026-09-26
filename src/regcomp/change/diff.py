@@ -48,25 +48,26 @@ def diff(old: ParsedDocument, new: ParsedDocument) -> list[ClauseChange]:
     new_own = {c.ref: own_text(c, new) for c in new.clauses}
     changes: list[ClauseChange] = []
 
+    old_key = {r: for_diff(t) for r, t in old_own.items()}
+    new_key = {r: for_diff(t) for r, t in new_own.items()}
+
     for ref in [c.ref for c in new.clauses if c.ref in old_own]:
         a, b = old_own[ref], new_own[ref]
         if a == b:
-            cls = "unchanged"
-        elif for_diff(a) == for_diff(b):
-            cls = "cosmetic"
+            changes.append(ClauseChange("unchanged", ref, ref, a, b, 1.0))
+        elif old_key[ref] == new_key[ref]:
+            changes.append(ClauseChange("cosmetic", ref, ref, a, b, 1.0))
         else:
-            cls = "modified"
-        changes.append(ClauseChange(cls, ref, ref, a, b, _ratio(a, b)))
+            score = _ratio(old_key[ref], new_key[ref])
+            changes.append(ClauseChange("modified", ref, ref, a, b, score))
 
     only_old = [r for r in old_own if r not in new_own]
     only_new = [r for r in new_own if r not in old_own]
     for nref in only_new:
-        best = max(only_old, key=lambda o: _ratio(old_own[o], new_own[nref]), default=None)
-        score = _ratio(old_own[best], new_own[nref]) if best else 0.0
+        best, score = _best_match(new_key[nref], only_old, old_key)
         if best and score >= RENUMBER_MIN_SIMILARITY:
             only_old.remove(best)
-            same = for_diff(old_own[best]) == for_diff(new_own[nref])
-            cls = "cosmetic" if same else "modified"
+            cls = "cosmetic" if old_key[best] == new_key[nref] else "modified"
             changes.append(ClauseChange(cls, best, nref, old_own[best], new_own[nref], score))
         else:
             changes.append(ClauseChange("new", None, nref, None, new_own[nref], score))
@@ -79,5 +80,23 @@ def substantive(changes: list[ClauseChange]) -> list[ClauseChange]:
     return [c for c in changes if c.change_class in ("modified", "new", "repealed")]
 
 
-def _ratio(a: str, b: str) -> float:
-    return SequenceMatcher(None, for_diff(a), for_diff(b), autojunk=False).ratio()
+def _best_match(key: str, candidates: list[str], keys: dict[str, str]) -> tuple[str | None, float]:
+    """Most similar candidate, using difflib's cheap upper bounds to skip hopeless pairs."""
+    best, best_score = None, 0.0
+    floor = RENUMBER_MIN_SIMILARITY
+    for cand in candidates:
+        other = keys[cand]
+        shorter, longer = sorted((len(key), len(other)))
+        if longer and 2 * shorter / (shorter + longer) < floor:
+            continue  # length alone caps the ratio below the threshold
+        sm = SequenceMatcher(None, key, other, autojunk=False)
+        if sm.real_quick_ratio() < floor or sm.quick_ratio() < floor:
+            continue
+        score = sm.ratio()
+        if score > best_score:
+            best, best_score = cand, score
+    return best, best_score
+
+
+def _ratio(a_key: str, b_key: str) -> float:
+    return SequenceMatcher(None, a_key, b_key, autojunk=False).ratio()

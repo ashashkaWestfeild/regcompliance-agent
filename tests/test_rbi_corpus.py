@@ -52,3 +52,20 @@ def test_sep_2026_amendment_is_the_only_substantive_change(v2, v3):
     assert [(c.change_class, c.new_ref) for c in changed] == [("modified", "5(1)(v)")]
     assert "Foreign Portfolio Investors (FPIs)" in changed[0].new_text
     assert "Foreign Portfolio Investors" not in changed[0].old_text
+
+
+# PDF versions: parsed from the committed Docling cache, so Docling itself is not needed here.
+V1_PDF = "data/raw/rbi/kycdir_v1_20251128.pdf"
+V2_PDF = "data/raw/rbi/kycdir_v2_20251229.pdf"
+
+
+def test_dec_2025_amendment_is_the_only_substantive_change_in_pdfs():
+    from regcomp.ingest.pdf_docling import parse_rbi_pdf
+
+    v1, v2 = parse_rbi_pdf(V1_PDF), parse_rbi_pdf(V2_PDF)
+    for doc in (v1, v2):
+        assert [int(c.ref) for c in doc.clauses if c.kind == "para"] == list(range(1, 84))
+        assert all(doc.text[c.char_start : c.char_end] == c.quote for c in doc.clauses)
+    changed = substantive(diff(v1, v2))
+    assert [(c.change_class, c.new_ref) for c in changed] == [("modified", "65(10)(iv)")]
+    assert "CKYCR" in changed[0].new_text and "Explanation" in changed[0].new_text

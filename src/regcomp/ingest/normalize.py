@@ -34,5 +34,7 @@ def canonical(text: str) -> str:
 def for_diff(text: str) -> str:
     """Comparison key: case-folded, punctuation-folded, whitespace-free."""
     t = unicodedata.normalize("NFKC", text).translate(_QUOTES).casefold()
-    t = t.replace("[", "").replace("]", "")
+    # Brackets from footnote markers and hyphens lost at PDF line ends ("Income-tax" vs
+    # "Incometax") are not substantive.
+    t = t.replace("[", "").replace("]", "").replace("-", "").replace("­", "")
     return _WS.sub("", t)

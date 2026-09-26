@@ -64,13 +64,61 @@ def rbi_blocks(items: list[dict]) -> list[Block]:
         default=first_para,
     )
     blocks = []
+    expected = 1  # next paragraph number; used to split blocks Docling merged across paragraphs
     for it in items[start:]:
         if it["label"] in _SKIP_LABELS:
             continue
         if _SIGNATURE.search(it["text"]):
             break
-        blocks.append(Block(text=it["text"], is_heading=it["label"] in ("section_header", "title")))
+        for text in _split_inline_paragraphs(it["text"].strip(), expected):
+            lead = _LEAD_PARA.match(text)
+            if lead:
+                expected = int(lead.group(1)) + 1
+            blocks.append(_rbi_block(text, it["label"]))
     return blocks
+
+
+_LEAD_PARA = re.compile(r"^(\d{1,3})\.\s")
+_INLINE_PARA = re.compile(r"(?<=[.:;\]])\s+(\d{1,3})\.\s+(?=[A-Z‘'\"(])")
+
+
+def _split_inline_paragraphs(text: str, expected: int) -> list[str]:
+    """Split "... directions. 69. Collection of ... 70. The bank ..." at paragraph numbers,
+    but only at the next expected number, so an ordinary "5." inside a sentence never splits."""
+    lead = _LEAD_PARA.match(text)
+    if lead:
+        expected = int(lead.group(1)) + 1
+    parts, cut = [], 0
+    for m in _INLINE_PARA.finditer(text):
+        if int(m.group(1)) == expected:
+            parts.append(text[cut : m.start()].strip())
+            cut = m.start(1)
+            expected += 1
+    parts.append(text[cut:].strip())
+    return [piece for p in parts if p for piece in _split_inline_subclauses(p)]
+
+
+_INLINE_SUB = re.compile(r"(?:(?<=[:;])|(?<=\band)|(?<=\bor))\s+\((\d{1,2})\)\s")
+
+
+def _split_inline_subclauses(text: str) -> list[str]:
+    """Split "... shall ensure: (1) to undertake ...; and (2) adoption ..." at sequential
+    sub-clause numbers only (1, 2, 3 ...), after ':' ';' 'and' or 'or'."""
+    parts, cut, expected = [], 0, 1
+    for m in _INLINE_SUB.finditer(text):
+        if int(m.group(1)) == expected:
+            parts.append(text[cut : m.start()].strip())
+            cut = m.start(1) - 1  # keep the opening parenthesis
+            expected += 1
+    parts.append(text[cut:].strip())
+    return [p for p in parts if p]
+
+
+def _rbi_block(text: str, label: str) -> Block:
+    # Docling often tags a numbered paragraph's title line ("6. KYC Policy:") as a heading;
+    # a heading that starts with a clause marker is a clause, not a boundary.
+    heading = label in ("section_header", "title") and not _MARKER.match(text)
+    return Block(text=text, is_heading=heading)
 
 
 def parse_rbi_pdf(path: str | Path) -> ParsedDocument:
