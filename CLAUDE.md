@@ -5,7 +5,7 @@ All decisions below are settled unless the user reopens them.
 
 ## Context
 - Hackathon: ET AI Hackathon: Agentic Edition (Economic Times x Accenture), hosted on Unstop.
-- Phase 2 build sprint: 23 Sep 2026 11:00 IST -> 11 Oct 2026 23:59 IST. Submit by afternoon of 11 Oct, not at the deadline.
+- Phase 2 build sprint: 23 Sep 2026 11:00 IST -> 11 Oct 2026 23:59 IST. Target submission: Sat 10 Oct 15:00 IST (11 Oct is buffer only).
 - Team: user (solo, part-time alongside a full-time job) + Claude. Budget ~90 hours (≈3 h weekdays, ≈9 h weekend days).
 - Goal: top 3. Optimize for the 8 evaluation criteria and a defensible grid claim.
 - Required deliverables: (1) working demo covering every claimed area, (2) detailed structural architecture (process flow, actions, decisions, model usage, features). Self-declared 3x3 grid position with justification; over- AND under-claiming are penalized.
@@ -92,28 +92,7 @@ Jev (TypeSafe AI, typed calibrated decisions): optional second judge only, added
 - Business impact: circular-to-impact-assessment time, agent vs manual baseline (user's estimate, labeled as such).
 
 ## Schedule
-| Date | Work | Exit |
-|---|---|---|
-| Wed 23 Sep | Rules/format check, code-of-conduct read, repo, corpus download, verify older version | Constraints known, corpus on disk |
-| Thu 24 Sep | Schemas + mutation taxonomy | Schemas committed |
-| Fri 25 Sep | Mutation script + answer key committed; start hand-labeling (15/day) | Answer key in git |
-| Sat–Sun 26–27 Sep | Parse -> extract -> map -> gaps, crude end to end | Gap list for one policy |
-| Mon 28 Sep | Eval harness v1, citation gate, baseline | First metrics table |
-| Tue–Wed 29–30 Sep | Iterate on numbers, tiering, review thresholds, optional Jev | Metrics improving |
-| Thu–Fri 1–2 Oct | Change agent loop + versioned graph | Agent handles one real amendment |
-| Sat–Sun 3–4 Oct | Feed, what-if, prioritization, remediation, effectiveness, feedback loop | All 12 candidates exist |
-| Mon–Tue 5–6 Oct | UI | Demo path clickable |
-| Wed 7 Oct | Hardening, replay mode, final eval | Final numbers |
-| Thu 8 Oct | FEATURE FREEZE. Evidence matrix, decide claim | Claim decided |
-| Fri 9 Oct | Architecture document | Written |
-| Sat 10 Oct | Demo video, finalize matrix | Video done |
-| Sun 11 Oct | Buffer, submit by afternoon | Submitted |
-
-Checkpoints: 28 Sep with no end-to-end run -> single-pass extraction, no dual judge, push change agent later.
-4 Oct with unstable agent -> reduce to diff -> graph query -> re-map with recovery; cut what-if.
-
-Cut order when slipping: UI polish -> Jev -> remediation depth -> what-if -> feedback loop.
-Never cut: eval harness, citation gate, change agent, evidence matrix.
+Superseded on 26 Sep (3-day slip). The live schedule, checkpoints, cut order, stack simplifications and feature tiers are in docs/PLAN.md.
 
 ## Evidence matrix (build as you go)
 Columns: feature | demo timestamp | architecture section | metric. One row per claimed feature.
@@ -131,4 +110,4 @@ Prepare a 5-minute pitch and a live-demo path for the finale (check finale date 
 - Say explicitly when something is uncertain or speculative.
 
 ## Next action
-Draft the core schemas (above) as Pydantic models + Postgres DDL, and the mutation taxonomy/script design. The user validates the mutation themes against real-world KYC findings (generic, no employer specifics).
+Schemas, DDL and mutation taxonomy are done (src/regcomp/schemas.py, db/schema.sql, docs/mutation_taxonomy.md). Follow docs/PLAN.md section 6 from the current date.
