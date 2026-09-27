@@ -115,6 +115,8 @@ Folder: C:\Users\singh\OneDrive\Documents\AI Engineer\regcompliance-meta\
 - PROJECT_LOG.md: append a timestamped (IST) entry for every meaningful action: what was done, files/commits, decisions.
 - PROBLEMS_LOG.md: every problem hit, each attempted fix with timestamp, whether it worked and why, final solution. Update status as it changes.
 - project_chart.html: architecture, Gantt, feature status, blockers. Update stats, Gantt done/active tags, feature status and blockers at the end of each work session.
+- Flow maps: whenever a new process/data flow is built or designed, add it to project_chart.html as a Mermaid diagram (verify it renders) and keep existing flow maps current (user rule, 27 Sep).
+- PROJECT_LOG.md has a "Current status" block at the top: update it at the end of every work step.
 Get the time with `date "+%Y-%m-%d %H:%M"`; never guess timestamps.
 
 ## Open-source-first directive (user, 26 Sep)
