@@ -12,3 +12,6 @@ data/parsed/*.json
 # Organiser-provided brief for shortlisted teams: keep local, never publish.
 docs/et_hackathon_detailed_problem_statements_branded.pdf
 
+
+# Pipeline run outputs (regenerable from the LLM cache)
+eval/runs/

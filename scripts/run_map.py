@@ -1,0 +1,424 @@
+"""Stage 2 of the crude end-to-end run (dev set): load -> embed -> retrieve -> judge -> gaps.
+
+Reads eval/runs/<run>/{obligations,controls}.json from run_extract.py, resets the pipeline
+tables in Postgres (never llm_cache), loads documents/clauses/obligations/controls, embeds with
+bge-m3 into pgvector, retrieves the top-K controls per obligation, judges per regulation unit,
+applies the deterministic gap rules, and writes mappings + gaps. Prints a crude preview against
+the frozen dev answer key as counts.
+
+    uv run python scripts/run_map.py --run e2e1
+"""
+
+import argparse
+import csv
+import hashlib
+import json
+import sys
+import time
+import uuid
+from collections import Counter, defaultdict
+from datetime import date
+from pathlib import Path
+
+from psycopg.types.json import Jsonb
+
+from regcomp.db import connect
+from regcomp.ingest.pdf_docling import parse_policy_items
+from regcomp.ingest.rbi_html import parse_file
+from regcomp.llm import STAGE_MODELS, embed
+from regcomp.pipeline.judge import judge_unit
+
+REGULATION = "data/raw/rbi/kycdir_v3_20260918.html"
+REG_VERSION = "KYCDIR-2025-upd-20260918"
+REG_EFFECTIVE = date(2026, 9, 18)
+DEV_POLICY = "data/mutated/nainital.items.json"
+POLICY_VERSION = "nainital-mutated-350b8e0"
+POLICY_EFFECTIVE = date(2026, 9, 27)
+DEV_KEY = "eval/answer_key_nainital.jsonl"
+TOP_K = 5
+PIPELINE_TABLES = (
+    "gap, remediation, mapping, control_test, evidence, review_override, clause_diff, "
+    "change_event, embedding, obligation, control, clause, document, bank_profile"
+)
+
+
+def deepest(doc, pos: int) -> str | None:
+    hits = [c for c in doc.clauses if c.char_start <= pos < c.char_end]
+    return max(hits, key=lambda c: c.depth).ref if hits else None
+
+
+def vec_literal(v: list[float]) -> str:
+    return "[" + ",".join(f"{x:.6f}" for x in v) + "]"
+
+
+def load(conn, reg, pol, obligations, controls):
+    conn.execute(f"TRUNCATE {PIPELINE_TABLES} CASCADE")
+    reg_id, pol_id = uuid.uuid4(), uuid.uuid4()
+    for doc_id, kind, issuer, title, version, text, synthetic in (
+        (
+            reg_id,
+            "master_direction",
+            "RBI",
+            "RBI (Commercial Banks - KYC) Directions, 2025",
+            REG_VERSION,
+            reg.text,
+            False,
+        ),
+        (
+            pol_id,
+            "policy",
+            "Nainital Bank",
+            "KYC/AML Policy (planted-gap dev copy)",
+            POLICY_VERSION,
+            pol.text,
+            True,
+        ),
+    ):
+        conn.execute(
+            "INSERT INTO document (id, kind, issuer, title, version_label, sha256, text,"
+            " is_synthetic) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+            (
+                doc_id,
+                kind,
+                issuer,
+                title,
+                version,
+                hashlib.sha256(text.encode()).hexdigest(),
+                text,
+                synthetic,
+            ),
+        )
+    clause_ids = {}
+    rows = []
+    for prefix, doc_id, doc, version, eff in (
+        ("REG", reg_id, reg, REG_VERSION, REG_EFFECTIVE),
+        ("POL", pol_id, pol, POLICY_VERSION, POLICY_EFFECTIVE),
+    ):
+        for c in doc.clauses:
+            cid = uuid.uuid4()
+            clause_ids[(prefix, c.ref)] = cid
+            rows.append(
+                (
+                    cid,
+                    f"{prefix}:{c.ref}",
+                    version,
+                    eff,
+                    doc_id,
+                    c.ref,
+                    c.parent_ref,
+                    c.section,
+                    c.char_start,
+                    c.char_end,
+                    c.quote,
+                )
+            )
+    with conn.cursor() as cur:
+        cur.executemany(
+            "INSERT INTO clause (id, key, source_version, effective_from, document_id,"
+            " clause_ref, parent_ref, heading, char_start, char_end, quote)"
+            " VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            rows,
+        )
+
+    extraction = {
+        "model": STAGE_MODELS["extract_obligations"],
+        "passes": 1,
+        "pass_agreement": False,
+    }
+    ob_rows, per_unit = [], defaultdict(int)
+    for o in obligations:
+        per_unit[o["unit_ref"]] += 1
+        o["id"] = uuid.uuid4()
+        o["ref"] = deepest(reg, o["char_start"]) or o["clause_ref"]
+        span = {
+            "document_id": str(reg_id),
+            "char_start": o["char_start"],
+            "char_end": o["char_end"],
+            "quote": o["quote"],
+        }
+        ob_rows.append(
+            (
+                o["id"],
+                f"OBL:{o['unit_ref']}#{per_unit[o['unit_ref']]}",
+                REG_VERSION,
+                REG_EFFECTIVE,
+                clause_ids[("REG", o["clause_ref"])],
+                o["ref"],
+                Jsonb(span),
+                o["actor"],
+                o["modality"],
+                o["action"],
+                o["action"],
+                Jsonb({"raw": o["threshold"]}) if o.get("threshold") else None,
+                Jsonb({"raw": o.get("applies_to")}),
+                Jsonb(extraction),
+            )
+        )
+    ct_rows, per_unit = [], defaultdict(int)
+    ctl_extraction = dict(extraction, model=STAGE_MODELS["extract_controls"])
+    for c in controls:
+        per_unit[c["unit_ref"]] += 1
+        c["id"] = uuid.uuid4()
+        c["ref"] = deepest(pol, c["char_start"]) or c["clause_ref"]
+        span = {
+            "document_id": str(pol_id),
+            "char_start": c["char_start"],
+            "char_end": c["char_end"],
+            "quote": c["quote"],
+        }
+        ct_rows.append(
+            (
+                c["id"],
+                f"CTL:{c['unit_ref']}#{per_unit[c['unit_ref']]}",
+                POLICY_VERSION,
+                POLICY_EFFECTIVE,
+                pol_id,
+                c["ref"],
+                c["objective"],
+                c["type"],
+                c["nature"],
+                c.get("frequency"),
+                Jsonb({"raw": c["threshold"]}) if c.get("threshold") else None,
+                Jsonb({"raw": c.get("scope")}),
+                c.get("owner"),
+                c.get("evidence"),
+                Jsonb(span),
+                Jsonb(ctl_extraction),
+            )
+        )
+    with conn.cursor() as cur:
+        cur.executemany(
+            "INSERT INTO obligation (id, key, source_version, effective_from, clause_id,"
+            " source_clause_ref, source_span, actor, modality, action, object, threshold,"
+            " applicability, extraction) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            ob_rows,
+        )
+        cur.executemany(
+            "INSERT INTO control (id, key, source_version, effective_from, document_id,"
+            " control_ref, objective, type, nature, frequency, threshold, scope, owner,"
+            " expected_evidence, source_span, extraction)"
+            " VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            ct_rows,
+        )
+    return reg_id, pol_id
+
+
+def embed_all(conn, obligations, controls):
+    ob_text = [f"{o['action']}. {o.get('threshold') or ''} {o['quote']}" for o in obligations]
+    ct_text = [f"{c['objective']}. {c['quote']}" for c in controls]
+    vectors = embed(ob_text + ct_text)
+    rows = [
+        ("obligation", o["id"], "bge-m3", vec_literal(v))
+        for o, v in zip(obligations, vectors[: len(obligations)], strict=True)
+    ]
+    rows += [
+        ("control", c["id"], "bge-m3", vec_literal(v))
+        for c, v in zip(controls, vectors[len(obligations) :], strict=True)
+    ]
+    with conn.cursor() as cur:
+        cur.executemany(
+            "INSERT INTO embedding (owner_kind, owner_id, model, vec) VALUES (%s,%s,%s,%s::vector)",
+            rows,
+        )
+    return dict(zip([o["id"] for o in obligations], vectors[: len(obligations)], strict=True))
+
+
+def retrieve(conn, ob_vectors) -> dict:
+    out = {}
+    for oid, v in ob_vectors.items():
+        rows = conn.execute(
+            "SELECT owner_id, 1 - (vec <=> %s::vector) FROM embedding"
+            " WHERE owner_kind = 'control' ORDER BY vec <=> %s::vector LIMIT %s",
+            (vec_literal(v), vec_literal(v), TOP_K),
+        ).fetchall()
+        out[oid] = [(r[0], float(r[1])) for r in rows]
+    return out
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--run", required=True)
+    args = ap.parse_args()
+    run = Path("eval/runs") / args.run
+    obligations = json.loads((run / "obligations.json").read_text(encoding="utf-8"))["items"]
+    controls = json.loads((run / "controls.json").read_text(encoding="utf-8"))["items"]
+    reg = parse_file(REGULATION)
+    pol = parse_policy_items(json.loads(Path(DEV_POLICY).read_text(encoding="utf-8")))
+    t0 = time.time()
+
+    with connect(autocommit=True) as conn:
+        load(conn, reg, pol, obligations, controls)
+        print(
+            f"loaded {len(obligations)} obligations, {len(controls)} controls "
+            f"({time.time() - t0:.0f}s)",
+            flush=True,
+        )
+        ob_vectors = embed_all(conn, obligations, controls)
+        print(f"embedded ({time.time() - t0:.0f}s)", flush=True)
+        hits = retrieve(conn, ob_vectors)
+        print(f"retrieved top-{TOP_K} ({time.time() - t0:.0f}s)", flush=True)
+
+        by_ctl = {c["id"]: c for c in controls}
+        units = defaultdict(list)
+        for o in obligations:
+            units[o["unit_ref"]].append(o)
+        results = {}
+        for i, obs in enumerate(units.values(), 1):
+            cand_ids = list(dict.fromkeys(cid for o in obs for cid, _ in hits[o["id"]]))
+            local = {f"C{n}": cid for n, cid in enumerate(cand_ids, 1)}
+            candidates = {k: by_ctl[v] for k, v in local.items()}
+            reverse = {v: k for k, v in local.items()}
+            payload = [
+                {
+                    "id": f"O{n}",
+                    "modality": o["modality"],
+                    "quote": o["quote"],
+                    "threshold": o.get("threshold"),
+                    "applies_to": o.get("applies_to"),
+                    "candidates": [reverse[cid] for cid, _ in hits[o["id"]]],
+                }
+                for n, o in enumerate(obs, 1)
+            ]
+            for r in judge_unit(payload, candidates, conn):
+                o = obs[int(r["obligation"][1:]) - 1]
+                r["control_uuid"] = local.get(r["control"]) if r["control"] else None
+                results[o["id"]] = r
+            if i % 10 == 0 or i == len(units):
+                print(f"[{time.strftime('%H:%M:%S')}] judged {i}/{len(units)} units", flush=True)
+
+        write_mappings_and_gaps(conn, obligations, results, hits, run)
+    preview(obligations, results)
+    return 0
+
+
+def write_mappings_and_gaps(conn, obligations, results, hits, run: Path):
+    risk = {"missing": ("high", 0.8), "partial": ("medium", 0.5), "covered": ("low", 0.2)}
+    gap_rows = []
+    with conn.cursor() as cur:
+        for o in obligations:
+            r = results.get(o["id"])
+            if r is None:
+                continue
+            mid = uuid.uuid4()
+            sim = dict(hits[o["id"]]).get(r["control_uuid"]) if r["control_uuid"] else None
+            rank = (
+                [cid for cid, _ in hits[o["id"]]].index(r["control_uuid"]) + 1
+                if r["control_uuid"] in dict(hits[o["id"]])
+                else None
+            )
+            status = "auto" if r["citation_ok"] and r["confidence"] >= 0.7 else "escalated"
+            cur.execute(
+                "INSERT INTO mapping (id, key, source_version, effective_from, obligation_id,"
+                " control_id, verdict, rationale, obligation_citations, control_citations,"
+                " judges, confidence, status, retrieval_rank, reranker_score)"
+                " VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                (
+                    mid,
+                    f"MAP:{o['id']}",
+                    REG_VERSION,
+                    REG_EFFECTIVE,
+                    o["id"],
+                    r["control_uuid"],
+                    r["verdict"],
+                    r["rationale"],
+                    Jsonb([{"quote": o["quote"]}]),
+                    Jsonb(
+                        [{"quote_start": r.get("control_quote_start")}] if r["control_uuid"] else []
+                    ),
+                    Jsonb([{"judge": "cheap", "model": STAGE_MODELS["judge"], **r}]),
+                    max(0.0, min(1.0, float(r["confidence"]))),
+                    status,
+                    rank,
+                    sim,
+                ),
+            )
+            if r["gap_type"]:
+                inherent, score = risk.get(r["verdict"], ("medium", 0.5))
+                cur.execute(
+                    "INSERT INTO gap (key, source_version, effective_from, type, obligation_id,"
+                    " control_id, mapping_id, inherent_risk, residual_risk, priority_score,"
+                    " rationale) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                    (
+                        f"GAP:{o['id']}",
+                        REG_VERSION,
+                        REG_EFFECTIVE,
+                        r["gap_type"],
+                        o["id"],
+                        r["control_uuid"],
+                        mid,
+                        inherent,
+                        inherent,
+                        score,
+                        r["rationale"],
+                    ),
+                )
+                gap_rows.append(
+                    (
+                        o["ref"],
+                        o["modality"],
+                        r["verdict"],
+                        r["issue"],
+                        r["gap_type"],
+                        r["confidence"],
+                        o["quote"][:200],
+                        r["rationale"],
+                    )
+                )
+    with (run / "gaps.csv").open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(
+            [
+                "regulation_ref",
+                "modality",
+                "verdict",
+                "issue",
+                "gap_type",
+                "confidence",
+                "obligation_quote",
+                "rationale",
+            ]
+        )
+        w.writerows(sorted(gap_rows))
+
+
+def preview(obligations, results):
+    verdicts = Counter(r["verdict"] for r in results.values())
+    gaps = Counter(r["gap_type"] for r in results.values() if r["gap_type"])
+    cites = Counter(r["citation_ok"] for r in results.values())
+    print(f"\nmappings: {dict(verdicts)}; judged {len(results)}/{len(obligations)} obligations")
+    print(f"gaps by type: {dict(gaps)}")
+    print(f"control citations verified: {cites[True]}/{sum(cites.values())}")
+
+    key = [json.loads(line) for line in Path(DEV_KEY).read_text(encoding="utf-8").splitlines()]
+    gap_refs = defaultdict(set)
+    for o in obligations:
+        r = results.get(o["id"])
+        if r and r["gap_type"]:
+            gap_refs[o["ref"]].add(r["gap_type"])
+
+    def reported(refs):
+        return set().union(*(gap_refs.get(ref, set()) for ref in refs)) if refs else set()
+
+    muts = [k for k in key if k["kind"] == "mutation"]
+    detected = [k for k in muts if reported(k["target_obligation_refs"])]
+    typed = [
+        k
+        for k in detected
+        if reported(k["target_obligation_refs"]) & set(k["acceptable_gap_types"])
+    ]
+    decoys = [k for k in key if k["kind"] == "decoy"]
+    decoy_hits = [k for k in decoys if reported(k["target_obligation_refs"])]
+    print("\nCRUDE PREVIEW vs frozen dev key (ref-level match only, not the real harness):")
+    print(
+        f"  gaps detected {len(detected)}/{len(muts)} (type in accepted set {len(typed)}/"
+        f"{len(muts)}), decoys flagged {len(decoy_hits)}/{len(decoys)}"
+    )
+    for k in muts:
+        print(
+            f"  {k['mutation_id']:5} {k['target_obligation_refs']} -> "
+            f"{sorted(reported(k['target_obligation_refs'])) or 'no gap reported'}"
+        )
+
+
+if __name__ == "__main__":
+    sys.exit(main())

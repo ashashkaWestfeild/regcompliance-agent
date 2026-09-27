@@ -19,7 +19,7 @@ CREATE TYPE test_kind      AS ENUM ('design','operating');
 CREATE TYPE test_result    AS ENUM ('effective','ineffective','cannot_assess');
 CREATE TYPE gap_type       AS ENUM ('missing_control','weak_threshold','narrow_scope',
                                     'internal_contradiction','stale_control',
-                                    'design_deficiency','operating_failure');
+                                    'design_deficiency','operating_failure','unspecified');
 CREATE TYPE risk_level     AS ENUM ('low','medium','high','critical');
 CREATE TYPE gap_status     AS ENUM ('open','in_remediation','closed','accepted');
 CREATE TYPE defense_line   AS ENUM ('1LoD','2LoD','3LoD');
@@ -232,6 +232,18 @@ CREATE TABLE review_override (
     reason      text NOT NULL,
     reviewer    text NOT NULL,
     created_at  timestamptz NOT NULL DEFAULT now()
+);
+
+-- ------------------------------------------------------------ LLM cache
+CREATE TABLE IF NOT EXISTS llm_cache (
+    key          char(64) PRIMARY KEY,
+    stage        text NOT NULL,
+    model        text NOT NULL,
+    request      jsonb NOT NULL,
+    response     jsonb NOT NULL,
+    latency_ms   int,
+    eval_tokens  int,
+    created_at   timestamptz NOT NULL DEFAULT now()
 );
 
 -- ------------------------------------------------------------ embeddings

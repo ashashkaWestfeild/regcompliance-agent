@@ -102,6 +102,7 @@ class GapType(StrEnum):
     STALE_CONTROL = "stale_control"
     DESIGN_DEFICIENCY = "design_deficiency"
     OPERATING_FAILURE = "operating_failure"
+    UNSPECIFIED = "unspecified"  # partial mapping without a specific reason
 
 
 class RiskLevel(StrEnum):
