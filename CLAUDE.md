@@ -119,6 +119,10 @@ Get the time with `date "+%Y-%m-%d %H:%M"`; never guess timestamps.
 ## Open-source-first directive (user, 26 Sep)
 Keep the project to industry standards and use open-source tools wherever practical. Stack and licences: docs/PLAN.md section 3. Any non-open component must be named as an exception with a reason.
 
+## Git hygiene
+- Stage explicit paths (`git add <files>`); never `git add -A` / `git add .`. Twice on 26-27 Sep a blanket add published files that must stay local (the organiser brief; a pre-review answer key).
+- Check `git status --short` before every commit. The answer key is committed only in the user-approved approval commit.
+
 ## Working agreement with the user
 - Direct, precise, no fluff or praise, no emojis. Explain intuition and first principles.
 - Challenge weak assumptions. Name analysis paralysis when scope refinement replaces building.
