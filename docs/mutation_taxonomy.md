@@ -46,8 +46,9 @@ Notes:
   to score against.
 - The real amendments give the change-agent demo two cases:
   - Dec 2025: CKYCR reliance Explanation, theme `ckycr_upload`.
-  - Sep 2026: FPIs added to the certified-copy alternative. Any policy naming only NRIs/PIOs
-    becomes a `narrow_scope` gap after the amendment.
+  - Sep 2026: FPIs added to the certified-copy alternative. The provision is permissive
+    ("may"), so a policy naming only NRIs/PIOs gets an **advisory** ("policy update
+    recommended"), never a gap (user decision 27 Sep; real finding R01).
 
 ## Design rules
 

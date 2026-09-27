@@ -1,0 +1,107 @@
+- rbi_page_id: 13140
+  title: Responsible Business Conduct
+  new_url: https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13140
+  new_sha256: e753dbeb5b83701a99949107fdc850368a526d1cee58baba792a8aaeeb419632
+  old_wayback: http://web.archive.org/web/20260615134056id_/https://www.rbi.org.in/SCRIPTs/BS_ViewMasDirections.aspx?id=13140
+  old_captured: '20260615134056'
+  old_sha256: 8ede09983582da92249d9cb768d7d36c3f9bb20356cca62f5f8a2066cfd3a6e9
+  truth_clauses:
+  - '121'
+- rbi_page_id: 13145
+  title: Resolution of Stressed Assets
+  new_url: https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13145
+  new_sha256: 92dfed797487e157362882e22834cf26b81a994db51af712994030c747d33e0d
+  old_wayback: http://web.archive.org/web/20260614102144id_/https://www.rbi.org.in/SCRIPTs/BS_ViewMasDirections.aspx?id=13145
+  old_captured: '20260614102144'
+  old_sha256: 7db046219fd1ff6cdf4e7b8094264adf7e88b51f9200e03f9b5befdd8fc32d87
+  truth_clauses:
+  - '13'
+  - 6(3)(v)
+  - 6(8)
+- rbi_page_id: 13146
+  title: Income Recognition, Asset Classification and Provisioning
+  new_url: https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13146
+  new_sha256: 11fa904fe0c473e85c54fd9cb13ae159bc4c564b2ade54981494192053767866
+  old_wayback: http://web.archive.org/web/20260617074423id_/https://www.rbi.org.in/SCRIPTs/BS_ViewMasDirections.aspx?id=13146
+  old_captured: '20260617074423'
+  old_sha256: 14d2590017b56d3f1610cb75b3965891ae273405434eaffce3da150314b3a0f8
+  truth_clauses:
+  - '139'
+  - 57(4)
+  - 62(3)
+  - 80(6)
+  - '84'
+- rbi_page_id: 13152
+  title: Concentration Risk Management
+  new_url: https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13152
+  new_sha256: ba46cb312b9af0985a9a5cde0182380b3dd772da5885615432d8ef08c9dfd4a7
+  old_wayback: http://web.archive.org/web/20260617160229id_/https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13152
+  old_captured: '20260617160229'
+  old_sha256: f5bb36dc7b8173c6e65b96cfdf37885c9836337c8f0bb0a7518784337b991f10
+  truth_clauses:
+  - '100'
+  - '101'
+  - '102'
+  - '107'
+  - '95'
+  - '98'
+  - '99'
+- rbi_page_id: 13153
+  title: Credit Risk Management
+  new_url: https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13153
+  new_sha256: 3d2a449bcd3ac83465f55944f80b475abaccb80c8118d06959cdefa62c9835b5
+  old_wayback: http://web.archive.org/web/20260614101206id_/https://www.rbi.org.in/SCRIPTs/BS_ViewMasDirections.aspx?id=13153
+  old_captured: '20260614101206'
+  old_sha256: c349a478ccb9348c2fd155ba9b5bc7658f0dd02dcfd98c55aa9a543ea74c1e9e
+  truth_clauses:
+  - '12'
+- rbi_page_id: 13156
+  title: Credit Facilities
+  new_url: https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13156
+  new_sha256: 19afe9de0a11a87278af2a78b57346d5d1b4c0ecf996d3805b801c647b227e07
+  old_wayback: http://web.archive.org/web/20260614100217id_/https://www.rbi.org.in/SCRIPTs/BS_ViewMasDirections.aspx?id=13156
+  old_captured: '20260614100217'
+  old_sha256: 031985810cbc20b121ce414adfa4edf5d1ae3af801fe437c3ef26b41c69b41f5
+  truth_clauses:
+  - '137'
+  - 137(4)
+  - '170'
+  - '219'
+  - 5(11)
+  - 5(13)
+  - 5(14)
+  - 5(16)
+  - 5(6)
+  - '78'
+  - 80(3)
+- rbi_page_id: 13157
+  title: Interest Rate on Deposits
+  new_url: https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13157
+  new_sha256: 38521c84ed3fc24871f0d509fa00c4b37d16f602ae6a57231942cb998c425f7b
+  old_wayback: http://web.archive.org/web/20260615144644id_/https://www.rbi.org.in/SCRIPTs/BS_ViewMasDirections.aspx?id=13157
+  old_captured: '20260615144644'
+  old_sha256: e0f50db9eed1c89e06b10ad59aca27286e98b49df2df853292e79f638b40687f
+  truth_clauses:
+  - 27(4)
+  - 32(7)
+- rbi_page_id: 13160
+  title: Cash Reserve Ratio and Statutory Liquidity Ratio
+  new_url: https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13160
+  new_sha256: a1ef08fc0354c48fb27e3b431d913c43797a58df3ce6a62f10de155b11d9c94d
+  old_wayback: http://web.archive.org/web/20260616055712id_/https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13160
+  old_captured: '20260616055712'
+  old_sha256: 6b5c84bd5c544b9c86567c64fe457df5dc6a82d781a1393caff1fef8f74cefa8
+  truth_clauses:
+  - 20(8)
+  - 20(9)
+  - 29(5)
+- rbi_page_id: 13162
+  title: Undertaking of Financial Services
+  new_url: https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13162
+  new_sha256: 711c6c31b7e8be5f2c781fe1c97ddee7a88a3b1300178093e95dc292a110b331
+  old_wayback: http://web.archive.org/web/20260609144528id_/https://rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=13162
+  old_captured: '20260609144528'
+  old_sha256: 80e3f5a2b733ac1df9e18f26a8c2452cfa6d2b0d9501448afa44f69d5c18b914
+  truth_clauses:
+  - 18(4)(ii)(a)
+  - 18(4)(ii)(b)

@@ -73,3 +73,15 @@ policies:
     sha256: 33e430e226be57e77e95a5b5596306b9f6579c7283716874ee6e82ca10cacf87
     retrieved_from: "https://centralbank.bank.in/sites/default/files/2025-04/FINAL-KYCAML-Policy-2025-26-upto-06.11.2024.pdf"
     retrieved_on: 2026-09-26
+
+  - id: dhanlaxmi
+    bank: "Dhanlaxmi Bank Ltd"
+    bank_type: "scheduled commercial bank (private sector)"
+    title: "Policy on Know Your Customer (KYC), Anti Money Laundering (AML) Measures and Combating Financing of Terrorism (CFT), Version 8.1"
+    pages: 125
+    note: "Added 2026-09-27 as a second held-out test set (user decision: enlarge the evaluation). Answer key authored and frozen before any model reads the policy."
+    split: test2  # held out: run only for final numbers, never tuned on
+    file: data/raw/policies/dhanlaxmi_kyc_aml_cft_policy_v8.1.pdf
+    sha256: 0fb244a00d92d8b308a68d0a7eb9a902c2deacb4338ed34b91734b00d6ccd8f8
+    retrieved_from: "https://www.dhan.bank.in/pdf/55-KYC%20AML%20CFT%20Policy%202025_Version%208.1.pdf"
+    retrieved_on: 2026-09-26
