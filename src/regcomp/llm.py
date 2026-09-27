@@ -26,6 +26,7 @@ OLLAMA_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 STAGE_MODELS = {
     "extract_obligations": "qwen3:8b",
     "extract_definitions": "qwen3:8b",
+    "classify_level": "qwen3:8b",
     "extract_controls": "qwen3:8b",
     "judge": "qwen3:8b",
 }

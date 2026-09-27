@@ -241,6 +241,12 @@ def main() -> None:
     with connect() as conn:
         findings, policy_sha = findings_from_db(conn)
         stage_cost = cost(conn)
+        levels = dict(
+            conn.execute(
+                "SELECT coalesce(applicability->>'level', 'policy'), count(*) FROM obligation"
+                " GROUP BY 1 ORDER BY 1"
+            ).fetchall()
+        )
     expected_sha = key[0]["mutated_text_sha256"]
     if policy_sha != expected_sha:
         raise SystemExit(
@@ -281,7 +287,9 @@ def main() -> None:
         "",
         "## Pipeline metrics (counts)",
         f"- obligations extracted {len(ext_o['items'])}, rejected by citation gate "
-        f"{len(ext_o['rejected'])}",
+        f"{len(ext_o['rejected'])}, duplicates collapsed {ext_o.get('duplicates', 0)}",
+        "- obligation level (gaps scored only on policy-level): "
+        + ", ".join(f"{k} {v}" for k, v in levels.items()),
         f"- controls extracted {len(ext_c['items'])}, rejected by citation gate "
         f"{len(ext_c['rejected'])}",
         f"- mappings {len(findings)}: covered {sum(f['verdict'] == 'covered' for f in findings)}, "

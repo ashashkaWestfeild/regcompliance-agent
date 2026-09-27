@@ -153,7 +153,14 @@ def load(conn, reg, pol, obligations, controls):
                 o["action"],
                 o["action"],
                 Jsonb({"raw": o["threshold"]}) if o.get("threshold") else None,
-                Jsonb({"raw": o.get("applies_to")}),
+                Jsonb(
+                    {
+                        "raw": o.get("applies_to"),
+                        "level": o["level"],
+                        "level_reason": o.get("level_reason"),
+                        "level_rule": o.get("level_rule"),
+                    }
+                ),
                 Jsonb(extraction),
             )
         )
@@ -250,6 +257,7 @@ def main() -> int:
     run = Path("eval/runs") / args.run
     obligations = json.loads((run / "obligations.json").read_text(encoding="utf-8"))["items"]
     controls = json.loads((run / "controls.json").read_text(encoding="utf-8"))["items"]
+    apply_levels(run, obligations)
     reg = parse_file(REGULATION)
     pol = parse_policy_items(json.loads(Path(DEV_POLICY).read_text(encoding="utf-8")))
     t0 = time.time()
@@ -314,9 +322,24 @@ def _plain(r: dict) -> dict:
     return {k: v for k, v in r.items() if k != "control_uuid"}
 
 
+def apply_levels(run: Path, obligations: list[dict]) -> None:
+    """Attach the obligation level from levels.json (scripts/run_level.py). Without it every
+    obligation counts as policy-level, i.e. the pre-27 Sep behaviour."""
+    path = run / "levels.json"
+    levels = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    for o in obligations:
+        v = levels.get(f"{o['char_start']}:{o['char_end']}:{o['action']}", {})
+        o["level"] = v.get("level", "policy")
+        o["level_reason"] = v.get("reason")
+        o["level_rule"] = v.get("rule")
+    if levels:
+        print(f"levels: {dict(Counter(o['level'] for o in obligations))}", flush=True)
+
+
 def write_mappings_and_gaps(conn, obligations, results, hits, run: Path):
     risk = {"missing": ("high", 0.8), "partial": ("medium", 0.5), "covered": ("low", 0.2)}
     gap_rows = []
+    not_policy = Counter()
     with conn.cursor() as cur:
         for o in obligations:
             r = results.get(o["id"])
@@ -355,7 +378,9 @@ def write_mappings_and_gaps(conn, obligations, results, hits, run: Path):
                     sim,
                 ),
             )
-            if r["gap_type"]:
+            if r["gap_type"] and o["level"] != "policy":
+                not_policy[o["level"]] += 1  # reported, but not a policy gap (user rule)
+            elif r["gap_type"]:
                 inherent, score = risk.get(r["verdict"], ("medium", 0.5))
                 cur.execute(
                     "INSERT INTO gap (key, source_version, effective_from, type, obligation_id,"
@@ -402,6 +427,8 @@ def write_mappings_and_gaps(conn, obligations, results, hits, run: Path):
             ]
         )
         w.writerows(sorted(gap_rows))
+    if not_policy:
+        print(f"gaps not raised (obligation not policy-level): {dict(not_policy)}")
 
 
 def preview(obligations, results):
