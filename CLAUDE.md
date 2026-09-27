@@ -118,6 +118,7 @@ Folder: C:\Users\singh\OneDrive\Documents\AI Engineer\regcompliance-meta\
 - Flow maps: whenever a new process/data flow is built or designed, add it to project_chart.html as a Mermaid diagram (verify it renders) and keep existing flow maps current (user rule, 27 Sep).
 - project_chart.html: keep the Gantt timeline current and keep section "7. Day-wise summary" (last section; one card per day, 3-6 short points) updated as each day progresses (user rule, 27 Sep).
 - PROJECT_LOG.md has a "Current status" block at the top: update it at the end of every work step.
+- handbook/RegCompliance_Handbook.html -> RegCompliance_Handbook.pdf (build with handbook/build_handbook.ps1): the user's interview/reviewer prep handbook (what, why, alternatives, problems, results, Q&A). Update the affected chapters, the numbers cheat sheet and the changelog alongside the other metadata files, then rebuild the PDF. Local only: never commit, push or publish it (user rule, 27 Sep).
 Get the time with `date "+%Y-%m-%d %H:%M"`; never guess timestamps.
 
 ## Open-source-first directive (user, 26 Sep)
