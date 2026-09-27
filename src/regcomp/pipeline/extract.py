@@ -128,15 +128,63 @@ class Extracted:
     flags: list[dict] = field(default_factory=list)  # verbatim instruction-like sentences
 
 
-def sentence_from(text: str, prefix: str) -> tuple[int, int] | None:
-    """Span of the sentence in `text` that begins with `prefix` (verbatim), else None."""
+_FOLD = str.maketrans(
+    {
+        "{": "(",
+        "[": "(",
+        "}": ")",
+        "]": ")",
+        "‘": "'",
+        "’": "'",
+        "“": '"',
+        "”": '"',
+        "–": "-",
+        "—": "-",
+        "‑": "-",
+    }
+)
+
+
+def _normalised(text: str) -> tuple[str, list[int]]:
+    """Case/bracket/quote/dash-folded text with runs of whitespace collapsed, plus a map from
+    each normalised character back to its index in the original."""
+    chars, index = [], []
+    for i, ch in enumerate(text):
+        if ch.isspace():
+            if chars and chars[-1] == " ":
+                continue
+            ch = " "
+        chars.append(ch.translate(_FOLD).casefold())
+        index.append(i)
+    return "".join(chars), index
+
+
+def locate(text: str, prefix: str) -> tuple[int, int, str] | None:
+    """Find where `prefix` starts in `text`: exactly, else after normalisation (a model typo
+    such as "(RBA}" for "(RBA)"). Returns (start, end of the matched prefix, "exact" or
+    "normalised"). Callers always slice the quote from `text`, so it stays verbatim."""
     prefix = prefix.strip().rstrip(".")
     if len(prefix) < 12:
         return None
     at = text.find(prefix)
+    if at >= 0:
+        return at, at + len(prefix), "exact"
+    norm_text, index = _normalised(text)
+    norm_prefix, _ = _normalised(prefix)
+    at = norm_text.find(norm_prefix.strip())
     if at < 0:
         return None
-    end = _SENTENCE_END.search(text, at + len(prefix))
+    end = at + len(norm_prefix.strip()) - 1
+    return index[at], index[end] + 1, "normalised"
+
+
+def sentence_from(text: str, prefix: str) -> tuple[int, int] | None:
+    """Span of the sentence in `text` that begins at `prefix` (see `locate`), else None."""
+    found = locate(text, prefix)
+    if found is None:
+        return None
+    at, prefix_end, _ = found
+    end = _SENTENCE_END.search(text, prefix_end)
     stop = end.end() if end and end.group() != "\n" else (end.start() if end else len(text))
     return at, stop
 
@@ -158,6 +206,7 @@ def _gate(unit: Unit, raw: dict, key: str, out: Extracted) -> None:
         item.update(
             unit_ref=unit.ref,
             clause_ref=unit.clause_ref,
+            quote_match=locate(unit.text, item.get("quote_start") or "")[2],
             quote=unit.text[s:e],
             char_start=unit.start + s,
             char_end=unit.start + e,
