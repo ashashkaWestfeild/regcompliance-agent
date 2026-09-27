@@ -121,6 +121,7 @@ Keep the project to industry standards and use open-source tools wherever practi
 
 ## Git hygiene
 - Stage explicit paths (`git add <files>`); never `git add -A` / `git add .`. Twice on 26-27 Sep a blanket add published files that must stay local (the organiser brief; a pre-review answer key).
+- Never print, log or echo values from `.env` or any secret; validate structure only (redact unknown lines too). A Neon password leaked into session output on 27 Sep this way.
 - Check `git status --short` before every commit. The answer key is committed only in the user-approved approval commit.
 
 ## Working agreement with the user
