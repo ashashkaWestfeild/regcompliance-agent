@@ -1,4 +1,4 @@
--- Postgres 16 + pgvector. Mirrors src/regcomp/schemas.py.
+-- Postgres 18 + pgvector. Mirrors src/regcomp/schemas.py.
 -- Bitemporal convention on versioned tables:
 --   valid time       effective_from / effective_to   (NULL = in force)
 --   transaction time recorded_at / superseded_at     (NULL = current belief)

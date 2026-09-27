@@ -49,7 +49,7 @@ uv run python scripts/parse_corpus.py   # parse all sources into data/parsed/
 Docling output is cached in `data/parsed/docling_cache/` (keyed by file sha256) and committed,
 so the PDF-derived clauses are reproducible without installing Docling.
 
-Optional local database: `docker compose up -d` (or `podman compose up -d`) starts Postgres 16 +
+Optional local database: `docker compose up -d` (or `podman compose up -d`) starts Postgres 18 +
 pgvector and applies [`db/schema.sql`](db/schema.sql). CI applies the same schema on every push.
 
 ## Project layout

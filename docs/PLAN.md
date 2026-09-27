@@ -63,7 +63,7 @@ target: **INR 0**.
 
 | Piece | Choice | Licence | Reason |
 |---|---|---|---|
-| DB | PostgreSQL 16 + pgvector | PostgreSQL / PostgreSQL | CLAUDE.md |
+| DB | PostgreSQL 18 + pgvector (Neon for dev and demo; same version in CI and compose) | PostgreSQL / PostgreSQL | CLAUDE.md |
 | Containers | Podman Desktop (fully open source), running our `docker-compose.yml`; Docker Desktop is the fallback (free for personal use, proprietary app). Both need CPU virtualisation enabled in BIOS | Apache-2.0 | open-source first |
 | Regulation parsing | HTML via BeautifulSoup for v2/v3; Docling for PDF v1 | MIT / MIT | HTML is clean; Docling fixes PDF word-split noise (P-012) |
 | Policy parsing | Docling (layout + tables, no OCR) | MIT | reference session 2 |

@@ -16,12 +16,12 @@ jobs:
       - run: uv run pytest -q
 
   schema:
-    # Loads db/schema.sql into a real Postgres 16 + pgvector, so the DDL is validated on every
+    # Loads db/schema.sql into a real Postgres 18 + pgvector, so the DDL is validated on every
     # push without any local database.
     runs-on: ubuntu-latest
     services:
       db:
-        image: pgvector/pgvector:pg16
+        image: pgvector/pgvector:pg18
         env:
           POSTGRES_USER: regcomp
           POSTGRES_PASSWORD: regcomp_ci_only

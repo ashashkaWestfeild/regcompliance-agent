@@ -1,8 +1,8 @@
-# Local Postgres 16 + pgvector. db/schema.sql runs automatically on first start
+# Local Postgres 18 + pgvector. db/schema.sql runs automatically on first start
 # (only when the data volume is empty; `docker compose down -v` to re-init).
 services:
   db:
-    image: pgvector/pgvector:pg16
+    image: pgvector/pgvector:pg18
     container_name: regcomp-db
     environment:
       POSTGRES_USER: regcomp
@@ -11,7 +11,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      # Postgres 18 images keep data under /var/lib/postgresql/18/...; mount the parent.
+      - pgdata:/var/lib/postgresql
       - ./db/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U regcomp -d regcomp"]
