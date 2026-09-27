@@ -67,10 +67,10 @@ target: **INR 0**.
 | Containers | Podman Desktop (fully open source), running our `docker-compose.yml`; Docker Desktop is the fallback (free for personal use, proprietary app). Both need CPU virtualisation enabled in BIOS | Apache-2.0 | open-source first |
 | Regulation parsing | HTML via BeautifulSoup for v2/v3; Docling for PDF v1 | MIT / MIT | HTML is clean; Docling fixes PDF word-split noise (P-012) |
 | Policy parsing | Docling (layout + tables, no OCR) | MIT | reference session 2 |
-| **LLM (local)** | Ollama serving an 8B-14B open-weights instruct model on the RTX 4060 (8 GB): extraction passes, cheap judge, injection classifier | MIT (Ollama); model licence per model | free, private, on-prem story |
+| **LLM (local)** | Ollama on the RTX 4060 (8 GB). Candidates for the Mon 28 bake-off: `qwen3:8b` (5.2 GB, fits in VRAM) and `qwen3:14b` (9.3 GB, partial CPU offload). Used for extraction passes, the cheap judge and the injection classifier | MIT (Ollama); Apache-2.0 (Qwen3) | free, private, on-prem story |
 | **LLM (strong)** | A larger open-weights model (70B-120B class) via a free hosted tier, used only for escalations | open-weights model; host is a free service | laptop cannot run 70B well; model stays open |
 | LLM routing | LiteLLM in-process; stage -> model mapping in config; a paid API model is possible only as an explicit, logged opt-in | MIT | swap without code changes |
-| Embeddings | bge-m3 local (sentence-transformers) | MIT | CLAUDE.md |
+| Embeddings | bge-m3 served by Ollama (1024-dim, 8K context; no PyTorch in the core install) | MIT | CLAUDE.md; one local model server for LLM and embeddings |
 | Reranker | FlashRank (local, CPU); fall back to embedding order on failure | Apache-2.0 | reference session 1 |
 | Agent | LangGraph + Postgres checkpointer | MIT | reference repo has checkpointer code |
 | Tracing + eval tracking | **MLflow** (local server): OpenTelemetry-compatible LLM traces plus experiment runs for every eval | Apache-2.0 | replaces Logfire, whose backend is SaaS; one tool for traces and metrics |
@@ -180,37 +180,46 @@ The final claim is decided on **Wed 7 Oct** from the evidence matrix.
 
 ## 7. Submission package
 
-Unstop rules, read 2026-09-26:
-- Deliverables: a working prototype (public GitHub URL), a **pitch deck (PDF or PPT)** and a
-  **2-4 minute demo video**.
-- Uploads in .pdf, max 50 MB. One solution per team.
-- All links public. Editable until the deadline; no late submissions.
-- Top 10 go to a virtual National Finale.
+From the logged-in Phase 2 submit form (screenshot, 27 Sep) plus the Unstop rules and FAQs:
+- Four required fields: pitch deck (PDF), demo video (mp4/mp3 upload), public GitHub URL (max
+  500 chars), problem statement radio (**Banking/financial regulations**).
+- Uploads max 50 MB (FAQ). One solution per team. Editable until the deadline; no late
+  submissions. Top 10 go to the virtual finale on 2 Nov 2026.
+- A **"Download Brief/Case"** button on the form: not read yet (user to download and share).
 
-1. **Public GitHub repo:**
-   - README with a one-command run and the public demo URL.
+1. **Public GitHub repo.** The form asks for "complete source code, README.md, installation
+   steps, dependencies, architecture overview, API documentation (if applicable), and
+   environment setup instructions", enough for judges "to understand and run the project
+   without additional assistance". So the README must also contain:
+   - A one-command run and the public demo URL.
    - The answer-key commit hash.
-   - A statement that all data is public or synthetic.
-   - An **AI-assistance disclosure** (Claude Code as coding assistant; LLM APIs used inside the
-     system).
-   - **Attribution** for patterns taken from the reference repos. The rules make plagiarism a
-     disqualifier, so we reuse ideas with credit and never copy code verbatim.
-2. **Pitch deck (PDF, 10-12 slides):**
-   - Problem and business impact.
-   - Architecture (process flow, agent graph, model per stage).
-   - Reliability and guardrails.
-   - Metrics.
-   - Evidence matrix.
-   - Grid claim F3/D2 with justification. The problem statement's "detailed structural
-     architecture" deliverable lives here plus `docs/ARCHITECTURE.md`.
-3. **Demo video, 2-4 minutes** (hard limit). The CLAUDE.md script is cut to fit:
-   - Bank profile -> gaps with citations and one "why" panel (45 s).
-   - Amendment arrives -> agent plans, re-maps, recovers from one failure, opens remediation
-     (75 s).
-   - What-if (20 s).
-   - Reviewer override (20 s).
-   - Metrics and guardrail report (30 s).
-   - Evidence matrix (10 s).
+   - The data provenance statement.
+   - The **AI-assistance disclosure** and **attribution** for the reference repos. The rules
+     make plagiarism a disqualifier, so we reuse ideas with credit and never copy code verbatim.
+   - A zero-setup path: replay mode runs with no models, no API keys and no database.
+2. **Pitch deck (PDF, 8-12 slides)**, one slide per form item:
+   1. Team Introduction.
+   2. Problem Statement.
+   3. Proposed Solution.
+   4. Architecture: process flow, agent graph, model per stage (the problem statement's
+      "detailed structural architecture"; full version in `docs/ARCHITECTURE.md`).
+   5. AI Models & Technologies Used (open-source stack + licences).
+   6. Product Demo (screens + demo URL).
+   7. Business Impact.
+   8. Scalability (plus Responsible AI and guardrails).
+   9. Future Roadmap.
+   10. Grid claim F3/D2 with the evidence matrix and metrics. The form has no separate field
+       for it, so it must be in the deck.
+3. **Demo video, 2-4 minutes** (hard limit). Uploaded as **mp4 under 50 MB** (export 720p) and
+   also on YouTube (unlisted) with a public link. The form's required sections map to our
+   script, target 3:30:
+   - Introduction and problem overview (25 s).
+   - Live demo: bank profile -> gaps with citations and one "why" panel (40 s).
+   - AI capabilities: amendment arrives -> agent plans, re-maps, recovers from one failure,
+     opens remediation (70 s).
+   - Key features: what-if and reviewer override (35 s).
+   - Business impact: metrics and guardrail report (30 s).
+   - Closing summary with the evidence matrix (10 s).
 4. **Accessible demo link:** replay mode on Streamlit Community Cloud. It needs no API keys and
    no database.
 5. **Grid claim F3/D2**, justified by the matrix. Never D3 (no multimodal input).

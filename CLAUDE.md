@@ -100,7 +100,7 @@ Superseded on 26 Sep (3-day slip). The live schedule, checkpoints, cut order, st
 ## Evidence matrix (build as you go)
 Columns: feature | demo timestamp | architecture section | metric. One row per claimed feature.
 
-## Demo script (2-4 min hard limit; target 3:30)
+## Demo script (2-4 min hard limit; target 3:30; mp4 < 50 MB + unlisted YouTube link)
 Bank profile -> gaps with citations + one "why" panel (45 s) -> amendment arrives, agent plans, re-maps only affected edges, recovers from one injected failure, opens remediation (75 s) -> what-if on a draft circular (20 s) -> reviewer override changes a re-run (20 s) -> metrics + guardrail report (30 s) -> evidence matrix (10 s).
 
 ## Guardrails
