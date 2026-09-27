@@ -12,3 +12,4 @@ number; superseded ones are marked, never deleted.
 | [0005](0005-answer-key-before-first-run.md) | Planted gaps with an answer key committed before any system run | accepted |
 | [0006](0006-regulation-source-and-diff.md) | 2025 KYC Directions as base; clause-level, noise-filtered diff | accepted |
 | [0007](0007-one-agent-where-it-pays.md) | Ingestion is a workflow; the change agent is the agent | accepted |
+| [0008](0008-kyc-as-proving-ground.md) | KYC as the proving ground; engine is regulation-agnostic (tested on 6 other Directions) | accepted |
