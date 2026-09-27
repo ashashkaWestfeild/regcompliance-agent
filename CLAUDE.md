@@ -132,6 +132,14 @@ Keep the project to industry standards and use open-source tools wherever practi
 - Answer keys, mutated policies and mutation specs are FROZEN since the approval commit: no edits without an explicit logged reason (commit message + PROBLEMS_LOG), and metrics must cite the key commit.
 - The architecture document must disclose that the answer keys were authored in the same toolchain (Claude Code), with the mitigations: hand-written find/replace edits, user review, coverage check, commit timestamp before any LLM run, held-out test split.
 
+## Gold set, error analysis and triage (user rules, 27 Sep evening)
+- The blind adjudication sheet (scripts/score.py) shows no verdict, gap type, confidence, rationale or status; every row shows a policy passage; flagged and unflagged pairs are mixed and shuffled; one row per distinct (regulation sentence, passage).
+- The user's 50 labels are a FIXED mini gold set. Every judge candidate is re-run on exactly those 50 pairs (stable spans in adjudication_private.json) and scored against the labels as counts ("31/50").
+- Error analysis before any change: classify the cause of 30 extra (unkeyed) gaps: (a) applicability (obligation not expected at policy level: SOP / system / not applicable), (b) granularity (covered at section level or by reference), (c) retrieval (correct text exists but not in the top-5), (d) judge (right candidates, wrong verdict). Report the distribution.
+- Obligation-level label: policy-level / SOP-or-system / not-applicable. Score gaps only on policy-level obligations. Allow many-to-one mapping and coverage by reference.
+- Output as triage: high-confidence gaps vs review queue. Report precision on the high-confidence tier and the review-queue rate, alongside recall on the answer key.
+- R01 (FPI, 18 Sep 2026 amendment) is an ADVISORY ("policy update recommended"), not a problem or gap, in all summaries, the deck and the pitch.
+
 ## Git hygiene
 - Stage explicit paths (`git add <files>`); never `git add -A` / `git add .`. Twice on 26-27 Sep a blanket add published files that must stay local (the organiser brief; a pre-review answer key).
 - Never print, log or echo values from `.env` or any secret; validate structure only (redact unknown lines too). A Neon password leaked into session output on 27 Sep this way.
