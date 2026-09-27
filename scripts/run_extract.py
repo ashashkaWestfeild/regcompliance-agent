@@ -57,7 +57,8 @@ def main() -> int:
             json.dumps(asdict(controls), ensure_ascii=False, indent=1), encoding="utf-8"
         )
     print(
-        f"done: {len(obligations.items)} obligations ({len(obligations.rejected)} rejected), "
+        f"done: {len(obligations.items)} obligations ({len(obligations.rejected)} rejected, "
+        f"{obligations.duplicates} duplicates collapsed), "
         f"{len(controls.items)} controls ({len(controls.rejected)} rejected), "
         f"flags {len(obligations.flags) + len(controls.flags)}",
         flush=True,

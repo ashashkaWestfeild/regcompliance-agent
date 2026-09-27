@@ -84,7 +84,7 @@ def test_wrong_location_is_a_near_miss_not_a_hit():
     s = score(KEY, [f(1, "42(1)", "missing", "missing_control", None)], [])
     m1 = s.planted[0]
     assert (m1["detected"], m1["near_miss"]) == (False, True)
-    assert len(s.unkeyed) == 1  # goes to adjudication
+    assert s.unkeyed == []  # reported as this row's near miss, not also as an extra
 
 
 def test_decoy_injection_and_real_findings():

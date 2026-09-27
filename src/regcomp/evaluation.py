@@ -61,7 +61,9 @@ def score(key: list[dict], findings: list[dict], flags: list[dict]) -> Score:
         kind = row["kind"]
         if kind == "mutation":
             strict, near = match(row, findings)
-            keyed_ids |= {f["id"] for f in strict}
+            # Near misses (right regulation ref, other policy text) are reported on this row, so
+            # they are not also unkeyed extras (changed 27 Sep: they were counted twice).
+            keyed_ids |= {f["id"] for f in strict + near}
             s.planted.append(
                 {
                     "id": row["mutation_id"],

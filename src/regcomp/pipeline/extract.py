@@ -142,6 +142,7 @@ class Extracted:
     items: list[dict] = field(default_factory=list)  # each with quote + char_start/char_end
     rejected: list[dict] = field(default_factory=list)  # quote_start not verbatim in the unit
     flags: list[dict] = field(default_factory=list)  # verbatim instruction-like sentences
+    duplicates: int = 0  # items collapsed: same source sentence + same normalised action
 
 
 _FOLD = str.maketrans(
@@ -210,7 +211,20 @@ def _user_prompt(unit: Unit) -> str:
     return f"{context}<text>\n{unit.text}\n</text>"
 
 
+def _dedupe_key(unit: Unit, span: tuple[int, int], item: dict) -> tuple:
+    what = item.get("action") or item.get("objective") or ""
+    return (unit.start + span[0], unit.start + span[1], " ".join(re.findall(r"\w+", what.lower())))
+
+
 def _gate(unit: Unit, raw: dict, key: str, out: Extracted) -> None:
+    """Citation gate + deterministic dedupe. A model can loop and repeat one item many times
+    (seen 27 Sep: one obligation 69 times in one response); items with the same source sentence
+    and the same normalised action are collapsed to the first and counted in `duplicates`."""
+    seen = {
+        _dedupe_key(unit, (i["char_start"] - unit.start, i["char_end"] - unit.start), i)
+        for i in out.items
+        if i.get("unit_ref") == unit.ref
+    }
     for item in raw.get(key, []):
         span = sentence_from(unit.text, item.get("quote_start") or "")
         if span is None:
@@ -218,6 +232,11 @@ def _gate(unit: Unit, raw: dict, key: str, out: Extracted) -> None:
                 {"unit": unit.ref, "quote_start": item.get("quote_start"), "item": item}
             )
             continue
+        dedupe = _dedupe_key(unit, span, item)
+        if dedupe in seen:
+            out.duplicates += 1
+            continue
+        seen.add(dedupe)
         s, e = span
         item.update(
             unit_ref=unit.ref,

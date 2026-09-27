@@ -22,3 +22,20 @@ def test_whitespace_and_case_differences():
 def test_unrelated_prefix_is_still_rejected():
     assert locate(TEXT, "The bank shall never apply anything") is None
     assert locate(TEXT, "too short") is None
+
+
+def test_repeated_items_from_a_looping_model_are_collapsed():
+    from regcomp.pipeline.extract import Extracted, _gate
+    from regcomp.pipeline.units import Unit
+
+    unit = Unit("6", "6", TEXT, 1000, "")
+    item = {"action": "Apply a Risk-Based Approach", "quote_start": "The bank shall apply a Risk"}
+    raw = {
+        "obligations": [dict(item) for _ in range(69)]
+        + [{"action": "mitigate risks", "quote_start": "The bank shall apply a Risk"}]
+    }
+    out = Extracted()
+    _gate(unit, raw, "obligations", out)
+    assert [i["action"] for i in out.items] == ["Apply a Risk-Based Approach", "mitigate risks"]
+    assert out.duplicates == 68
+    assert out.items[0]["char_start"] == 1000 + TEXT.index("The bank")

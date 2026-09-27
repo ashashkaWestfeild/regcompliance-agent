@@ -226,6 +226,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
     ap.add_argument("--policy", default="nainital")
+    ap.add_argument("--new-sheet", action="store_true", help="regenerate an existing sheet")
     args = ap.parse_args()
     run = Path("eval/runs") / args.run
     key = [
@@ -297,13 +298,18 @@ def main() -> None:
     ]
     (run / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
-    with connect() as conn:
-        pairs, sampled = write_adjudication(conn, run, args.run, findings, s.unkeyed)
     print("\n".join(lines))
-    print(
-        f"\nadjudication sheet: {len(pairs)} pairs ({len(sampled)} of {len(s.unkeyed)} unkeyed "
-        "gaps, sampled, blind)"
-    )
+    sheet = run / "adjudication_sheet.csv"
+    if sheet.exists() and not args.new_sheet:
+        # A sheet may be in the user's hands (the gold set); never overwrite it silently.
+        print(f"\nadjudication sheet kept: {sheet} exists (pass --new-sheet to regenerate)")
+    else:
+        with connect() as conn:
+            pairs, sampled = write_adjudication(conn, run, args.run, findings, s.unkeyed)
+        print(
+            f"\nadjudication sheet: {len(pairs)} pairs ({len(sampled)} of {len(s.unkeyed)} "
+            "unkeyed gaps, sampled, blind)"
+        )
     digest = hashlib.sha256((run / "report.md").read_bytes()).hexdigest()[:12]
     print(f"report: {run / 'report.md'} ({digest})")
 
