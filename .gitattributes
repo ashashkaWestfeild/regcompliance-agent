@@ -4,3 +4,7 @@
 # Raw source documents must stay byte-identical: citation offsets and sha256 in
 # data/sources.yaml depend on it. Never let git rewrite line endings here.
 data/raw/** binary
+
+# Source documents and parser caches are data, not code: keep them out of GitHub's language
+# statistics (otherwise the RBI HTML pages make the repo look ~96% HTML).
+data/** linguist-vendored
