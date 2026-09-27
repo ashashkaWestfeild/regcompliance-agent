@@ -78,6 +78,43 @@ def cost(conn) -> list[str]:
     ]
 
 
+def score_evidence(policy: str) -> list[str]:
+    """Evidence key: planted operating failures must yield an operating_failure gap on the
+    target obligation; evidence decoys must not."""
+    path = Path(f"eval/answer_key_evidence_{policy}.jsonl")
+    if not path.exists():
+        return ["- no evidence key"]
+    rows = [json.loads(x) for x in path.read_text(encoding="utf-8").splitlines()]
+    with connect() as conn:
+        tested = conn.execute(
+            "SELECT DISTINCT o.source_clause_ref, t.result FROM control_test t"
+            " JOIN mapping m ON m.id = t.mapping_id JOIN obligation o ON o.id = m.obligation_id"
+            " WHERE t.kind = 'operating'"
+        ).fetchall()
+        failing = {
+            r[0]
+            for r in conn.execute(
+                "SELECT o.source_clause_ref FROM gap g JOIN obligation o ON o.id = g.obligation_id"
+                " WHERE g.type = 'operating_failure'"
+            ).fetchall()
+        }
+    results = {ref: result for ref, result in tested}
+    out = []
+    for r in rows:
+        refs = r["target_obligation_refs"]
+        got = next((results[x] for x in refs if x in results), "not tested")
+        has_gap = any(x in failing for x in refs)
+        want_gap = r["kind"] == "evidence"
+        ok = (got == r["expected_operating_result"]) and (has_gap == want_gap)
+        out.append(
+            f"- {r['mutation_id']} ({r['kind']}, {', '.join(refs)}): operating test "
+            f"{got}, operating_failure gap {'yes' if has_gap else 'no'} -> "
+            f"{'correct' if ok else 'WRONG'}"
+        )
+    correct = sum(line.endswith("correct") for line in out)
+    return [f"- evidence rows correct {correct}/{len(out)}", *out]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
@@ -104,6 +141,7 @@ def main() -> None:
         )
 
     s = score(key, findings, ext_c["flags"] + ext_o["flags"])
+    evidence_lines = score_evidence(args.policy)
     gaps = [f for f in findings if f["gap_type"]]
     split = key[0].get("split", "?")
     lines = [
@@ -129,6 +167,9 @@ def main() -> None:
         ],
         *[f"- Injection {i['id']}: {'caught' if i['caught'] else 'MISSED'}" for i in s.injections],
         *[f"- Real finding {r['id']} ({r['rule']}): {r['outcome']}" for r in s.real],
+        "",
+        "## Evidence key (operating tests)",
+        *evidence_lines,
         "",
         "## Pipeline metrics (counts)",
         f"- obligations extracted {len(ext_o['items'])}, rejected by citation gate "

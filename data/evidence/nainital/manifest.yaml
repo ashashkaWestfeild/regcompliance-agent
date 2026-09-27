@@ -1,0 +1,12 @@
+# Which obligation each synthetic evidence file tests, and the deterministic rule applied.
+# Tests run after mapping: the file is linked to the control mapped to that obligation.
+- file: rekyc_updation_log.csv
+  obligation_ref: "42(1)"
+  rule: rekyc_overdue
+  as_of: 2026-09-30
+  tolerance: 0.05
+- file: ckycr_upload_log.csv
+  obligation_ref: "65(2)"
+  rule: ckycr_late
+  deadline_days: 10
+  tolerance: 0.05
