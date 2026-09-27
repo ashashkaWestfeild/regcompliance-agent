@@ -19,6 +19,11 @@ NORMATIVE = re.compile(
     r"not permitted|prohibited|ensure)\b",
     re.IGNORECASE,
 )
+# Clauses in a section titled "Definitions" define terms ("'X' means ..."). They rarely say
+# "shall", yet a definition fixes what an obligation requires (who counts, which threshold), so
+# they are extracted with their own prompt, one leaf definition per unit.
+DEFINITIONS_SECTION = re.compile(r"\bdefinitions?\b", re.IGNORECASE)
+DEFINES = re.compile(r"\b(means|mean|includes?|shall include|is the|are the)\b", re.IGNORECASE)
 
 
 @dataclass
@@ -28,6 +33,7 @@ class Unit:
     text: str  # quotable text: a verbatim slice of the document
     start: int  # character offset of `text` in the document
     context: str  # read-only lead-in from the parent (may be empty)
+    kind: str = "provision"  # provision | definition
 
 
 def units(doc: ParsedDocument, max_chars: int = MAX_CHARS) -> list[Unit]:
@@ -39,17 +45,25 @@ def units(doc: ParsedDocument, max_chars: int = MAX_CHARS) -> list[Unit]:
     out: list[Unit] = []
 
     def visit(c: ParsedClause, context: str) -> None:
-        if len(c.quote) <= max_chars or not children.get(c.ref):
+        kind = "definition" if DEFINITIONS_SECTION.search(c.section or "") else "provision"
+        # Definitions always split to leaves: each defined term (or sub-case) is its own unit.
+        whole = len(c.quote) <= max_chars and kind == "provision"
+        if whole or not children.get(c.ref):
             text = c.quote[:max_chars] if len(c.quote) > max_chars else c.quote
-            out.append(Unit(c.ref, c.ref, text, c.char_start, context))
+            out.append(Unit(c.ref, c.ref, text, c.char_start, context, kind))
             return
         lead = own_text(c, doc)
         if lead:
-            out.append(Unit(f"{c.ref}#lead", c.ref, lead, c.char_start, context))
+            out.append(Unit(f"{c.ref}#lead", c.ref, lead, c.char_start, context, kind))
         for child in children[c.ref]:
             visit(child, (context + " " + lead).strip()[-600:])
 
     for c in doc.clauses:
         if c.depth == 1:
             visit(c, "")
-    return [u for u in out if NORMATIVE.search(u.text)]
+    return [
+        u
+        for u in out
+        if NORMATIVE.search(u.text)
+        or (u.kind == "definition" and len(u.text) >= 50 and DEFINES.search(u.text))
+    ]

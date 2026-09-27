@@ -4,8 +4,8 @@
 
 Writes to eval/runs/<run>/:
   report.md                  counts per row type + pipeline metrics, citing the key commit
-  adjudication_sheet.csv     blind sheet for the user: unkeyed gaps mixed with an equal number
-                             of covered pairs, shuffled, no system verdicts
+  adjudication_sheet.csv     blind sheet for the user: a random sample of unkeyed gaps mixed
+                             with an equal number of covered pairs, shuffled, no system verdicts
   adjudication_private.json  which sheet rows were system gaps (do not open before labelling)
 """
 
@@ -21,6 +21,7 @@ from regcomp.db import connect
 from regcomp.evaluation import score, summary
 
 SEED = 20260927
+SAMPLE_GAPS = 25  # unkeyed gaps per adjudication sheet
 
 
 def _detected(p: dict) -> str:
@@ -190,11 +191,14 @@ def main() -> None:
     ]
     (run / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
-    # Blind adjudication sheet: unkeyed gaps + an equal number of covered pairs, shuffled.
+    # Blind adjudication sheet: a seeded random sample of unkeyed gaps (a person can label ~50
+    # rows, not 350) + an equal number of covered pairs, shuffled. Precision on unkeyed gaps is
+    # then reported as "confirmed x/n sampled".
     rng = random.Random(SEED)
+    sampled = rng.sample(s.unkeyed, min(len(s.unkeyed), SAMPLE_GAPS))
     covered = [f for f in findings if f["verdict"] == "covered"]
-    fillers = rng.sample(covered, min(len(covered), len(s.unkeyed)))
-    pairs = [(f, True) for f in s.unkeyed] + [(f, False) for f in fillers]
+    fillers = rng.sample(covered, min(len(covered), len(sampled)))
+    pairs = [(f, True) for f in sampled] + [(f, False) for f in fillers]
     rng.shuffle(pairs)
     with (run / "adjudication_sheet.csv").open("w", newline="", encoding="utf-8-sig") as fh:
         w = csv.writer(fh)
@@ -223,7 +227,10 @@ def main() -> None:
         encoding="utf-8",
     )
     print("\n".join(lines))
-    print(f"\nadjudication sheet: {len(pairs)} pairs ({len(s.unkeyed)} unkeyed gaps, blind)")
+    print(
+        f"\nadjudication sheet: {len(pairs)} pairs ({len(sampled)} of {len(s.unkeyed)} unkeyed "
+        "gaps, sampled, blind)"
+    )
     digest = hashlib.sha256((run / "report.md").read_bytes()).hexdigest()[:12]
     print(f"report: {run / 'report.md'} ({digest})")
 
