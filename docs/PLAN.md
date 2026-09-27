@@ -7,7 +7,7 @@ Revision 2 (26 Sep, 20:14): adds the Fri 2 Oct holiday, reflects what the corpus
 and folds in the patterns adopted from the reference material (section 3).
 Revision 3 (26 Sep, 20:40): aligned with the Unstop rules (section 7) and adds the guardrails
 layer (section 3a).
-Revision 4 (27 Sep, 15:00; rows re-dated 15:48): the plan is a guide, not a contract (user). Work is pulled forward
+Revision 4 (27 Sep, 15:00; rows re-dated 15:47): the plan is a guide, not a contract (user). Work is pulled forward
 as soon as the previous task is done and the dates below are re-set continuously; the only hard
 line is submission before 10 Oct. Sunday's work finished early, so the end-to-end run moves from
 Wed 30 to Sun 27 / Mon 28. The chain links applicability, evidence and testing are promoted from
