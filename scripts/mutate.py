@@ -157,6 +157,7 @@ def main() -> int:
     rows = []
     for m in spec:
         verdict, gap_type = EXPECTED[m["operator"]]
+        verdict = m.get("expected_verdict", verdict)
         gap_types = m.get("expected_gap_types") or ([gap_type] if gap_type else [])
         locations = []
         for r in (r for r in records if r["id"] == m["id"]):
@@ -196,7 +197,9 @@ def main() -> int:
                     ref: reg_text[ref] for ref in m.get("target_obligation_refs", [])
                 },
                 "regulation_version": REGULATION_VERSION,
+                "split": src["split"],
                 "expected_verdict": verdict,
+                "acceptable_verdicts": m.get("acceptable_verdicts", []),
                 "acceptable_gap_types": gap_types,
                 "informational_ok": m.get("informational_ok", []),
                 "locations": locations,
@@ -209,6 +212,7 @@ def main() -> int:
                 "mutation_id": f["id"],
                 "kind": "real_finding",
                 "policy": args.policy,
+                "split": src["split"],
                 "policy_source_sha256": src["sha256"],
                 "mutated_text_sha256": sha256_text(doc.text),
                 "theme": f["theme"],

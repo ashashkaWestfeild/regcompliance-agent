@@ -120,6 +120,12 @@ Get the time with `date "+%Y-%m-%d %H:%M"`; never guess timestamps.
 ## Open-source-first directive (user, 26 Sep)
 Keep the project to industry standards and use open-source tools wherever practical. Stack and licences: docs/PLAN.md section 3. Any non-open component must be named as an exception with a reason.
 
+## Evaluation integrity (user rules, 27 Sep)
+- Nainital = dev set (prompts, thresholds and routing may be tuned on it). Central Bank = held-out test set: run only for final numbers (freeze, Wed 7 Oct), never inspected while tuning. Report metrics separately per split.
+- Extraction and mapping prompts must NOT reference specific clauses, thresholds or themes from either answer key (e.g. no "re-KYC", "10 days", "25%", "trust beneficial owner" hints). Schema-generic instructions only; few-shot examples, if any, must come from non-KYC text or from reviewer overrides on the dev set.
+- Every delete / narrow / weaken mutation must pass scripts/coverage_check.py (lexical + bge-m3 semantic search of the altered policy) with each remaining hit judged; a planted gap is only valid if no other passage still satisfies the obligation.
+- The architecture document must disclose that the answer keys were authored in the same toolchain (Claude Code), with the mitigations: hand-written find/replace edits, user review, coverage check, commit timestamp before any LLM run, held-out test split.
+
 ## Git hygiene
 - Stage explicit paths (`git add <files>`); never `git add -A` / `git add .`. Twice on 26-27 Sep a blanket add published files that must stay local (the organiser brief; a pre-review answer key).
 - Never print, log or echo values from `.env` or any secret; validate structure only (redact unknown lines too). A Neon password leaked into session output on 27 Sep this way.

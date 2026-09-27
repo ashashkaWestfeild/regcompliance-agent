@@ -30,9 +30,5 @@
   scoring: excluded
   note: "The policy states it is valid up to 08.07.2026; it has lapsed as of 26 Sep 2026. Governance flag in the demo only."
 
-- id: R04
-  policies: [nainital]
-  theme: fiu_reporting
-  target_obligation_refs: ["15(2)"]
-  scoring: adjudicate
-  note: "Candidate found 27 Sep: 15(2) requires the Principal Officer's name, designation, address and contact details to go to FIU-IND AND RBI. Nainital's original policy communicates them to FIU-IND only. Pending the user's blind adjudication."
+# R04 (PO details to RBI) removed 27 Sep: the original policy does state it in its
+# definitions list (3(iii)): "...details of the Principal Officer shall also be communicated to the RBI".

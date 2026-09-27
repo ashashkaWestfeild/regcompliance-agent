@@ -11,6 +11,10 @@
   theme: periodic_rekyc
   target_obligation_refs: ["42(1)"]
   note: "High-risk re-KYC every 8 years instead of 2, a copy-paste slip from the medium-risk row (both statements). User review: changed from 5 to 8 years."
+  check:  # redundant-coverage patterns (scripts/coverage_check.py only; never in prompts)
+    - 'two years for high risk'
+    - 'high risk[^.]{0,60}\b(two|2)\b years'
+    - '\b(two|2)\b years[^.]{0,40}high risk'
   edits:
     - find: "carried out at least once in every two years for high risk customers"
       replace: "carried out at least once in every eight years for high risk customers"
@@ -21,16 +25,29 @@
   operator: make_stale
   theme: beneficial_owner
   target_obligation_refs: ["5(1)(iv)(a)"]
-  note: "Company BO threshold reverted to the pre-2023 25%. User review: OK."
+  note: "Company BO threshold reverted to the pre-2023 25%. User review: OK. Coverage check (27 Sep): the policy also stated the correct 10% in 38(c), so that note is removed too; otherwise this would be a contradiction, not a stale control."
+  check:  # redundant-coverage patterns (scripts/coverage_check.py only; never in prompts)
+    - 'controlling ownership interest'
+    - '(10|ten) ?(per ?cent|percent|%)[^.]{0,80}(shares|company)'
   edits:
     - find: "more than 10 per cent of the shares or capital or profits of the company"
       replace: "more than 25 per cent of the shares or capital or profits of the company"
+    - find: "c. Controlling Ownership Interest:"
+      replace: ""
+    - find: "The threshold limit for controlling ownership interest for the purpose of determination of Beneficial Owner in case of both Companies and Trust has been revised to 10% from earlier threshold of 25% and 15% respectively (as per amendment RBI's Master Direction (MD) on KYC (Know Your Customer) dated February 25, 2016, Reserve Bank of India vide circular dated April 28,2023)."
+      replace: ""
 
 - id: N03
   operator: delete_control
   theme: beneficial_owner
   target_obligation_refs: ["5(1)(iv)(d)"]
-  note: "Trust beneficial-owner identification removed entirely. User review: OK."
+  expected_verdict: partial
+  expected_gap_types: ["missing_control", "narrow_scope"]
+  note: "Trust beneficial-owner definition removed. User review: OK. Coverage check (27 Sep): the policy still collects names of beneficiaries, trustees, settlor and authors (35(v),(vii),(viii)) and identity of persons behind trust/nominee accounts (38(b)), but loses the 10% beneficiary threshold and 'ultimate effective control'. Keyed as partial."
+  check:  # redundant-coverage patterns (scripts/coverage_check.py only; never in prompts)
+    - 'trust[^.]{0,150}beneficial owner|beneficial owner[^.]{0,150}trust'
+    - 'author of the trust'
+    - 'trustee'
   edits:
     - find: "d) Where the customer is a trust, the identification of beneficial owner(s) shall include identification of the author of the trust, the trustee, the beneficiaries with 10% or more interest in the trust and any other natural person exercising ultimate effective control over the trust through a chain of control or ownership."
       replace: ""
@@ -39,18 +56,27 @@
   operator: strip_design
   theme: fiu_reporting
   target_obligation_refs: ["5(1)(xvii)", "15(1)"]
-  note: "Principal Officer not designated (named owner removed; the duty remains). User review: key N04 as two findings."
+  note: "Principal Officer not designated (named owner removed; the duty remains). User review: key N04 as two findings. Coverage check (27 Sep): the alternate-PO sentence also named the COO, so it is neutralised too."
   edits:
     - find: "The Chief Operating Officer of the bank, posted at Head Office, Seven Oaks, Mallital, Nainital is designated as Principal Officer. The Principal Officer shall be responsible"
       replace: "The Principal Officer shall be responsible"
+    - find: "In case The Chief Operating Officer of the bank is absent due to valid reasons, Chief Compliance Officer posted at the Banks Head Office will act as an Alternate Principal Officer to ensure timely compliance."
+      replace: "In case the Principal Officer is absent due to valid reasons, an Alternate Principal Officer will act to ensure timely compliance."
 
 - id: N04b
   operator: delete_control
   theme: fiu_reporting
   target_obligation_refs: ["15(2)"]
-  note: "Principal Officer details no longer communicated to FIU-IND. User review: second N04 finding."
+  note: "Principal Officer details no longer communicated to FIU-IND or RBI. User review: second N04 finding. Coverage check (27 Sep): the definitions list also stated both duties (3(ii), 3(iii)); all three statements removed."
+  check:  # redundant-coverage patterns (scripts/coverage_check.py only; never in prompts)
+    - 'Principal Officer[^.]{0,200}(FIU|communicat)'
+    - '(name|designation|address)[^.]{0,80}Principal Officer'
   edits:
     - find: "The name, designation and address of the Principal Officer is communicated to the FIU-IND."
+      replace: ""
+    - find: "ii. The name, designation and address of the Principal Officer shall be communicated to the FIU-IND."
+      replace: ""
+    - find: "iii. Further, the name, designation, address and contact details of the Principal Officer shall also be communicated to the RBI."
       replace: ""
 
 - id: N05
@@ -58,6 +84,10 @@
   theme: ongoing_monitoring
   target_obligation_refs: ["41(2)"]
   note: "Intensified monitoring limited to accounts rated high risk at opening (re-rated accounts escape). User review: wording changed."
+  check:  # redundant-coverage patterns (scripts/coverage_check.py only; never in prompts)
+    - 'intensified monitoring'
+    - 'high risk accounts?[^.]{0,150}monitor'
+    - 'enhanced monitoring'
   edits:
     - find: "Explanation: High risk accounts will be subjected to more intensified monitoring."
       replace: "Explanation: High risk accounts identified at the time of account opening will be subjected to more intensified monitoring."

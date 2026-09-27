@@ -134,6 +134,23 @@ eval/answer_key_evidence.jsonl      # operating_failure plants
 8. Report per-operator precision and recall, the decoy false-positive rate, the injection
    detection rate, and real-finding accuracy.
 
+## Evaluation splits and integrity
+
+- **Nainital = dev set, Central Bank = held-out test set** (`split` in `data/sources.yaml` and in
+  every key row). Metrics are reported separately; the test set is run only for final numbers.
+- **Redundant-coverage check** (`scripts/coverage_check.py`): for every delete, narrow and weaken
+  mutation, the altered policy is searched lexically (the row's `check` patterns) and
+  semantically (bge-m3 similarity to the RBI clause). Every remaining hit is read and judged; a
+  mutation is only valid if no other passage still satisfies the obligation. Results on
+  27 Sep led to: extra edits in N02, N04a, N04b, C02, C04; N03 re-keyed as partial; R04 removed.
+- **One finding, several rows.** A single reported finding matches every key row whose
+  obligation it covers (e.g. one finding "PO details not sent to FIU-IND or RBI" satisfies a
+  row keyed on 15(2) once, not twice).
+- **Verdict alternatives.** A row may list `acceptable_verdicts`; the row is correct if the
+  reported gap type is in `acceptable_gap_types` OR the mapping verdict is in
+  `acceptable_verdicts` (C07: design deficiency or partial).
+- **Prompts stay schema-generic** (no clause numbers, thresholds or themes from the keys).
+
 ## Obligation modality
 
 `must`, `must_not`, `may`. A `may` provision is permissive: not adopting it is never a breach.

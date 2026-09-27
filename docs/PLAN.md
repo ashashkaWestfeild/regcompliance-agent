@@ -159,7 +159,7 @@ The final claim is decided on **Wed 7 Oct** from the evidence matrix.
 | **Sun 4 Oct** | 9 | What-if dry-run on a synthetic draft circular; reviewer override -> few-shot feedback; injection flagging; remediation polish; eval re-run | All claimed features exist. **CHECKPOINT 2** |
 | Mon 5 Oct | 3 | Streamlit: bank profile, gap dashboard, "why" panel, review queue | Core demo path clickable |
 | Tue 6 Oct | 3 | Streamlit: change timeline, metrics page (including the guardrail report), graph view; replay mode; **deploy replay to Streamlit Community Cloud** (the rules make an accessible demo link mandatory) | Public demo URL works without API keys |
-| **Wed 7 Oct** | 3 | **FEATURE FREEZE.** Final eval, calibration plot, cost/latency; evidence matrix; decide claim | Numbers and claim frozen |
+| **Wed 7 Oct** | 3 | **FEATURE FREEZE.** Final eval: dev (Nainital) and first-ever run on the held-out test set (Central Bank), reported separately; calibration plot, cost/latency; evidence matrix; decide claim | Numbers and claim frozen |
 | Thu 8 Oct | 3 | Architecture document (`docs/ARCHITECTURE.md`) + **pitch deck** (PDF, 10-12 slides). **Submit v0 on Unstop tonight** (it can be replaced until the deadline) | Deck PDF; v0 submitted |
 | Fri 9 Oct | 3 | Rehearse; record the **2-4 minute** video (hard limit); upload unlisted and check the link while logged out; README / run instructions + AI-assistance disclosure | Video link works publicly |
 | **Sat 10 Oct** | 6 | Fix what the rehearsal exposed; check all links logged out; **final submit by 15:00** (edits allowed until 11 Oct 23:59) | Submitted |

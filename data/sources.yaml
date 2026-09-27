@@ -56,6 +56,7 @@ policies:
     title: "Know Your Customer (KYC) and Anti-Money Laundering (AML) Policy"
     pages: 80
     note: "Document control says review due 31.10.2025; includes June 2025 MD changes."
+    split: dev   # prompts and thresholds may be tuned on this policy
     file: data/raw/policies/nainital_kyc_aml_policy.pdf
     sha256: 7f3ab8259d88352221fa0002d3013febff7667cc17b4d17981caf398c925cc54
     retrieved_from: "https://www.nainitalbank.bank.in/pdf/KYC%20AMLPolicy.pdf"
@@ -67,6 +68,7 @@ policies:
     title: "KYC / AML Policy 2025-26 (amended/updated up to 06.11.2024)"
     pages: 129
     note: "Bilingual header text (Hindi) on some pages."
+    split: test  # held out: run only for final numbers, never tuned on
     file: data/raw/policies/centralbank_kyc_aml_policy_2025-26.pdf
     sha256: 33e430e226be57e77e95a5b5596306b9f6579c7283716874ee6e82ca10cacf87
     retrieved_from: "https://centralbank.bank.in/sites/default/files/2025-04/FINAL-KYCAML-Policy-2025-26-upto-06.11.2024.pdf"

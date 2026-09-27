@@ -6,6 +6,9 @@
   theme: ckycr_upload
   target_obligation_refs: ["65(2)"]
   note: "CKYCR upload deadline weakened from 10 to 30 days."
+  check:  # redundant-coverage patterns (scripts/coverage_check.py only; never in prompts)
+    - 'CKYCR[^.]{0,150}(days|within)'
+    - 'within (10|ten) days'
   edits:
     - find: "upload it onto CKYCR within 10 days of commencement"
       replace: "upload it onto CKYCR within 30 days of commencement"
@@ -14,19 +17,26 @@
   operator: weaken_threshold
   theme: risk_categorization
   target_obligation_refs: ["41(1)"]
-  note: "Risk-categorisation review weakened from six-monthly to yearly (all three statements)."
+  note: "Risk-categorisation review weakened from six-monthly to yearly. User review: OK. Coverage check (27 Sep): four statements in total (2.2.7.2, annexure repeat, 6.x, Do's-and-Don'ts table row 7); all four changed."
+  check:  # redundant-coverage patterns (scripts/coverage_check.py only; never in prompts)
+    - 'six months'
+    - 'risk categori[sz]ation[^.]{0,150}(review|periodic)'
   edits:
     - find: "Such review of risk categorization of customers should be carried out at least once in every six months."
       replace: "Such review of risk categorization of customers should be carried out at least once in a year."
       all: true  # stated identically in section 2.2.7.2 and in an annexure
     - find: "with such periodicity being at least once in six months"
       replace: "with such periodicity being at least once in a year"
+    - find: "Risk profiles of customers should be reviewed, once in every six months."
+      replace: "Risk profiles of customers should be reviewed, once in a year."
 
 - id: C03
   operator: make_stale
   theme: beneficial_owner
   target_obligation_refs: ["5(1)(iv)(b)"]
   note: "Partnership BO threshold reverted to the pre-2023 15%."
+  check:  # redundant-coverage patterns (scripts/coverage_check.py only; never in prompts)
+    - 'partnership[^.]{0,250}(per ?cent|percent|%)'
   edits:
     - find: "more than 10 percent of capital or profits of the partnership"
       replace: "more than 15 percent of capital or profits of the partnership"
@@ -35,16 +45,25 @@
   operator: delete_control
   theme: ongoing_monitoring
   target_obligation_refs: ["41(2)"]
-  note: "Intensified monitoring of high-risk accounts removed."
+  note: "Intensified monitoring of high-risk accounts removed. User review: OK if no other coverage. Coverage check (27 Sep): the Do's-and-Don'ts table row 6 restated it and is removed too; remaining enhanced-monitoring passages are category-specific (PEPs, non-face-to-face, STR-reported, fintech), not the general high-risk duty."
+  check:  # redundant-coverage patterns (scripts/coverage_check.py only; never in prompts)
+    - 'intensified monitoring'
+    - 'high risk accounts?[^.]{0,150}monitor'
+    - 'enhanced monitoring'
   edits:
     - find: "High risk accounts have to be subjected to more intensified monitoring."
+      replace: ""
+    - find: "High risk accounts are subject to intensive monitoring and special"
       replace: ""
 
 - id: C05
   operator: narrow_scope
   theme: ongoing_monitoring
   target_obligation_refs: ["68"]
-  note: "Money-mule monitoring limited to savings accounts (current accounts escape)."
+  note: "Money-mule monitoring limited to savings accounts (current accounts escape). User review: OK. Coverage check (27 Sep): 7.5.7.4/7.5.7.5 monitor only accounts flagged by product-code criteria (small accounts), so the general duty is still narrowed."
+  check:  # redundant-coverage patterns (scripts/coverage_check.py only; never in prompts)
+    - 'money mules?'
+    - '\bmules?\b'
   edits:
     - find: "meticulous monitoring to identify accounts which are operated as Money Mules"
       replace: "meticulous monitoring to identify savings accounts which are operated as Money Mules"
@@ -63,7 +82,8 @@
   operator: strip_design
   theme: fiu_reporting
   target_obligation_refs: ["52", "15(1)"]
-  note: "STR alert workflow loses its maker-checker levels and Principal Officer approval; the duty to file STRs remains but has no accountable reviewer."
+  acceptable_verdicts: [partial]
+  note: "STR alert workflow loses its maker-checker levels and Principal Officer approval; the duty to file STRs remains but has no accountable reviewer. User review: acceptable = design deficiency or partial."
   edits:
     - find: "After first level checking by a Senior Manager and second level checking by Chief Manager, the suspicious alert shall be put up before the"
       replace: "The suspicious alert shall be put up before the"
