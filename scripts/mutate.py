@@ -62,35 +62,45 @@ def apply(items: list[dict], spec: list[dict]) -> tuple[list[dict], list[dict], 
         for k, edit in enumerate(m["edits"]):
             find, replace = canonical(edit["find"]), canonical(edit.get("replace") or "")
             total = sum(it["text"].count(find) for it in items)
-            if total != 1:
-                errors.append(f"{m['id']}: find occurs {total}x (must be 1): {find[:70]!r}")
+            every = bool(edit.get("all"))  # replace every occurrence (a rule stated twice)
+            if (total != 1 and not every) or total == 0:
+                need = "at least 1" if every else "must be 1"
+                errors.append(f"{m['id']}: find occurs {total}x ({need}): {find[:70]!r}")
                 continue
-            i = next(i for i, it in enumerate(items) if find in it["text"])
-            text = items[i]["text"]
-            at = text.index(find)
-            before, after = text[:at], text[at + len(find) :]
-            if replace:  # keep the original separators around the edit
-                new_text, offset = before + replace + after, len(before)
-            else:  # deletion: collapse the surrounding whitespace to a single space
-                before, after = before.rstrip(), after.lstrip()
-                sep = " " if before and after else ""
-                new_text, offset = before + sep + after, len(before) + len(sep)
-            delta = len(new_text) - len(text)
-            for r in records:  # shift earlier edits that sit after this one in the same item
-                if r["item"] == i and r["offset"] > at:
-                    r["offset"] += delta
-            items[i]["text"] = new_text
-            records.append(
-                {
-                    "id": m["id"],
-                    "edit": k,
-                    "item": i,
-                    "offset": offset,
-                    "length": len(replace),
-                    "deleted_text": find if not replace else None,
-                }
-            )
+            for i in [i for i, it in enumerate(items) if find in it["text"]]:
+                cursor = 0
+                while (at := items[i]["text"].find(find, cursor)) >= 0:
+                    cursor = _splice(items, records, m["id"], k, i, at, find, replace)
     return items, records, errors
+
+
+def _splice(items, records, mid, k, i, at, find, replace) -> int:
+    """Replace `find` at offset `at` of item i, record where the new text sits, and return the
+    offset just past it (so a replacement that contains `find` is never re-matched)."""
+    text = items[i]["text"]
+    before, after = text[:at], text[at + len(find) :]
+    if replace:  # keep the original separators around the edit
+        new_text, offset = before + replace + after, len(before)
+    else:  # deletion: collapse the surrounding whitespace to a single space
+        before, after = before.rstrip(), after.lstrip()
+        sep = " " if before and after else ""
+        new_text, offset = before + sep + after, len(before) + len(sep)
+    delta = len(new_text) - len(text)
+    for r in records:  # shift earlier edits that sit after this one in the same item
+        if r["item"] == i and r["offset"] > at:
+            r["offset"] += delta
+    items[i]["text"] = new_text
+    records.append(
+        {
+            "id": mid,
+            "edit": k,
+            "item": i,
+            "offset": offset,
+            "length": len(replace),
+            "deleted_text": find if not replace else None,
+        }
+    )
+    return offset + len(replace)
 
 
 def locate(positions: dict[int, int], items: list[dict], record: dict) -> int:
