@@ -302,6 +302,8 @@ def main() -> int:
         (run / "judgments.json").write_text(
             json.dumps({str(k): _plain(v) for k, v in results.items()}, indent=1), encoding="utf-8"
         )
+    # Fresh connection for the write: the judge loop can outlive a server-side disconnect.
+    with connect(autocommit=True) as conn:
         write_mappings_and_gaps(conn, obligations, results, hits, run)
     preview(obligations, results)
     return 0
