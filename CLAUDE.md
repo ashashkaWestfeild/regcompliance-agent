@@ -124,6 +124,8 @@ Keep the project to industry standards and use open-source tools wherever practi
 - Nainital = dev set (prompts, thresholds and routing may be tuned on it). Central Bank = held-out test set: run only for final numbers (freeze, Wed 7 Oct), never inspected while tuning. Report metrics separately per split.
 - Extraction and mapping prompts must NOT reference specific clauses, thresholds or themes from either answer key (e.g. no "re-KYC", "10 days", "25%", "trust beneficial owner" hints). Schema-generic instructions only; few-shot examples, if any, must come from non-KYC text or from reviewer overrides on the dev set.
 - Every delete / narrow / weaken mutation must pass scripts/coverage_check.py (lexical + bge-m3 semantic search of the altered policy) with each remaining hit judged; a planted gap is only valid if no other passage still satisfies the obligation.
+- Report evaluation results as counts per row type ("6/7 gaps, 0/3 decoys, 1/1 injection"), never bare percentages.
+- Answer keys, mutated policies and mutation specs are FROZEN since the approval commit: no edits without an explicit logged reason (commit message + PROBLEMS_LOG), and metrics must cite the key commit.
 - The architecture document must disclose that the answer keys were authored in the same toolchain (Claude Code), with the mitigations: hand-written find/replace edits, user review, coverage check, commit timestamp before any LLM run, held-out test split.
 
 ## Git hygiene
@@ -138,4 +140,4 @@ Keep the project to industry standards and use open-source tools wherever practi
 - Say explicitly when something is uncertain or speculative.
 
 ## Next action
-Schemas, DDL and mutation taxonomy are done (src/regcomp/schemas.py, db/schema.sql, docs/mutation_taxonomy.md). Follow docs/PLAN.md section 6 from the current date.
+Answer keys approved and frozen (see the "ANSWER KEYS APPROVED" commit). Next session goal (behind schedule): a crude end-to-end run on the Nainital DEV set only: regulation parse -> obligation extraction (qwen3:8b via Ollama) -> control extraction -> mapping (bge-m3 retrieval, judge) -> gap list, with results loaded into Neon. Quality does not matter yet; a complete run does. Never run on the Central Bank test set before freeze.

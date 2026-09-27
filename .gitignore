@@ -12,7 +12,3 @@ data/parsed/*.json
 # Organiser-provided brief for shortlisted teams: keep local, never publish.
 docs/et_hackathon_detailed_problem_statements_branded.pdf
 
-# DRAFT answer keys and mutated policies stay local until the user approves the mutation set;
-# remove these two lines in the approval commit (ADR 0005).
-data/mutated/
-eval/answer_key_*.jsonl

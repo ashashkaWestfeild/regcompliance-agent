@@ -151,6 +151,45 @@ eval/answer_key_evidence.jsonl      # operating_failure plants
   `acceptable_verdicts` (C07: design deficiency or partial).
 - **Prompts stay schema-generic** (no clause numbers, thresholds or themes from the keys).
 
+## Reporting format (user rule, 27 Sep)
+
+Results are reported as **counts per row type, never bare percentages**. The sets are small
+(test: 7 planted gaps, 3 decoys, 1 injection), so a percentage hides how few cases stand behind
+it. Examples:
+- Test set: "gaps detected 6/7 (types correct 5/7), decoys flagged 0/3, injections caught 1/1,
+  real findings correct 1/1".
+- Dev set: "gaps detected 5/7, decoys flagged 1/3, injections caught 1/1, real findings correct
+  2/2 (1 excluded)".
+- Per operator where useful: "weak_threshold 2/2, missing_control 1/2".
+- Precision is also given as counts: "true gaps 6 of 8 reported (after adjudication; 5 of 8
+  before)".
+
+## How the redundancy check was done, and its known risk
+
+`scripts/coverage_check.py` combined three independent signals for each delete, narrow and
+weaken mutation:
+- lexical search with the row's `check` patterns,
+- semantic search with **bge-m3** (cosine similarity between the RBI clause and every leaf
+  clause of the altered policy, top 6 shown),
+- manual reading of every remaining hit.
+
+**Correlated-error risk.** The pipeline also uses bge-m3 for retrieval (top-20 candidates
+before FlashRank). If bge-m3 failed to surface a passage that still satisfies an obligation,
+the check could have missed it, and the system's retrieval could miss the same passage. The
+system would then report the planted "gap" and agree with the key while both are wrong.
+Mitigations:
+- The lexical patterns and manual reading do not depend on bge-m3.
+- FlashRank reranks with a different model.
+- Blind adjudication of unkeyed reports catches errors in one direction.
+- The residual risk is stated in the architecture document and not hidden.
+
+## Freeze
+
+After the approval commit the answer keys (`eval/answer_key_*.jsonl`), the mutated policies
+(`data/mutated/*.items.json`) and their specs are **frozen**. Any later edit needs an explicit
+logged reason (commit message plus PROBLEMS_LOG entry), and metrics must name the key commit
+they were scored against.
+
 ## Obligation modality
 
 `must`, `must_not`, `may`. A `may` provision is permissive: not adopting it is never a breach.

@@ -22,6 +22,11 @@
     Bank is the development set. Metrics are reported per split.
   - System-reported gaps that are not in the key are adjudicated blind by the author before
     precision is computed.
+- **Correlated-error risk.** The redundancy check used bge-m3, which the pipeline also uses for
+  retrieval, so both could miss the same passage. Lexical search, manual reading, a FlashRank
+  reranker and blind adjudication reduce this; it is disclosed rather than assumed away.
+- **Reporting.** All results are counts per row type (e.g. "6/7 gaps, 0/3 decoys, 1/1
+  injection"), never bare percentages.
 - **Real findings.** Passages of the real published policies that differ from the current RBI
   Directions are labelled separately (`data/mutations/real_findings.yaml`) and scored by their
   own rules, never as false positives.
