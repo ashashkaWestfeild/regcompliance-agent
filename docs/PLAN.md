@@ -7,7 +7,7 @@ Revision 2 (26 Sep, 20:14): adds the Fri 2 Oct holiday, reflects what the corpus
 and folds in the patterns adopted from the reference material (section 3).
 Revision 3 (26 Sep, 20:40): aligned with the Unstop rules (section 7) and adds the guardrails
 layer (section 3a).
-Revision 4 (27 Sep, 15:00): the plan is a guide, not a contract (user). Work is pulled forward
+Revision 4 (27 Sep, 15:00; rows re-dated 15:48): the plan is a guide, not a contract (user). Work is pulled forward
 as soon as the previous task is done and the dates below are re-set continuously; the only hard
 line is submission before 10 Oct. Sunday's work finished early, so the end-to-end run moves from
 Wed 30 to Sun 27 / Mon 28. The chain links applicability, evidence and testing are promoted from
@@ -172,10 +172,11 @@ Problem 1's chain, and where each link is shown:
 | Sat 26 | Schemas, DDL, taxonomy, plan; RBI corpus (3 versions); theme verification | - | done |
 | Sun 27 AM | Parsers (RBI HTML + Docling PDFs, policies); both real amendments diff to 1 change; Neon + schema; Ollama models; CI | - | done |
 | Sun 27 PM | Answer keys reviewed, coverage-checked, **approved and frozen** (`350b8e0`) | - | done |
-| **Sun 27 PM - Mon 28** | **Crude end-to-end on Nainital (dev):** LLM client + exact cache; obligation extraction (with applicability fields); control extraction; bge-m3 retrieval; first-pass judge; citation gate; gap list; load to Neon. You: label 15 | Complete run, any quality | in progress |
-| Tue 29 | Eval harness v1 (counts per row type vs the frozen dev key; citation validity; extraction vs your labels). FlashRank rerank. You: label 15 + first blind adjudication | First metrics table | |
-| Wed 30 | **Applicability** (bank profile + filter, reasons) + **evidence and testing minimal** (2 synthetic CSVs, design + operating tests, one failing) | Chain links shown end to end | |
-| Thu 1 | Tiering (judges agree + high confidence -> auto; else strong model -> review queue), second extraction pass, risk rubric, remediation drafts | Numbers improving | |
+| **Sun 27 PM** | **Crude end-to-end on Nainital (dev)**: extraction, pgvector retrieval, judge, gaps; **eval harness v1**; evidence + control tests; applicability module | First scores (counts) | in progress (ETA 17:30) |
+| **Mon 28** | Wire applicability + evidence into the pipeline; score the evidence key; FlashRank rerank; change-detection report vs RBI amendment markers; first fixes from the scores. You: label 15 | Chain links scored end to end | |
+| Tue 29 | Tiering (judges agree + high confidence -> auto; else strong model -> review queue), second extraction pass, risk rubric, **remediation drafts**. You: label 15 + blind adjudication | Numbers improving | |
+| Wed 30 | Label-based accuracy + calibration; tuning on the dev set only | Metrics vs user labels | |
+| Thu 1 | **Change agent groundwork** (LangGraph skeleton, Postgres checkpointer, diff tool wrapped) | Agent runs a dry pass | |
 | **Fri 2 (holiday)** | **Change agent part 1:** LangGraph, diff -> classify (incl. permissive "may" -> advisory) -> scope, Postgres checkpointer | Both real amendments classified; FPI -> "policy update recommended" | |
 | **Sat 3** | **Change agent part 2:** re-extract, re-map affected edges only, recovery, open gaps + remediation; evidence-batch trigger (ongoing monitoring) | Sep 2026 amendment end to end, one recovered failure | |
 | **Sun 4** | What-if dry-run; reviewer override loop; injection flagging report; eval re-run | All claimed features exist. **CHECKPOINT** | |
