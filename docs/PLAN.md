@@ -129,6 +129,7 @@ pipeline, and keeps the metadata logs updated. **Only you can do these:**
 | By Mon | Post the AI-tools question in the Unstop Discussions tab (draft in PROJECT_LOG 20:44); open the logged-in Phase 2 "Submit" form and note every field; read the ET microsite (Claude cannot open it) | 30 min |
 | Sun 27 | Review planted mutations for realism | 1 h |
 | Mon 28 – Tue 29 | **Blind-label ~30 obligation-to-control mappings** (15 per day) | 2 x 1 h |
+| After first E2E (Wed 30 - Thu 1) and each eval run | **Blind adjudication** of system-reported gaps not in the answer key (pairs shown without the system's verdict, mixed with covered pairs); precision is reported after adjudication | 30-45 min each |
 | Wed 7 | Manual baseline estimate: analyst hours per circular | 15 min |
 | Fri 9 – Sat 10 | Record the video, submit | 3 h |
 

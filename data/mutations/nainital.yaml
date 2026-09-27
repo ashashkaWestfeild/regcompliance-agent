@@ -1,26 +1,27 @@
-# Planted gaps for the Nainital Bank KYC/AML policy. DRAFT SAMPLE (2026-09-26) for user review:
-# realism, operator choice and targets. The full set (~12-15 per policy) follows after review.
+# Planted gaps for the Nainital Bank KYC/AML policy.
+# Sample reviewed by the user on 2026-09-27 (decisions recorded in each note).
 #
 # Each edit: `find` must occur exactly once in the policy's Docling items (whitespace-normalised);
-# `replace` "" deletes. target_obligation_ref is a clause in the current RBI Directions (v3).
-# Operators map 1:1 to expected gap types (scripts/mutate.py EXPECTED; docs/mutation_taxonomy.md).
+# `replace` "" deletes. Targets are clause refs in the current RBI Directions (v3, 18 Sep 2026).
+# `target_obligation_refs` lists every acceptable regulation clause for scoring.
+# `expected_gap_types` overrides the operator's default when a finding has more than one valid type.
 
 - id: N01
   operator: weaken_threshold
   theme: periodic_rekyc
-  target_obligation_ref: "42(1)"
-  note: "High-risk re-KYC weakened from every 2 years to every 5 years (both statements)."
+  target_obligation_refs: ["42(1)"]
+  note: "High-risk re-KYC every 8 years instead of 2, a copy-paste slip from the medium-risk row (both statements). User review: changed from 5 to 8 years."
   edits:
     - find: "carried out at least once in every two years for high risk customers"
-      replace: "carried out at least once in every five years for high risk customers"
+      replace: "carried out at least once in every eight years for high risk customers"
     - find: "At least once in every two years for high risk customers"
-      replace: "At least once in every five years for high risk customers"
+      replace: "At least once in every eight years for high risk customers"
 
 - id: N02
   operator: make_stale
   theme: beneficial_owner
-  target_obligation_ref: "5(1)(iv)(a)"
-  note: "Company BO threshold reverted to the pre-2023 25%."
+  target_obligation_refs: ["5(1)(iv)(a)"]
+  note: "Company BO threshold reverted to the pre-2023 25%. User review: OK."
   edits:
     - find: "more than 10 per cent of the shares or capital or profits of the company"
       replace: "more than 25 per cent of the shares or capital or profits of the company"
@@ -28,37 +29,45 @@
 - id: N03
   operator: delete_control
   theme: beneficial_owner
-  target_obligation_ref: "5(1)(iv)(d)"
-  note: "Trust beneficial-owner identification removed entirely."
+  target_obligation_refs: ["5(1)(iv)(d)"]
+  note: "Trust beneficial-owner identification removed entirely. User review: OK."
   edits:
     - find: "d) Where the customer is a trust, the identification of beneficial owner(s) shall include identification of the author of the trust, the trustee, the beneficiaries with 10% or more interest in the trust and any other natural person exercising ultimate effective control over the trust through a chain of control or ownership."
       replace: ""
 
-- id: N04
+- id: N04a
   operator: strip_design
   theme: fiu_reporting
-  target_obligation_ref: "15(1)"
-  note: "Named owner (who is the Principal Officer) and the FIU-IND communication step removed; the duty remains but has no accountable owner."
+  target_obligation_refs: ["5(1)(xvii)", "15(1)"]
+  note: "Principal Officer not designated (named owner removed; the duty remains). User review: key N04 as two findings."
   edits:
     - find: "The Chief Operating Officer of the bank, posted at Head Office, Seven Oaks, Mallital, Nainital is designated as Principal Officer. The Principal Officer shall be responsible"
       replace: "The Principal Officer shall be responsible"
+
+- id: N04b
+  operator: delete_control
+  theme: fiu_reporting
+  target_obligation_refs: ["15(2)"]
+  note: "Principal Officer details no longer communicated to FIU-IND. User review: second N04 finding."
+  edits:
     - find: "The name, designation and address of the Principal Officer is communicated to the FIU-IND."
       replace: ""
 
 - id: N05
   operator: narrow_scope
   theme: ongoing_monitoring
-  target_obligation_ref: "41(2)"
-  note: "Intensified monitoring limited to non-individual high-risk accounts."
+  target_obligation_refs: ["41(2)"]
+  note: "Intensified monitoring limited to accounts rated high risk at opening (re-rated accounts escape). User review: wording changed."
   edits:
     - find: "Explanation: High risk accounts will be subjected to more intensified monitoring."
-      replace: "Explanation: High risk accounts of non-individual customers will be subjected to more intensified monitoring."
+      replace: "Explanation: High risk accounts identified at the time of account opening will be subjected to more intensified monitoring."
 
 - id: N06
   operator: contradict
   theme: risk_categorization
-  target_obligation_ref: "41(1)"
-  note: "Second statement elsewhere contradicts the six-monthly review."
+  target_obligation_refs: ["41(1)"]
+  expected_gap_types: ["internal_contradiction", "weak_threshold"]
+  note: "A second statement allows a two-yearly risk review against the six-monthly one required by 41(1). User review: key as contradiction + weakening."
   edits:
     - find: "b. The transactions in accounts of marketing firms, especially accounts of Multi-Level Marketing (MLM) Companies shall be closely monitored."
       replace: "b. The transactions in accounts of marketing firms, especially accounts of Multi-Level Marketing (MLM) Companies shall be closely monitored. Branches may carry out the review of risk categorisation of accounts once in two years."
@@ -68,7 +77,7 @@
 - id: N-D01
   operator: decoy
   theme: ongoing_monitoring
-  target_obligation_ref: "68"
+  target_obligation_refs: ["68"]
   note: "Rephrase only; same obligation."
   edits:
     - find: "Bank shall undertake diligence measures and meticulous monitoring to identify accounts which are operated as Money Mules and take appropriate action, including reporting of suspicious transactions to FIU-IND."
@@ -76,19 +85,18 @@
 
 - id: N-D02
   operator: decoy
-  theme: periodic_rekyc
-  target_obligation_ref: "42(1)"
-  note: "Stricter than RBI (medium risk every 5 years instead of 8), changed in both statements. Not a gap."
+  theme: beneficial_owner
+  target_obligation_refs: ["5(1)(iv)(b)"]
+  informational_ok: ["stricter_than_required"]
+  note: "Stricter than RBI: partnership BO threshold 5% instead of 10%. User review: stricter = not a gap; 'stricter than required' is neutral, any gap verdict is a false positive. Moved here from medium-risk re-KYC so it cannot interact with N01 (high 8 yrs vs medium 5 yrs would be a legitimate inversion finding)."
   edits:
-    - find: "customers, once in every eight years for medium risk customers"
-      replace: "customers, once in every five years for medium risk customers"
-    - find: "At least once in every eight years for medium risk customers"
-      replace: "At least once in every five years for medium risk customers"
+    - find: "more than 10 percent of capital or profits of the partnership"
+      replace: "more than 5 percent of capital or profits of the partnership"
 
 - id: N-D03
   operator: decoy
   theme: fiu_reporting
-  target_obligation_ref: "52"
+  target_obligation_refs: ["52"]
   note: "Grammar fix only."
   edits:
     - find: "bank/branch shall not pursue the CDD process, and instead file an STR with FIU-IND."

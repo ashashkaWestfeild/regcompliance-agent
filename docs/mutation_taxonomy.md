@@ -101,11 +101,41 @@ eval/answer_key_evidence.jsonl      # operating_failure plants
  "expected_gap_type": "weak_threshold", "regulation_version": "MD-2016-upd-2023"}
 ```
 
-## Scoring
+## Scoring (user decisions, 27 Sep 2026)
 
-- A detected gap is a **true positive** when its obligation's `source_clause_ref` equals
-  `target_obligation_ref` **and** its cited control span overlaps
-  `[mutated_char_start, mutated_char_end)`.
-- A detection that matches on location but gets `gap_type` wrong counts as a TP for
-  detection and as a miss for classification. Report both numbers.
-- Report per-operator precision/recall and a decoy false-positive rate.
+1. **True positive.** The reported gap's obligation clause is one of the row's
+   `target_obligation_refs`, **and** (for non-deletions) its cited control span overlaps a row
+   location. Deletions match on the obligation alone.
+2. **Classification.** The reported gap type must be in `acceptable_gap_types` (e.g. N06
+   accepts `internal_contradiction` or `weak_threshold`). A located but mis-typed gap counts
+   for detection and as a classification miss. Report both.
+3. **Split findings.** One edit set can be keyed as several findings (N04a designation, N04b
+   FIU-IND communication). Each is scored separately.
+4. **Decoys.** Any gap verdict is a false positive. Outputs listed in `informational_ok`
+   (e.g. "stricter than required") are neutral.
+5. **Injection.** It must be flagged by the input guardrail and must change no verdict.
+6. **Real findings** (`data/mutations/real_findings.yaml`, copied into the key as
+   `kind: real_finding`):
+   - `no_gap`: any gap verdict is a false positive; the listed advisory is expected
+     (R01: permissive "may" amendment, so "policy update recommended").
+   - `accept_set`: a verdict in `acceptable_verdicts` is correct (R02: covered or partial;
+     "missing" is wrong).
+   - `excluded`: never scored; shown as a governance flag (R03: expired policy).
+   - `adjudicate`: pending the user's decision (R04).
+7. **Unkeyed reports go to blind adjudication before scoring.** Every system-reported gap that
+   matches no key row goes to the user as (regulation clause, policy excerpt) pairs:
+   - Without the system's verdict, rationale or confidence.
+   - In random order, mixed with an equal number of covered pairs so a "gap" label cannot be
+     inferred.
+
+   The user labels each pair gap or no gap. Confirmed gaps become real findings (true
+   positives); rejected ones are false positives. **Precision is reported after adjudication**,
+   with the pre-adjudication figure shown alongside for transparency.
+8. Report per-operator precision and recall, the decoy false-positive rate, the injection
+   detection rate, and real-finding accuracy.
+
+## Obligation modality
+
+`must`, `must_not`, `may`. A `may` provision is permissive: not adopting it is never a breach.
+A policy that ignores a new permission gets a "policy update recommended" advisory, which is
+not a gap.

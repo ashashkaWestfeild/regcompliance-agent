@@ -44,6 +44,9 @@ class DocKind(StrEnum):
 class Modality(StrEnum):
     MUST = "must"
     MUST_NOT = "must_not"
+    # Permissive provisions ("the bank may ..."). Not following one is never a breach; a policy
+    # that ignores a new permission gets a "policy update recommended" advisory instead.
+    MAY = "may"
 
 
 class ThresholdKind(StrEnum):

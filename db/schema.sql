@@ -10,7 +10,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;  -- gen_random_uuid()
 
 -- ------------------------------------------------------------ enums
 CREATE TYPE doc_kind       AS ENUM ('master_direction','amendment','circular','draft','policy');
-CREATE TYPE modality       AS ENUM ('must','must_not');
+CREATE TYPE modality       AS ENUM ('must','must_not','may');  -- may = permissive, advisory only
 CREATE TYPE control_type   AS ENUM ('preventive','detective','corrective');
 CREATE TYPE control_nature AS ENUM ('manual','automated','semi_automated');
 CREATE TYPE verdict        AS ENUM ('covered','partial','missing');

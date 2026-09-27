@@ -9,7 +9,10 @@ independent of the models it will grade (ADR 0005).
 
 Outputs:
     data/mutated/<policy>.items.json   mutated Docling items (input to the pipeline)
-    eval/answer_key_<policy>.jsonl     one row per mutation, decoy and injection
+    eval/answer_key_<policy>.jsonl     one row per mutation, decoy, injection and real finding
+
+Real findings (data/mutations/real_findings.yaml) are passages of the real policy labelled by
+the user; they are copied into the key so the system is scored fairly on them.
 """
 
 import argparse
@@ -20,12 +23,14 @@ from pathlib import Path
 
 import yaml
 
+from regcomp.change.diff import own_text
 from regcomp.ingest.normalize import canonical
 from regcomp.ingest.pdf_docling import docling_items, parse_policy_items
 from regcomp.ingest.rbi_html import parse_file as parse_regulation
 
 REGULATION = "data/raw/rbi/kycdir_v3_20260918.html"
 REGULATION_VERSION = "KYCDIR-2025-upd-20260918"
+REAL_FINDINGS = "data/mutations/real_findings.yaml"
 
 EXPECTED = {  # operator -> (expected mapping verdict, expected gap type)
     "delete_control": ("missing", "missing_control"),
@@ -109,11 +114,18 @@ def main() -> int:
     src = next(p for p in sources["policies"] if p["id"] == args.policy)
     spec = yaml.safe_load(Path(f"data/mutations/{args.policy}.yaml").read_text(encoding="utf-8"))
 
-    regulation_refs = {c.ref for c in parse_regulation(REGULATION).clauses}
+    regulation = parse_regulation(REGULATION)
+    reg_text = {c.ref: own_text(c, regulation) for c in regulation.clauses}
+    real = [
+        f
+        for f in yaml.safe_load(Path(REAL_FINDINGS).read_text(encoding="utf-8"))
+        if args.policy in f["policies"]
+    ]
     errors = [
-        f"{m['id']}: unknown regulation ref {m['target_obligation_ref']!r}"
-        for m in spec
-        if m.get("target_obligation_ref") and m["target_obligation_ref"] not in regulation_refs
+        f"{m['id']}: unknown regulation ref {ref!r}"
+        for m in spec + real
+        for ref in m.get("target_obligation_refs", [])
+        if ref not in reg_text
     ]
     errors += [
         f"{m['id']}: unknown operator {m['operator']!r}"
@@ -135,6 +147,7 @@ def main() -> int:
     rows = []
     for m in spec:
         verdict, gap_type = EXPECTED[m["operator"]]
+        gap_types = m.get("expected_gap_types") or ([gap_type] if gap_type else [])
         locations = []
         for r in (r for r in records if r["id"] == m["id"]):
             start = locate(positions, mutated, r)
@@ -168,16 +181,43 @@ def main() -> int:
                 "mutated_text_sha256": sha256_text(doc.text),
                 "operator": m["operator"],
                 "theme": m["theme"],
-                "target_obligation_ref": m.get("target_obligation_ref"),
+                "target_obligation_refs": m.get("target_obligation_refs", []),
+                "target_obligation_text": {
+                    ref: reg_text[ref] for ref in m.get("target_obligation_refs", [])
+                },
                 "regulation_version": REGULATION_VERSION,
                 "expected_verdict": verdict,
-                "expected_gap_type": gap_type,
+                "acceptable_gap_types": gap_types,
+                "informational_ok": m.get("informational_ok", []),
                 "locations": locations,
                 "note": m.get("note", ""),
             }
         )
+    for f in real:
+        rows.append(
+            {
+                "mutation_id": f["id"],
+                "kind": "real_finding",
+                "policy": args.policy,
+                "policy_source_sha256": src["sha256"],
+                "mutated_text_sha256": sha256_text(doc.text),
+                "theme": f["theme"],
+                "target_obligation_refs": f.get("target_obligation_refs", []),
+                "target_obligation_text": {
+                    ref: reg_text[ref] for ref in f.get("target_obligation_refs", [])
+                },
+                "regulation_version": REGULATION_VERSION,
+                "scoring": f["scoring"],
+                "acceptable_verdicts": f.get("acceptable_verdicts", []),
+                "expected_advisory": f.get("expected_advisory"),
+                "note": f.get("note", ""),
+            }
+        )
 
-    kinds = {k: sum(r["kind"] == k for r in rows) for k in ("mutation", "decoy", "injection")}
+    kinds = {
+        k: sum(r["kind"] == k for r in rows)
+        for k in ("mutation", "decoy", "injection", "real_finding")
+    }
     print(
         f"{args.policy}: OK, {kinds}; mutated text {len(doc.text)} chars, "
         f"{len(doc.clauses)} clauses"

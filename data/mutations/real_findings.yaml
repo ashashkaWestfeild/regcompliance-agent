@@ -1,0 +1,38 @@
+# Findings that exist in the REAL published policies (not planted). Labelled by the user
+# (27 Sep 2026) so the system is scored fairly on them. They also appear in the mutated copies,
+# because mutations never touch these passages.
+#
+# scoring:
+#   no_gap       - any gap verdict is a false positive; the listed advisory output is expected
+#   accept_set   - a verdict in `acceptable_verdicts` is correct; anything else is wrong
+#   excluded     - never scored; shown in the demo as a governance flag
+#   adjudicate   - pending the user's blind adjudication
+
+- id: R01
+  policies: [nainital, centralbank]
+  theme: certified_copy
+  target_obligation_refs: ["5(1)(v)"]
+  scoring: no_gap
+  expected_advisory: policy_update_recommended
+  note: "Both policies limit the alternative certified-copy route to NRIs/PIOs. The 18 Sep 2026 amendment adds FPIs, but the provision is permissive ('may'), so the omission is not a breach. Expected output: 'policy update recommended'. This is also the demo's 'new circular arrives' event."
+
+- id: R02
+  policies: [nainital]
+  theme: ckycr_upload
+  target_obligation_refs: ["65(2)"]
+  scoring: accept_set
+  acceptable_verdicts: [covered, partial]
+  note: "Nainital requires CKYCR upload 'in terms of Rule 9 (1A)' but never states the 10-day deadline. Covered by reference or partial are both acceptable; 'missing' is wrong."
+
+- id: R03
+  policies: [nainital]
+  theme: governance
+  scoring: excluded
+  note: "The policy states it is valid up to 08.07.2026; it has lapsed as of 26 Sep 2026. Governance flag in the demo only."
+
+- id: R04
+  policies: [nainital]
+  theme: fiu_reporting
+  target_obligation_refs: ["15(2)"]
+  scoring: adjudicate
+  note: "Candidate found 27 Sep: 15(2) requires the Principal Officer's name, designation, address and contact details to go to FIU-IND AND RBI. Nainital's original policy communicates them to FIU-IND only. Pending the user's blind adjudication."

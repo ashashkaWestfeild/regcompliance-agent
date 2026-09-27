@@ -32,11 +32,12 @@ Declared not covered unless time remains after freeze: 13 cross-regulation, 14 r
 - Only public data goes to any LLM provider.
 
 ## Data and ground truth
-- Regulation: RBI (Commercial Banks – Know Your Customer) Directions, 2025 (RBI/DOR/2025-26/169, 28 Nov 2025). It replaced the 2016 KYC Master Direction, which is repealed; do not build on the 2016 MD. Three versions are on disk (original, after 29 Dec 2025 amendment, after 18 Sep 2026 amendment); provenance and sha256 in data/sources.yaml. STR/CTR numeric rules live in the PML Rules, not in the Directions.
+- **Base corpus (confirmed by user 27 Sep): RBI (Commercial Banks – Know Your Customer) Directions, 2025 (RBI/DOR/2025-26/169, 28 Nov 2025), plus the 18 Sep 2026 amendment (current version v3).** Demo "new circular arrives" event = the 18 Sep 2026 FPI amendment (permissive, so expected output is "policy update recommended", not a breach). It replaced the 2016 KYC Master Direction, which is repealed; do not build on the 2016 MD. Three versions are on disk (original, after 29 Dec 2025 amendment, after 18 Sep 2026 amendment); provenance and sha256 in data/sources.yaml. STR/CTR numeric rules live in the PML Rules, not in the Directions.
 - Controls: publicly published KYC/AML policies of two commercial banks, Nainital Bank and Central Bank of India (data/sources.yaml).
 - Gap planting: a script mutates the public policies and writes an answer key. The answer key is committed to git BEFORE any system run (timestamped proof against "self-grading").
 - Mutation operators: delete control; weaken threshold/frequency; narrow scope; introduce contradiction; make stale (pre-amendment rule); strip owner/evidence (design deficiency).
 - Mutation themes (from public RBI penalty patterns; user to validate): periodic re-KYC, risk categorization, beneficial-owner identification, CKYCR upload timelines, STR/CTR reporting to FIU-IND, transaction-monitoring alert review.
+- Answer key scoring rules (acceptable sets, split findings, decoys, real findings, blind adjudication of unkeyed reports before precision is reported): docs/mutation_taxonomy.md "Scoring". Obligation modality is must / must_not / may.
 - Hand-labeled real sample: ~30 obligation->control mappings labeled blind by the user.
 - Evidence: synthetic CSV logs (e.g., re-KYC completion), some deliberately failing operating tests.
 
