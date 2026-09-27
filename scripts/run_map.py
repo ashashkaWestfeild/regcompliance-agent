@@ -26,7 +26,9 @@ from regcomp.db import connect
 from regcomp.ingest.pdf_docling import parse_policy_items
 from regcomp.ingest.rbi_html import parse_file
 from regcomp.llm import STAGE_MODELS, embed
+from regcomp.pipeline import rerank as rerank_mod
 from regcomp.pipeline.judge import judge_unit
+from regcomp.pipeline.rerank import rerank
 
 REGULATION = "data/raw/rbi/kycdir_v3_20260918.html"
 REG_VERSION = "KYCDIR-2025-upd-20260918"
@@ -35,7 +37,8 @@ DEV_POLICY = "data/mutated/nainital.items.json"
 POLICY_VERSION = "nainital-mutated-350b8e0"
 POLICY_EFFECTIVE = date(2026, 9, 27)
 DEV_KEY = "eval/answer_key_nainital.jsonl"
-TOP_K = 5
+TOP_K = 5  # candidates the judge sees
+RETRIEVE_K = 20  # bge-m3 candidates before FlashRank reranking
 PIPELINE_TABLES = (
     "gap, remediation, mapping, control_test, evidence, review_override, clause_diff, "
     "change_event, embedding, obligation, control, clause, document, bank_profile"
@@ -223,15 +226,20 @@ def embed_all(conn, obligations, controls):
     return dict(zip([o["id"] for o in obligations], vectors[: len(obligations)], strict=True))
 
 
-def retrieve(conn, ob_vectors) -> dict:
+def retrieve(conn, ob_vectors, obligations, controls) -> dict:
+    """bge-m3 top-RETRIEVE_K from pgvector, then FlashRank rerank to TOP_K.
+    Returns {obligation_id: [(control_id, reranker_score), ...]} best first."""
+    ob_text = {o["id"]: f"{o['action']}. {o['quote']}" for o in obligations}
+    ct_text = {c["id"]: f"{c['objective']}. {c['quote']}" for c in controls}
     out = {}
     for oid, v in ob_vectors.items():
         rows = conn.execute(
-            "SELECT owner_id, 1 - (vec <=> %s::vector) FROM embedding"
-            " WHERE owner_kind = 'control' ORDER BY vec <=> %s::vector LIMIT %s",
-            (vec_literal(v), vec_literal(v), TOP_K),
+            "SELECT owner_id FROM embedding WHERE owner_kind = 'control'"
+            " ORDER BY vec <=> %s::vector LIMIT %s",
+            (vec_literal(v), RETRIEVE_K),
         ).fetchall()
-        out[oid] = [(r[0], float(r[1])) for r in rows]
+        candidates = [(r[0], ct_text[r[0]]) for r in rows]
+        out[oid] = rerank(ob_text[oid], candidates, TOP_K)
     return out
 
 
@@ -255,8 +263,12 @@ def main() -> int:
         )
         ob_vectors = embed_all(conn, obligations, controls)
         print(f"embedded ({time.time() - t0:.0f}s)", flush=True)
-        hits = retrieve(conn, ob_vectors)
-        print(f"retrieved top-{TOP_K} ({time.time() - t0:.0f}s)", flush=True)
+        hits = retrieve(conn, ob_vectors, obligations, controls)
+        print(
+            f"retrieved top-{RETRIEVE_K} -> FlashRank top-{TOP_K} "
+            f"(rerank failures {rerank_mod.failures}) ({time.time() - t0:.0f}s)",
+            flush=True,
+        )
 
         by_ctl = {c["id"]: c for c in controls}
         units = defaultdict(list)
