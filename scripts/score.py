@@ -186,7 +186,7 @@ def main() -> None:
         "- model time by stage (cache totals): " + "; ".join(stage_cost),
         "",
         "Not yet measured: extraction precision/recall vs the user's labels, calibration, "
-        "evidence key (N-E01/N-E02), applicability.",
+        "applicability.",
     ]
     (run / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 

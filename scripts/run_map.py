@@ -298,9 +298,18 @@ def main() -> int:
             if i % 10 == 0 or i == len(units):
                 print(f"[{time.strftime('%H:%M:%S')}] judged {i}/{len(units)} units", flush=True)
 
+        # Saved before the DB write so a write failure never costs a re-judge.
+        (run / "judgments.json").write_text(
+            json.dumps({str(k): _plain(v) for k, v in results.items()}, indent=1), encoding="utf-8"
+        )
         write_mappings_and_gaps(conn, obligations, results, hits, run)
     preview(obligations, results)
     return 0
+
+
+def _plain(r: dict) -> dict:
+    """Judge result without the resolved control UUID (stored in mapping.control_id)."""
+    return {k: v for k, v in r.items() if k != "control_uuid"}
 
 
 def write_mappings_and_gaps(conn, obligations, results, hits, run: Path):
@@ -337,7 +346,7 @@ def write_mappings_and_gaps(conn, obligations, results, hits, run: Path):
                     Jsonb(
                         [{"quote_start": r.get("control_quote_start")}] if r["control_uuid"] else []
                     ),
-                    Jsonb([{"judge": "cheap", "model": STAGE_MODELS["judge"], **r}]),
+                    Jsonb([{"judge": "cheap", "model": STAGE_MODELS["judge"], **_plain(r)}]),
                     max(0.0, min(1.0, float(r["confidence"]))),
                     status,
                     rank,
