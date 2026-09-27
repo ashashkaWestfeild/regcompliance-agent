@@ -1,0 +1,15 @@
+# Bank profile for the dev bank. Drives the applicability link of the chain.
+# Each attribute records its basis: "policy" = stated in the bank's public KYC/AML policy;
+# "assumption" = not evidenced in the public documents, set for the demo and editable in the UI.
+bank: Nainital Bank Ltd
+entity_type: {value: "commercial bank (scheduled, private sector)", basis: policy}
+geography: {value: ["India"], basis: assumption, note: "no overseas branches or subsidiaries mentioned"}
+customer_segments:
+  value: [individuals, sole proprietors, companies, partnership firms, trusts, unincorporated associations, NRIs and PIOs, foreign portfolio investors, politically exposed persons]
+  basis: policy
+products:
+  value: [savings accounts, small accounts, current accounts, term deposits, loans, wire transfers, correspondent banking, third-party products]
+  basis: policy
+channels:
+  value: [branch, business correspondents, video-based customer identification (V-CIP), Aadhaar OTP based e-KYC, digital KYC]
+  basis: policy
