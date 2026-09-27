@@ -134,6 +134,7 @@ Keep the project to industry standards and use open-source tools wherever practi
 - Check `git status --short` before every commit. The answer key is committed only in the user-approved approval commit.
 
 ## Working agreement with the user
+- The plan (docs/PLAN.md) is a guide, not a contract: when a task is done, pull the next one forward without waiting; re-date the schedule and the metadata chart as work moves. Only hard line: submit before 10 Oct 2026.
 - Direct, precise, no fluff or praise, no emojis. Explain intuition and first principles.
 - Challenge weak assumptions. Name analysis paralysis when scope refinement replaces building.
 - Do not remove or alter provided code unnecessarily. Refer to exact code segments, not line numbers.

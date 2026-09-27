@@ -7,6 +7,11 @@ Revision 2 (26 Sep, 20:14): adds the Fri 2 Oct holiday, reflects what the corpus
 and folds in the patterns adopted from the reference material (section 3).
 Revision 3 (26 Sep, 20:40): aligned with the Unstop rules (section 7) and adds the guardrails
 layer (section 3a).
+Revision 4 (27 Sep, 15:00): the plan is a guide, not a contract (user). Work is pulled forward
+as soon as the previous task is done and the dates below are re-set continuously; the only hard
+line is submission before 10 Oct. Sunday's work finished early, so the end-to-end run moves from
+Wed 30 to Sun 27 / Mon 28. The chain links applicability, evidence and testing are promoted from
+stretch to core in a minimal form (see 5a).
 
 ## 1. Status and budget
 
@@ -144,26 +149,42 @@ pipeline, and keeps the metadata logs updated. **Only you can do these:**
 Internal contradictions *within* a bank policy are a planted mutation. That is not feature 14.
 The final claim is decided on **Wed 7 Oct** from the evidence matrix.
 
-## 6. Schedule
+## 5a. Chain coverage (rev 4)
 
-| Day | Hrs | Work | Exit criterion |
+Problem 1's chain, and where each link is shown:
+
+| Link | Minimal version that must exist | Built on |
+|---|---|---|
+| Regulations | 3 versions, clause tree, diff | done |
+| Obligations | extracted with modality must / must_not / may, verbatim quote | Sun 27 - Mon 28 |
+| Applicability | bank profile + filter with a reason per obligation (e.g. "applies only if V-CIP introduced") | Wed 30 |
+| Policies / controls | extracted controls with owner / frequency / evidence fields | Sun 27 - Mon 28 |
+| Evidence | 2 synthetic CSVs (re-KYC completion dates, CKYCR upload lag) | Wed 30 |
+| Testing | design test (control attributes) + operating test (exception rate vs tolerance), "cannot assess" without evidence | Wed 30 |
+| Gaps | deterministic gap rules, scored against the frozen key | Mon 28 - Tue 29 |
+| Remediation | drafts for top gaps with owner line, due date, success criterion | Thu 1 |
+| Ongoing monitoring | change agent triggered by a new circular **or** a new evidence batch | Fri 2 - Sat 3 |
+
+## 6. Schedule (rev 4: rolling; re-dated as work moves)
+
+| When | Work | Exit criterion | Status |
 |---|---|---|---|
-| ~~Sat 26 Sep~~ | 3 | ~~Schemas, DDL, taxonomy, plan~~, ~~RBI corpus (3 versions), theme verification, docker-compose~~ | Done |
-| **Sun 27 Sep** | 9 | Regulation parser (HTML v2/v3 + Docling v1) with clause-level normalization; policy parser (Docling); loader into Postgres; `spec.yaml` (~25 mutations + 8 decoys + 1 injection plant), `mutate.py`; **answer key committed and pushed** | Answer key on GitHub before any LLM run; v1->v2 clause diff shows 1 real change, not 500 |
-| Mon 28 Sep | 3 | LiteLLM + exact cache + Logfire wiring; obligation extraction (single pass, strict JSON) on the 6 theme chapters. You: label 15 | Obligations in DB, all spans verified |
-| Tue 29 Sep | 3 | Control extraction; bge-m3 embeddings; FlashRank rerank to top 5. You: label 15 | Candidates per obligation |
-| **Wed 30 Sep** | 3 | Mapping judge, citation gate, gap rules, **first end-to-end run** | Gap list for one policy. **CHECKPOINT 1** |
-| Thu 1 Oct | 3 | Eval harness v1: gap P/R per operator, decoy FP rate, citation validity, extraction P/R vs your labels | First metrics table |
-| **Fri 2 Oct (holiday)** | 9 | AM: tiering (agree + high confidence -> auto, else strong model -> review queue), second extraction pass, risk rubric. PM: **change agent part 1** (LangGraph skeleton, normalize/diff/classify, Postgres checkpointer) | Agent classifies both real amendments correctly and ignores cosmetic noise |
-| **Sat 3 Oct** | 9 | **Change agent part 2**: re-extract, re-map affected edges only, recovery (repair-retry, escalate, cannot-assess), open gaps + remediation; injected-failure test. Evidence CSVs + design/operating tests | Agent handles the Sep 2026 amendment end to end, including one recovered failure |
-| **Sun 4 Oct** | 9 | What-if dry-run on a synthetic draft circular; reviewer override -> few-shot feedback; injection flagging; remediation polish; eval re-run | All claimed features exist. **CHECKPOINT 2** |
-| Mon 5 Oct | 3 | Streamlit: bank profile, gap dashboard, "why" panel, review queue | Core demo path clickable |
-| Tue 6 Oct | 3 | Streamlit: change timeline, metrics page (including the guardrail report), graph view; replay mode; **deploy replay to Streamlit Community Cloud** (the rules make an accessible demo link mandatory) | Public demo URL works without API keys |
-| **Wed 7 Oct** | 3 | **FEATURE FREEZE.** Final eval: dev (Nainital) and first-ever run on the held-out test set (Central Bank), reported separately; calibration plot, cost/latency; evidence matrix; decide claim | Numbers and claim frozen |
-| Thu 8 Oct | 3 | Architecture document (`docs/ARCHITECTURE.md`) + **pitch deck** (PDF, 10-12 slides). **Submit v0 on Unstop tonight** (it can be replaced until the deadline) | Deck PDF; v0 submitted |
-| Fri 9 Oct | 3 | Rehearse; record the **2-4 minute** video (hard limit); upload unlisted and check the link while logged out; README / run instructions + AI-assistance disclosure | Video link works publicly |
-| **Sat 10 Oct** | 6 | Fix what the rehearsal exposed; check all links logged out; **final submit by 15:00** (edits allowed until 11 Oct 23:59) | Submitted |
-| Sun 11 Oct | - | Emergency buffer only | - |
+| Sat 26 | Schemas, DDL, taxonomy, plan; RBI corpus (3 versions); theme verification | - | done |
+| Sun 27 AM | Parsers (RBI HTML + Docling PDFs, policies); both real amendments diff to 1 change; Neon + schema; Ollama models; CI | - | done |
+| Sun 27 PM | Answer keys reviewed, coverage-checked, **approved and frozen** (`350b8e0`) | - | done |
+| **Sun 27 PM - Mon 28** | **Crude end-to-end on Nainital (dev):** LLM client + exact cache; obligation extraction (with applicability fields); control extraction; bge-m3 retrieval; first-pass judge; citation gate; gap list; load to Neon. You: label 15 | Complete run, any quality | in progress |
+| Tue 29 | Eval harness v1 (counts per row type vs the frozen dev key; citation validity; extraction vs your labels). FlashRank rerank. You: label 15 + first blind adjudication | First metrics table | |
+| Wed 30 | **Applicability** (bank profile + filter, reasons) + **evidence and testing minimal** (2 synthetic CSVs, design + operating tests, one failing) | Chain links shown end to end | |
+| Thu 1 | Tiering (judges agree + high confidence -> auto; else strong model -> review queue), second extraction pass, risk rubric, remediation drafts | Numbers improving | |
+| **Fri 2 (holiday)** | **Change agent part 1:** LangGraph, diff -> classify (incl. permissive "may" -> advisory) -> scope, Postgres checkpointer | Both real amendments classified; FPI -> "policy update recommended" | |
+| **Sat 3** | **Change agent part 2:** re-extract, re-map affected edges only, recovery, open gaps + remediation; evidence-batch trigger (ongoing monitoring) | Sep 2026 amendment end to end, one recovered failure | |
+| **Sun 4** | What-if dry-run; reviewer override loop; injection flagging report; eval re-run | All claimed features exist. **CHECKPOINT** | |
+| Mon 5 - Tue 6 | Streamlit (profile, gaps, why-panel, review queue, timeline, metrics, guardrails); replay mode; **Streamlit Cloud deploy** | Public demo URL works without keys | |
+| **Wed 7** | **FEATURE FREEZE.** Final eval: dev + first-ever test-set run (Central Bank), counts per split; evidence matrix; decide claim | Numbers and claim frozen | |
+| Thu 8 | Architecture doc + pitch deck (8-12 slides); **submit v0** | v0 submitted | |
+| Fri 9 | Rehearse; record 2-4 min video (mp4 < 50 MB + unlisted YouTube) | Video link works | |
+| **Sat 10** | Fixes; final submit by 15:00 | Submitted | |
+| Sun 11 | Buffer only | - | |
 
 ### Checkpoints and cuts
 
