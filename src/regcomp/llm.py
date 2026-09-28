@@ -57,6 +57,10 @@ def _post(path: str, body: dict, timeout: int = 600, retry: bool = True) -> dict
                 _post("/api/generate", {"model": body["model"], "keep_alive": 0}, 60, False)
             return _post(path, body, timeout, retry=False)
         raise LLMError(f"Ollama unreachable at {OLLAMA_URL}: {e} {detail}".strip()) from None
+    except TimeoutError:
+        # A generation that runs past the timeout (seen 28 Sep: thinking mode looping for 10+
+        # min). At temperature 0 a retry would loop the same way, so the caller decides.
+        raise LLMError(f"{path}: no answer within {timeout}s") from None
 
 
 _spare = None  # private cache connection used after the caller's connection drops

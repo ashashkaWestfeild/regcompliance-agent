@@ -25,7 +25,7 @@ from psycopg.types.json import Jsonb
 from regcomp.db import connect
 from regcomp.ingest.pdf_docling import parse_policy_items
 from regcomp.ingest.rbi_html import parse_file
-from regcomp.llm import STAGE_MODELS, embed
+from regcomp.llm import STAGE_MODELS, LLMError, embed
 from regcomp.pipeline import rerank as rerank_mod
 from regcomp.pipeline.judge import judge_unit
 from regcomp.pipeline.rerank import rerank
@@ -283,7 +283,7 @@ def main() -> int:
         units = defaultdict(list)
         for o in obligations:
             units[o["unit_ref"]].append(o)
-        results = {}
+        results, failed_units = {}, []
         for i, obs in enumerate(units.values(), 1):
             cand_ids = list(dict.fromkeys(cid for o in obs for cid, _ in hits[o["id"]]))
             local = {f"C{n}": cid for n, cid in enumerate(cand_ids, 1)}
@@ -300,13 +300,28 @@ def main() -> int:
                 }
                 for n, o in enumerate(obs, 1)
             ]
-            for r in judge_unit(payload, candidates, conn, think=args.judge_think):
+            try:
+                judged = judge_unit(payload, candidates, conn, think=args.judge_think)
+            except LLMError as e:
+                # One unit's judge call failing (e.g. a runaway generation) must not end a
+                # multi-hour run: skip the unit, count it, and report it.
+                failed_units.append(obs[0]["unit_ref"])
+                print(
+                    f"[{time.strftime('%H:%M:%S')}] judge failed on unit {obs[0]['unit_ref']}: {e}",
+                    flush=True,
+                )
+                judged = []
+            for r in judged:
                 o = obs[int(r["obligation"][1:]) - 1]
                 r["control_uuid"] = local.get(r["control"]) if r["control"] else None
                 results[o["id"]] = r
             if i % 10 == 0 or i == len(units):
                 print(f"[{time.strftime('%H:%M:%S')}] judged {i}/{len(units)} units", flush=True)
 
+        if failed_units:
+            print(
+                f"judge failed on {len(failed_units)} units (skipped): {failed_units}", flush=True
+            )
         # Saved before the DB write so a write failure never costs a re-judge.
         (run / "judgments.json").write_text(
             json.dumps({str(k): _plain(v) for k, v in results.items()}, indent=1), encoding="utf-8"
