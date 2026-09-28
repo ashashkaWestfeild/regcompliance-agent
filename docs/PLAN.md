@@ -7,7 +7,7 @@ Revision 2 (26 Sep, 20:14): adds the Fri 2 Oct holiday, reflects what the corpus
 and folds in the patterns adopted from the reference material (section 3).
 Revision 3 (26 Sep, 20:40): aligned with the Unstop rules (section 7) and adds the guardrails
 layer (section 3a).
-Revision 5 (29 Sep, 00:45): rows re-dated after Sun 27 / Mon 28. Mon 28 was spent on judge quality
+Revision 5 (29 Sep, 00:42): rows re-dated after Sun 27 / Mon 28. Mon 28 was spent on judge quality
 (three judge experiments), the extended change-detection set and parser fixes, and a third bank
 (held-out test2); tiering and remediation move to Tue 29.
 
