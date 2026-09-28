@@ -7,6 +7,10 @@ Revision 2 (26 Sep, 20:14): adds the Fri 2 Oct holiday, reflects what the corpus
 and folds in the patterns adopted from the reference material (section 3).
 Revision 3 (26 Sep, 20:40): aligned with the Unstop rules (section 7) and adds the guardrails
 layer (section 3a).
+Revision 5 (29 Sep, 00:45): rows re-dated after Sun 27 / Mon 28. Mon 28 was spent on judge quality
+(three judge experiments), the extended change-detection set and parser fixes, and a third bank
+(held-out test2); tiering and remediation move to Tue 29.
+
 Revision 4 (27 Sep, 15:00; rows re-dated 15:47): the plan is a guide, not a contract (user). Work is pulled forward
 as soon as the previous task is done and the dates below are re-set continuously; the only hard
 line is submission before 10 Oct. Sunday's work finished early, so the end-to-end run moves from
@@ -172,9 +176,9 @@ Problem 1's chain, and where each link is shown:
 | Sat 26 | Schemas, DDL, taxonomy, plan; RBI corpus (3 versions); theme verification | - | done |
 | Sun 27 AM | Parsers (RBI HTML + Docling PDFs, policies); both real amendments diff to 1 change; Neon + schema; Ollama models; CI | - | done |
 | Sun 27 PM | Answer keys reviewed, coverage-checked, **approved and frozen** (`350b8e0`) | - | done |
-| **Sun 27 PM** | **Crude end-to-end on Nainital (dev)**: extraction, pgvector retrieval, judge, gaps; **eval harness v1**; evidence + control tests; applicability module | First scores (counts) | in progress (ETA 17:30) |
-| **Mon 28** | Wire applicability + evidence into the pipeline; score the evidence key; FlashRank rerank; change-detection report vs RBI amendment markers; first fixes from the scores. You: label 15 | Chain links scored end to end | |
-| Tue 29 | Tiering (judges agree + high confidence -> auto; else strong model -> review queue), second extraction pass, risk rubric, **remediation drafts**. You: label 15 + blind adjudication | Numbers improving | |
+| **Sun 27 PM** | **Crude end-to-end on Nainital (dev)**: extraction, pgvector retrieval, judge, gaps; **eval harness v1**; evidence + control tests; applicability module | First scores (counts) | done: runs e2e1-e2e5, error analysis, dedupe, obligation level; third bank drafted |
+| **Mon 28** | Wire applicability + evidence into the pipeline; score the evidence key; FlashRank rerank; change-detection report vs RBI amendment markers; first fixes from the scores. You: label 15 | Chain links scored end to end | done: evidence 2/2, rerank, change detection on 9 more Directions (262/266), parser fixes; judge rubric e2e6 reverted; thinking-judge e2e7 run (to score) |
+| Tue 29 | Score e2e7 (thinking judge) vs e2e5; freeze the Dhanlaxmi key (after user review); score the 50-label gold set. Then **tiering** (fast judge for all; thinking / strong judge only on uncertain units -> high-confidence gaps vs review queue), loop caps + fallback, risk rubric, **remediation drafts**. You: Dhanlaxmi review + blind review | Triage report: high-confidence precision, review-queue rate, recall | |
 | Wed 30 | Label-based accuracy + calibration; tuning on the dev set only | Metrics vs user labels | |
 | Thu 1 | **Change agent groundwork** (LangGraph skeleton, Postgres checkpointer, diff tool wrapped) | Agent runs a dry pass | |
 | **Fri 2 (holiday)** | **Change agent part 1:** LangGraph, diff -> classify (incl. permissive "may" -> advisory) -> scope, Postgres checkpointer | Both real amendments classified; FPI -> "policy update recommended" | |
