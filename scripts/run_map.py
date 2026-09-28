@@ -253,6 +253,7 @@ def retrieve(conn, ob_vectors, obligations, controls) -> dict:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
+    ap.add_argument("--judge-think", action="store_true", help="judge with thinking mode on")
     args = ap.parse_args()
     run = Path("eval/runs") / args.run
     obligations = json.loads((run / "obligations.json").read_text(encoding="utf-8"))["items"]
@@ -299,7 +300,7 @@ def main() -> int:
                 }
                 for n, o in enumerate(obs, 1)
             ]
-            for r in judge_unit(payload, candidates, conn):
+            for r in judge_unit(payload, candidates, conn, think=args.judge_think):
                 o = obs[int(r["obligation"][1:]) - 1]
                 r["control_uuid"] = local.get(r["control"]) if r["control"] else None
                 results[o["id"]] = r

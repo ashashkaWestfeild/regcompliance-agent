@@ -10,6 +10,10 @@ threshold / scope / owner / conflicting control) with rule-derived verdicts. qwe
 the checks inconsistently (e.g. "action: different" while its rationale said the control
 addresses the obligation), so planted gaps fell 3/7 -> 2/7, decoys flagged rose 1/3 -> 2/3 and
 unkeyed gaps 178 -> 328. Element checks need a stronger judge; see the tiering plan.
+
+Also tried and reverted (28 Sep, dev run e2e6): generic rubric rules (substance over wording;
+adopting some permitted alternatives is covered; partial only with a named weaker element).
+Partial verdicts rose 136 -> 172 and unkeyed gaps 106 -> 124, recall unchanged at 2/7.
 """
 
 from regcomp.llm import complete_json
@@ -92,7 +96,9 @@ def gap_type(verdict: str, issue: str) -> str | None:
     return None
 
 
-def judge_unit(obligations: list[dict], candidates: dict[str, dict], conn) -> list[dict]:
+def judge_unit(
+    obligations: list[dict], candidates: dict[str, dict], conn, think: bool = False
+) -> list[dict]:
     """obligations: [{id, modality, action, threshold, applies_to, quote}];
     candidates: {control_id: {quote, owner, frequency, ...}}. Returns gated results."""
     lines = ["<obligations>"]
@@ -105,7 +111,9 @@ def judge_unit(obligations: list[dict], candidates: dict[str, dict], conn) -> li
     for cid, c in candidates.items():
         lines.append(f"[{cid}] {c['quote']}")
     lines.append("</candidate_controls>")
-    raw = complete_json("judge", JUDGE_SYSTEM, "\n".join(lines), JUDGE_SCHEMA, conn=conn)
+    raw = complete_json(
+        "judge", JUDGE_SYSTEM, "\n".join(lines), JUDGE_SCHEMA, think=think, conn=conn
+    )
 
     known = {o["id"] for o in obligations}
     top_candidate = {o["id"]: o["candidates"][0] for o in obligations if o.get("candidates")}
