@@ -20,12 +20,15 @@ from dataclasses import dataclass, field
 from regcomp.ingest.normalize import canonical
 
 _DEC = re.compile(r"^(\d{1,2}(?:\.\d{1,2})+)\.?\s+")
-_PARA = re.compile(r"^(\d{1,3})\.\s+")
+# "121A." is how RBI numbers a paragraph inserted by an amendment (seen in 2026 amendments).
+_PARA = re.compile(r"^(\d{1,3}[A-Z]?)\.\s+")
 _LABEL = r"[0-9]{1,2}|[a-z]{1,2}|[ivxl]{1,6}"
 _PAREN = re.compile(
     rf"^(?:\((?P<p>{_LABEL})\)\s*|(?P<r>{_LABEL})\)\s+|(?P<d>[a-z]{{1,2}}|[ivxl]{{1,6}})\.\s+)"
 )
 _ROMAN = re.compile(r"^[ivxl]+$")
+# "(ia)" is a sub-clause inserted after "(i)" by an amendment: a roman sibling, not a letter.
+_ROMAN_INSERT = re.compile(r"^(?P<base>[ivxl]{1,6})(?P<suffix>[a-z])$")
 _ROMAN_VALUES = {"i": 1, "v": 5, "x": 10, "l": 50}
 
 
@@ -76,6 +79,9 @@ def _classify(label: str, stack: list[tuple[str, str]]) -> str:
     if label.isdigit():
         return "num"
     open_types = {t: lab for t, lab in stack}
+    inserted = _ROMAN_INSERT.match(label)
+    if inserted and open_types.get("roman") == inserted.group("base"):
+        return "roman"
     if _ROMAN.match(label):
         prev_alpha = open_types.get("alpha")
         # "(i)" right after "(h)" is a letter, not the roman numeral one.
@@ -104,6 +110,7 @@ def build(blocks: list[Block]) -> ParsedDocument:
     context: list[tuple[int, int, bool, str | None, str | None]] = []  # per block
     source_positions: dict[int, int] = {}
 
+    pending: list[str] = []  # markers seen where no clause is open yet
     for block in blocks:
         text = canonical(block.text)
         if not text:
@@ -111,6 +118,9 @@ def build(blocks: list[Block]) -> ParsedDocument:
         start = offset
 
         if block.is_heading:
+            # A marker on a heading ("[Chapter VI-A ..." inserted by an amendment) belongs to
+            # the content it introduces: carry it to the next clause instead of dropping it.
+            pending.extend(block.amended_by)
             boundaries.append((start, 0))
             stack.clear()
             open_nodes.clear()
@@ -134,6 +144,8 @@ def build(blocks: list[Block]) -> ParsedDocument:
                 boundaries.append((start, depth))
                 opened.append(node)
                 open_nodes[:] = [node]
+                node["amended_by"].extend(pending)
+                pending.clear()
             elif paren and stack:
                 label = paren.group("p") or paren.group("r") or paren.group("d")
                 kind = _classify(label, stack)
@@ -159,9 +171,13 @@ def build(blocks: list[Block]) -> ParsedDocument:
                 boundaries.append((start, depth))
                 opened.append(node)
                 open_nodes.append(node)
+                node["amended_by"].extend(pending)
+                pending.clear()
             # Unmarked block: nothing to open; it extends the deepest open clause.
             if block.amended_by and open_nodes:
                 open_nodes[-1]["amended_by"].extend(block.amended_by)
+            elif block.amended_by:
+                pending.extend(block.amended_by)
 
         context.append((start, start + len(text), block.is_heading, chapter, section))
         for item, off in block.sources:

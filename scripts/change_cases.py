@@ -25,7 +25,8 @@ from pathlib import Path
 
 import yaml
 
-from regcomp.change.diff import diff, substantive
+from regcomp.change.diff import diff, own_text, substantive
+from regcomp.ingest.normalize import for_diff
 from regcomp.ingest.rbi_html import parse_file
 
 # Selected 27 Sep 2026 from https://rbi.org.in/Scripts/BS_ViewMasterDirections.aspx: every
@@ -85,6 +86,27 @@ def under_marked(ref: str | None, parent: dict, truth: set) -> bool:
     return False
 
 
+def bracketed(doc, marked: set[str]) -> set[str]:
+    """RBI wraps amended text in [ ... ] and puts one dated footnote just before the '['. A
+    marked clause therefore also covers every clause that starts inside the bracket range
+    opened in or just before it (e.g. paragraphs 121A-121D, or a whole inserted chapter)."""
+    pairs, stack = [], []
+    for i, ch in enumerate(doc.text):
+        if ch == "[":
+            stack.append(i)
+        elif ch == "]" and stack:
+            pairs.append((stack.pop(), i))
+    spans = {c.ref: (c.char_start, c.char_end) for c in doc.clauses}
+    covered = set()
+    for opening, closing in pairs:
+        claimed = any(
+            spans[ref][0] - 300 <= opening <= spans[ref][1] for ref in marked if ref in spans
+        )
+        if claimed:
+            covered |= {c.ref for c in doc.clauses if opening <= c.char_start <= closing}
+    return covered
+
+
 def cached(name: str, url: str) -> Path:
     path = CACHE / name
     if not path.exists():
@@ -96,6 +118,7 @@ def cached(name: str, url: str) -> Path:
 def main() -> None:
     CACHE.mkdir(parents=True, exist_ok=True)
     manifest, rows, details = [], [], []
+    totals = {"found": 0, "truth": 0, "marker_only": 0, "unexplained": 0}
     path = Path("data/change_cases.yaml")
     known = (
         {m["rbi_page_id"]: m for m in yaml.safe_load(path.read_text("utf-8")) or []}
@@ -129,15 +152,30 @@ def main() -> None:
         captured = datetime.strptime(ts[:8], "%Y%m%d").date()
         old_path = cached(f"{pid}_{ts}.html", RAW.format(ts, original))
         old = parse_file(str(old_path))
-        truth = {ref for ref, ds in dated.items() if any(d > captured for d in ds)}
+        marked = {ref for ref, ds in dated.items() if any(d > captured for d in ds)}
+        truth = marked | bracketed(new, marked)
         reported = {c.new_ref or c.old_ref for c in substantive(diff(old, new))}
         found, missed, extra = reported & truth, truth - reported, reported - truth
+        # A marker can sit on a paragraph whose own text is unchanged (it introduces an inserted
+        # child block); such a "miss" has nothing to detect and is reported separately.
+        old_by, new_by = {c.ref: c for c in old.clauses}, {c.ref: c for c in new.clauses}
+        marker_only = {
+            r
+            for r in missed
+            if r in old_by
+            and r in new_by
+            and for_diff(own_text(old_by[r], old)) == for_diff(own_text(new_by[r], new))
+        }
+        totals["found"] += len(found)
+        totals["truth"] += len(truth)
+        totals["marker_only"] += len(marker_only)
         # RBI puts a "substituted" marker on a paragraph; its sub-clauses change with it.
         parent = {c.ref: c.parent_ref for c in old.clauses} | {
             c.ref: c.parent_ref for c in new.clauses
         }
 
         unexplained = {r for r in extra if not under_marked(parent.get(r), parent, truth)}
+        totals["unexplained"] += len(unexplained)
         amended = ", ".join(sorted({d.isoformat() for d in amend_dates if d > captured}))
         rows.append(
             f"| {name} | {captured.isoformat()} | {amended} | {len(found)}/{len(truth)} "
@@ -145,7 +183,8 @@ def main() -> None:
         )
         details.append(
             f"- {name}: found {sorted(found)}"
-            + (f"; missed {sorted(missed)}" if missed else "")
+            + (f"; missed {sorted(missed - marker_only)}" if missed - marker_only else "")
+            + (f"; marker only, text unchanged {sorted(marker_only)}" if marker_only else "")
             + (f"; extra not under a marked clause {sorted(unexplained)}" if unexplained else "")
         )
         manifest.append(
@@ -164,13 +203,19 @@ def main() -> None:
         "# Change detection on real 2026 amendments of other RBI Directions",
         "",
         "Old = latest Wayback capture before the amendments; new = current rbi.org.in page.",
-        "Ground truth = clauses RBI marked as amended after the old capture. Counts only; no",
-        "language model involved. KYC (2 amendments) is in change_detection.md.",
+        "Ground truth = clauses RBI marked as amended after the old capture, extended across the",
+        "'[ ... ]' range RBI opens at each marker (an inserted block has one footnote).",
+        "Counts only; no language model involved. KYC (2 amendments) is in change_detection.md.",
         "",
         "| Direction | Old capture | Amendments (effective) | Found | Missed | Extra | Extra not "
         "under a marked clause |",
         "|---|---|---|---|---|---|---|",
         *rows,
+        "",
+        f"**Total:** {totals['found']}/{totals['truth']} RBI-amended clauses found; the "
+        f"{totals['truth'] - totals['found']} not found are marker-only ({totals['marker_only']}: "
+        "the marked paragraph's own text is unchanged) or listed below; "
+        f"{totals['unexplained']} reported changes are not under any RBI marker.",
         "",
         *details,
         "",
