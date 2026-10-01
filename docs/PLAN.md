@@ -13,6 +13,8 @@ Revision 5 (29 Sep, 00:42): rows re-dated after Sun 27 / Mon 28. Mon 28 was spen
 Revision 6 (2 Oct, 01:46): re-dated after three days without build work (Tue 29 after the e2e7
 score, Wed 30, Thu 1). Thinking-mode tiering is dropped (e2e7 rejected). Risk rubric, remediation,
 triage and the change-agent groundwork move into Fri 2 - Sun 4; label cut-off Sun 4 Oct.
+Revision 7 (2 Oct, 01:50; user): every major build part, the UI and the public demo link included,
+is complete by the end of Sun 4 Oct. Mon 5 - Tue 6 become buffer. The freeze stays on Wed 7 Oct.
 
 Revision 4 (27 Sep, 15:00; rows re-dated 15:47): the plan is a guide, not a contract (user). Work is pulled forward
 as soon as the previous task is done and the dates below are re-set continuously; the only hard
@@ -172,7 +174,7 @@ Problem 1's chain, and where each link is shown:
 | Remediation | drafts for top gaps with owner line, due date, success criterion | Thu 1 |
 | Ongoing monitoring | change agent triggered by a new circular **or** a new evidence batch | Fri 2 - Sat 3 |
 
-## 6. Schedule (rev 6: rolling; re-dated as work moves)
+## 6. Schedule (rev 7: rolling; re-dated as work moves)
 
 | When | Work | Exit criterion | Status |
 |---|---|---|---|
@@ -183,10 +185,10 @@ Problem 1's chain, and where each link is shown:
 | **Mon 28** | Wire applicability + evidence into the pipeline; score the evidence key; FlashRank rerank; change-detection report vs RBI amendment markers; first fixes from the scores. You: label 15 | Chain links scored end to end | done: evidence 2/2, rerank, change detection on 9 more Directions (262/266), parser fixes; judge rubric e2e6 reverted; thinking-judge e2e7 run (to score) |
 | Tue 29 | Score e2e7 (thinking judge) vs e2e5 | Judge decision | done: thinking mode rejected (planted 1/7 vs 2/7, extras 116 vs 106, 126 vs ~30 GPU-min); tiering on thinking dropped; the rest moved to Fri 2 - Sun 4 |
 | Wed 30 - Thu 1 | - | - | no build work |
-| **Fri 2 (holiday)** | **Change agent groundwork + part 1:** LangGraph skeleton, Postgres checkpointer, diff -> classify (incl. permissive "may" -> advisory) -> scope. Lead-in anchor fix (extraction); deterministic risk rubric. You: 50-row blind review + Dhanlaxmi key review | Both real amendments classified; FPI -> "policy update recommended" | |
-| **Sat 3** | **Change agent part 2:** re-extract, re-map affected edges only, recovery, open gaps; evidence-batch trigger (ongoing monitoring); **remediation drafts** | Sep 2026 amendment end to end, one recovered failure | |
-| **Sun 4** | Score the 50-label gold set per judge candidate; **triage** (high-confidence gaps vs review queue); freeze + push the Dhanlaxmi key; what-if dry-run; reviewer override loop; injection flagging report; eval re-run. **Label cut-off:** no labels / no review by today -> judge stays e2e5, Dhanlaxmi left out of the held-out run, claim D1 | All claimed features exist. **CHECKPOINT** | |
-| Mon 5 - Tue 6 | Streamlit (profile, gaps, why-panel, review queue, timeline, metrics, guardrails); replay mode; **Streamlit Cloud deploy** | Public demo URL works without keys | |
+| **Fri 2 (holiday, 9 h)** | **Change agent groundwork + part 1:** LangGraph skeleton, Postgres checkpointer, diff -> classify (incl. permissive "may" -> advisory) -> scope. Lead-in anchor fix (extraction) + dev re-score; deterministic risk rubric; **remediation drafts**. You: 50-row blind review + Dhanlaxmi key review | Both real amendments classified; FPI -> "policy update recommended" | |
+| **Sat 3 (9 h)** | **Change agent part 2:** re-extract, re-map affected edges only, recovery, open gaps; evidence-batch trigger (ongoing monitoring); what-if dry-run; reviewer override loop; **triage** (high-confidence gaps vs review queue). You: Streamlit Community Cloud account | Sep 2026 amendment end to end, one recovered failure | |
+| **Sun 4 (9 h)** | **Streamlit** (profile, gaps, why-panel, review queue, timeline, metrics, guardrails); replay mode; **Streamlit Cloud deploy**. Score the 50-label gold set per judge candidate; freeze + push the Dhanlaxmi key; injection flagging report; eval re-run. **Label cut-off 12:00:** no labels / no review -> judge stays e2e5, Dhanlaxmi left out of the held-out run, claim D1 | **BUILD COMPLETE:** all claimed features exist; public demo URL works without keys. **CHECKPOINT** | |
+| Mon 5 - Tue 6 | Buffer: dev-only tuning from the labels, fixes, UI polish; anything that slipped from Sun 4 | Nothing open before the freeze | |
 | **Wed 7** | **FEATURE FREEZE.** Final eval: dev + first-ever test-set runs (Central Bank; Dhanlaxmi if its key is frozen), in chunks of 30 min or less resumed from the cache, counts per split; evidence matrix; decide claim | Numbers and claim frozen | |
 | Thu 8 | Architecture doc + pitch deck (8-12 slides); **submit v0** | v0 submitted | |
 | Fri 9 | Rehearse; record 2-4 min video (mp4 < 50 MB + unlisted YouTube) | Video link works | |
@@ -197,8 +199,10 @@ Problem 1's chain, and where each link is shown:
 
 - **Wed 30 Sep, no end-to-end run:** single-pass extraction only, one judge, drop the second
   pass on Fri 2 Oct, and use the whole holiday on the change agent.
-- **Sun 4 Oct, agent unstable:** reduce it to diff -> graph query -> re-map with recovery;
-  cut what-if (feature 12).
+- **Sat 3 Oct end of day, agent unstable:** reduce it to diff -> graph query -> re-map with
+  recovery; cut what-if (feature 12).
+- **Sun 4 Oct end of day, demo not deployed:** the Mon 5 - Tue 6 buffer takes it; cut UI polish
+  and the graph view first.
 - **Docker still unavailable on Sun 27 midday:** switch to Neon (about 15 min). Parsers do not
   need a DB, so Sunday morning is unaffected.
 - **Cut order when slipping:** UI polish -> graph view -> reviewer feedback loop -> what-if ->

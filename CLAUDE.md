@@ -154,12 +154,14 @@ Keep the project to industry standards and use open-source tools wherever practi
 - Say explicitly when something is uncertain or speculative.
 
 ## Next action
-State on 2 Oct 01:46 (details: docs/PLAN.md rev 6 and the PROJECT_LOG "Current status" block in the
-metadata folder). Thinking-mode judge (e2e7) was scored and rejected; e2e5 (qwen3:8b) is the baseline.
-Next, in order: (1) change agent groundwork + part 1 (LangGraph skeleton, Postgres checkpointer,
-diff -> classify -> scope); (2) lead-in anchor fix in extraction, then a dev re-score; (3) deterministic
-risk rubric; (4) Sat 3: change agent part 2 + evidence trigger, remediation drafts; (5) Sun 4: score the
-user's 50-row blind gold set if labelled, triage tiers, freeze and push the Dhanlaxmi (test2) answer key
-once the user has reviewed data/mutations/dhanlaxmi.yaml. No run longer than 30 minutes; split longer
+State on 2 Oct 01:50 (details: docs/PLAN.md rev 7 and the PROJECT_LOG "Current status" block in the
+metadata folder). User target: every major build part complete by the end of Sun 4 Oct. Thinking-mode
+judge (e2e7) was scored and rejected; e2e5 (qwen3:8b) is the baseline. In order: Fri 2: (1) change agent
+groundwork + part 1 (LangGraph skeleton, Postgres checkpointer, diff -> classify -> scope); (2) lead-in
+anchor fix in extraction, then a dev re-score; (3) deterministic risk rubric; (4) remediation drafts.
+Sat 3: change agent part 2 + evidence trigger; what-if dry-run; reviewer override; triage tiers. Sun 4:
+Streamlit UI + replay mode + Streamlit Cloud deploy; score the user's 50-row blind gold set if labelled
+(cut-off 12:00); freeze and push the Dhanlaxmi (test2) answer key once the user has reviewed
+data/mutations/dhanlaxmi.yaml. Mon 5 - Tue 6 are buffer. No run longer than 30 minutes; split longer
 jobs into chunks resumed from the cache.
 Never run on either held-out test set (Central Bank, Dhanlaxmi) before the 7 Oct freeze.
