@@ -154,10 +154,12 @@ Keep the project to industry standards and use open-source tools wherever practi
 - Say explicitly when something is uncertain or speculative.
 
 ## Next action
-State on 29 Sep 00:42 (details: docs/PLAN.md rev 5 and the PROJECT_LOG "Current status" block in the
-metadata folder). Next session, in order: (1) run control tests + score.py for dev run e2e7
-(thinking-mode judge) and compare with e2e5; (2) freeze and push the Dhanlaxmi (test2) answer key
-once the user has reviewed data/mutations/dhanlaxmi.yaml; (3) score the user's 50-row blind gold
-set if labelled; (4) tiering: fast judge everywhere, thinking or strong judge only on uncertain
-units, with loop caps and fallback; high-confidence gaps vs review queue; (5) remediation drafts.
+State on 2 Oct 01:46 (details: docs/PLAN.md rev 6 and the PROJECT_LOG "Current status" block in the
+metadata folder). Thinking-mode judge (e2e7) was scored and rejected; e2e5 (qwen3:8b) is the baseline.
+Next, in order: (1) change agent groundwork + part 1 (LangGraph skeleton, Postgres checkpointer,
+diff -> classify -> scope); (2) lead-in anchor fix in extraction, then a dev re-score; (3) deterministic
+risk rubric; (4) Sat 3: change agent part 2 + evidence trigger, remediation drafts; (5) Sun 4: score the
+user's 50-row blind gold set if labelled, triage tiers, freeze and push the Dhanlaxmi (test2) answer key
+once the user has reviewed data/mutations/dhanlaxmi.yaml. No run longer than 30 minutes; split longer
+jobs into chunks resumed from the cache.
 Never run on either held-out test set (Central Bank, Dhanlaxmi) before the 7 Oct freeze.
