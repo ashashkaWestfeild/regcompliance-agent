@@ -3,14 +3,14 @@
  "policy": "nainital",
  "split": "dev",
  "key_commit": "350b8e0 2026-09-27T14:48:06+05:30",
- "scored_at": "2026-10-02 20:06",
+ "scored_at": "2026-10-02 21:06",
  "summary": [
   "planted gaps detected 5/7 (type accepted 2/7; near misses 1/7)",
   "planted gaps raised at the right obligation, any passage (location-tolerant) 6/7",
   "decoys flagged 1/3",
   "injections caught 1/1",
-  "high-confidence tier: planted 3/7 (exact 3), decoys 0/3, unkeyed 29",
-  "review queue: planted 3/7 (exact 2), decoys 1/3, unkeyed 26",
+  "high-confidence tier: planted 3/7 (exact 3), decoys 0/3, unkeyed 17",
+  "review queue: planted 3/7 (exact 2), decoys 1/3, unkeyed 38",
   "real findings correct 2/2 (1 excluded)",
   "by operator: contradict 0/1, delete_control 2/2, make_stale 1/1, narrow_scope 1/1, strip_design 0/1, weaken_threshold 1/1",
   "precision inputs: 5 planted-gap hits, 1 decoy hits, 55 unkeyed reports awaiting blind adjudication"

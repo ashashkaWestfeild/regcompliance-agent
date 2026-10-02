@@ -1,0 +1,14 @@
+# Triage conventions. Configuration, not code: these are decisions about where a finding is shown,
+# taken by the user, and a compliance reviewer can change them.
+
+# A gap the judge raised on a technical system requirement goes to the review queue, not the
+# high-confidence tier (user decision, 2 Oct 2026). Such requirements (encryption, network
+# restrictions, software testing, where data is stored) are usually written in a procedure manual
+# or a system specification rather than in the board-approved policy, so a silent policy is a
+# question for a reviewer, not a certain policy gap. Two independent labellers agreed on only 30
+# of 50 rows about what is "policy-level", which is why this is a convention and not a model call.
+# The pattern is general technical vocabulary; it names no clause and no bank.
+technical_requirement:
+  tier: review
+  note: "Technical system requirement: the policy is silent on it; it may sit in a procedure manual or system specification."
+  pattern: "\\b(infrastructure|application software|software|APIs?|web ?services?|encrypt\\w*|IP address(es)?|spoof\\w*|cyber security|technology|workflows?|liveness|live environment|data and recordings|systems? located|auditable|alteration-proof|audit trail|CERT-In|penetration test\\w*|vulnerabilit\\w*|geo-?tagging)\\b"

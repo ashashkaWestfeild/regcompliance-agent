@@ -99,3 +99,29 @@ def test_direction_of_a_changed_number_follows_the_wording_around_it():
         is None
     )
     assert direction(interval, "something else entirely about 9 branches") is None
+
+
+def test_technical_requirement_convention_matches_system_wording_only():
+    import re
+    from pathlib import Path
+
+    import yaml
+
+    rule = yaml.safe_load(Path("data/triage.yaml").read_text(encoding="utf-8"))
+    pattern = re.compile(rule["technical_requirement"]["pattern"], re.IGNORECASE)
+    for technical in (
+        "The bank shall ensure end-to-end encryption of data between the device and the server.",
+        "The application shall prevent connection from IP addresses outside India.",
+        "The bank shall store the entire data and recordings in systems located in India.",
+        "The software and relevant APIs shall be tested before use in live environment.",
+    ):
+        assert pattern.search(technical), technical
+    for governance in (
+        "The bank shall put in place a system of periodic review of risk categorisation.",
+        "The bank shall carry out periodic updation at least once in every two years.",
+        "The beneficial owner is the natural person with more than 10 per cent ownership.",
+        "The Principal Officer shall be responsible for ensuring compliance.",
+        "The bank shall subject high-risk accounts to more intensified monitoring.",
+    ):
+        assert not pattern.search(governance), governance
+    assert rule["technical_requirement"]["tier"] == "review"

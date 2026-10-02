@@ -14,6 +14,7 @@ establish (src/regcomp/pipeline/verify.py). Nothing the judge reported is delete
     - a changed number where the policy is stricter or the direction is unclear
     - an obligation judged covered whose policy sentence adds a limiting phrase, or says "may"
     - a gap on an obligation classed as procedure-level (kept visible instead of dropped)
+    - a judge gap on a technical system requirement (convention in data/triage.yaml)
 
 Safe to re-run: it first undoes its own earlier changes.
 
@@ -21,8 +22,11 @@ Safe to re-run: it first undoes its own earlier changes.
 """
 
 import json
+import re
 from collections import Counter
+from pathlib import Path
 
+import yaml
 from psycopg.types.json import Jsonb
 
 from regcomp.db import connect
@@ -32,6 +36,7 @@ from regcomp.pipeline import verify
 from regcomp.pipeline.verify import NEAR, Comparer, sweep
 
 REGULATION = "data/raw/rbi/kycdir_v3_20260918.html"
+TECH = yaml.safe_load(Path("data/triage.yaml").read_text(encoding="utf-8"))["technical_requirement"]
 SURE = 0.8  # overlap above which an "optional" finding goes straight to the high tier
 
 FIELDS = (
@@ -96,6 +101,7 @@ def main() -> None:
         undo(conn)
         policy_text = conn.execute("SELECT text FROM document WHERE kind = 'policy'").fetchone()[0]
         comparer = Comparer(policy_text)
+        technical = re.compile(TECH["pattern"], re.IGNORECASE)
         controls = conn.execute(
             "SELECT id, (source_span->>'char_start')::int, (source_span->>'char_end')::int"
             " FROM control"
@@ -180,6 +186,9 @@ def main() -> None:
             if o["gap"] and ev.kind == "same":
                 retier(o, "review", evidence)
                 stats["judge gap, but near-verbatim policy text exists -> review"] += 1
+            elif o["gap"] and policy_level and technical.search(o["quote"]):
+                retier(o, "review", evidence | {"check": "technical", "detail": TECH["note"]})
+                stats["judge gap on a technical system requirement -> review"] += 1
             elif not o["gap"] and policy_level and o["verdict"] == "covered":
                 if ev.kind == "adds_words":
                     add_gap(o, "narrow_scope", "review", evidence, f"Text comparison: {ev.detail}",
