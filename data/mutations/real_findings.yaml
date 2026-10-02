@@ -7,6 +7,9 @@
 #   accept_set   - a verdict in `acceptable_verdicts` is correct; anything else is wrong
 #   excluded     - never scored; shown in the demo as a governance flag
 #   adjudicate   - pending the user's blind adjudication
+#   known_gap    - a real gap already known at the listed `passages`: a report on it earns no
+#                  credit on any planted row and is never an extra; it is reported on its own
+#                  line (user rule, 2 Oct 2026)
 
 - id: R01
   policies: [nainital, centralbank]
@@ -32,3 +35,35 @@
 
 # R04 (PO details to RBI) removed 27 Sep: the original policy does state it in its
 # definitions list (3(iii)): "...details of the Principal Officer shall also be communicated to the RBI".
+
+# Dhanlaxmi (held-out test set 2), from the answer-key review of 2 Oct 2026.
+- id: L-R01
+  policies: [dhanlaxmi]
+  theme: beneficial_owner
+  target_obligation_refs: ["5(1)(iv)(a)"]
+  scoring: accept_set
+  acceptable_verdicts: [covered, partial]
+  note: "The company document checklist lists beneficial owners as shareholders with 25% or more (the pre-March-2023 value) while the policy's own definition and RBI say more than 10 percent. Covered (by the definition) or partial (stale / contradicting checklist) are both acceptable; 'missing' is wrong."
+
+- id: L-R02
+  policies: [dhanlaxmi]
+  theme: beneficial_owner
+  target_obligation_refs: ["5(1)(iv)(b)"]
+  scoring: known_gap
+  passages:
+    - "Partners who are having 15% or more share in the Partnership firm"
+  note: "The partnership document checklist says 15% or more (the pre-2023 value); RBI says more than 10 percent. A real gap in the published policy, on the same obligation as planted L05, so it counts neither way: no credit, never an extra, reported separately if flagged."
+
+- id: L-R03
+  policies: [dhanlaxmi]
+  theme: governance
+  scoring: excluded
+  note: "Policy v8.1 still bases itself on the repealed 2016 Master Direction 'updated as of January 04, 2024'. Governance flag in the demo only."
+
+- id: L-R04
+  policies: [dhanlaxmi]
+  theme: certified_copy
+  target_obligation_refs: ["5(1)(v)"]
+  scoring: no_gap
+  expected_advisory: policy_update_recommended
+  note: "Same as R01: the policy limits the alternative certified-copy route to NRIs/PIOs; the 18 Sep 2026 amendment adds FPIs but is permissive ('may'). Expected output: 'policy update recommended', never a gap."
