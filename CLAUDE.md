@@ -154,7 +154,20 @@ Keep the project to industry standards and use open-source tools wherever practi
 - Say explicitly when something is uncertain or speculative.
 
 ## Next action
-State on 2 Oct 21:18 (details: docs/PLAN.md rev 8 and the PROJECT_LOG "Current status" block in the
+State on 3 Oct 01:30 (plan rev 10, docs/PLAN.md): a result lock guards the dev results
+(`uv run python scripts/check_unchanged.py` must pass after any display or metadata change). Built
+since rev 9: applicability stage (rule-decided, profiles in data/profiles/), source metadata and
+citations, confidence tables and note, one remedy per paragraph, app display of all of these.
+Stage order is now: run_extract, run_level, run_map, load_metadata, run_tests, run_verify,
+run_applicability --apply, run_risk, run_remediation, clean_remediation --apply, score,
+fit_confidence. Next: (1) second dev key run once the user has reviewed
+`reviews/nainital2_key_review.md` (it replaces the dev bank in the database: reload dev from the
+cache afterwards and re-check the lock); (2) evaluation freeze tag on Sat 3 night; (3) Sun 4:
+held-out runs from a clean checkout of the tag, with the tag hash recorded on the scorecard and in
+docs/ARCHITECTURE.md, then deck / video / first submission; (4) Sat 10: full remedies until
+12:30, submit by 15:00. Not built (roadmap): closing loop, advisory wording, document routing.
+
+Earlier state on 2 Oct 21:18 (details: docs/PLAN.md rev 8 and the PROJECT_LOG "Current status" block in the
 metadata folder). The build is complete: every claimed feature runs and the demo is deployed
 (https://regcompliance-agent-gg39o3vts7mzhbtds2u6l7.streamlit.app/). Dev baseline is e2e11 + triage (run_map --passages --dense-only, run_tests, run_verify,
 run_risk, run_remediation): planted 5/7 at the exact spot (3 high-confidence, 2 review), decoys 0/3 high,

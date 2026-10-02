@@ -22,6 +22,16 @@ freeze stays on Wed 7 Oct, because nothing may be tuned once the held-out banks 
 Revision 9 (2 Oct, 21:26; user): no work is possible on weekdays, so everything except the final
 submit is done by the end of Sun 4 Oct. One day of tuning (Sat 3), code freeze that evening, held-out
 runs on Sun 4 (moved from Wed 7), submission pack the same day; Sat 10 is the only buffer.
+Revision 10 (2 Oct, 22:10; user-approved route): a review found two scoping gaps (applicability
+not wired, no document routing) and the user added citations with dates, complete remedies and a
+measured confidence note. Rule: nothing may move a verdict, tier or score, checked by a result lock
+(`scripts/check_unchanged.py`). Done on 2-3 Oct: the lock, the applicability stage with profiles
+for all three banks, source metadata and citations, the confidence tables and note, one remedy
+per paragraph, the app display, the deck and video-script drafts. Left: the second dev key run
+(after the user's review of the key), the evaluation freeze tag on Sat 3 night, held-out runs on
+Sun 4 from a clean checkout of the tag (tag hash on the scorecard and in ARCHITECTURE.md), then
+deck / video / first submission; Sat 10: full remedies until 12:30, submit by 15:00. Tuning is
+dropped. Roadmap, not built: closing loop for remedies, advisory wording, document routing.
 
 Revision 4 (27 Sep, 15:00; rows re-dated 15:47): the plan is a guide, not a contract (user). Work is pulled forward
 as soon as the previous task is done and the dates below are re-set continuously; the only hard
