@@ -12,7 +12,7 @@
 #                  line (user rule, 2 Oct 2026)
 
 - id: R01
-  policies: [nainital, centralbank]
+  policies: [nainital, nainital2, centralbank]
   theme: certified_copy
   target_obligation_refs: ["5(1)(v)"]
   scoring: no_gap
@@ -20,7 +20,7 @@
   note: "Both policies limit the alternative certified-copy route to NRIs/PIOs. The 18 Sep 2026 amendment adds FPIs, but the provision is permissive ('may'), so the omission is not a breach. Expected output: 'policy update recommended'. This is also the demo's 'new circular arrives' event."
 
 - id: R02
-  policies: [nainital]
+  policies: [nainital, nainital2]
   theme: ckycr_upload
   target_obligation_refs: ["65(2)"]
   scoring: accept_set
@@ -28,7 +28,7 @@
   note: "Nainital requires CKYCR upload 'in terms of Rule 9 (1A)' but never states the 10-day deadline. Covered by reference or partial are both acceptable; 'missing' is wrong."
 
 - id: R03
-  policies: [nainital]
+  policies: [nainital, nainital2]
   theme: governance
   scoring: excluded
   note: "The policy states it is valid up to 08.07.2026; it has lapsed as of 26 Sep 2026. Governance flag in the demo only."
