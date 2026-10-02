@@ -1,0 +1,72 @@
+# Risk rubric for ranking gaps. Configuration, not code: a compliance reviewer can change it.
+#
+# inherent risk = how bad it is if the obligation is not met. Taken from the subject of the
+#   obligation: the first theme (top to bottom) whose pattern is found in the obligation text or
+#   in the heading it sits under. No match -> default.
+# residual risk = inherent level (low 1 .. critical 4) x gap factor, i.e. how much of the
+#   obligation the bank's policy still leaves open.
+# priority score = that product / 4, between 0 and 1. Gaps are listed highest first.
+#
+# Patterns are case-insensitive regular expressions. Themes follow the areas RBI has penalised
+# banks for (see docs/mutation_taxonomy.md); they are subject matter, not bank-specific.
+
+default: medium
+
+themes:
+  - name: sanctions and terrorist financing
+    level: critical
+    pattern: "sanction|UNSC|UAPA|unlawful activities|terroris|freez|designated (individual|entit)|weapons of mass destruction|proliferation"
+  - name: prohibited accounts
+    level: critical
+    pattern: "anonymous|fictitious|benami|shell bank"
+  - name: beneficial ownership
+    level: high
+    pattern: "beneficial owner|controlling ownership"
+  - name: politically exposed persons
+    level: high
+    pattern: "politically exposed|\\bPEPs?\\b"
+  - name: suspicious transaction reporting
+    level: high
+    pattern: "suspicious transaction|\\bSTRs?\\b|FIU-IND|financial intelligence unit|tipping|tip-off"
+  - name: enhanced due diligence and high-risk customers
+    level: high
+    pattern: "enhanced due diligence|\\bEDD\\b|high[- ]risk|non-face-to-face|correspondent|wire transfer"
+  - name: customer identification and due diligence
+    level: high
+    pattern: "customer due diligence|\\bCDD\\b|customer identification|verify the identity|officially valid document|\\bOVD\\b"
+  - name: risk categorisation and monitoring
+    level: medium
+    pattern: "risk categori[sz]ation|risk assessment|risk-based approach|monitoring of transactions|on-?going due diligence"
+  - name: periodic updation of KYC
+    level: medium
+    pattern: "periodic updation|re-?KYC|updation of KYC"
+  - name: records and central KYC registry
+    level: medium
+    pattern: "\\bCKYCR?\\b|central KYC|record management|maintenance of records|preserv"
+  - name: digital and video KYC process
+    level: medium
+    pattern: "V-CIP|video based|digital KYC|e-KYC|Aadhaar"
+  - name: governance
+    level: medium
+    pattern: "board of directors|senior management|principal officer|designated director|internal audit"
+  - name: training, hiring and customer education
+    level: low
+    pattern: "training|hiring|recruit|customer education|awareness"
+
+# How much of the obligation the gap leaves open.
+gap_factors:
+  missing_control: 1.0
+  internal_contradiction: 1.0
+  operating_failure: 0.9
+  weak_threshold: 0.8
+  narrow_scope: 0.7
+  stale_control: 0.6
+  design_deficiency: 0.5
+  unspecified: 0.5
+
+# inherent level x factor -> residual level (lowest bound that is met wins, top to bottom)
+residual_bounds:
+  critical: 3.5
+  high: 2.4
+  medium: 1.4
+  low: 0.0
