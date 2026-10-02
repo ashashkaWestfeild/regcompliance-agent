@@ -20,6 +20,7 @@ from regcomp.pipeline.extract import extract_obligations
 from regcomp.pipeline.judge import judge_unit
 from regcomp.pipeline.level import classify_unit
 from regcomp.pipeline.units import units
+from regcomp.pipeline.verify import _pairs as shared_pairs
 
 TOP_K = 5  # candidates the judge sees
 RETRIEVE_K = 20
@@ -64,18 +65,34 @@ def _same_text(a: tuple[int, int], b: tuple[int, int]) -> bool:
     return inside >= 0.5 * min(a[1] - a[0], b[1] - b[0])
 
 
+def rank_by_wording(text: str, rows: list[tuple]) -> list[tuple]:
+    """Order (id, ref, quote, start, end) rows by the share of the text's word pairs they hold.
+    Used when no embedding service is reachable: policies restate the regulation closely, so
+    shared wording is a serviceable stand-in."""
+    want = shared_pairs(text)
+    scored = [(len(want & shared_pairs(r[2])), r) for r in rows]
+    return [r for score, r in sorted(scored, key=lambda x: -x[0]) if score][:RETRIEVE_K]
+
+
 def candidates_for(conn, obligation: dict) -> list[dict]:
     """Top policy candidates for one obligation: embedding order from pgvector, repeats of the
-    same policy text dropped (the retrieval the dev baseline uses)."""
+    same policy text dropped (the retrieval the dev baseline uses). Without an embedding service
+    (the deployed app has no GPU) the candidates are ranked by shared wording instead."""
     text = f"{obligation['action']}. {obligation.get('threshold') or ''} {obligation['quote']}"
-    vec = "[" + ",".join(f"{x:.6f}" for x in embed([text])[0]) + "]"
-    rows = conn.execute(
+    columns = (
         "SELECT c.id::text, c.control_ref, c.source_span->>'quote',"
         " (c.source_span->>'char_start')::int, (c.source_span->>'char_end')::int"
-        " FROM embedding e JOIN control c ON c.id = e.owner_id"
-        " WHERE e.owner_kind = 'control' ORDER BY e.vec <=> %s::vector LIMIT %s",
-        (vec, RETRIEVE_K),
-    ).fetchall()
+    )
+    try:
+        vec = "[" + ",".join(f"{x:.6f}" for x in embed([text])[0]) + "]"
+        rows = conn.execute(
+            columns + " FROM embedding e JOIN control c ON c.id = e.owner_id"
+            " WHERE e.owner_kind = 'control' ORDER BY e.vec <=> %s::vector LIMIT %s",
+            (vec, RETRIEVE_K),
+        ).fetchall()
+    except LLMError:
+        every = conn.execute(columns + " FROM control c WHERE c.superseded_at IS NULL").fetchall()
+        rows = rank_by_wording(text, every)
     kept: list[dict] = []
     for cid, ref, quote, start, end in rows:
         if not any(_same_text((start, end), k["span"]) for k in kept):

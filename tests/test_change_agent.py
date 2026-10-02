@@ -179,3 +179,41 @@ def test_commit_runs_only_outside_a_dry_run(monkeypatch):
         )
         assert tools.calls[-1][0] == last and out["status"] == status
         assert ("committed" in out) is (not dry)
+
+
+def test_candidates_fall_back_to_shared_wording_without_an_embedding_service(monkeypatch):
+    from regcomp.change import execute
+    from regcomp.llm import LLMError
+
+    rows = [
+        ("c1", "20", "Periodic updation of KYC is carried out once in every eight years.", 0, 70),
+        ("c2", "30", "The bank shall upload KYC records onto the CKYCR within 10 days.", 100, 165),
+        (
+            "c3",
+            "31",
+            "KYC records shall be uploaded onto the CKYCR within 10 days of opening.",
+            100,
+            170,
+        ),
+        ("c4", "40", "Staff shall be trained every year.", 200, 235),
+    ]
+
+    class Conn:
+        def execute(self, sql, params=None):
+            assert "FROM control c" in sql  # the embedding query is never reached
+            return self
+
+        def fetchall(self):
+            return rows
+
+    def no_embedder(texts):
+        raise LLMError("Ollama unreachable")
+
+    monkeypatch.setattr(execute, "embed", no_embedder)
+    ob = {
+        "action": "upload the KYC records",
+        "quote": "The bank shall upload the KYC records onto the CKYCR within 10 days.",
+    }
+    found = execute.candidates_for(Conn(), ob)
+    # best wording first; c3 repeats c2's policy text (same span) and is dropped; c4 shares nothing
+    assert [c["id"] for c in found] == ["c2", "c1"] or [c["id"] for c in found] == ["c2"]
