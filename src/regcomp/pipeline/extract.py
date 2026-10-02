@@ -206,6 +206,32 @@ def sentence_from(text: str, prefix: str) -> tuple[int, int] | None:
     return at, stop
 
 
+LIST_ITEM_MIN_OVERLAP = 0.5
+
+
+def list_item_for(text: str, span: tuple[int, int], what: str) -> tuple[int, int] | None:
+    """When the cited sentence is only a lead-in ("The bank shall:", "... include:"), the span
+    of the list item below it that states `what` (the extracted action or objective), else None.
+
+    Found 27 Sep (error analysis) and 2 Oct: 60 of 458 dev obligations were anchored to a lead-in,
+    so retrieval and the judge saw "the bank shall:" instead of the duty. The item is chosen by
+    the share of the action's content words it contains; the quote stays a verbatim slice."""
+    if not text[span[0] : span[1]].rstrip().endswith(":"):
+        return None
+    want = {w for w in re.findall(r"[a-z0-9]+", what.lower()) if len(w) > 3}
+    if not want:
+        return None
+    best, best_score, at = None, 0.0, span[1]
+    for line in text[span[1] :].split("\n"):
+        start, at = at, at + len(line) + 1
+        have = set(re.findall(r"[a-z0-9]+", line.lower()))
+        score = len(want & have) / len(want)
+        if line.strip() and score > best_score:
+            lead = len(line) - len(line.lstrip())
+            best, best_score = (start + lead, start + len(line.rstrip())), score
+    return best if best_score >= LIST_ITEM_MIN_OVERLAP else None
+
+
 def _user_prompt(unit: Unit) -> str:
     context = f"<context>{unit.context}</context>\n" if unit.context else ""
     return f"{context}<text>\n{unit.text}\n</text>"
@@ -232,6 +258,11 @@ def _gate(unit: Unit, raw: dict, key: str, out: Extracted) -> None:
                 {"unit": unit.ref, "quote_start": item.get("quote_start"), "item": item}
             )
             continue
+        what = item.get("action") or item.get("objective") or ""
+        listed = list_item_for(unit.text, span, what)
+        if listed:
+            item["lead_in"] = unit.text[span[0] : span[1]]
+            span = listed
         dedupe = _dedupe_key(unit, span, item)
         if dedupe in seen:
             out.duplicates += 1
