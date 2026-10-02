@@ -91,3 +91,73 @@ def test_large_blast_radius_waits_for_a_reviewer_and_resumes(monkeypatch):
     # dry run (what-if) never pauses: it writes nothing
     dry = build(lambda: wide).invoke({"old_path": V2, "new_path": V3, "dry_run": True})
     assert dry["status"] == "planned" and "re_map" in [s["action"] for s in dry["plan"]]
+
+
+class FakeTools:
+    """Part 2 tools without a database or a model."""
+
+    def __init__(self):
+        self.calls = []
+
+    def re_extract(self, new_path, refs):
+        self.calls.append(("re_extract", refs))
+        return [
+            {"id": "new-1", "ref": "5(1)(v)", "action": "compare the copy", "level": "policy"},
+            {"id": "new-2", "ref": "5(1)(v)", "action": "tell the applicant", "level": "policy"},
+        ]
+
+    def re_map(self, obligations):
+        self.calls.append(("re_map", len(obligations)))
+        return [
+            dict(obligations[0], verdict="covered", gap_type=None, rationale="same text"),
+            dict(
+                obligations[1], verdict="missing", gap_type="missing_control", rationale="no text"
+            ),
+        ]
+
+    def current(self, ids):
+        return [
+            {"id": "o1", "ref": "5(1)(v)", "action": "Compare the copy", "verdict": "partial",
+             "gap_type": "narrow_scope"},
+            {"id": "o9", "ref": "5(1)(v)", "action": "keep a register", "verdict": "missing",
+             "gap_type": "missing_control"},
+        ]  # fmt: skip
+
+
+def test_part_two_projects_the_gap_delta_and_recovers_from_a_failed_step(monkeypatch):
+    duty = ClauseChange(
+        "modified", "5(1)(v)", "5(1)(v)", "x shall y.", "x shall y. z shall w.", 0.9
+    )
+    monkeypatch.setattr("regcomp.change.agent.classify", lambda c, d: classify(duty, d))
+    tools = FakeTools()
+    agent = build(lambda: GRAPH, InMemorySaver(), tools)
+    out = agent.invoke(
+        {"old_path": V2, "new_path": V3, "dry_run": True, "inject_failure": "re_map"},
+        {"configurable": {"thread_id": "whatif"}},
+    )
+    assert out["status"] == "projected"
+    assert [c[0] for c in tools.calls] == ["re_extract", "re_map"]  # the failed attempt never ran
+    assert any("re_map: recovered after a failed attempt" in line for line in out["log"])
+    delta = out["delta"]
+    assert [g["action"] for g in delta["opened"]] == ["tell the applicant"]
+    # the old narrow-scope gap closes (now covered); the retired obligation's gap closes too
+    assert {g["action"] for g in delta["closed"]} == {"compare the copy", "keep a register"}
+    assert (delta["gap_delta"], delta["new_obligations"], delta["retired_obligations"]) == (
+        -1,
+        1,
+        1,
+    )
+
+
+def test_an_advisory_never_reaches_part_two():
+    tools = FakeTools()
+    out = build(lambda: GRAPH, None, tools).invoke({"old_path": V2, "new_path": V3})
+    assert out["status"] == "planned" and tools.calls == [] and "delta" not in out
+
+
+def test_changed_units_are_the_units_holding_the_changed_clause():
+    from regcomp.change.agent import parse
+    from regcomp.change.execute import changed_units
+
+    us = changed_units(parse(V3), ["5(1)(v)"])
+    assert us and all(u.ref.startswith("5(1)(v)") for u in us) and us[0].kind == "definition"
