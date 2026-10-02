@@ -23,6 +23,7 @@ both ends keep changing. Today it is spreadsheet work, redone after every amendm
 | Read the regulation | A parser splits the RBI Direction into numbered clauses with exact character positions | Code |
 | Read the bank policy | Docling layout parsing, then the same clause tree | Code |
 | Extract obligations and controls | An open-weights model returns structured items; every quote is sliced from the source by position, so it cannot be invented | Model proposes, code verifies |
+| Decide applicability | Each obligation's limiting condition is matched against a bank profile built from the bank's own policy; an obligation is excluded only when the profile states the bank does not offer what the condition names | Code |
 | Find policy text for each obligation | Embedding search over extracted controls **and** every raw policy passage | Code |
 | Judge coverage | A model gives a verdict and an issue; fixed rules turn that into a gap type | Model judges, code decides |
 | Compare the wording | Near-identical sentences are compared directly: numbers, "shall" against "may", inserted conditions | Code |
@@ -49,6 +50,7 @@ must not be flagged. The numbers below are for the development bank only.
 | Injected instruction caught | 1 of 1 |
 | Real findings handled correctly | 2 of 2 |
 | Evidence tests correct | 2 of 2 |
+| Applicability to the bank | 458 of 458 obligations apply; none excluded |
 | Change detection against RBI's own amendment markers | 2 of 2 KYC amendments; 262 of 266 amended clauses in nine other Directions |
 
 Read these with two cautions. The wording-comparison rules were written after studying this bank's
@@ -87,6 +89,7 @@ uv run python scripts/run_level.py --run demo              # obligation level
 uv run python scripts/run_map.py --run demo --passages --dense-only --stop-after-min 25
 uv run python scripts/run_tests.py                         # design and operating tests
 uv run python scripts/run_verify.py                        # wording comparison and tiers
+uv run python scripts/run_applicability.py --apply         # applicability by bank profile
 uv run python scripts/run_risk.py                          # risk ranking
 uv run python scripts/run_remediation.py --top 10          # remediation drafts
 uv run python scripts/score.py --run demo                  # against the answer key
@@ -144,7 +147,8 @@ rule of this project, and there is no per-event spending cap.
 - The comparison rules were written after studying development misses.
 - "Policy-level or procedure-level" is a convention: two independent labellers agreed on 30 of 50
   rows. The system routes such items to review rather than deciding.
-- One regulation end to end; text input only.
+- One regulation end to end; text input only. A person chooses which policy is checked against which Direction.
+- A bank profile lists what the bank's policy mentions. A policy that restates the regulation mentions almost everything, so the applicability step excludes nothing on the development bank; its value is the stored reason and the what-if.
 - The hosted demo depends on free tiers (a daily token cap for the hosted model).
 
 More detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md),

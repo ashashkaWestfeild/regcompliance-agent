@@ -18,6 +18,7 @@ split:
 | Draft a remediation | Set owner and due date; reject wording that drops a number or a duty |
 | (never sees evidence rows) | Compute exception rates and test them against a tolerance |
 | (not asked) | Rank risk from a rubric file |
+| (not asked) | Decide whether an obligation applies to the bank, against a profile built from the bank's own policy |
 
 Decision records: [`adr/`](adr/).
 
@@ -31,6 +32,7 @@ flowchart LR
   P2 --> E2[Controls<br/>model + citation gate]
   P2 --> PS[Every policy passage<br/>code]
   E1 --> L[Obligation level<br/>model + rule]
+  L --> AP[Applicability<br/>bank profile, code]
   E2 --> RT[Candidate search<br/>bge-m3 + pgvector]
   PS --> RT
   E1 --> RT
@@ -51,6 +53,7 @@ closes the old one in time; nothing is deleted.
 | 1 | Parse | The regulation and the policy become trees of numbered clauses with exact character spans. No fixed-size chunks. |
 | 2 | Extract | Obligations (actor, modality, action, threshold) and controls. The model returns the first words of the sentence; code locates them and cuts the sentence. Definitions are extracted clause by clause. A citation at a lead-in ("the bank shall:") moves to the list item that states the duty. |
 | 3 | Level | Each obligation is marked policy-level, procedure/system-level or not applicable. A quantified requirement is always policy-level. |
+| 3b | Applicability | Each obligation's limiting condition is matched against a bank profile ([`applicability.py`](../src/regcomp/applicability.py)). The profile is built by code from the bank's published policy: a product, channel, customer segment or geography is listed when the policy deals with it, with the clause as evidence. Applies: the bank has every attribute the condition names, or the condition names none. Does not apply: only when the profile states, with a source, that the bank does not offer what the condition names; the gap then leaves both tiers and stays visible with the reason. To confirm: the profile is silent; this is a note on the finding and moves nothing. Each decision is stored with its reason, the attribute relied on and who decided. A model fallback exists but is off: two models marked ordinary conditions (customer risk grades, for example) as bank attributes. |
 | 4 | Candidates | For each obligation, the closest policy text by embedding, over extracted controls and every raw policy passage (control extraction misses text, so it is not the only source). Repeats of the same text are dropped; the top five go to the judge. A cross-encoder reranker was removed after it lowered the share of cases where the right passage was in the top five. |
 | 5 | Judge | One call per regulation unit. Verdict (covered, partial, missing) and an issue from a fixed list. Fixed rules map these to a gap type. |
 | 6 | Tests | Design: does the control name an owner, a frequency, evidence. Operating: exception rate in an evidence log against a tolerance. |
@@ -166,6 +169,7 @@ not adopted as the evaluated judge ([data](../eval/reports/judge_compare.json)).
 | Other reports | 17 high-confidence, 38 review |
 | Injection caught / real findings / evidence tests | 1 of 1 / 2 of 2 / 2 of 2 |
 | Change detection | 2 of 2 KYC amendments; 262 of 266 clauses in nine other Directions |
+| Applicability | 458 of 458 obligations apply to the development bank; none excluded, none to confirm |
 
 Still missed on development: the removed owner, and the contradiction is flagged at the right
 obligation with the wrong passage.
@@ -191,6 +195,7 @@ Held-out results: to be added at the freeze.
   policy-level. Level therefore routes items to review and is not reported as an accuracy figure.
 - **Correlated error.** The redundancy check and the pipeline both use bge-m3; a passage both
   miss would make a planted gap look valid. Lexical search and manual reading reduce this.
+- **Bank profiles.** The profiles of all three banks are built by a script from the published policies and were committed (`c286fd7`) before any held-out run; no model read the held-out policies. The vocabulary behind them was written from the regulation's own conditions. A profile lists what a policy mentions, which is weaker than what the bank offers: a policy that restates the regulation mentions almost everything, so on the development bank the stage excludes nothing.
 - **Real findings** in the published policies are labelled separately and scored by their own
   rules, never as false alarms. A real gap that shares an obligation with a planted one counts
   neither way.
@@ -227,6 +232,7 @@ Held-out results: to be added at the freeze.
 - A removed owner is not detected on plain policy passages.
 - One regulation end to end; nine others only for change detection. Text input only.
 - No cross-regulation analysis and no detection of contradictions between regulations.
+- No document routing: a person chooses which policy is checked against which Direction.
 - Next: a design check for owners the regulation itself names; a wider comparison for reworded
   sentences; more than one development bank.
 
