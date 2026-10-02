@@ -68,6 +68,14 @@ _DIGITS = re.compile(r"\d[\d,]*(?:\.\d+)?")
 _WORD = re.compile(r"[a-z]+", re.I)
 _SENTENCE = re.compile(r"[^\n.;]+(?:[.;]|\n|$)")
 _TOKEN = re.compile(r"\w+")
+# The number one is a requirement only when it measures something ("one year", "1 per
+# cent"). "any one of", "one or more" and a list marker "(1)" are not thresholds.
+_ONE_WITH_UNIT = re.compile(
+    r"\b(?:one|1)\s*(?:\(\s*(?:one|1)\s*\)\s*)?(?:calendar\s+|working\s+|financial\s+)?"
+    r"(?:years?|months?|weeks?|days?|hours?|per\s*cent|percent|%)",
+    re.I,
+)
+_DURATION = re.compile(r"\b(\d+)\s*(?:calendar\s+|financial\s+)?(year|month)s?\b", re.I)
 
 
 def _content(text: str) -> list[str]:
@@ -90,16 +98,24 @@ def body(quote: str) -> str:
     return _MARKER.sub("", quote or "", count=1).strip()
 
 
+def _clean(text: str) -> str:
+    """The sentence without cross-references, years and list markers."""
+    text = _ACT_NO.sub(" ", _REFERENCE.sub(" ", body(text)))
+    return _BRACKETED.sub(" ", _YEAR.sub(" ", text))
+
+
 def numbers(text: str) -> set[str]:
     """The requirement numbers in `text` as plain integers / decimals: digits and number words
-    ("fifty thousand" -> 50000, "ten" -> 10), without cross-references, years and list markers."""
-    text = _ACT_NO.sub(" ", _REFERENCE.sub(" ", body(text)))
-    text = _BRACKETED.sub(" ", _YEAR.sub(" ", text))
+    ("fifty thousand" -> 50000, "ten" -> 10), without cross-references, years and list markers.
+    The number one counts only when a unit follows it ("one year", "1 per cent")."""
+    text = _clean(text)
     out = set()
     for m in _DIGITS.findall(text):
         value = m.replace(",", "").rstrip(".")
         out.add(str(int(float(value))) if float(value).is_integer() else value)
-    out.discard("1")  # "one of", "(1)", "any one": never a threshold on its own
+    out.discard("1")  # "one of", "(1)", "any one": not a threshold on its own
+    if _ONE_WITH_UNIT.search(text):  # but "one year", "1 per cent" is (P-047, 3 Oct)
+        out.add("1")
     words = _WORD.findall(_DIGITS.sub(" | ", text).lower())
     run = None
     for w in words + ["|"]:
@@ -148,6 +164,20 @@ def _digits(text: str) -> str:
     if run is not None:
         out.append(str(run))
     return "".join(out)
+
+
+def equivalents(text: str) -> set[str]:
+    """Other ways of writing the periods in `text`: N years as 12N months, and 12N months as
+    N years. A policy that says "12 months" where the regulation says "one year" has not
+    changed the number."""
+    out = set()
+    for value, unit in _DURATION.findall(_digits(_clean(text))):
+        n = int(value)
+        if unit.lower() == "year":
+            out.add(str(12 * n))
+        elif n and n % 12 == 0:
+            out.add(str(n // 12))
+    return out
 
 
 def changed_number(obligation: str, passage: str) -> tuple[float, float, str] | None:
@@ -249,9 +279,9 @@ class Comparer:
                 detail = "policy adds: " + "; ".join(added)
                 return Evidence("adds_words", overlap, start, end, detail)
             return Evidence("loose", overlap, start, end)
-        missing = numbers(sentence) - numbers(passage)
+        missing = numbers(sentence) - numbers(passage) - equivalents(passage)
         if missing:
-            other = sorted(numbers(passage) - numbers(sentence), key=float)
+            other = sorted(numbers(passage) - numbers(sentence) - equivalents(sentence), key=float)
             detail = f"obligation: {', '.join(sorted(missing, key=float))}; policy: " + (
                 ", ".join(other) if other else "no number"
             )

@@ -125,3 +125,48 @@ def test_technical_requirement_convention_matches_system_wording_only():
     ):
         assert not pattern.search(governance), governance
     assert rule["technical_requirement"]["tier"] == "review"
+
+
+def test_the_number_one_counts_only_when_it_measures_something():
+    assert numbers("ensure the updation of KYC within one year of its falling due") == {"1"}
+    assert numbers("ownership of more than 1 per cent of the capital") == {"1"}
+    assert numbers("within one (1) month of the request") == {"1"}
+    assert numbers("any one of the following documents shall be obtained") == set()
+    assert numbers("one or more natural persons") == set()
+    assert numbers("(1) The bank shall act on the request") == set()
+    assert numbers("holding 1.5 per cent or 11 per cent, within 21 days") == {"1.5", "11", "21"}
+
+
+def test_one_year_against_two_years_is_a_changed_number_and_weaker():
+    regulation = (
+        "The bank shall ensure the updation of KYC within one year of its falling due for KYC."
+    )
+    policy = (
+        "Some other clause of the policy about records. The bank shall ensure the updation of "
+        "KYC within two years of its falling due for KYC. Another clause follows here."
+    )
+    found = Comparer(policy).compare(regulation, "must")
+    assert found.kind == "number_differs"
+    assert found.detail == "obligation: 1; policy: 2"
+    way, why = direction(regulation, policy[found.start : found.end])
+    assert way == "weaker" and "deadline" in why
+
+
+def test_one_year_and_twelve_months_are_the_same_period():
+    regulation = (
+        "The bank shall ensure the updation of KYC within one year of its falling due for KYC."
+    )
+    same = "The bank shall ensure the updation of KYC within 12 months of its falling due for KYC."
+    other = "The bank shall ensure the updation of KYC within 12 days of its falling due for KYC."
+    assert Comparer(same).compare(regulation, "must").kind == "same"
+    assert (
+        Comparer(same).compare(regulation.replace("one year", "twelve months"), "must").kind
+        == "same"
+    )
+    assert Comparer(regulation).compare(same, "must").kind == "same"
+    assert Comparer(other).compare(regulation, "must").kind == "number_differs"
+    two_years = regulation.replace("one year", "two years")
+    assert Comparer(same).compare(two_years, "must").kind == "number_differs"
+    assert (
+        Comparer(same.replace("12 months", "24 months")).compare(two_years, "must").kind == "same"
+    )

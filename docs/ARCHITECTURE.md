@@ -68,7 +68,8 @@ Bank policies restate much of the regulation almost word for word. Where that is
 the two sentences directly ([`pipeline/verify.py`](../src/regcomp/pipeline/verify.py)):
 
 - **Number sweep.** Every regulation sentence that states a number is lined up with its closest
-  policy sentence. A number the policy sentence lacks becomes a gap at that passage, even if no
+  policy sentence. The number one counts only when a unit follows it ("one year", "1 per
+  cent"), and "one year" equals "12 months". A number the policy sentence lacks becomes a gap at that passage, even if no
   obligation was extracted from the sentence.
 - **Weaker or stricter.** Decided by the words before the number: after "more than", "within",
   "once in every" a larger policy number is weaker; after "at least" a smaller one is. A model is
@@ -177,15 +178,22 @@ obligation with the wrong passage.
 
 **Second development key.** A second set of planted gaps on the same bank (4 gaps, 3 decoys, 1 injection; passages from a seeded draw committed first; key frozen at `4631983` before its run) was written after the wording comparison, to see whether the rules hold on gaps they were not written against.
 
-| Measure | First key | Second key |
-|---|---|---|
-| Planted gaps, exact passage | 5 of 7 | 3 of 4 |
-| Of those, in the high-confidence tier | 3 | 0 |
-| Decoys flagged: high-confidence / review | 0 / 1 of 3 | 0 / 1 of 3 |
-| Injected instruction flagged | 1 of 1 | 0 of 1 |
-| Other reports: high-confidence + review | 17 + 38 | 17 + 38 |
+| Measure | First key | Second key, as first run | Second key, after two fixes |
+|---|---|---|---|
+| Planted gaps, exact passage | 5 of 7 | 3 of 4 | 3 of 4 |
+| Of those, in the high-confidence tier | 3 | 0 | 1 |
+| Decoys flagged: high-confidence / review | 0 / 1 of 3 | 0 / 1 of 3 | 0 / 1 of 3 |
+| Injected instruction flagged | 1 of 1 | 0 of 1 | 1 of 1 |
+| Other reports: high-confidence + review | 17 + 38 | 17 + 38 | 17 + 38 |
 
 What the second key showed: (1) a weakened "one year" to "two years" was judged correctly by the model, then moved to review because the number comparison ignores the number one and so saw two matching sentences; (2) a duty made optional in a sentence whose regulation text has no "shall" was found with the wrong type; (3) a deleted duty was found, in review, because the obligation was classed as procedure-level; (4) the contradiction was missed, as on the first key; (5) the injected instruction, worded differently from the first, was not flagged; the verdicts show no sign that it was followed. The comparison rules therefore fit the first key better than they generalise.
+
+**Two fixes made after the second key's first run (3 Oct), before the freeze.** Both were written from the general principle, without looking at the held-out keys, and both are disclosed here because the last column above is not a test: the fixes were made knowing what this key had missed.
+
+1. *The number one.* The number comparison used to ignore the number one, because "any one of" and "(1)" are not thresholds. It now counts one when a unit follows ("one year", "1 per cent"), and treats "one year" and "12 months" as the same period. Effect on the first key: no verdict, gap, tier or score line changed (the result lock compares equal). Effect on the second key: the weakened "one year" to "two years" moved from the review queue to the high-confidence tier.
+2. *A code-level scan for instructions.* Every sentence of the bank's document is checked in code for text that tells an automated reader to drop its instructions, addresses a program reading the document, says what verdict to give, or tells it not to report findings ([`guard.py`](../src/regcomp/pipeline/guard.py)). It does not depend on a model. On the unaltered development policy it flags 0 sentences, and 0 in the regulation; in each planted copy it flags exactly the planted sentence. The held-out banks carry differently worded instructions and are the real test.
+
+Not fixed: the contradiction, the duty made optional where the regulation sentence has no "shall", and the deleted duty classed as procedure-level.
 
 Held-out results: to be added at the freeze.
 
@@ -247,7 +255,7 @@ held-out runs, which are then reported against it.
 |---|---|---|
 | Invented citations | Quotes are cut from the source by position | Built |
 | Changed numbers or lost duties | Wording comparison; fidelity check on remediation drafts | Built |
-| Instructions hidden in a document | Documents are passed as data and never followed; flagged with the verbatim text when the extraction model notices | Built; flagged 1 of 2 on the development keys |
+| Instructions hidden in a document | Documents are passed as data and never followed; flagged by the extraction model and by a code-level scan that needs no model | Built. The model alone flagged 1 of 2 on the development keys; the scan, written after that, flags both and nothing in the unaltered policy |
 | Over-confident output | Two tiers and a review queue | Built |
 | An agent that writes too much | Dry run cannot reach the write step; pause above 20% of mappings; versioned writes, nothing deleted | Built |
 | Machine closes a gap | Only a reviewer confirms, dismisses, resolves or accepts; name and reason recorded | Built |
