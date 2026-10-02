@@ -10,26 +10,13 @@ evidence. Deterministic; the LLM never sees evidence rows.
 """
 
 import argparse
-import hashlib
-import uuid
-from datetime import date
 from pathlib import Path
 
 import yaml
 
 from regcomp.db import connect
-from regcomp.evidence import (
-    ckycr_late,
-    design_test,
-    operating_test,
-    read_csv,
-    rekyc_overdue,
-)
-
-RULES = {
-    "rekyc_overdue": lambda m: rekyc_overdue(date.fromisoformat(str(m["as_of"]))),
-    "ckycr_late": lambda m: ckycr_late(int(m["deadline_days"])),
-}
+from regcomp.evidence import design_test
+from regcomp.monitor import assess_batch
 
 
 def main() -> None:
@@ -67,80 +54,13 @@ def main() -> None:
             f"{design['ineffective']} (of {len(cited)} cited controls)"
         )
 
-        # Operating tests from evidence.
+        # Operating tests from evidence (same code path as a later batch: regcomp/monitor.py).
         for m in manifest:
-            path = folder / m["file"]
-            rows = read_csv(path)
-            mapping = conn.execute(
-                "SELECT m.id, m.control_id, o.id FROM mapping m JOIN obligation o"
-                " ON o.id = m.obligation_id WHERE o.source_clause_ref = %s"
-                " AND m.control_id IS NOT NULL ORDER BY m.confidence DESC LIMIT 1",
-                (m["obligation_ref"],),
-            ).fetchone()
-            if mapping is None:
-                print(f"{m['file']}: cannot assess - no control mapped to {m['obligation_ref']}")
-                continue
-            mapping_id, control_id, obligation_id = mapping
-            ev_id = uuid.uuid4()
-            t = operating_test(
-                rows, RULES[m["rule"]](m), tolerance=float(m["tolerance"]), rule=m["rule"]
-            )
-            period = sorted(
-                v
-                for r in rows
-                for k, v in r.items()
-                if k != "account_id" and len(v) == 10 and v[4] == "-"
-            )
-            conn.execute(
-                "INSERT INTO evidence (id, control_id, source_path, period_start, period_end,"
-                " population, sample_size, exceptions, sha256)"
-                " VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                (
-                    ev_id,
-                    control_id,
-                    path.as_posix(),
-                    period[0],
-                    period[-1],
-                    t.population,
-                    t.population,
-                    t.exceptions,
-                    hashlib.sha256(path.read_bytes()).hexdigest(),
-                ),
-            )
-            test_id = uuid.uuid4()
-            conn.execute(
-                "INSERT INTO control_test (id, control_id, mapping_id, kind, result,"
-                " evidence_ids, exception_rate, tolerance, rationale)"
-                " VALUES (%s,%s,%s,'operating',%s,%s,%s,%s,%s)",
-                (
-                    test_id,
-                    control_id,
-                    mapping_id,
-                    t.result,
-                    [ev_id],
-                    t.exception_rate,
-                    t.tolerance,
-                    t.rationale,
-                ),
-            )
-            if t.result == "ineffective":
-                conn.execute(
-                    "INSERT INTO gap (key, source_version, effective_from, type, obligation_id,"
-                    " control_id, mapping_id, control_test_id, inherent_risk, residual_risk,"
-                    " priority_score, rationale) VALUES (%s,%s,%s,'operating_failure',%s,%s,%s,"
-                    "%s,'high','high',0.9,%s)",
-                    (
-                        f"GAP:OPS:{m['file']}",
-                        "evidence",
-                        date.today(),
-                        obligation_id,
-                        control_id,
-                        mapping_id,
-                        test_id,
-                        t.rationale,
-                    ),
-                )
-            print(f"{m['file']} -> {m['obligation_ref']}: {t.result} ({t.rationale})")
+            out = assess_batch(conn, m, folder / m["file"])
+            if out["result"] == "cannot_assess":
+                print(f"{m['file']}: cannot assess - {out['rationale']}")
+            else:
+                print(f"{m['file']} -> {m['obligation_ref']}: {out['result']} ({out['rationale']})")
 
 
 if __name__ == "__main__":
