@@ -154,14 +154,13 @@ Keep the project to industry standards and use open-source tools wherever practi
 - Say explicitly when something is uncertain or speculative.
 
 ## Next action
-State on 2 Oct 01:50 (details: docs/PLAN.md rev 7 and the PROJECT_LOG "Current status" block in the
-metadata folder). User target: every major build part complete by the end of Sun 4 Oct. Thinking-mode
-judge (e2e7) was scored and rejected; e2e5 (qwen3:8b) is the baseline. In order: Fri 2: (1) change agent
-groundwork + part 1 (LangGraph skeleton, Postgres checkpointer, diff -> classify -> scope); (2) lead-in
-anchor fix in extraction, then a dev re-score; (3) deterministic risk rubric; (4) remediation drafts.
-Sat 3: change agent part 2 + evidence trigger; what-if dry-run; reviewer override; triage tiers. Sun 4:
-Streamlit UI + replay mode + Streamlit Cloud deploy; score the user's 50-row blind gold set if labelled
-(cut-off 12:00); freeze and push the Dhanlaxmi (test2) answer key once the user has reviewed
-data/mutations/dhanlaxmi.yaml. Mon 5 - Tue 6 are buffer. No run longer than 30 minutes; split longer
-jobs into chunks resumed from the cache.
+State on 2 Oct 13:20 (details: docs/PLAN.md rev 7 and the PROJECT_LOG "Current status" block in the
+metadata folder). User target: every major build part complete by the end of Sun 4 Oct. Dev baseline is
+e2e10 (run_map --passages --dense-only on the lead-in-fixed extraction): planted 2/7 exact, 3/7 at the
+right obligation, extras 54. Both held-out keys are frozen (Central Bank `350b8e0`, Dhanlaxmi `da58e66`).
+Built on 2 Oct: change agent part 1, risk rubric, policy passages as candidates, lead-in fix, gold-set
+scorer. Next, in order: (1) remediation drafts; (2) judge issue for an optional duty (weak_modality) with
+the next dev re-judge; (3) Sat 3: change agent part 2 + evidence trigger, what-if dry-run, reviewer
+override, triage tiers; (4) Sun 4: Streamlit UI + replay mode + Streamlit Cloud deploy. Mon 5 - Tue 6 are
+buffer. No run longer than 30 minutes (run_map --stop-after-min resumes from the cache).
 Never run on either held-out test set (Central Bank, Dhanlaxmi) before the 7 Oct freeze.

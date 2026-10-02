@@ -155,6 +155,10 @@ eval/answer_key_evidence.jsonl      # operating_failure plants
 
 - **Nainital = dev set, Central Bank = held-out test set** (`split` in `data/sources.yaml` and in
   every key row). Metrics are reported separately; the test set is run only for final numbers.
+- **Dhanlaxmi = held-out test set 2** (`split: test2`), key frozen in `da58e66` on 2 Oct 2026
+  after the user's review, before any pipeline model read the policy. Its targets came from a
+  seeded draw committed earlier (`3991efb`), because the key was written after the author had
+  seen dev results. 6 planted gaps, 3 decoys, 1 injection, 4 real findings.
 - **Redundant-coverage check** (`scripts/coverage_check.py`): for every delete, narrow and weaken
   mutation, the altered policy is searched lexically (the row's `check` patterns) and
   semantically (bge-m3 similarity to the RBI clause). Every remaining hit is read and judged; a
