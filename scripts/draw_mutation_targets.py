@@ -52,7 +52,14 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("policy")
     ap.add_argument("--seed", type=int, required=True)
+    ap.add_argument("--operators", help="comma-separated gap slots (default: the standard seven)")
+    ap.add_argument(
+        "--exclude-spec",
+        type=Path,
+        help="a mutation spec whose edited passages are left out (a second key on the same bank)",
+    )
     args = ap.parse_args()
+    operators = args.operators.split(",") if args.operators else OPERATORS
     src = next(
         p
         for p in yaml.safe_load(Path("data/sources.yaml").read_text("utf-8"))["policies"]
@@ -63,12 +70,19 @@ def main() -> None:
         for i, it in enumerate(docling_items(src["file"]))
         if it.get("label") in {"text", "list_item", "paragraph"} and len(it["text"]) >= 60
     ]
+    if args.exclude_spec:
+        taken = [
+            " ".join(e["find"].split())[:60]
+            for m in yaml.safe_load(args.exclude_spec.read_text("utf-8"))
+            for e in m.get("edits", [])
+        ]
+        items = [(i, t) for i, t in items if not any(f in " ".join(t.split()) for f in taken)]
     rng = random.Random(args.seed)
     themes = list(THEMES)
     rng.shuffle(themes)
     used: set[int] = set()
     slots = []
-    for n, op in enumerate(OPERATORS):
+    for n, op in enumerate(operators):
         drawn = themes[n % len(themes)]
         # If the drawn theme has no feasible passage for this operator (e.g. nothing numeric to
         # weaken), take the next theme in the seeded order: a fixed rule, not the author's pick.

@@ -35,12 +35,15 @@ from regcomp.pipeline import rerank as rerank_mod
 from regcomp.pipeline.judge import judge_unit
 from regcomp.pipeline.passages import passage_controls
 from regcomp.pipeline.rerank import rerank
+from regcomp.policies import policy
 
 REGULATION = "data/raw/rbi/kycdir_v3_20260918.html"
 REG_VERSION = "KYCDIR-2025-upd-20260918"
 REG_EFFECTIVE = date(2026, 9, 18)
+# Set in main() from --policy (default: the dev bank).
 DEV_POLICY = "data/mutated/nainital.items.json"
 POLICY_VERSION = "nainital-mutated-350b8e0"
+POLICY_ISSUER = "Nainital Bank"
 POLICY_EFFECTIVE = date(2026, 9, 27)
 DEV_KEY = "eval/answer_key_nainital.jsonl"
 TOP_K = 5  # candidates the judge sees
@@ -85,8 +88,8 @@ def load(conn, reg, pol, obligations, controls):
         (
             pol_id,
             "policy",
-            "Nainital Bank",
-            "KYC/AML Policy (planted-gap dev copy)",
+            POLICY_ISSUER,
+            "KYC/AML Policy (planted-gap copy)",
             POLICY_VERSION,
             pol.text,
             True,
@@ -287,11 +290,17 @@ def retrieve(conn, ob_vectors, obligations, controls, dense_only: bool = False) 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
+    ap.add_argument("--policy", default="nainital")
+    ap.add_argument("--held-out", action="store_true", help="confirm a held-out (test) policy")
     ap.add_argument("--judge-think", action="store_true", help="judge with thinking mode on")
     ap.add_argument("--passages", action="store_true", help="policy passages as candidates too")
     ap.add_argument("--dense-only", action="store_true", help="no reranker; dedupe candidates")
     ap.add_argument("--stop-after-min", type=float, help="stop cleanly after this many minutes")
     args = ap.parse_args()
+    global DEV_POLICY, POLICY_VERSION, POLICY_ISSUER, DEV_KEY
+    bank = policy(args.policy, args.held_out)
+    DEV_POLICY, POLICY_VERSION, DEV_KEY = str(bank.items), bank.version, str(bank.key)
+    POLICY_ISSUER = bank.bank
     run = Path("eval/runs") / args.run
     obligations = json.loads((run / "obligations.json").read_text(encoding="utf-8"))["items"]
     controls = json.loads((run / "controls.json").read_text(encoding="utf-8"))["items"]

@@ -18,9 +18,9 @@ from regcomp.ingest.pdf_docling import parse_policy_items
 from regcomp.ingest.rbi_html import parse_file
 from regcomp.pipeline.extract import extract_controls, extract_obligations
 from regcomp.pipeline.units import units
+from regcomp.policies import policy
 
 REGULATION = "data/raw/rbi/kycdir_v3_20260918.html"
-DEV_POLICY = "data/mutated/nainital.items.json"
 
 
 def progress(label: str):
@@ -41,12 +41,15 @@ def progress(label: str):
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
+    ap.add_argument("--policy", default="nainital")
+    ap.add_argument("--held-out", action="store_true", help="confirm a held-out (test) policy")
     args = ap.parse_args()
+    bank = policy(args.policy, args.held_out)
     out = Path("eval/runs") / args.run
     out.mkdir(parents=True, exist_ok=True)
 
     reg = parse_file(REGULATION)
-    pol = parse_policy_items(json.loads(Path(DEV_POLICY).read_text(encoding="utf-8")))
+    pol = parse_policy_items(json.loads(bank.items.read_text(encoding="utf-8")))
     with connect(autocommit=True) as conn:
         obligations = extract_obligations(units(reg), conn, progress("obligations"))
         (out / "obligations.json").write_text(

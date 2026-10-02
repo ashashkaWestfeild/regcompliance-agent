@@ -24,7 +24,11 @@ def main() -> None:
     ap.add_argument("--policy", default="nainital")
     args = ap.parse_args()
     folder = Path(f"data/evidence/{args.policy}")
-    manifest = yaml.safe_load((folder / "manifest.yaml").read_text(encoding="utf-8"))
+    manifest = (
+        yaml.safe_load((folder / "manifest.yaml").read_text(encoding="utf-8"))
+        if (folder / "manifest.yaml").exists()
+        else []  # no evidence files for this policy: design tests only
+    )
 
     with connect(autocommit=True) as conn:
         conn.execute("DELETE FROM gap WHERE type = 'operating_failure'")

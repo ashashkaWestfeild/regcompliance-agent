@@ -29,9 +29,9 @@ def _detected(p: dict) -> str:
     return "yes" if p["detected"] else "near miss" if p["near_miss"] else "no"
 
 
-def key_commit() -> str:
+def key_commit(policy: str = "nainital") -> str:
     out = subprocess.run(
-        ["git", "log", "-1", "--format=%h %cI", "--", "eval/answer_key_nainital.jsonl"],
+        ["git", "log", "-1", "--format=%h %cI", "--", f"eval/answer_key_{policy}.jsonl"],
         capture_output=True,
         text=True,
         check=False,
@@ -266,7 +266,7 @@ def main() -> None:
     lines = [
         f"# Evaluation report: run `{args.run}`, policy `{args.policy}` ({split} set)",
         "",
-        f"Answer key: `eval/answer_key_{args.policy}.jsonl` at commit {key_commit()}; "
+        f"Answer key: `eval/answer_key_{args.policy}.jsonl` at commit {key_commit(args.policy)}; "
         f"policy text sha256 verified ({expected_sha[:12]}...).",
         "",
         "## Against the answer key (counts)",
@@ -323,7 +323,7 @@ def main() -> None:
         "run": args.run,
         "policy": args.policy,
         "split": split,
-        "key_commit": key_commit(),
+        "key_commit": key_commit(args.policy),
         "scored_at": time.strftime("%Y-%m-%d %H:%M"),
         "summary": summary(s),
         "planted": [

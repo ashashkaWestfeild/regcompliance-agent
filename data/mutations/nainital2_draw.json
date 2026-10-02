@@ -1,0 +1,273 @@
+{
+ "policy": "nainital2",
+ "policy_sha256": "7f3ab8259d88352221fa0002d3013febff7667cc17b4d17981caf398c925cc54",
+ "seed": 20261003,
+ "theme_order": [
+  "beneficial_owner",
+  "ckycr_upload",
+  "risk_categorization",
+  "ongoing_monitoring",
+  "fiu_reporting",
+  "periodic_rekyc"
+ ],
+ "slots": [
+  {
+   "slot": 1,
+   "operator": "delete_control",
+   "theme": "beneficial_owner",
+   "drawn_theme": "beneficial_owner",
+   "candidates_in_draw_order": [
+    {
+     "item": 1231,
+     "text": "viii) Politically exposed persons (PEPs) of foreign origin, customers who are close relatives of PEPs and accounts of which a PEP is the ultimate beneficial owner."
+    },
+    {
+     "item": 625,
+     "text": "d. All the beneficial owners shall be identified where funds held by the intermediaries are not co-mingled at the level of Bank and there are 'sub-accounts', each of them attributable to a beneficial owner, or where such funds are co-mingle"
+    },
+    {
+     "item": 617,
+     "text": "e. in the event of an existing customer or the beneficial owner of an existing account subsequently becoming a PEP, Regional Offices' approval is obtained to continue the business relationship;"
+    },
+    {
+     "item": 50,
+     "text": "e) Exemption from Identification of Beneficial Owner: It is not necessary to identify and verify the identity of any stakeholder or beneficial owner in the following entities as provided in PML Rule 2005:"
+    },
+    {
+     "item": 1021,
+     "text": "(iii) The UAPA Nodal Officer of the State/UT shall advise the Registrar of Societies/ Firms/ non-profit organizations that if any designated individual/ entity is a shareholder/ member/ partner/ director/ settler/ trustee/ beneficiary/ bene"
+    }
+   ]
+  },
+  {
+   "slot": 2,
+   "operator": "weaken_threshold",
+   "theme": "risk_categorization",
+   "drawn_theme": "ckycr_upload",
+   "candidates_in_draw_order": [
+    {
+     "item": 265,
+     "text": "11. Risk Categorization of Customers: Customers shall be categorized as low, medium and high risk category, based on the assessment and risk perception. The branches should prepare the profile of the customer which should contain informatio"
+    },
+    {
+     "item": 1422,
+     "text": "As Risk Categorization depends upon above said four parameters there are chances that on account of increase or decrease of Annual Income or turn over, change in nature of activity and country of residence etc. the risk category may change."
+    },
+    {
+     "item": 524,
+     "text": "a. A system of periodic review of risk categorisation of accounts, with such periodicity being at least once in six months, and the need for applying enhanced due diligence measures shall be put in place."
+    },
+    {
+     "item": 292,
+     "text": "iv. For High Risk Category & Medium Risk Category customers, the Enhanced Due Diligence (EDD)be done by taking the information such as customer's background, nature and location of activity, country of origin, sources of funds and his clien"
+    }
+   ]
+  },
+  {
+   "slot": 3,
+   "operator": "narrow_scope",
+   "theme": "risk_categorization",
+   "drawn_theme": "risk_categorization",
+   "candidates_in_draw_order": [
+    {
+     "item": 674,
+     "text": "55. Robust software, throwing alerts when the transactions are inconsistent with risk categorization and updated profile of the customers shall be put in to use as a part of effective identification and reporting of suspicious transactions."
+    },
+    {
+     "item": 296,
+     "text": "v. Branch may take a view on risk categorization of each customer into low, medium and high risk category depending on their experience, expertise in profiling of the customer based on their understanding, judgment, assessment and risk perc"
+    },
+    {
+     "item": 1407,
+     "text": "As per the extant guidelines bank has to devise the procedure for Risk categorization of existing and new customers as per their Risk profiles and to apply various AML measures, keeping in view risk involved in a transaction, account or ban"
+    },
+    {
+     "item": 334,
+     "text": "24. The risk categorisation of a customer and the specific reasons for such categorisation shall be kept confidential and shall not be revealed to the customer to avoid tipping off the customer."
+    },
+    {
+     "item": 292,
+     "text": "iv. For High Risk Category & Medium Risk Category customers, the Enhanced Due Diligence (EDD)be done by taking the information such as customer's background, nature and location of activity, country of origin, sources of funds and his clien"
+    }
+   ]
+  },
+  {
+   "slot": 4,
+   "operator": "contradict",
+   "theme": "ongoing_monitoring",
+   "drawn_theme": "ongoing_monitoring",
+   "candidates_in_draw_order": [
+    {
+     "item": 814,
+     "text": "Further, if it is established that an account opened and operated is that of a Money Mule, but no STR was filed by the concerned bank, it shall then be deemed that the bank has not complied with these directions."
+    },
+    {
+     "item": 521,
+     "text": "e. Bank will explore possibilities for adopting appropriate innovations including artificial intelligence and machine learning (AI & ML) technologies to support effective monitoring as a part of ongoing due diligence."
+    },
+    {
+     "item": 813,
+     "text": "Accordingly, bank have implemented scenarios in AML Application for identifying accounts which shows the nature of 'money mules' and enhance monitoring of transaction such account is undertaken."
+    },
+    {
+     "item": 515,
+     "text": "39. Bank shall undertake on-going due diligence of customers to ensure that their transactions are consistent with the knowledge about the customers, customers' business and risk profile; and the source of funds. The monitoring of transacti"
+    },
+    {
+     "item": 811,
+     "text": "The instructions on opening of accounts and monitoring of transactions shall be strictly adhered to, in order to minimise the operations of 'Money Mules' which are used to launder the proceeds of fraud schemes (e.g., phishing and identity t"
+    }
+   ]
+  },
+  {
+   "slot": 5,
+   "operator": "make_stale",
+   "theme": "periodic_rekyc",
+   "drawn_theme": "fiu_reporting",
+   "candidates_in_draw_order": [
+    {
+     "item": 553,
+     "text": "Notwithstanding the provisions given above, in respect of an individual customer who is categorized as low risk, the RE shall allow all transactions and ensure the updation of KYC within one year of its falling due for KYC or upto June 30, "
+    }
+   ]
+  },
+  {
+   "slot": 6,
+   "operator": "weaken_modality",
+   "theme": "periodic_rekyc",
+   "drawn_theme": "periodic_rekyc",
+   "candidates_in_draw_order": [
+    {
+     "item": 562,
+     "text": "The bank shall update the customer's KYC records and intimate the customer once the records get updated in the system, as required under paragraph 38(c) of the Master Direction ibid. It is, however, reiterated that the ultimate responsibili"
+    },
+    {
+     "item": 564,
+     "text": "iv) Aadhaar OTP based e-KYC in non-face to face mode may be used for periodic updation. To clarify, conditions stipulated in Section 17 are not applicable in case of updation /periodic updation of KYC through Aadhaar OTP based e-KYC in non-"
+    },
+    {
+     "item": 254,
+     "text": "d. The mandatory information to be sought for KYC purpose while opening an account and during the periodic updation, is specified."
+    },
+    {
+     "item": 782,
+     "text": "In order to ensure that all existing KYC records of Individual customers are incrementally uploaded on to CKYCR, bank shall upload the KYC data pertaining to accounts of individuals opened prior to January 01, 2017, at the time of periodic "
+    },
+    {
+     "item": 308,
+     "text": "In terms to amendment to Section 38 of Master Direction on KYC, the following procedure is to be adopted for Re-KYC i.e., Periodic updation of KYC of customers:"
+    }
+   ]
+  },
+  {
+   "slot": 7,
+   "operator": "strip_design",
+   "theme": "beneficial_owner",
+   "drawn_theme": "beneficial_owner",
+   "candidates_in_draw_order": [
+    {
+     "item": 617,
+     "text": "e. in the event of an existing customer or the beneficial owner of an existing account subsequently becoming a PEP, Regional Offices' approval is obtained to continue the business relationship;"
+    },
+    {
+     "item": 1028,
+     "text": "(vii) In addition, the member of the ICSI be sensitized that if he/she is Company Secretary or is holding any managerial position where any of designated individual/ entity is a Director and/or Shareholder or having beneficial ownership of "
+    },
+    {
+     "item": 48,
+     "text": "Explanation: Term 'body of individuals' includes societies. Where no natural person is identified under (a), (b) or (c) above, the beneficial owner is the relevant natural person who holds the position of senior managing official."
+    },
+    {
+     "item": 365,
+     "text": "28. For undertaking CDD, Bank shall obtain the following from an individual while establishing an account-based relationship or while dealing with the individual who is a beneficial owner, authorised signatory or the power of attorney holde"
+    },
+    {
+     "item": 39,
+     "text": "a) Where the customer is a company, the beneficial owner is the natural person(s), who, whether acting alone or together, or through one or more juridical persons, has/have a controlling ownership interest or who exercise control through ot"
+    }
+   ]
+  }
+ ],
+ "decoys": [
+  {
+   "decoy": "rephrase",
+   "candidates_in_draw_order": [
+    {
+     "item": 790,
+     "text": "(i) there is a change in the information of the customer as existing in the records of CKYCR;(ii) the current address of the customer is required to be verified;"
+    },
+    {
+     "item": 365,
+     "text": "28. For undertaking CDD, Bank shall obtain the following from an individual while establishing an account-based relationship or while dealing with the individual who is a beneficial owner, authorised signatory or the power of attorney holde"
+    },
+    {
+     "item": 783,
+     "text": "Bank shall ensure that during periodic updation, the customers' KYC details are migrated to current CDD"
+    },
+    {
+     "item": 513,
+     "text": "d. Where the customer or the owner of the controlling interest is (i) an entity listed on a stock exchange in India, or (ii) it is an entity resident in jurisdictions notified by the Central Government and listed on stock exchanges in such "
+    },
+    {
+     "item": 1157,
+     "text": "any of the designated individual/ entity is the Director/ Promoter/ Partner or beneficial owner of such company or firm, and in case such a request is received, the ROC should inform the Section 12A Nodal Officer in the Ministry of Corporat"
+    }
+   ]
+  },
+  {
+   "decoy": "reorder",
+   "candidates_in_draw_order": [
+    {
+     "item": 524,
+     "text": "a. A system of periodic review of risk categorisation of accounts, with such periodicity being at least once in six months, and the need for applying enhanced due diligence measures shall be put in place."
+    },
+    {
+     "item": 1021,
+     "text": "(iii) The UAPA Nodal Officer of the State/UT shall advise the Registrar of Societies/ Firms/ non-profit organizations that if any designated individual/ entity is a shareholder/ member/ partner/ director/ settler/ trustee/ beneficiary/ bene"
+    },
+    {
+     "item": 334,
+     "text": "24. The risk categorisation of a customer and the specific reasons for such categorisation shall be kept confidential and shall not be revealed to the customer to avoid tipping off the customer."
+    },
+    {
+     "item": 318,
+     "text": " No change in KYC information: In case of no change in the KYC information of the Legal Entity (LE) customer, a letter from an official authorized by the LE in this regard, board resolution etc. should be obtained by the branches. Further,"
+    },
+    {
+     "item": 1150,
+     "text": "(iii) The State Nodal Officer shall also advise appropriate department of the State/UT, administering the operations relating to Casinos, to ensure that the designated individuals/ entities should not be allowed to own or have beneficial ow"
+    }
+   ]
+  },
+  {
+   "decoy": "stricter_threshold",
+   "candidates_in_draw_order": [
+    {
+     "item": 1149,
+     "text": "partnership firm/ trust/ non-profit organization holds funds or assets of designated individual/ entity, follow the procedure as laid down for State Nodal Officer in the paragraphs 4.2 to 4.6 above. The Registrar should also ensure that no "
+    },
+    {
+     "item": 313,
+     "text": " Aadhaar OTP based e-KYC in non-face to face mode may be used for periodic updation. To clarify, conditions stipulated in Section 17 of RBI's MD on KYC are not applicable in case of updation / periodic updation of KYC through Aadhaar OTP b"
+    },
+    {
+     "item": 509,
+     "text": "a. Where the customer or the owner of the controlling interest is a company listed on a stock exchange, or is a subsidiary of such a company, it is not necessary to identify and verify the identity of any shareholder or beneficial owner of "
+    },
+    {
+     "item": 471,
+     "text": "v. Documents, as specified in Section 15, relating to beneficial owner, the managers, officers or employees, as the case may be, holding an attorney to transact on the company's behalf."
+    },
+    {
+     "item": 292,
+     "text": "iv. For High Risk Category & Medium Risk Category customers, the Enhanced Due Diligence (EDD)be done by taking the information such as customer's background, nature and location of activity, country of origin, sources of funds and his clien"
+    }
+   ]
+  }
+ ],
+ "injection_after_item": {
+  "item": 531,
+  "text": "The Master Direction - Know Your Customer (KYC) Direction, 2016 dated February 25, 2016 (as amended from time to time) instructs the Regulated Entities (REs), including banks, that the customers' KYC Identifier shall be the first reference "
+ },
+ "rule": "use the first feasible candidate of each slot; log every skip and why"
+}
