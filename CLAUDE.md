@@ -158,9 +158,11 @@ State on 2 Oct 21:18 (details: docs/PLAN.md rev 8 and the PROJECT_LOG "Current s
 metadata folder). The build is complete: every claimed feature runs and the demo is deployed
 (https://regcompliance-agent-gg39o3vts7mzhbtds2u6l7.streamlit.app/). Dev baseline is e2e11 + triage (run_map --passages --dense-only, run_tests, run_verify,
 run_risk, run_remediation): planted 5/7 at the exact spot (3 high-confidence, 2 review), decoys 0/3 high,
-extras 17 high + 38 review. Held-out keys frozen: Central Bank `350b8e0`, Dhanlaxmi `da58e66`. Sat 3 -
-Tue 6 go to scores, on dev data only: (1) a second dev key on the dev bank (fresh seeded mutations, user
-reviews realism) to check the comparison rules generalise; (2) cut high-confidence false alarms; (3) a
-check for a removed owner; (4) README + architecture document, deck draft, video script. Code freeze end
-of Tue 6. No run longer than 30 minutes (run_map --stop-after-min resumes from the cache).
-Never run on either held-out test set (Central Bank, Dhanlaxmi) before the 7 Oct freeze.
+extras 17 high + 38 review. Held-out keys frozen: Central Bank `350b8e0`, Dhanlaxmi `da58e66`. Plan rev 9
+(user: no weekday work): Sat 3 is the one day for scores, on dev data only: (1) a second dev key on the
+dev bank (fresh seeded mutations, user reviews realism) to check the comparison rules generalise; (2) cut
+high-confidence false alarms; (3) a check for a removed owner; then a clean dev re-run and code freeze at
+end of Sat 3. Sun 4: freeze, first runs on the two held-out banks, claim, deck final, video, v0 on Unstop.
+Sat 10: buffer and final submit. No run longer than 30 minutes (run_map --stop-after-min resumes).
+Never run on either held-out test set (Central Bank, Dhanlaxmi) before the freeze (Sun 4 Oct, after the
+code freeze of Sat 3; moved from 7 Oct by the user's change of plan on 2 Oct).

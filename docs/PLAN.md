@@ -19,6 +19,9 @@ Revision 8 (2 Oct, 21:18): the build was complete on Fri 2 Oct, two days early (
 feature runs; the demo is deployed). The days gained go to evaluation quality: Sat 3 - Tue 6 for a
 second dev key, false-alarm reduction and dev-only tuning, with the documents pulled forward. The
 freeze stays on Wed 7 Oct, because nothing may be tuned once the held-out banks have been run.
+Revision 9 (2 Oct, 21:26; user): no work is possible on weekdays, so everything except the final
+submit is done by the end of Sun 4 Oct. One day of tuning (Sat 3), code freeze that evening, held-out
+runs on Sun 4 (moved from Wed 7), submission pack the same day; Sat 10 is the only buffer.
 
 Revision 4 (27 Sep, 15:00; rows re-dated 15:47): the plan is a guide, not a contract (user). Work is pulled forward
 as soon as the previous task is done and the dates below are re-set continuously; the only hard
@@ -178,7 +181,7 @@ Problem 1's chain, and where each link is shown:
 | Remediation | drafts for top gaps with owner line, due date, success criterion | Thu 1 |
 | Ongoing monitoring | change agent triggered by a new circular **or** a new evidence batch | Fri 2 - Sat 3 |
 
-## 6. Schedule (rev 8: rolling; re-dated as work moves)
+## 6. Schedule (rev 9: rolling; re-dated as work moves)
 
 | When | Work | Exit criterion | Status |
 |---|---|---|---|
@@ -190,14 +193,11 @@ Problem 1's chain, and where each link is shown:
 | Tue 29 | Score e2e7 (thinking judge) vs e2e5 | Judge decision | done: thinking mode rejected (planted 1/7 vs 2/7, extras 116 vs 106, 126 vs ~30 GPU-min); tiering on thinking dropped; the rest moved to Fri 2 - Sun 4 |
 | Wed 30 - Thu 1 | - | - | no build work |
 | **Fri 2 (holiday)** | Change agent end to end (diff, classify, scope, gate, plan, re-extract, re-map, compare, commit, retry, what-if); policy passages as candidates; lead-in fix; text comparison and tiers; risk rubric; remediation drafts; evidence-batch trigger; reviewer decisions; hosted-model path; Streamlit app deployed; third-bank key frozen (`da58e66`) | **BUILD COMPLETE** (two days early) | done: dev 5/7 planted at the exact spot (3 high-confidence + 2 review), decoys 0/3 high, extras 17 high + 38 review |
-| **Sat 3 (9 h)** | **Scores, day 1:** second dev key on the dev bank (fresh seeded mutations; user reviews realism) to test whether the comparison rules generalise; cut high-confidence false alarms (time-boxed); removed-owner check. README + architecture document | Rules hold on a key they were not written against | |
-| **Sun 4 (9 h)** | **Scores, day 2:** tuning on dev + dev2 only; app polish; pitch deck draft | High-confidence tier: planted found, decoys 0, fewer false alarms | |
-| Mon 5 | Dev-only tuning; video script; demo rehearsal | Script agreed | |
-| Tue 6 | Clean dev re-run from scratch; **code freeze at end of day**; v0 submission draft on Unstop | Nothing open before the freeze | |
-| **Wed 7** | **FREEZE.** First-ever runs on the two held-out banks (Central Bank, Dhanlaxmi), in chunks of 30 min or less resumed from the cache; counts per split; decide the claim (D2, or D1 if they fall short) | Numbers and claim frozen | |
-| Thu 8 | Pitch deck final with the real numbers; v0 updated | v0 submitted | |
-| Fri 9 | Record the 2-4 min video (mp4 < 50 MB + unlisted YouTube) | Video link works | |
-| **Sat 10** | Fixes; final submit by 15:00 | Submitted | |
+| Fri 2, evening | Second dev key drafted (seeded draw) with a review sheet; README + architecture document; video script draft | Review sheet with the user | |
+| **Sat 3 (9 h)** | **Scores, the one day:** second dev key run (do the comparison rules generalise?); cut high-confidence false alarms (time-boxed); removed-owner check; clean dev re-run from scratch; app polish; pitch deck draft. **Code freeze at end of day** | Rules hold on a key they were not written against; nothing open before the freeze | |
+| **Sun 4 (9 h)** | **FREEZE.** First-ever runs on the two held-out banks (Central Bank, Dhanlaxmi), in chunks of 30 min or less resumed from the cache; counts per split; decide the claim (D2, or D1 if they fall short). Deck final with the real numbers; user records the 2-4 min video; **v0 submitted on Unstop** | Numbers and claim frozen; submission pack complete | |
+| Mon 5 - Fri 9 | No work planned | - | |
+| **Sat 10** | Buffer: fixes, re-record if needed; final submit by 15:00 | Submitted | |
 | Sun 11 | Buffer only | - | |
 
 ### Checkpoints and cuts
