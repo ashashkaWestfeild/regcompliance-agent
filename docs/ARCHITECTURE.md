@@ -224,7 +224,7 @@ held-out runs, which are then reported against it.
   policy-level. Level therefore routes items to review and is not reported as an accuracy figure.
 - **Correlated error.** The redundancy check and the pipeline both use bge-m3; a passage both
   miss would make a planted gap look valid. Lexical search and manual reading reduce this.
-- **Bank profiles.** The profiles of all three banks are built by a script from the published policies and were committed (`c286fd7`) before any held-out run; no model read the held-out policies. The vocabulary behind them was written from the regulation's own conditions. A profile lists what a policy mentions, which is weaker than what the bank offers: a policy that restates the regulation mentions almost everything, so on the development bank the stage excludes nothing.
+- **Bank profiles.** The profiles of all three banks are built by a script from the published policies and were committed (`c286fd7`) before any held-out run; no model read the held-out policies. The vocabulary behind them was written from the regulation's own conditions. A profile lists what a policy mentions, which is weaker than what the bank offers: a policy that restates the regulation mentions almost everything, so the stage excluded nothing on the banks tested (no profile states an absence) and no precision gain is claimed from it. The what-if in the app is hypothetical.
 - **Real findings** in the published policies are labelled separately and scored by their own
   rules, never as false alarms. A real gap that shares an obligation with a planted one counts
   neither way.
@@ -262,7 +262,7 @@ held-out runs, which are then reported against it.
 - One regulation end to end; nine others only for change detection. Text input only.
 - No cross-regulation analysis and no detection of contradictions between regulations.
 - No document routing: a person chooses which policy is checked against which Direction.
-- Next: a design check for owners the regulation itself names; a wider comparison for reworded
+- Next: a bank profile built from independent facts (licences, product lists) instead of the policy's own text, so that applicability can exclude; a design check for owners the regulation itself names; a wider comparison for reworded
   sentences; more than one development bank.
 
 ## 10. Claim

@@ -154,7 +154,7 @@ rule of this project, and there is no per-event spending cap.
 - "Policy-level or procedure-level" is a convention: two independent labellers agreed on 30 of 50
   rows. The system routes such items to review rather than deciding.
 - One regulation end to end; text input only. A person chooses which policy is checked against which Direction.
-- A bank profile lists what the bank's policy mentions. A policy that restates the regulation mentions almost everything, so the applicability step excludes nothing on the development bank; its value is the stored reason and the what-if.
+- A bank profile lists what the bank's policy mentions. A policy that restates the regulation mentions almost everything, so the applicability step excluded nothing on the banks tested, and no precision gain is claimed from it. The what-if in the app is hypothetical: it shows what would drop out if a bank stated it did not offer something. A profile built from independent facts is on the roadmap.
 - The hosted demo depends on free tiers (a daily token cap for the hosted model).
 
 More detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md),

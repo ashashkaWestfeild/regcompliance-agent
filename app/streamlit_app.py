@@ -486,9 +486,15 @@ def applicability_page() -> None:
     b.metric("Do not apply", counts["no"])
     c.metric("To confirm", counts["conditional"])
 
-    st.markdown("**What if the bank does not offer something?** (dry run, nothing is written)")
+    st.caption(
+        "On the banks tested this stage excluded nothing: a policy that restates the "
+        "regulation mentions almost every product and channel. No precision gain is claimed."
+    )
+    st.markdown(
+        "**Hypothetical: what if the bank did not offer something?** (dry run, nothing is written)"
+    )
     options = [f"{x['Attribute']}: {x['The policy deals with']}" for x in listed]
-    choice = st.selectbox("State that the bank does not offer", ["(nothing)", *options])
+    choice = st.selectbox("Suppose the bank did not offer", ["(nothing)", *options])
     if choice == "(nothing)":
         return
     picked = listed[options.index(choice)]
