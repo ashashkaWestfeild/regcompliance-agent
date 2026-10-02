@@ -81,3 +81,20 @@ def test_missing_key_and_http_errors_are_reported_without_the_key(monkeypatch):
     with pytest.raises(llm.LLMError) as err:
         llm.complete_json("judge", "sys", "user", SCHEMA, conn=FakeConn())
     assert "HTTP 401" in str(err.value) and "secret-value" not in str(err.value)
+
+
+def test_a_daily_cap_fails_at_once_instead_of_waiting(monkeypatch):
+    monkeypatch.setenv("REGCOMP_MODEL_JUDGE", "groq:openai/gpt-oss-120b")
+    monkeypatch.setenv("STRONG_MODEL_API_KEY", "test-key-not-real")
+    calls, waits = [], []
+
+    def fake_urlopen(req, timeout):
+        calls.append(req)
+        raise urllib.error.HTTPError(req.full_url, 429, "cap", {"retry-after": "5400"}, None)
+
+    monkeypatch.setattr(llm.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(llm.time, "sleep", waits.append)
+    with pytest.raises(llm.LLMError) as err:
+        llm.complete_json("judge", "sys", "user", SCHEMA, conn=FakeConn())
+    assert "allowance used up" in str(err.value) and "test-key-not-real" not in str(err.value)
+    assert len(calls) == 1 and waits == []

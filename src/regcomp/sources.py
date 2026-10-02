@@ -61,6 +61,33 @@ def policy_meta(policy_id: str) -> dict:
     }
 
 
+def document_fields(meta: dict) -> dict:
+    """The fields of a document row as scripts/load_metadata.py stores them, from the output of
+    regulation_meta or policy_meta. Citations are built from these fields."""
+    return {
+        "source_title": meta["source_title"],
+        "issuer": meta.get("issuer", "Reserve Bank of India"),
+        "reference_no": meta.get("reference_no"),
+        "issued_on": meta.get("issued_on"),
+        "effective_from": meta.get("version_date"),
+        "amended_by": meta.get("amended_by"),
+        "url": meta.get("url"),
+        "stated_date": meta.get("stated_date"),
+        "stated_date_kind": meta.get("stated_date_kind"),
+    }
+
+
+def regulation_meta_for_file(path: str) -> dict | None:
+    """Citation fields for the regulation version stored in a file, or None when the file is not
+    a catalogued RBI document (a synthetic draft, for example)."""
+    wanted = str(path).replace("\\", "/")
+    for entry in _load()["regulation"]:
+        files = [entry.get("file")] + [f.get("file") for f in entry.get("files", [])]
+        if wanted in files:
+            return regulation_meta(entry["version_label"])
+    return None
+
+
 def marker_date(marker: str) -> date | None:
     """The effective date inside an RBI amendment marker, or None if it states none."""
     m = _EFFECT.search(marker or "")

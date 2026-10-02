@@ -45,6 +45,7 @@ HOSTED = {
     "groq": ("https://api.groq.com/openai/v1/chat/completions", "STRONG_MODEL_API_KEY"),
 }
 MAX_RATE_WAITS = 8
+MAX_RATE_WAIT_S = 120  # a longer wait asked by the provider means a daily cap
 
 
 class LLMError(RuntimeError):
@@ -115,7 +116,14 @@ def _hosted_chat(model: str, messages: list[dict], schema: dict, timeout: int = 
             return json.load(urllib.request.urlopen(req, timeout=timeout))
         except urllib.error.HTTPError as e:
             if e.code == 429:
-                wait = float(e.headers.get("retry-after") or 10)
+                try:
+                    wait = float(e.headers.get("retry-after") or 10)
+                except ValueError:
+                    wait = 10.0
+                if wait > MAX_RATE_WAIT_S:  # a daily cap, not a per-minute one: say so at once
+                    raise LLMError(
+                        f"{provider}: allowance used up (HTTP 429, retry after {int(wait)} s)"
+                    ) from None
                 time.sleep(min(max(wait, 1.0), 65.0))
                 continue
             detail = e.read().decode("utf-8", "replace")[:200]

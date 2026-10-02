@@ -1,8 +1,9 @@
 """RegCompliance Agent: the hosted demo (Streamlit).
 
 Reads the compliance graph from Postgres and shows it: gaps in two tiers with their evidence,
-the review queue, the change agent on real and draft amendments, operating evidence and the
-evaluation numbers. Public visitors can look and simulate; writing needs the reviewer code.
+source citation, applicability and confidence note; the review queue; the change agent on real
+and draft amendments; a what-if on the bank profile; operating evidence and the evaluation
+numbers. Public visitors can look and simulate; writing needs the reviewer code.
 
     uv run streamlit run app/streamlit_app.py
 """
@@ -25,10 +26,23 @@ try:  # on Streamlit Cloud the settings come from the app's secrets; locally fro
 except Exception:  # no secrets file on a local run
     pass
 
+from regcomp import applicability as appl  # noqa: E402
+from regcomp.citation import (  # noqa: E402
+    DOC_FIELDS,
+    day,
+    policy_citation,
+    policy_lines,
+    predates,
+    regulation_citation,
+    regulation_lines,
+)
+from regcomp.confidence import note as confidence_note  # noqa: E402
 from regcomp.db import connect  # noqa: E402
 from regcomp.llm import model_for  # noqa: E402
+from regcomp.remediation import readable  # noqa: E402
 from regcomp.review import DECISIONS, decide  # noqa: E402
 from regcomp.risk import assess  # noqa: E402
+from regcomp.sources import document_fields, regulation_meta_for_file  # noqa: E402
 
 st.set_page_config(page_title="RegCompliance Agent", page_icon="📋", layout="wide")
 
@@ -46,12 +60,52 @@ SCENARIOS = {
         "data/raw/rbi/kycdir_v2_20251229.pdf",
     ),
 }
+APPLIES = {"yes": "applies", "no": "does not apply", "conditional": "to confirm"}
+LIMIT_WORDS = ("rate-limited", "HTTP 429", "allowance")
 
 
 @st.cache_data(ttl=120, show_spinner=False)
 def query(sql: str, params: tuple = ()) -> list[tuple]:
     with connect(autocommit=True) as conn:
         return conn.execute(sql, params).fetchall()
+
+
+@st.cache_data(ttl=600, show_spinner=False)
+def documents() -> dict[str, dict]:
+    """{kind: the stored source fields of that document}. Loaded from data/sources.yaml by
+    scripts/load_metadata.py; nothing here comes from a model."""
+    rows = query("SELECT kind::text, title, " + ", ".join(DOC_FIELDS) + " FROM document")
+    out = {}
+    for kind, title, *fields in rows:
+        doc = dict(zip(DOC_FIELDS, fields, strict=True))
+        doc["source_title"] = doc["source_title"] or title
+        out["policy" if kind == "policy" else "regulation"] = doc
+    return out
+
+
+@st.cache_data(ttl=600, show_spinner=False)
+def amendment_markers() -> list[tuple[str, list[str]]]:
+    return query(
+        "SELECT c.clause_ref, c.amended_by FROM clause c JOIN document d ON d.id = c.document_id"
+        " WHERE d.kind <> 'policy' AND c.superseded_at IS NULL"
+        " AND jsonb_array_length(c.amended_by) > 0"
+    )
+
+
+def markers_for(ref: str) -> list[str]:
+    """RBI's markers on the paragraph or on a paragraph that contains it."""
+    return [
+        m
+        for clause, found in amendment_markers()
+        if ref == clause or ref.startswith(clause + "(")
+        for m in found
+    ]
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def confidence_table() -> dict:
+    path = ROOT / "eval" / "reports" / "confidence_table.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
 
 
 @st.cache_data(ttl=120, show_spinner=False)
@@ -61,10 +115,19 @@ def gaps(tier: str) -> list[dict]:
         " g.priority_score, o.action, o.source_span->>'quote', c.source_span->>'quote',"
         " c.control_ref, g.rationale, g.evidence, o.applicability->>'level', c.id::text,"
         " g.status::text, r.action, r.owner_line::text, r.owner_role, r.due_date::text,"
-        " r.success_criterion, r.drafted_by_model"
+        " r.success_criterion, r.drafted_by_model, m.verdict::text,"
+        " m.judges->0->>'citation_ok', g.control_test_id IS NOT NULL, a.answer, a.reason,"
+        " a.decided_by, a.attribute, a.value, a.basis"
         " FROM gap g JOIN obligation o ON o.id = g.obligation_id"
         " LEFT JOIN control c ON c.id = g.control_id"
-        " LEFT JOIN remediation r ON r.gap_id = g.id"
+        " LEFT JOIN mapping m ON m.id = g.mapping_id"
+        " LEFT JOIN applicability_decision a ON a.obligation_id = o.id"
+        " AND a.superseded_at IS NULL"
+        # one remedy per regulation paragraph, shown on every high-confidence gap of it
+        " LEFT JOIN LATERAL (SELECT r.* FROM remediation r JOIN gap g2 ON g2.id = r.gap_id"
+        " JOIN obligation o2 ON o2.id = g2.obligation_id"
+        " WHERE o2.source_clause_ref = o.source_clause_ref AND g.tier = 'high'"
+        " ORDER BY (r.gap_id = g.id) DESC LIMIT 1) r ON true"
         " WHERE g.tier = %s AND g.superseded_at IS NULL AND g.status = 'open'"
         " ORDER BY g.priority_score DESC, o.source_clause_ref",
         (tier,),
@@ -72,7 +135,9 @@ def gaps(tier: str) -> list[dict]:
     keys = (
         "id", "ref", "type", "risk", "priority", "action", "rbi_text", "policy_text",
         "policy_ref", "why", "evidence", "level", "control_id", "status", "fix", "owner_line",
-        "owner_role", "due", "closes_when", "drafted_by",
+        "owner_role", "due", "closes_when", "drafted_by", "verdict", "citation_ok", "has_test",
+        "applies", "applies_reason", "applies_by", "applies_attribute", "applies_value",
+        "applies_basis",
     )  # fmt: skip
     return [dict(zip(keys, r, strict=True)) for r in rows]
 
@@ -90,10 +155,16 @@ def overview() -> None:
             " AND status = 'open' AND superseded_at IS NULL"
         )
     )
-    docs = query("SELECT kind::text, title, version_label FROM document ORDER BY kind")
+    docs = documents()
     st.subheader("What is loaded")
-    for kind, title, version in docs:
-        st.write(f"**{kind.replace('_', ' ')}**: {title} (`{version}`)")
+    if "regulation" in docs:
+        st.markdown(f"**Regulation:** {docs['regulation']['source_title']}")
+        for line in regulation_lines(regulation_citation(docs["regulation"], "all"))[1:]:
+            st.write("•", line)
+    if "policy" in docs:
+        st.markdown("**Bank policy** (a copy with known gaps planted for testing)")
+        for line in policy_lines(policy_citation(docs["policy"], None)):
+            st.write("•", line)
     a, b, c, d, e = st.columns(5)
     a.metric("Obligations", counts.get("obligations", 0))
     b.metric("Policy passages", counts.get("candidates", 0))
@@ -103,7 +174,9 @@ def overview() -> None:
     st.caption(
         "Chain: regulation → obligations → applicability → policy passages → evidence → tests → "
         "gaps → remediation → monitoring. A model extracts and judges; code checks every "
-        "citation, compares the wording, decides the gap type, ranks the risk and sets the tier."
+        "citation, decides applicability, compares the wording, decides the gap type, ranks the "
+        "risk and sets the tier. A person chooses which policy is checked against which "
+        "Direction."
     )
     risk = query(
         "SELECT residual_risk::text, tier, count(*) FROM gap WHERE status = 'open'"
@@ -137,6 +210,27 @@ def policy_text() -> str:
     return query("SELECT text FROM document WHERE kind = 'policy'")[0][0]
 
 
+def source_block(ref: str, policy_ref: str | None) -> None:
+    """The full citation of a finding: both documents, with the three dates kept apart."""
+    docs = documents()
+    if "regulation" not in docs:
+        return
+    reg = regulation_citation(docs["regulation"], ref, markers_for(ref))
+    with st.expander(f"Source citation: {reg['document']}, paragraph {ref}", expanded=False):
+        left, right = st.columns(2)
+        left.markdown("**Regulation**")
+        for line in regulation_lines(reg):
+            left.write("• " + line)
+        if "policy" in docs:
+            pol = policy_citation(docs["policy"], policy_ref)
+            right.markdown("**Bank policy**")
+            for line in policy_lines(pol):
+                right.write("• " + line)
+            for flag in predates(pol, reg):
+                st.warning(flag)
+        st.caption("Every date and reference is read from the stored source record, not a model.")
+
+
 def gap_detail(g: dict) -> None:
     left, right = st.columns(2)
     left.markdown(f"**RBI {g['ref']}**")
@@ -153,7 +247,8 @@ def gap_detail(g: dict) -> None:
         right.caption("The judge cited no passage; this is the closest policy text by wording.")
     else:
         right.error("No passage in the policy addresses this.")
-    st.markdown(f"**Why it was raised:** {g['why']}")
+    source_block(g["ref"], g["policy_ref"])
+    st.markdown(f"**Why it was raised:** {readable(g['why'])}")
     if ev.get("kind") in COMPARISON:
         note = COMPARISON[ev["kind"]] + (f": {ev['detail']}" if ev.get("detail") else "")
         st.markdown(
@@ -164,14 +259,34 @@ def gap_detail(g: dict) -> None:
     if ev.get("check") == "level":
         level = ev.get("level", "").replace("_", " ")
         st.markdown(f"**Obligation level:** {level} (shown for review, not scored as a policy gap)")
+    if g["applies"]:
+        basis = (
+            f" Profile attribute: {g['applies_attribute']} ({g['applies_value']}); basis: "
+            f"{g['applies_basis'] or 'not stated'}."
+            if g["applies_value"]
+            else ""
+        )
+        st.markdown(
+            f"**Applies to this bank:** {APPLIES[g['applies']]}: {g['applies_reason']}.{basis} "
+            f"Decided by {g['applies_by']}."
+        )
+    cn = confidence_note(
+        g["verdict"] or "partial", g["type"], ev, g["has_test"], g["citation_ok"] == "true",
+        confidence_table(),
+    )  # fmt: skip
+    st.markdown(f"**Confidence note:** {'. '.join(cn['signals'])}. {cn['record']}")
     reason = assess(f"{g['action']}. {g['rbi_text']}", "", g["type"]).reasons[1]
     st.markdown(f"**Risk:** residual {g['risk']} (priority {g['priority']:.2f}); {reason}")
     if g["fix"]:
-        st.markdown("**Remediation draft**")
+        st.markdown(f"**Remediation draft for RBI paragraph {g['ref']}** (one per paragraph)")
         st.success(g["fix"])
+        doc = documents().get("regulation", {})
+        version = day(doc.get("effective_from"))
         st.caption(
             f"Owner: {g['owner_line']} {g['owner_role']} · due {g['due']} · closes when: "
-            f"{g['closes_when']} · drafted by {g['drafted_by']}"
+            f"{g['closes_when']} · drafted by {g['drafted_by']} · a proposal for a reviewer. "
+            f"Basis: {doc.get('source_title', 'the regulation')}, paragraph {g['ref']} "
+            f"({doc.get('reference_no', '')}; version updated as on {version})."
         )
 
 
@@ -235,6 +350,19 @@ def review_form(g: dict) -> None:
         conn.close()
 
 
+def version_citation(path: str) -> None:
+    """Which document the agent is reading as the new version."""
+    meta = regulation_meta_for_file(path)
+    if meta is None:
+        st.caption(
+            f"New version: `{path}`, a synthetic draft written for this demo. It is not an RBI "
+            "document and carries no RBI reference."
+        )
+        return
+    lines = regulation_lines(regulation_citation(document_fields(meta), "all"))
+    st.caption("New version: " + " · ".join(lines[1:]))
+
+
 def change_page() -> None:
     st.subheader("Change agent")
     st.caption(
@@ -247,6 +375,8 @@ def change_page() -> None:
     asked = st.query_params.get("scenario", "1")
     first = int(asked) - 1 if asked.isdigit() and 1 <= int(asked) <= len(SCENARIOS) else 0
     name = st.selectbox("Scenario", list(SCENARIOS), index=first)
+    old, new = SCENARIOS[name]
+    version_citation(new)
     fail = st.checkbox("Inject one failure in the re-mapping step (to show recovery)")
     if not st.button("Run the agent"):
         return
@@ -254,8 +384,6 @@ def change_page() -> None:
     from run_change import DbTools
 
     from regcomp.change.agent import build, graph_from_db
-
-    old, new = SCENARIOS[name]
 
     def load_graph() -> dict:
         with connect(autocommit=True) as conn:
@@ -269,7 +397,14 @@ def change_page() -> None:
             agent = build(load_graph, InMemorySaver(), DbTools("demo"))
             out = agent.invoke(start, {"configurable": {"thread_id": f"demo-{name}-{fail}"}})
         except Exception as e:  # shown to the visitor instead of a stack trace
-            st.error(f"The run stopped: {e}")
+            if any(word in str(e) for word in LIMIT_WORDS):
+                st.warning(
+                    "The hosted model's free allowance is used up for now, so the steps that "
+                    "need a model (re-extract and re-judge) could not run. Nothing is wrong with "
+                    "the data. Please try again later; the first scenario needs no model call."
+                )
+            else:
+                st.error(f"The run stopped: {e}")
             return
     st.markdown("**What the agent did**")
     for line in out.get("log", []):
@@ -277,7 +412,10 @@ def change_page() -> None:
     st.markdown(f"**Outcome:** {out.get('status', '?').replace('_', ' ')}")
     for step in out.get("plan", []):
         if step["action"] == "advise":
-            st.info(f"Advisory for clause {step['ref']}: {step['note']} {step['summary']}")
+            st.info(
+                f"Advisory for paragraph {step['ref']} (not a gap): {step['note']} "
+                f"{step['summary']}"
+            )
     delta = out.get("delta")
     if delta:
         a, b, c = st.columns(3)
@@ -293,6 +431,101 @@ def change_page() -> None:
                 st.markdown(f"**{title}**")
                 st.dataframe(delta[key], use_container_width=True, hide_index=True)
     st.caption(f"Model used for the re-analysis steps: {model_for('judge')}")
+
+
+@st.cache_data(ttl=300, show_spinner=False)
+def applicability_inputs() -> tuple[str | None, list[tuple], list[tuple]]:
+    profile = query(
+        "SELECT profile FROM applicability_decision WHERE superseded_at IS NULL"
+        " GROUP BY 1 ORDER BY max(recorded_at) DESC LIMIT 1"
+    )
+    obligations = query(
+        "SELECT id::text, source_clause_ref, applicability->>'raw', source_span->>'quote'"
+        " FROM obligation WHERE superseded_at IS NULL ORDER BY source_clause_ref"
+    )
+    open_gaps = query(
+        "SELECT obligation_id::text, tier FROM gap WHERE status = 'open'"
+        " AND superseded_at IS NULL AND tier IN ('high', 'review')"
+    )
+    return (profile[0][0] if profile else None), obligations, open_gaps
+
+
+def applicability_page() -> None:
+    st.subheader("Does each obligation apply to this bank?")
+    profile_id, obligations, open_gaps = applicability_inputs()
+    if not profile_id:
+        st.write("The applicability stage has not been run for this bank.")
+        return
+    profile, vocab = appl.load_profile(profile_id), appl.load_vocab()
+    st.caption(
+        f"Bank profile: {profile['bank']} ({profile['entity_type']['value']}). The profile is "
+        "built by code from the bank's own published policy: a product, channel, customer "
+        "segment or geography is listed because the policy deals with it. Each obligation's "
+        "limiting condition is matched against it by fixed rules. An obligation is excluded only "
+        "when the profile states that the bank does not offer what the condition names."
+    )
+    listed = [
+        {"Attribute": attribute.replace("_", " "), "The policy deals with": e["value"],
+         "Where": e.get("where", ""), "Evidence (first mention)": e.get("evidence", "")}
+        for attribute, entries in profile.get("has", {}).items()
+        for e in entries
+    ]  # fmt: skip
+    with st.expander(f"Profile: {len(listed)} attributes found in the policy"):
+        st.dataframe(listed, use_container_width=True, hide_index=True)
+
+    def decide_all(p: dict) -> dict[str, dict]:
+        return {
+            oid: appl.decide({"applies_to": raw, "quote": quote}, p, vocab)
+            for oid, _, raw, quote in obligations
+        }
+
+    now = decide_all(profile)
+    counts = {a: sum(d["answer"] == a for d in now.values()) for a in APPLIES}
+    a, b, c = st.columns(3)
+    a.metric("Apply", counts["yes"])
+    b.metric("Do not apply", counts["no"])
+    c.metric("To confirm", counts["conditional"])
+
+    st.markdown("**What if the bank does not offer something?** (dry run, nothing is written)")
+    options = [f"{x['Attribute']}: {x['The policy deals with']}" for x in listed]
+    choice = st.selectbox("State that the bank does not offer", ["(nothing)", *options])
+    if choice == "(nothing)":
+        return
+    picked = listed[options.index(choice)]
+    changed = decide_all(
+        appl.without(
+            profile,
+            picked["Attribute"].replace(" ", "_"),
+            picked["The policy deals with"],
+            basis="what-if statement",
+        )
+    )
+    gaps_on = {}
+    for oid, tier in open_gaps:
+        gaps_on.setdefault(oid, []).append(tier)
+    moved = [
+        {"RBI ref": ref, "Now": APPLIES[changed[oid]["answer"]], "Reason": changed[oid]["reason"],
+         "Open gaps on it": ", ".join(sorted(gaps_on.get(oid, []))) or "-",
+         "Obligation": (quote or "")[:140]}
+        for oid, ref, _, quote in obligations
+        if changed[oid]["answer"] != now[oid]["answer"]
+    ]  # fmt: skip
+    out_ids = {oid for oid in changed if changed[oid]["answer"] == "no"}
+    leaving = [t for oid in out_ids for t in gaps_on.get(oid, [])]
+    a, b, c = st.columns(3)
+    a.metric("Obligations that no longer apply", len(out_ids))
+    b.metric("Obligations to confirm", sum(r["Now"] == "to confirm" for r in moved))
+    c.metric(
+        "Open gaps that would leave the tiers",
+        len(leaving),
+        help=f"high confidence {leaving.count('high')}, review queue {leaving.count('review')}",
+    )
+    st.caption(
+        "Only an obligation whose own limiting condition names the attribute is excluded. One "
+        "that merely mentions it in its sentence is marked 'to confirm' and keeps its gap."
+    )
+    if moved:
+        st.dataframe(moved, use_container_width=True, hide_index=True)
 
 
 def evidence_page() -> None:
@@ -336,12 +569,35 @@ def evaluation_page() -> None:
         "These are development-set numbers; the comparison rules were written after studying "
         "this bank's misses. Two banks the system has never seen are scored once, at the freeze."
     )
+    if card.get("applicability"):
+        st.markdown("**Applicability (bank profile)**")
+        for line in card["applicability"]:
+            st.write("•", line.lstrip("- "))
+    if card.get("judge_confidence_reliability"):
+        st.markdown("**Is the judge's own confidence number worth showing?**")
+        st.dataframe(
+            card["judge_confidence_reliability"], use_container_width=True, hide_index=True
+        )
+        st.caption(
+            "Verdicts with a known answer come from the answer key and 50 adjudicated pairs. The "
+            "number mostly restates the verdict (every checked verdict at 1.00 was 'covered'), so "
+            "it is not shown on findings. Each finding carries a note built from checks that "
+            "code can verify, with the record of that kind of finding on the development bank:"
+        )
+        st.dataframe(card["signal_records"], use_container_width=True, hide_index=True)
+        st.caption(
+            "Most findings of each kind are not adjudicated, and most adjudicated ones are gaps "
+            "we planted, so these records are counts, not hit rates."
+        )
 
 
 st.title("RegCompliance Agent")
 st.caption("RBI KYC Directions against a bank's published KYC policy · ET × Accenture AI Hackathon")
 try:
-    tabs = st.tabs(["Overview", "Gaps", "Review queue", "Change agent", "Evidence", "Evaluation"])
+    tabs = st.tabs(
+        ["Overview", "Gaps", "Review queue", "Applicability", "Change agent", "Evidence",
+         "Evaluation"]
+    )  # fmt: skip
     with tabs[0]:
         overview()
     with tabs[1]:
@@ -349,10 +605,12 @@ try:
     with tabs[2]:
         gaps_page("review")
     with tabs[3]:
-        change_page()
+        applicability_page()
     with tabs[4]:
-        evidence_page()
+        change_page()
     with tabs[5]:
+        evidence_page()
+    with tabs[6]:
         evaluation_page()
 except RuntimeError as e:  # database not configured or unreachable: say so, without details
     st.error(f"Cannot reach the database: {e}")

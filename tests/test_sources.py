@@ -45,3 +45,12 @@ def test_marker_date_is_read_from_the_marker_text():
     assert marker_date(marker) == date(2025, 12, 29)
     assert marker_date("Substituted vide a later notification") is None
     assert marker_date("") is None
+
+
+def test_a_file_is_traced_to_its_version_and_a_draft_to_none():
+    from regcomp.sources import regulation_meta_for_file
+
+    second = RAW["regulation"][1]
+    for f in second["files"]:
+        assert regulation_meta_for_file(f["file"])["version_date"] == second["effective_from"]
+    assert regulation_meta_for_file("data/synthetic/kycdir_draft_whatif.html") is None
