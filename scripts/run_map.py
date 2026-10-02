@@ -248,11 +248,23 @@ def embed_all(conn, obligations, controls):
     return dict(zip([o["id"] for o in obligations], vectors[: len(obligations)], strict=True))
 
 
-def retrieve(conn, ob_vectors, obligations, controls) -> dict:
+def _same_text(a: dict, b: dict) -> bool:
+    """Two candidates on (mostly) the same policy text: the judge only sees the quote, so the
+    second one would spend a slot on a repeat."""
+    inside = min(a["char_end"], b["char_end"]) - max(a["char_start"], b["char_start"])
+    return inside >= 0.5 * min(a["char_end"] - a["char_start"], b["char_end"] - b["char_start"])
+
+
+def retrieve(conn, ob_vectors, obligations, controls, dense_only: bool = False) -> dict:
     """bge-m3 top-RETRIEVE_K from pgvector, then FlashRank rerank to TOP_K.
-    Returns {obligation_id: [(control_id, reranker_score), ...]} best first."""
+    Returns {obligation_id: [(control_id, reranker_score), ...]} best first.
+
+    dense_only: keep the embedding order, drop candidates that repeat a higher-ranked one's
+    text, and take the top TOP_K (score None). On the dev targets (2 Oct) the reranker pushed the
+    right passage out of the top 5 more often than it pulled it in: 14/18 vs 16/18."""
     ob_text = {o["id"]: f"{o['action']}. {o['quote']}" for o in obligations}
     ct_text = {c["id"]: control_text(c) for c in controls}
+    by_id = {c["id"]: c for c in controls}
     out = {}
     for oid, v in ob_vectors.items():
         rows = conn.execute(
@@ -260,6 +272,13 @@ def retrieve(conn, ob_vectors, obligations, controls) -> dict:
             " ORDER BY vec <=> %s::vector LIMIT %s",
             (vec_literal(v), RETRIEVE_K),
         ).fetchall()
+        if dense_only:
+            kept: list = []
+            for (cid,) in rows:
+                if not any(_same_text(by_id[cid], by_id[k]) for k in kept):
+                    kept.append(cid)
+            out[oid] = [(cid, None) for cid in kept[:TOP_K]]
+            continue
         candidates = [(r[0], ct_text[r[0]]) for r in rows]
         out[oid] = rerank(ob_text[oid], candidates, TOP_K)
     return out
@@ -270,6 +289,7 @@ def main() -> int:
     ap.add_argument("--run", required=True)
     ap.add_argument("--judge-think", action="store_true", help="judge with thinking mode on")
     ap.add_argument("--passages", action="store_true", help="policy passages as candidates too")
+    ap.add_argument("--dense-only", action="store_true", help="no reranker; dedupe candidates")
     ap.add_argument("--stop-after-min", type=float, help="stop cleanly after this many minutes")
     args = ap.parse_args()
     run = Path("eval/runs") / args.run
@@ -295,9 +315,10 @@ def main() -> int:
         )
         ob_vectors = embed_all(conn, obligations, controls)
         print(f"embedded ({time.time() - t0:.0f}s)", flush=True)
-        hits = retrieve(conn, ob_vectors, obligations, controls)
+        hits = retrieve(conn, ob_vectors, obligations, controls, args.dense_only)
+        how = "deduped dense" if args.dense_only else "FlashRank"
         print(
-            f"retrieved top-{RETRIEVE_K} -> FlashRank top-{TOP_K} "
+            f"retrieved top-{RETRIEVE_K} -> {how} top-{TOP_K} "
             f"(rerank failures {rerank_mod.failures}) ({time.time() - t0:.0f}s)",
             flush=True,
         )
