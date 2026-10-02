@@ -14,6 +14,10 @@ unkeyed gaps 178 -> 328. Element checks need a stronger judge; see the tiering p
 Also tried and reverted (28 Sep, dev run e2e6): generic rubric rules (substance over wording;
 adopting some permitted alternatives is covered; partial only with a named weaker element).
 Partial verdicts rose 136 -> 172 and unkeyed gaps 106 -> 124, recall unchanged at 2/7.
+
+Added 2 Oct (dev run e2e11): the issue "optional_not_mandatory" for a mandatory obligation that
+the policy states as an option ("may"). It maps to the gap type weak_modality, planted in test
+set 2 only (user review of that key), so the dev set shows its side effects but not its recall.
 """
 
 from regcomp.llm import complete_json
@@ -24,6 +28,7 @@ ISSUES = [
     "not_addressed",
     "weaker_threshold",
     "narrower_scope",
+    "optional_not_mandatory",
     "conflicting_statements",
     "outdated_requirement",
     "no_owner_or_evidence",
@@ -33,8 +38,9 @@ ISSUES = [
 JUDGE_SYSTEM = (
     "You compare regulatory obligations with candidate controls from a bank's internal policy. "
     "For each obligation decide whether the candidate controls, taken together, satisfy it: "
-    "covered (fully satisfied), partial (addressed, but weaker, narrower, conflicting, outdated "
-    "or without an accountable owner or evidence), or missing (not addressed by any candidate). "
+    "covered (fully satisfied), partial (addressed, but weaker, narrower, stated as optional "
+    "where the obligation is mandatory, conflicting, outdated or without an accountable owner or "
+    "evidence), or missing (not addressed by any candidate). "
     "Return one result per obligation with: the obligation id; verdict; the id of the single "
     "best supporting control (null if missing); issue (one of: " + ", ".join(ISSUES) + "); a "
     "rationale of at most 40 words; control_quote_start: the first 8 to 15 words of the key "
@@ -79,16 +85,23 @@ GAP_BY_ISSUE = {
     "not_addressed": "missing_control",
     "weaker_threshold": "weak_threshold",
     "narrower_scope": "narrow_scope",
+    "optional_not_mandatory": "weak_modality",
     "conflicting_statements": "internal_contradiction",
     "outdated_requirement": "stale_control",
     "no_owner_or_evidence": "design_deficiency",
 }
 
 
-def gap_type(verdict: str, issue: str) -> str | None:
-    """Deterministic rule: judge verdict + issue -> gap type (None = no gap)."""
+def gap_type(verdict: str, issue: str, modality: str = "must") -> str | None:
+    """Deterministic rule: judge verdict + issue (+ the obligation's modality) -> gap type
+    (None = no gap)."""
     if verdict == "missing":
         return "missing_control"
+    if issue == "optional_not_mandatory":
+        # The judge names the issue but often still says "covered" (seen 2 Oct on an invented
+        # pair), so the rule does not depend on the verdict word. For a permission ("may") an
+        # optional control is consistent, not a gap.
+        return "weak_modality" if modality != "may" else None
     if verdict == "partial":
         return GAP_BY_ISSUE.get(issue, "unspecified")
     if issue == "no_owner_or_evidence":  # covered in substance, deficient in design
@@ -116,6 +129,7 @@ def judge_unit(
     )
 
     known = {o["id"] for o in obligations}
+    modality = {o["id"]: o["modality"] for o in obligations}
     top_candidate = {o["id"]: o["candidates"][0] for o in obligations if o.get("candidates")}
     out = []
     for r in raw.get("results", []):
@@ -134,6 +148,6 @@ def judge_unit(
             r["citation_ok"] = sentence_from(quote, r.get("control_quote_start") or "") is not None
         if r["verdict"] != "missing" and r["control"] is None:
             r["verdict"], r["citation_ok"] = "missing", False  # nothing retrievable to cite
-        r["gap_type"] = gap_type(r["verdict"], r["issue"])
+        r["gap_type"] = gap_type(r["verdict"], r["issue"], modality[r["obligation"]])
         out.append(r)
     return out
