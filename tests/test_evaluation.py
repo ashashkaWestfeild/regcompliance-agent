@@ -134,3 +134,16 @@ def test_known_real_gap_counts_neither_way():
     assert both.planted[0]["detected"] and both.unkeyed == []
     assert score(key, [], []).real[0]["outcome"] == "not flagged"
     assert "location-tolerant) 1/1" in "\n".join(summary(both))
+
+
+def test_tiers_are_reported_separately():
+    high = dict(f(1, "42(1)", "partial", "weak_threshold", (95, 130)), tier="high")
+    review = dict(f(2, "5(1)(iv)(d)", "missing", "missing_control"), tier="review")
+    decoy = dict(f(4, "68", "partial", "narrow_scope", (710, 720)), tier="review")
+    extra = dict(f(7, "99", "missing", "missing_control"), tier="review")
+    s = score(KEY, [high, review, decoy, extra], [])
+    assert [p["tier"] for p in s.planted] == ["high", "review", None]
+    assert s.decoys[0]["tier"] == "review"
+    text = "\n".join(summary(s))
+    assert "high-confidence tier: planted 1/3 (exact 1), decoys 0/1, unkeyed 0" in text
+    assert "review queue: planted 1/3 (exact 1), decoys 1/1, unkeyed 1" in text

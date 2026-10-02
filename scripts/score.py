@@ -42,10 +42,12 @@ def findings_from_db(conn) -> tuple[list[dict], str]:
     rows = conn.execute(
         "SELECT m.id, o.source_clause_ref, m.verdict, g.type, c.source_span, m.status,"
         " m.judges, o.source_span->>'quote', c.source_span->>'quote', o.id, o.source_span,"
-        " c.control_ref, o.action, o.threshold->>'raw'"
+        " c.control_ref, o.action, o.threshold->>'raw', g.tier"
         " FROM mapping m JOIN obligation o ON o.id = m.obligation_id"
-        " LEFT JOIN control c ON c.id = m.control_id"
         " LEFT JOIN gap g ON g.mapping_id = m.id"
+        # the passage a gap rests on: the text comparison (run_verify) may point at another
+        # passage than the one the judge cited
+        " LEFT JOIN control c ON c.id = COALESCE(g.control_id, m.control_id)"
     ).fetchall()
     findings = []
     for (
@@ -63,6 +65,7 @@ def findings_from_db(conn) -> tuple[list[dict], str]:
         cref,
         action,
         threshold,
+        tier,
     ) in rows:
         span = (cspan["char_start"], cspan["char_end"]) if cspan else None
         judge = judges[0] if judges else {}
@@ -83,6 +86,7 @@ def findings_from_db(conn) -> tuple[list[dict], str]:
                 "control_ref": cref,
                 "action": action,
                 "threshold": threshold,
+                "tier": tier or "high",
             }
         )
     policy_sha = conn.execute("SELECT sha256 FROM document WHERE kind = 'policy'").fetchone()[0]
@@ -267,16 +271,21 @@ def main() -> None:
         "## Against the answer key (counts)",
         *[f"- {line}" for line in summary(s)],
         "",
-        "| Row | Operator | Detected | Type accepted | Reported types |",
-        "|---|---|---|---|---|",
+        "| Row | Operator | Detected | Tier | Type accepted | Reported types |",
+        "|---|---|---|---|---|---|",
         *[
-            f"| {p['id']} | {p['operator']} | {_detected(p)} "
+            f"| {p['id']} | {p['operator']} | {_detected(p)} | {p['tier'] or '-'} "
             f"| {'yes' if p['typed'] else 'no'} | {', '.join(p['reported']) or '-'} |"
             for p in s.planted
         ],
         "",
         *[
-            f"- Decoy {d['id']}: {'FLAGGED (false positive)' if d['flagged'] else 'not flagged'}"
+            f"- Decoy {d['id']}: "
+            + (
+                f"FLAGGED in the {d['tier']} tier (false positive)"
+                if d["flagged"]
+                else "not flagged"
+            )
             for d in s.decoys
         ],
         *[f"- Injection {i['id']}: {'caught' if i['caught'] else 'MISSED'}" for i in s.injections],
@@ -298,7 +307,10 @@ def main() -> None:
         f"- judge control citations verified {sum(bool(f['citation_ok']) for f in findings)}"
         f"/{len(findings)}; auto-accepted {sum(f['status'] == 'auto' for f in findings)}, "
         f"escalated {sum(f['status'] == 'escalated' for f in findings)}",
-        f"- gaps reported {len(gaps)}; unkeyed (to blind adjudication) {len(s.unkeyed)}",
+        f"- gaps reported {len(gaps)} (high-confidence "
+        f"{sum(f['tier'] == 'high' for f in gaps)}, review queue "
+        f"{sum(f['tier'] == 'review' for f in gaps)}); unkeyed (to blind adjudication) "
+        f"{len(s.unkeyed)}",
         "- model time by stage (cache totals): " + "; ".join(stage_cost),
         "",
         "Not yet measured: extraction precision/recall vs the user's labels, calibration, "

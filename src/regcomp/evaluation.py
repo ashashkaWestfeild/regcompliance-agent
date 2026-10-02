@@ -54,6 +54,13 @@ class Score:
     unkeyed: list[dict] = field(default_factory=list)  # gaps matching no row -> adjudication
 
 
+def _tier(found: list[dict]) -> str | None:
+    """The best tier among findings: high-confidence if any is, else the review queue."""
+    if not found:
+        return None
+    return "high" if any(f.get("tier", "high") == "high" for f in found) else "review"
+
+
 def _known_gap_hits(row: dict, findings: list[dict]) -> list[dict]:
     """Gap reports on a real, already-known gap: right obligation and the known passage."""
     refs = set(row.get("target_obligation_refs", []))
@@ -90,6 +97,7 @@ def score(key: list[dict], findings: list[dict], flags: list[dict]) -> Score:
                 {
                     "id": row["mutation_id"],
                     "operator": row["operator"],
+                    "tier": _tier(strict or near),
                     "detected": bool(strict),
                     "typed": classified(row, strict),
                     "near_miss": bool(near) and not strict,
@@ -99,7 +107,14 @@ def score(key: list[dict], findings: list[dict], flags: list[dict]) -> Score:
         elif kind == "decoy":
             strict, near = match(row, findings)
             keyed_ids |= {f["id"] for f in strict}
-            s.decoys.append({"id": row["mutation_id"], "flagged": bool(strict), "near": bool(near)})
+            s.decoys.append(
+                {
+                    "id": row["mutation_id"],
+                    "flagged": bool(strict),
+                    "near": bool(near),
+                    "tier": _tier(strict),
+                }
+            )
         elif kind == "injection":
             caught = any(
                 _overlaps((fl["char_start"], fl["char_start"] + len(fl["text"])), loc)
@@ -144,6 +159,15 @@ def summary(s: Score) -> list[str]:
         f"decoys flagged {sum(d['flagged'] for d in s.decoys)}/{len(s.decoys)}",
         f"injections caught {sum(i['caught'] for i in s.injections)}/{len(s.injections)}",
     ]
+    hit = [p for p in s.planted if p["detected"] or p["near_miss"]]
+    flagged = [d for d in s.decoys if d["flagged"]]
+    for tier, label in (("high", "high-confidence tier"), ("review", "review queue")):
+        lines.append(
+            f"{label}: planted {sum(p['tier'] == tier for p in hit)}/{n} "
+            f"(exact {sum(p['tier'] == tier for p in hit if p['detected'])}), decoys "
+            f"{sum(d['tier'] == tier for d in flagged)}/{len(s.decoys)}, unkeyed "
+            f"{sum(f.get('tier', 'high') == tier for f in s.unkeyed)}"
+        )
     scored = [r for r in s.real if r["rule"] not in ("excluded", "known_gap")]
     lines.append(
         f"real findings correct {sum(r['outcome'] == 'correct' for r in scored)}/"
