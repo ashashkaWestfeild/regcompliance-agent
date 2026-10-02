@@ -243,7 +243,10 @@ def change_page() -> None:
         "re-extracts and re-judges only those, and reports which gaps would open or close. "
         "Here it always runs as a dry run: nothing is written."
     )
-    name = st.selectbox("Scenario", list(SCENARIOS))
+    # ?scenario=2 in the address opens the page on that scenario (links for the demo and checks)
+    asked = st.query_params.get("scenario", "1")
+    first = int(asked) - 1 if asked.isdigit() and 1 <= int(asked) <= len(SCENARIOS) else 0
+    name = st.selectbox("Scenario", list(SCENARIOS), index=first)
     fail = st.checkbox("Inject one failure in the re-mapping step (to show recovery)")
     if not st.button("Run the agent"):
         return
