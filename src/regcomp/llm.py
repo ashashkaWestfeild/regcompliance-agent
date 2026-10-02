@@ -1,4 +1,5 @@
-"""LLM access for every pipeline stage: strict-JSON calls to open-weights models via Ollama.
+"""LLM access for every pipeline stage: strict-JSON calls to open-weights models, local (Ollama)
+or hosted (an OpenAI-compatible endpoint, for the deployed app and for judge comparisons).
 
 - Stage -> model routing lives in STAGE_MODELS (config, not code paths), so a stage can be moved
   to another open-weights model without touching callers.
@@ -18,6 +19,7 @@ import urllib.error
 import urllib.request
 
 import psycopg
+from dotenv import load_dotenv
 from psycopg.types.json import Jsonb
 
 from regcomp.db import connect
@@ -30,9 +32,18 @@ STAGE_MODELS = {
     "extract_controls": "qwen3:8b",
     "judge": "qwen3:8b",
     "draft_remediation": "qwen3:8b",
+    "compare_numbers": "qwen3:8b",
 }
 OPTIONS = {"temperature": 0, "num_ctx": 8192}
 EMBED_MODEL = "bge-m3"
+# Hosted open-weights providers with an OpenAI-compatible API: prefix -> (chat URL, key variable).
+# Used for the deployed app (no GPU there) and for judge comparisons; only public or synthetic
+# text is ever sent. Select with REGCOMP_MODEL / REGCOMP_MODEL_<STAGE>, e.g.
+# REGCOMP_MODEL_JUDGE=groq:openai/gpt-oss-120b.
+HOSTED = {
+    "groq": ("https://api.groq.com/openai/v1/chat/completions", "STRONG_MODEL_API_KEY"),
+}
+MAX_RATE_WAITS = 8
 
 
 class LLMError(RuntimeError):
@@ -64,6 +75,75 @@ def _post(path: str, body: dict, timeout: int = 600, retry: bool = True) -> dict
         raise LLMError(f"{path}: no answer within {timeout}s") from None
 
 
+def model_for(stage: str) -> str:
+    """The model a stage uses: REGCOMP_MODEL_<STAGE>, else REGCOMP_MODEL (all stages), else
+    STAGE_MODELS. A name like "groq:openai/gpt-oss-120b" is a hosted open-weights model."""
+    load_dotenv()
+    return (
+        os.environ.get(f"REGCOMP_MODEL_{stage.upper()}")
+        or os.environ.get("REGCOMP_MODEL")
+        or STAGE_MODELS[stage]
+    )
+
+
+def _hosted_chat(model: str, messages: list[dict], schema: dict, timeout: int = 120) -> dict:
+    """One chat call to an OpenAI-compatible hosted endpoint. A rate-limit answer (HTTP 429) is
+    waited out, because free tiers cap tokens per minute; the key is never logged."""
+    provider, name = model.split(":", 1)
+    url, key_var = HOSTED[provider]
+    key = os.environ.get(key_var, "").strip()
+    if not key:
+        raise LLMError(f"{key_var} is not set (needed for the hosted model {provider})")
+    body = {
+        "model": name,
+        "messages": messages,
+        "temperature": 0,
+        "response_format": {
+            "type": "json_schema",
+            "json_schema": {"name": "result", "schema": schema},
+        },
+    }
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {key}",
+        "User-Agent": "regcompliance-agent",
+    }
+    for _ in range(MAX_RATE_WAITS):
+        req = urllib.request.Request(url, json.dumps(body).encode("utf-8"), headers)
+        try:
+            return json.load(urllib.request.urlopen(req, timeout=timeout))
+        except urllib.error.HTTPError as e:
+            if e.code == 429:
+                wait = float(e.headers.get("retry-after") or 10)
+                time.sleep(min(max(wait, 1.0), 65.0))
+                continue
+            detail = e.read().decode("utf-8", "replace")[:200]
+            raise LLMError(f"{provider} returned HTTP {e.code}: {detail}") from None
+        except (urllib.error.URLError, TimeoutError) as e:
+            raise LLMError(f"{provider} unreachable: {e}") from None
+    raise LLMError(f"{provider}: still rate-limited after {MAX_RATE_WAITS} waits")
+
+
+def _chat(model: str, messages: list[dict], schema: dict, think: bool) -> tuple[str, int | None]:
+    """(reply text, output tokens) from the local or the hosted model."""
+    if model.split(":", 1)[0] in HOSTED:
+        result = _hosted_chat(model, messages, schema)
+        choices = result.get("choices") or [{}]
+        content = (choices[0].get("message") or {}).get("content") or ""
+        return content, (result.get("usage") or {}).get("completion_tokens")
+    body = {
+        "model": model,
+        "messages": messages,
+        "format": schema,
+        "stream": False,
+        "think": think,
+        "options": OPTIONS,
+        "keep_alive": "30m",
+    }
+    result = _post("/api/chat", body)
+    return (result.get("message") or {}).get("content") or "", result.get("eval_count")
+
+
 _spare = None  # private cache connection used after the caller's connection drops
 
 
@@ -82,7 +162,8 @@ def complete_json(
     stage: str, system: str, user: str, schema: dict, *, think: bool = False, conn=None
 ) -> dict:
     """One structured call. Returns the parsed JSON object (cached when seen before)."""
-    model = STAGE_MODELS[stage]
+    model = model_for(stage)
+    hosted = model.split(":", 1)[0] in HOSTED
     messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
     payload = {
         "stage": stage,
@@ -90,7 +171,7 @@ def complete_json(
         "messages": messages,
         "schema": schema,
         "think": think,
-        "options": OPTIONS,
+        "options": {"temperature": 0} if hosted else OPTIONS,
     }
     key = _cache_key(payload)
     own = conn is None
@@ -100,31 +181,22 @@ def complete_json(
         if row:
             return row[0]
         started = time.time()
-        body = {
-            "model": model,
-            "messages": messages,
-            "format": schema,
-            "stream": False,
-            "think": think,
-            "options": OPTIONS,
-            "keep_alive": "30m",
-        }
-        result = _post("/api/chat", body)
+        content, tokens = _chat(model, messages, schema, think)
         try:
-            parsed = json.loads(result["message"]["content"])
-        except (json.JSONDecodeError, KeyError) as first_error:
+            parsed = json.loads(content)
+        except json.JSONDecodeError as first_error:
             repair = messages + [
-                {"role": "assistant", "content": result.get("message", {}).get("content", "")},
+                {"role": "assistant", "content": content},
                 {
                     "role": "user",
                     "content": f"That was not valid JSON for the schema "
                     f"({first_error}). Return only the corrected JSON.",
                 },
             ]
-            result = _post("/api/chat", dict(body, messages=repair))
+            content, tokens = _chat(model, repair, schema, think)
             try:
-                parsed = json.loads(result["message"]["content"])
-            except (json.JSONDecodeError, KeyError) as e:
+                parsed = json.loads(content)
+            except json.JSONDecodeError as e:
                 raise LLMError(f"{stage}: invalid JSON after one repair: {e}") from None
         _cache(
             "INSERT INTO llm_cache (key, stage, model, request, response, latency_ms, eval_tokens)"
@@ -136,7 +208,7 @@ def complete_json(
                 Jsonb(payload),
                 Jsonb(parsed),
                 int((time.time() - started) * 1000),
-                result.get("eval_count"),
+                tokens,
             ),
             conn,
         )

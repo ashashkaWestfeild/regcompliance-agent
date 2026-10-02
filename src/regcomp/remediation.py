@@ -11,7 +11,7 @@ A draft is a proposal: closing a gap or accepting a risk stays with a reviewer.
 import re
 from datetime import date, timedelta
 
-from regcomp.llm import STAGE_MODELS, LLMError, complete_json
+from regcomp.llm import LLMError, complete_json, model_for
 
 # gap type -> (line of defence, role). Policy text is owned by the second line; how a control is
 # run and evidenced is owned by the first.
@@ -115,7 +115,7 @@ def draft(gap: dict, today: date, conn=None) -> dict:
             retry = user + f'\n<rejected_wording reason="{"; ".join(problems)}"/>'
             out = complete_json("draft_remediation", REMEDY_SYSTEM, retry, REMEDY_SCHEMA, conn=conn)
             problems = unfaithful(obligation, out["policy_wording"])
-        drafted_by = STAGE_MODELS["draft_remediation"]
+        drafted_by = model_for("draft_remediation")
     except (LLMError, KeyError) as e:
         out, problems, drafted_by = fallback, [f"model call failed: {e}"], "rule"
     if problems and drafted_by != "rule":
