@@ -55,6 +55,8 @@ must not be flagged. The numbers below are for the development bank only.
 | Applicability to the bank | 458 of 458 obligations apply; none excluded |
 | Change detection against RBI's own amendment markers | 2 of 2 KYC amendments; 262 of 266 amended clauses in nine other Directions |
 
+**A second answer key on the same bank** (4 planted gaps, 3 decoys, 1 injection, on passages picked by a seeded draw and written after the comparison rules) checks whether those rules hold on gaps they were not written for. Result: 3 of 4 planted gaps found, all three in the review queue and none in the high-confidence tier; the contradiction was missed; the stricter-number decoy was flagged in the review queue; the injected instruction was not flagged (0 of 1). Two causes are known: the number comparison ignores the number one ("one year" against "two years"), and instruction detection depends on the extraction model noticing the text.
+
 Read these with two cautions. The wording-comparison rules were written after studying this bank's
 misses, so they fit it well. And by our own reading about 11 of the 17 high-confidence extras are
 still false alarms ([error analysis](eval/reports/error_analysis_e2e11.md)). Two banks the system
@@ -134,7 +136,8 @@ docs/                   architecture, plan, how the test sets were built, decisi
   from the source.
 - **Numbers and duties must survive.** Wording comparison and remediation drafts check that every
   number and every "shall / shall not" is kept.
-- **Instruction-like text in a document is flagged** and treated as data, never followed.
+- **Instruction-like text in a document is treated as data, never followed**, and is flagged when the
+  extraction model notices it: 1 of 2 on the development keys.
 - **Dates and references come from the source record.** A citation's fields are read from the
   stored document data and RBI's own amendment markers, never from a model.
 - **Two tiers.** Anything the comparison contradicts, anything procedure-level and anything

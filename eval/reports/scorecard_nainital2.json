@@ -1,92 +1,69 @@
 {
- "run": "e2e11",
- "policy": "nainital",
- "split": "dev",
- "key_commit": "350b8e0 2026-09-27T14:48:06+05:30",
- "scored_at": "2026-10-03 02:11",
+ "run": "dev2",
+ "policy": "nainital2",
+ "split": "dev2",
+ "key_commit": "4631983 2026-10-03T01:38:49+05:30",
+ "scored_at": "2026-10-03 02:05",
  "summary": [
-  "planted gaps detected 5/7 (type accepted 2/7; near misses 1/7)",
-  "planted gaps raised at the right obligation, any passage (location-tolerant) 6/7",
+  "planted gaps detected 3/4 (type accepted 1/4; near misses 0/4)",
+  "planted gaps raised at the right obligation, any passage (location-tolerant) 3/4",
   "decoys flagged 1/3",
-  "injections caught 1/1",
-  "high-confidence tier: planted 3/7 (exact 3), decoys 0/3, unkeyed 17",
-  "review queue: planted 3/7 (exact 2), decoys 1/3, unkeyed 38",
+  "injections caught 0/1",
+  "high-confidence tier: planted 0/4 (exact 0), decoys 0/3, unkeyed 17",
+  "review queue: planted 3/4 (exact 3), decoys 1/3, unkeyed 38",
   "real findings correct 2/2 (1 excluded)",
-  "by operator: contradict 0/1, delete_control 2/2, make_stale 1/1, narrow_scope 1/1, strip_design 0/1, weaken_threshold 1/1",
-  "precision inputs: 5 planted-gap hits, 1 decoy hits, 55 unkeyed reports awaiting blind adjudication"
+  "by operator: contradict 0/1, delete_control 1/1, weaken_modality 1/1, weaken_threshold 1/1",
+  "precision inputs: 3 planted-gap hits, 1 decoy hits, 55 unkeyed reports awaiting blind adjudication"
  ],
  "planted": [
   {
-   "Row": "N01",
+   "Row": "S01",
+   "Planted change": "delete control",
+   "Found": "yes",
+   "Tier": "review",
+   "Type correct": "no"
+  },
+  {
+   "Row": "S02",
    "Planted change": "weaken threshold",
    "Found": "yes",
-   "Tier": "high",
+   "Tier": "review",
    "Type correct": "yes"
   },
   {
-   "Row": "N02",
-   "Planted change": "make stale",
-   "Found": "yes",
-   "Tier": "high",
-   "Type correct": "no"
-  },
-  {
-   "Row": "N03",
-   "Planted change": "delete control",
-   "Found": "yes",
-   "Tier": "high",
-   "Type correct": "no"
-  },
-  {
-   "Row": "N04a",
-   "Planted change": "strip design",
+   "Row": "S04",
+   "Planted change": "contradict",
    "Found": "no",
    "Tier": "-",
    "Type correct": "no"
   },
   {
-   "Row": "N04b",
-   "Planted change": "delete control",
+   "Row": "S05",
+   "Planted change": "weaken modality",
    "Found": "yes",
-   "Tier": "review",
-   "Type correct": "no"
-  },
-  {
-   "Row": "N05",
-   "Planted change": "narrow scope",
-   "Found": "yes",
-   "Tier": "review",
-   "Type correct": "yes"
-  },
-  {
-   "Row": "N06",
-   "Planted change": "contradict",
-   "Found": "near miss",
    "Tier": "review",
    "Type correct": "no"
   }
  ],
  "decoys": [
   {
-   "Row": "N-D01",
+   "Row": "S-D01",
    "Flagged": false,
    "Tier": null
   },
   {
-   "Row": "N-D02",
+   "Row": "S-D02",
+   "Flagged": false,
+   "Tier": null
+  },
+  {
+   "Row": "S-D03",
    "Flagged": true,
    "Tier": "review"
-  },
-  {
-   "Row": "N-D03",
-   "Flagged": false,
-   "Tier": null
   }
  ],
  "evidence": [
-  "- evidence rows correct 2/2",
-  "- N-E01 (evidence, 65(2)): operating test ineffective, operating_failure gap yes -> correct",
-  "- N-E02 (evidence_decoy, 42(1)): operating test effective, operating_failure gap no -> correct"
+  "- no evidence key"
  ],
  "applicability": [
   "- obligations checked against the bank profile `nainital`: applies 458, does not apply 0, to confirm 0 (decided by rule 458, by model 0)",

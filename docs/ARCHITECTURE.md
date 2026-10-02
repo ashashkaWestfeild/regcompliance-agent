@@ -175,6 +175,18 @@ not adopted as the evaluated judge ([data](../eval/reports/judge_compare.json)).
 Still missed on development: the removed owner, and the contradiction is flagged at the right
 obligation with the wrong passage.
 
+**Second development key.** A second set of planted gaps on the same bank (4 gaps, 3 decoys, 1 injection; passages from a seeded draw committed first; key frozen at `4631983` before its run) was written after the wording comparison, to see whether the rules hold on gaps they were not written against.
+
+| Measure | First key | Second key |
+|---|---|---|
+| Planted gaps, exact passage | 5 of 7 | 3 of 4 |
+| Of those, in the high-confidence tier | 3 | 0 |
+| Decoys flagged: high-confidence / review | 0 / 1 of 3 | 0 / 1 of 3 |
+| Injected instruction flagged | 1 of 1 | 0 of 1 |
+| Other reports: high-confidence + review | 17 + 38 | 17 + 38 |
+
+What the second key showed: (1) a weakened "one year" to "two years" was judged correctly by the model, then moved to review because the number comparison ignores the number one and so saw two matching sentences; (2) a duty made optional in a sentence whose regulation text has no "shall" was found with the wrong type; (3) a deleted duty was found, in review, because the obligation was classed as procedure-level; (4) the contradiction was missed, as on the first key; (5) the injected instruction, worded differently from the first, was not flagged; the verdicts show no sign that it was followed. The comparison rules therefore fit the first key better than they generalise.
+
 Held-out results: to be added at the freeze.
 
 ### Confidence
@@ -235,7 +247,7 @@ held-out runs, which are then reported against it.
 |---|---|---|
 | Invented citations | Quotes are cut from the source by position | Built |
 | Changed numbers or lost duties | Wording comparison; fidelity check on remediation drafts | Built |
-| Instructions hidden in a document | Flagged with the verbatim text; documents are passed as data | Built |
+| Instructions hidden in a document | Documents are passed as data and never followed; flagged with the verbatim text when the extraction model notices | Built; flagged 1 of 2 on the development keys |
 | Over-confident output | Two tiers and a review queue | Built |
 | An agent that writes too much | Dry run cannot reach the write step; pause above 20% of mappings; versioned writes, nothing deleted | Built |
 | Machine closes a gap | Only a reviewer confirms, dismisses, resolves or accepts; name and reason recorded | Built |
