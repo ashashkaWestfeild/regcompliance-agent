@@ -1,0 +1,157 @@
+# Bank profile, built by scripts/make_profile.py from the bank's published policy
+# (data/raw/policies/dhanlaxmi_kyc_aml_cft_policy_v8.1.pdf, sha256 0fb244a00d92).
+# has: a value is listed because the policy itself deals with it; `where` is the clause and
+#   `evidence` the words around the first mention. Mention in the policy is the basis: the
+#   profile says what the policy covers, not what the bank sells.
+# not_offered: stated absences, added by a person with a source (basis). Empty unless stated.
+#   Each entry: {attribute, value, basis, note}. basis "assumption" never excludes anything.
+bank: Dhanlaxmi Bank Ltd
+entity_type:
+  value: scheduled commercial bank (private sector)
+  basis: public source (data/sources.yaml)
+has:
+  channels:
+  - value: video-based customer identification (V-CIP)
+    basis: policy
+    where: 4.1.22
+    evidence: 'the accounts of an individual customer will be opened under their UCIC. 4.1.22 ''Video-based Customer
+      Identification Process (V-CIP)'': an alternate method of cus'
+  - value: Aadhaar OTP based e-KYC
+    basis: policy
+    where: '11.3'
+    evidence: ces) Act, 2016, and the regulations made thereunder. 11.3 Accounts opened using OTP based e-KYC, in
+      non-face to face mode are subject to the following condition
+  - value: digital KYC
+    basis: policy
+    where: 4.1.8
+    evidence: duly authorized by the Board of Directors of the Bank, being a company. 4.1.8 'Digital KYC' means
+      the capturing live photo of the customer and officially valid
+  - value: business correspondents
+    basis: policy
+    where: 11.2(d)(v)
+    evidence: 'lanation 2: Biometric-based e-KYC authentication can be done by bank officials, business correspondents,
+      or business facilitators. Explanation 3: The use of Aad'
+  - value: non-face-to-face onboarding
+    basis: policy
+    where: 4.2.9
+    evidence: reporting the KYC data to the CKYCR for individuals and legal entities. 4.2.9 "Non-face-to-face customers"
+      means customers who open accounts without visiting t
+  products:
+  - value: wire transfers
+    basis: policy
+    where: 4.2.14
+    evidence: 'a local agent or low-level staff does not constitute physical presence. 4.2.14 Wire Transfer: Wire
+      transfer refers to any transaction carried out on behalf of'
+  - value: correspondent banking
+    basis: policy
+    where: 4.2.13
+    evidence: of state-owned corporations, important political party officials, etc. 4.2.13 'Shell bank' means a
+      bank that has no physical presence in the country in which i
+  - value: small accounts
+    basis: policy
+    where: 4.1.19
+    evidence: nization or those who finance or are attempting to finance terrorism. 4.1.19 A 'Small Account' means
+      a savings account that is opened in terms of sub-rule (5) o
+  - value: third-party products
+    basis: policy
+    where: 10.2(e)
+    evidence: dequacy of the customer identification data it has obtained; e) When bank sells third party products
+      as agent; f) While selling Bank's own products, payment of
+  - value: credit cards
+    basis: policy
+    where: 10.2(f)
+    evidence: rty products as agent; f) While selling Bank's own products, payment of dues of credit cards/ sale
+      and reloading of prepaid/ travel cards and any other product
+  - value: prepaid and travel cards
+    basis: policy
+    where: 10.2(f)
+    evidence: ing Bank's own products, payment of dues of credit cards/ sale and reloading of prepaid/ travel cards
+      and any other product for more than Rs. 50,000/-. g) When
+  - value: demand drafts and pay orders
+    basis: policy
+    where: 22.3.2
+    evidence: tity of the customers for all international money transfer operations. Issue of Demand Drafts, etc.,
+      for more than Rs. 50,000/- 23.1 Any remittance of funds by
+  - value: at-par cheque facility for co-operative banks
+    basis: policy
+    where: '35.16'
+    evidence: any and their appropriate KYC/AML documents 35.16 Scheduled Commercial / RRBs / Co-operative Banks
+      Certified copies of (a) Permanent Account Number (PAN) is man
+  customer_segments:
+  - value: companies
+    basis: policy
+    where: '1'
+    evidence: rship interest" means ownership of / entitlement to more than 10 percent of the company's shares or
+      capital or profits. 2. "Control" shall include the right to
+  - value: partnership firms
+    basis: policy
+    where: 2(b)
+    evidence: hts or shareholders agreements or voting agreements. b. Where the customer is a partnership firm,
+      the beneficial owner is the natural person(s), who, whether ac
+  - value: sole proprietors
+    basis: policy
+    where: 11.4(i)
+    evidence: ase of new customer on-boarding for individual customers, proprietor in case of proprietorship firm,
+      authorised signatories and Beneficial Owners (BOs) in case
+  - value: trusts
+    basis: policy
+    where: 2(d)
+    evidence: who holds the position of senior managing official. d. Where the customer is a trust, the identification
+      of beneficial owner(s) shall include identification of
+  - value: unincorporated associations
+    basis: policy
+    where: 2(c)
+    evidence: right to control the management or policy decision. c. Where the customer is an unincorporated association
+      or body of individuals, the beneficial owner is the n
+  - value: juridical persons
+    basis: policy
+    where: 2(b)
+    evidence: natural person(s), who, whether acting alone or together or through one or more juridical person,
+      has/have ownership of / entitlement to more than 10 percent of
+  - value: NRIs and PIOs
+    basis: policy
+    where: 4.1.5
+    evidence: same on the copy by the authorised officer of the Bank Provided that in case of Non-Resident Indians
+      (NRIs) and Persons of Indian Origin (PIOs), as defined in F
+  - value: politically exposed persons
+    basis: policy
+    where: 4.2.12
+    evidence: iews of existing records at periodicity prescribed by the Reserve Bank. 4.2.12 "Politically Exposed
+      Persons" (PEPs) are individuals who are or have been entrust
+  - value: non-profit organisations
+    basis: policy
+    where: 4.1.12
+    evidence: ber or code assigned to a customer by the Central KYC Records Registry. 4.1.12 "Non-profit organisations"
+      (NPO) means any entity or organization constituted for
+  - value: self-help groups
+    basis: policy
+    where: '22.2'
+    evidence: 'that the bank has not complied with these directions. 22.2 Simplified norms for Self Help Groups
+      (SHGs): 22.2.1 In order to address the difficulties faced by Se'
+  - value: foreign students
+    basis: policy
+    where: 12.6.5(i)(i)
+    evidence: 'r violation, to ensure adherence to the above-mentioned conditions. Accounts of Foreign students
+      studying in India: Considering that foreign student arriving in'
+  - value: professional intermediaries
+    basis: policy
+    where: '35.21'
+    evidence: or all international money transfer operations. 35.21 Client accounts opened by professional intermediaries
+      When the Bank has knowledge or reason to believe tha
+  - value: co-operative credit societies
+    basis: policy
+    where: 30.12.1
+    evidence: t not exceeding rupees fifty thousand to the account of their customers who are co-operative credit
+      societies, provided the payees of such cheques are the const
+  - value: walk-in customers
+    basis: policy
+    where: 4.2.3
+    evidence: alf the person who is engaged in the transaction or activity, is acting. 4.2.3 "Walk-in Customer"
+      means a person who does not have an account-based relationship
+  geography:
+  - value: overseas branches and subsidiaries
+    basis: policy
+    where: 4.1.5
+    evidence: 'rtified by any one of the following, may be obtained:  Authorized officials of overseas branches
+      of Scheduled Commercial Banks registered in India,  Branches'
+not_offered: []

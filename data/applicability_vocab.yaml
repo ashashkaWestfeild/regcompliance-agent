@@ -1,0 +1,45 @@
+# Words that point at a bank attribute (something a bank has or offers), by attribute and value.
+# Used twice: (1) to build a bank's profile from its own published policy (a value is listed when
+# the policy uses one of its terms), and (2) to match the limiting condition of a regulatory
+# obligation against that profile. General banking vocabulary, written from the wording of the
+# RBI Directions' own conditions; no answer key and no held-out policy was consulted.
+# A term ending in * matches any word that starts with it; other terms match whole words.
+
+channels:
+  video-based customer identification (V-CIP):
+    ["v-cip", "video based customer identification", "video-based customer identification"]
+  Aadhaar OTP based e-KYC: ["otp based e-kyc", "otp-based e-kyc", "aadhaar otp"]
+  digital KYC: ["digital kyc"]
+  business correspondents: ["business correspondent*", "bc", "bcs"]
+  non-face-to-face onboarding: ["non-face-to-face"]
+
+products:
+  wire transfers: ["wire transfer*", "ordering bank", "batch transfer", "originator information"]
+  correspondent banking: ["correspondent bank*", "respondent bank*", "shell bank*"]
+  small accounts: ["small account*"]
+  third-party products: ["third party product*", "third-party product*"]
+  credit cards: ["credit card*"]
+  prepaid and travel cards: ["prepaid", "travel card*"]
+  demand drafts and pay orders: ["demand draft*", "pay order*"]
+  at-par cheque facility for co-operative banks: ["co-operative bank*"]
+
+customer_segments:
+  companies: ["company", "companies"]
+  partnership firms: ["partnership firm*"]
+  sole proprietors: ["proprietary firm*", "proprietorship firm*", "sole proprietary", "proprietary concern*"]
+  trusts: ["trust", "trusts"]
+  unincorporated associations: ["unincorporated association*", "body of individuals"]
+  juridical persons: ["juridical person*"]
+  NRIs and PIOs: ["non-resident*", "nri", "nris", "pio", "pios"]
+  foreign portfolio investors: ["foreign portfolio investor*", "fpi", "fpis"]
+  politically exposed persons: ["politically exposed", "pep", "peps"]
+  non-profit organisations: ["non-profit organisation*", "non-profit organization*", "npo", "npos"]
+  self-help groups: ["self help group*", "self-help group*", "shg", "shgs"]
+  foreign students: ["foreign student*"]
+  professional intermediaries: ["professional intermediar*"]
+  co-operative credit societies: ["co-operative credit societ*"]
+  walk-in customers: ["walk-in"]
+
+geography:
+  overseas branches and subsidiaries:
+    ["host country", "overseas branch*", "foreign branch*", "branches abroad", "overseas subsidiar*", "branches and majority owned subsidiaries"]

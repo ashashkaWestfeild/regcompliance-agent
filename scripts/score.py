@@ -20,6 +20,7 @@ from pathlib import Path
 
 from regcomp.db import connect
 from regcomp.evaluation import score, summary
+from regcomp.policies import policy
 
 SEED = 20260927
 SAMPLE_GAPS = 25  # unkeyed gaps per adjudication sheet
@@ -45,7 +46,8 @@ def findings_from_db(conn) -> tuple[list[dict], str]:
         " m.judges, o.source_span->>'quote', c.source_span->>'quote', o.id, o.source_span,"
         " c.control_ref, o.action, o.threshold->>'raw', g.tier"
         " FROM mapping m JOIN obligation o ON o.id = m.obligation_id"
-        " LEFT JOIN gap g ON g.mapping_id = m.id"
+        # a gap on an obligation that does not apply to the bank is not a reported gap
+        " LEFT JOIN gap g ON g.mapping_id = m.id AND g.tier <> 'not_applicable'"
         # the passage a gap rests on: the text comparison (run_verify) may point at another
         # passage than the one the judge cited
         " LEFT JOIN control c ON c.id = COALESCE(g.control_id, m.control_id)"
@@ -227,6 +229,44 @@ def score_evidence(policy: str) -> list[str]:
     return [f"- evidence rows correct {correct}/{len(out)}", *out]
 
 
+def applicability_lines(profile: str, key: list[dict]) -> list[str]:
+    """Counts for the applicability stage, and any planted target it took out of scoring."""
+    with connect() as conn:
+        rows = conn.execute(
+            "SELECT a.answer, a.decided_by, o.source_clause_ref FROM applicability_decision a"
+            " JOIN obligation o ON o.id = a.obligation_id"
+            " WHERE a.profile = %s AND a.superseded_at IS NULL AND o.superseded_at IS NULL",
+            (profile,),
+        ).fetchall()
+        gaps = dict(
+            conn.execute(
+                "SELECT a.answer, count(*) FROM gap g JOIN applicability_decision a"
+                " ON a.obligation_id = g.obligation_id AND a.superseded_at IS NULL"
+                " AND a.profile = %s WHERE g.status = 'open' AND g.superseded_at IS NULL"
+                " GROUP BY 1",
+                (profile,),
+            ).fetchall()
+        )
+    if not rows:
+        return ["- applicability stage not run for this bank"]
+    n = {a: sum(r[0] == a for r in rows) for a in ("yes", "no", "conditional")}
+    by_model = sum(r[1] == "model" for r in rows)
+    excluded_refs = {ref for answer, _, ref in rows if answer == "no"}
+    lost = [
+        k["mutation_id"]
+        for k in key
+        if k.get("kind") == "mutation" and excluded_refs & set(k.get("target_obligation_refs", []))
+    ]
+    return [
+        f"- obligations checked against the bank profile `{profile}`: applies {n['yes']}, does "
+        f"not apply {n['no']}, to confirm {n['conditional']} (decided by rule "
+        f"{len(rows) - by_model}, by model {by_model})",
+        f"- gaps taken out of scoring as not applicable {gaps.get('no', 0)}; gaps carrying a "
+        f"'to confirm' note {gaps.get('conditional', 0)} (a note moves nothing)",
+        "- planted gaps whose obligation was taken out: " + (", ".join(lost) or "none"),
+    ]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
@@ -261,6 +301,7 @@ def main() -> None:
 
     s = score(key, findings, ext_c["flags"] + ext_o["flags"])
     evidence_lines = score_evidence(args.policy)
+    applicable_lines = applicability_lines(policy(args.policy, held_out=True).profile, key)
     gaps = [f for f in findings if f["gap_type"]]
     split = key[0].get("split", "?")
     lines = [
@@ -295,6 +336,9 @@ def main() -> None:
         "## Evidence key (operating tests)",
         *evidence_lines,
         "",
+        "## Applicability (bank profile)",
+        *applicable_lines,
+        "",
         "## Pipeline metrics (counts)",
         f"- obligations extracted {len(ext_o['items'])}, rejected by citation gate "
         f"{len(ext_o['rejected'])}, duplicates collapsed {ext_o.get('duplicates', 0)}",
@@ -314,8 +358,7 @@ def main() -> None:
         f"{len(s.unkeyed)}",
         "- model time by stage (cache totals): " + "; ".join(stage_cost),
         "",
-        "Not yet measured: extraction precision/recall vs the user's labels, calibration, "
-        "applicability.",
+        "Not yet measured: extraction precision/recall vs the user's labels, calibration.",
     ]
     (run / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     # A small published copy for the demo app (eval/runs is not in the repository).
@@ -338,6 +381,7 @@ def main() -> None:
         ],
         "decoys": [{"Row": d["id"], "Flagged": d["flagged"], "Tier": d["tier"]} for d in s.decoys],
         "evidence": evidence_lines,
+        "applicability": applicable_lines,
     }
     Path(f"eval/reports/scorecard_{args.policy}.json").write_text(
         json.dumps(card, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n"

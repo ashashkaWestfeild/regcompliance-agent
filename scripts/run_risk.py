@@ -30,6 +30,7 @@ def main() -> None:
             "SELECT g.id, g.type, o.source_clause_ref, o.action, o.source_span->>'quote', g.tier"
             " FROM gap g JOIN obligation o ON o.id = g.obligation_id"
             " WHERE g.status = 'open' AND g.superseded_at IS NULL"
+            " AND g.tier <> 'not_applicable'"
         ).fetchall()
         ranked = []
         with conn.cursor() as cur:

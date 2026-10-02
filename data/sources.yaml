@@ -69,6 +69,7 @@ policies:
     pages: 80
     note: "Same published policy as nainital, with a second, independent set of planted gaps (seeded draw 20261003, different passages). Added 2 Oct 2026 to check that the text-comparison rules written against the first dev key hold on a key they were not written against."
     split: dev2   # development: a second key on the dev bank
+    profile: nainital   # same bank, same profile
     file: data/raw/policies/nainital_kyc_aml_policy.pdf
     sha256: 7f3ab8259d88352221fa0002d3013febff7667cc17b4d17981caf398c925cc54
     retrieved_from: "https://www.nainitalbank.bank.in/pdf/KYC%20AMLPolicy.pdf"

@@ -33,6 +33,7 @@ STAGE_MODELS = {
     "judge": "qwen3:8b",
     "draft_remediation": "qwen3:8b",
     "compare_numbers": "qwen3:8b",
+    "classify_condition": "qwen3:8b",
 }
 OPTIONS = {"temperature": 0, "num_ctx": 8192}
 EMBED_MODEL = "bge-m3"

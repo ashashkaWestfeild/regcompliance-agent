@@ -23,6 +23,7 @@ class Policy:
     items: Path  # planted-gap copy of the policy (Docling items)
     key: Path  # answer key
     version: str
+    profile: str  # bank profile id (data/profiles/<profile>.yaml)
 
 
 def policy(policy_id: str, held_out: bool = False) -> Policy:
@@ -42,4 +43,5 @@ def policy(policy_id: str, held_out: bool = False) -> Policy:
         items=Path(f"data/mutated/{policy_id}.items.json"),
         key=Path(f"eval/answer_key_{policy_id}.jsonl"),
         version=LABELS.get(policy_id, f"{policy_id}-mutated"),
+        profile=src.get("profile", policy_id),
     )

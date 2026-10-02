@@ -1,15 +1,162 @@
-# Bank profile for the dev bank. Drives the applicability link of the chain.
-# Each attribute records its basis: "policy" = stated in the bank's public KYC/AML policy;
-# "assumption" = not evidenced in the public documents, set for the demo and editable in the UI.
-bank: Nainital Bank Ltd
-entity_type: {value: "commercial bank (scheduled, private sector)", basis: policy}
-geography: {value: ["India"], basis: assumption, note: "no overseas branches or subsidiaries mentioned"}
-customer_segments:
-  value: [individuals, sole proprietors, companies, partnership firms, trusts, unincorporated associations, NRIs and PIOs, foreign portfolio investors, politically exposed persons]
-  basis: policy
-products:
-  value: [savings accounts, small accounts, current accounts, term deposits, loans, wire transfers, correspondent banking, third-party products]
-  basis: policy
-channels:
-  value: [branch, business correspondents, video-based customer identification (V-CIP), Aadhaar OTP based e-KYC, digital KYC]
-  basis: policy
+# Bank profile, built by scripts/make_profile.py from the bank's published policy
+# (data/raw/policies/nainital_kyc_aml_policy.pdf, sha256 7f3ab8259d88).
+# has: a value is listed because the policy itself deals with it; `where` is the clause and
+#   `evidence` the words around the first mention. Mention in the policy is the basis: the
+#   profile says what the policy covers, not what the bank sells.
+# not_offered: stated absences, added by a person with a source (basis). Empty unless stated.
+#   Each entry: {attribute, value, basis, note}. basis "assumption" never excludes anything.
+bank: The Nainital Bank Ltd
+entity_type:
+  value: scheduled commercial bank (private sector)
+  basis: public source (data/sources.yaml)
+has:
+  channels:
+  - value: video-based customer identification (V-CIP)
+    basis: policy
+    where: 3(vi)~2
+    evidence: 'd in different countries such a transaction is cross-border wire transfer. vi. ''Video based Customer
+      Identification Process (V-CIP)'': an alternate method of cus'
+  - value: Aadhaar OTP based e-KYC
+    basis: policy
+    where: 20(i)
+    evidence: for whom account was opened when they were minor, on their becoming a major.  Aadhaar OTP based e-KYC
+      in non-face to face mode may be used for periodic updati
+  - value: digital KYC
+    basis: policy
+    where: 3(viii)
+    evidence: tor" shall have the meaning assigned to them in the Companies Act, 2013. viii) 'Digital KYC' means
+      the capturing live photo of the customer and officially valid
+  - value: business correspondents
+    basis: policy
+    where: 28(f)
+    evidence: 'xplanation 2: Biometric based e-KYC authentication can be done by bank official/business correspondents/business
+      facilitators. Explanation 3: The use of Aadhaar'
+  - value: non-face-to-face onboarding
+    basis: policy
+    where: '29'
+    evidence: 't to download records from CKYCR. 29. Accounts opened using OTP based e-KYC, in non-face-to-face
+      mode, are subject to the following conditions: i) There must be'
+  products:
+  - value: wire transfers
+    basis: policy
+    where: 3(iv)~3
+    evidence: 'ject to effective identified by the originator as the receiver of the requested wire transfer. a.
+      Beneficiary RE: It refers to a financial institution, regulate'
+  - value: correspondent banking
+    basis: policy
+    where: 3(iv)~3
+    evidence: ves of state-owned corporations, important political party officials, etc. iv. 'Shell bank' means
+      a bank that has no physical presence in the country in which i
+  - value: small accounts
+    basis: policy
+    where: 3(xviii)
+    evidence: nization or those who finance or are attempting to finance terrorism. xviii) A 'Small Account' means
+      a savings account which is opened in terms of sub-rule (5)
+  - value: third-party products
+    basis: policy
+    where: 25(d)
+    evidence: thenticity or adequacy of the customer identification data obtained. d. Selling third party products
+      as agents, selling own products, payment of dues of credit
+  - value: credit cards
+    basis: policy
+    where: 25(d)
+    evidence: elling third party products as agents, selling own products, payment of dues of credit cards/sale
+      and reloading of prepaid/travel cards and any other product fo
+  - value: prepaid and travel cards
+    basis: policy
+    where: 3(vii)~2(e)
+    evidence: es (ARCs) e. All Payment System Providers (PSPs)/ System Participants (SPs) and Prepaid Payment Instrument
+      Issuers (PPI Issuers) f. All authorised persons (APs)
+  - value: demand drafts and pay orders
+    basis: policy
+    where: '65'
+    evidence: 4H (8). 65. Period for presenting payment instruments Payment of cheques/drafts/pay orders/banker's
+      cheques, if they are presented beyond the period of three mo
+  - value: at-par cheque facility for co-operative banks
+    basis: policy
+    where: 3(vii)~2(a)
+    evidence: CBs)/ Regional Rural Banks (RRBs)/ Local Area Banks (LABs)/ All Primary (Urban) Co-operative Banks
+      (UCBs) /State and Central Co-operative Banks (SCBs / CCBs) an
+  customer_segments:
+  - value: companies
+    basis: policy
+    where: 3(iv)(a)
+    evidence: s and Services) Act, 2016. iv) Beneficial Owner (BO) a) Where the customer is a company, the beneficial
+      owner is the natural person(s), who, whether acting alon
+  - value: partnership firms
+    basis: policy
+    where: 3(ii)~2(b)
+    evidence: ts or shareholder's agreements or voting agreements. b) Where the customer is a partnership firm,
+      the beneficial owner is the natural person(s), who, whether ac
+  - value: sole proprietors
+    basis: policy
+    where: preamble
+    evidence: f the customer is fully established as per Section 15. Part II CDD Measures for Sole Proprietary Firms
+      32. For opening an account in the name of a sole propriet
+  - value: trusts
+    basis: policy
+    where: 3(ii)~2(d)
+    evidence: who holds the position of senior managing official. d) Where the customer is a trust, the identification
+      of beneficial owner(s) shall include identification of
+  - value: unincorporated associations
+    basis: policy
+    where: 3(ii)~2(c)
+    evidence: right to control the management or policy decision. c) Where the customer is an unincorporated association
+      or body of individuals, the beneficial owner is the n
+  - value: juridical persons
+    basis: policy
+    where: 3(iv)(a)
+    evidence: atural person(s), who, whether acting alone or together, or through one or more juridical persons,
+      has/have a controlling ownership interest or who exercise con
+  - value: NRIs and PIOs
+    basis: policy
+    where: 3(ii)~2(v)
+    evidence: ed officer as per the provisions contained in the Act. Provided that in case of Non-Resident Indians
+      (NRIs) and Persons of Indian Origin (PIOs), as defined in F
+  - value: foreign portfolio investors
+    basis: policy
+    where: '49'
+    evidence: roval of the Reserve Bank for opening the account. 49. Simplified KYC norms for Foreign Portfolio
+      Investors (FPIs) Accounts of FPIs which are eligible/ register
+  - value: politically exposed persons
+    basis: policy
+    where: 3(xi)~3
+    evidence: change in the country or territory of which the parent entity is resident. xi) 'Politically Exposed
+      Persons' (PEPs) are individuals who are or have been entrust
+  - value: non-profit organisations
+    basis: policy
+    where: 3(xi)~2
+    evidence: number or code assigned to a customer by the Central KYC Records Registry. xi) 'Non-profit organizations'
+      (NPO) means any entity or organization, constituted fo
+  - value: self-help groups
+    basis: policy
+    where: '47'
+    evidence: stomer lies with the Bank. B. Simplified Due Diligence 47. Simplified norms for Self Help Groups (SHGs)
+      (a) CDD of all the members of SHG shall not be required
+  - value: foreign students
+    basis: policy
+    where: '48'
+    evidence: f credit linking of SHGs 48. Procedure to be followed while opening accounts of foreign students (a)
+      Bank shall, at its option, open a Non Resident Ordinary (NR
+  - value: professional intermediaries
+    basis: policy
+    where: '46'
+    evidence: 'e to accounts where a PEP is the beneficial owner 46. Client accounts opened by professional intermediaries:
+      Bank, while opening client accounts through profess'
+  - value: co-operative credit societies
+    basis: policy
+    where: '67'
+    evidence: unt not exceeding rupees fifty thousand to the account of its customers who are co-operative credit
+      societies, provided the payees of such cheques are the const
+  - value: walk-in customers
+    basis: policy
+    where: 25(e)
+    evidence: usand. e. Carrying out transactions for a non-account-based customer, that is a walk-in customer,
+      where the amount involved is equal to or exceeds rupees fifty
+  geography:
+  - value: overseas branches and subsidiaries
+    basis: policy
+    where: 3(ii)~2(v)
+    evidence: 'rtified by any one of the following, may be obtained:  authorised officials of overseas branches
+      of Scheduled Commercial Banks registered in India,  branches'
+not_offered: []

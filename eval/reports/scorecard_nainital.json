@@ -3,7 +3,7 @@
  "policy": "nainital",
  "split": "dev",
  "key_commit": "350b8e0 2026-09-27T14:48:06+05:30",
- "scored_at": "2026-10-02 21:06",
+ "scored_at": "2026-10-02 22:43",
  "summary": [
   "planted gaps detected 5/7 (type accepted 2/7; near misses 1/7)",
   "planted gaps raised at the right obligation, any passage (location-tolerant) 6/7",
@@ -87,5 +87,10 @@
   "- evidence rows correct 2/2",
   "- N-E01 (evidence, 65(2)): operating test ineffective, operating_failure gap yes -> correct",
   "- N-E02 (evidence_decoy, 42(1)): operating test effective, operating_failure gap no -> correct"
+ ],
+ "applicability": [
+  "- obligations checked against the bank profile `nainital`: applies 458, does not apply 0, to confirm 0 (decided by rule 458, by model 0)",
+  "- gaps taken out of scoring as not applicable 0; gaps carrying a 'to confirm' note 0 (a note moves nothing)",
+  "- planted gaps whose obligation was taken out: none"
  ]
 }
