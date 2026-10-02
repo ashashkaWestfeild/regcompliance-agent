@@ -56,6 +56,8 @@ policies:
     title: "Know Your Customer (KYC) and Anti-Money Laundering (AML) Policy"
     pages: 80
     note: "Document control says review due 31.10.2025; includes June 2025 MD changes."
+    stated_date: 2025-10-31   # the only date the policy prints about itself (document control)
+    stated_date_kind: "review due on"
     split: dev   # prompts and thresholds may be tuned on this policy
     file: data/raw/policies/nainital_kyc_aml_policy.pdf
     sha256: 7f3ab8259d88352221fa0002d3013febff7667cc17b4d17981caf398c925cc54
@@ -70,6 +72,8 @@ policies:
     note: "Same published policy as nainital, with a second, independent set of planted gaps (seeded draw 20261003, different passages). Added 2 Oct 2026 to check that the text-comparison rules written against the first dev key hold on a key they were not written against."
     split: dev2   # development: a second key on the dev bank
     profile: nainital   # same bank, same profile
+    stated_date: 2025-10-31
+    stated_date_kind: "review due on"
     file: data/raw/policies/nainital_kyc_aml_policy.pdf
     sha256: 7f3ab8259d88352221fa0002d3013febff7667cc17b4d17981caf398c925cc54
     retrieved_from: "https://www.nainitalbank.bank.in/pdf/KYC%20AMLPolicy.pdf"
@@ -81,6 +85,8 @@ policies:
     title: "KYC / AML Policy 2025-26 (amended/updated up to 06.11.2024)"
     pages: 129
     note: "Bilingual header text (Hindi) on some pages."
+    stated_date: 2024-11-06   # cover page
+    stated_date_kind: "amended / updated up to"
     split: test  # held out: run only for final numbers, never tuned on
     file: data/raw/policies/centralbank_kyc_aml_policy_2025-26.pdf
     sha256: 33e430e226be57e77e95a5b5596306b9f6579c7283716874ee6e82ca10cacf87
@@ -94,6 +100,8 @@ policies:
     pages: 125
     note: "Added 2026-09-27 as a second held-out test set (user decision: enlarge the evaluation). Answer key authored and frozen before any model reads the policy."
     split: test2  # held out: run only for final numbers, never tuned on
+    stated_date: 2024-01-04   # paragraph 3.1; the cover gives only "Version 8.1"
+    stated_date_kind: "follows the RBI Master Direction as updated on"
     file: data/raw/policies/dhanlaxmi_kyc_aml_cft_policy_v8.1.pdf
     sha256: 0fb244a00d92d8b308a68d0a7eb9a902c2deacb4338ed34b91734b00d6ccd8f8
     retrieved_from: "https://www.dhan.bank.in/pdf/55-KYC%20AML%20CFT%20Policy%202025_Version%208.1.pdf"
