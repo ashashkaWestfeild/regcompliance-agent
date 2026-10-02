@@ -15,6 +15,10 @@ score, Wed 30, Thu 1). Thinking-mode tiering is dropped (e2e7 rejected). Risk ru
 triage and the change-agent groundwork move into Fri 2 - Sun 4; label cut-off Sun 4 Oct.
 Revision 7 (2 Oct, 01:50; user): every major build part, the UI and the public demo link included,
 is complete by the end of Sun 4 Oct. Mon 5 - Tue 6 become buffer. The freeze stays on Wed 7 Oct.
+Revision 8 (2 Oct, 21:18): the build was complete on Fri 2 Oct, two days early (every claimed
+feature runs; the demo is deployed). The days gained go to evaluation quality: Sat 3 - Tue 6 for a
+second dev key, false-alarm reduction and dev-only tuning, with the documents pulled forward. The
+freeze stays on Wed 7 Oct, because nothing may be tuned once the held-out banks have been run.
 
 Revision 4 (27 Sep, 15:00; rows re-dated 15:47): the plan is a guide, not a contract (user). Work is pulled forward
 as soon as the previous task is done and the dates below are re-set continuously; the only hard
@@ -174,7 +178,7 @@ Problem 1's chain, and where each link is shown:
 | Remediation | drafts for top gaps with owner line, due date, success criterion | Thu 1 |
 | Ongoing monitoring | change agent triggered by a new circular **or** a new evidence batch | Fri 2 - Sat 3 |
 
-## 6. Schedule (rev 7: rolling; re-dated as work moves)
+## 6. Schedule (rev 8: rolling; re-dated as work moves)
 
 | When | Work | Exit criterion | Status |
 |---|---|---|---|
@@ -185,13 +189,14 @@ Problem 1's chain, and where each link is shown:
 | **Mon 28** | Wire applicability + evidence into the pipeline; score the evidence key; FlashRank rerank; change-detection report vs RBI amendment markers; first fixes from the scores. You: label 15 | Chain links scored end to end | done: evidence 2/2, rerank, change detection on 9 more Directions (262/266), parser fixes; judge rubric e2e6 reverted; thinking-judge e2e7 run (to score) |
 | Tue 29 | Score e2e7 (thinking judge) vs e2e5 | Judge decision | done: thinking mode rejected (planted 1/7 vs 2/7, extras 116 vs 106, 126 vs ~30 GPU-min); tiering on thinking dropped; the rest moved to Fri 2 - Sun 4 |
 | Wed 30 - Thu 1 | - | - | no build work |
-| **Fri 2 (holiday, 9 h)** | **Change agent groundwork + part 1:** LangGraph skeleton, Postgres checkpointer, diff -> classify (incl. permissive "may" -> advisory) -> scope. Lead-in anchor fix (extraction) + dev re-score; deterministic risk rubric; **remediation drafts**. You: 50-row blind review + Dhanlaxmi key review | Both real amendments classified; FPI -> "policy update recommended" | |
-| **Sat 3 (9 h)** | **Change agent part 2:** re-extract, re-map affected edges only, recovery, open gaps; evidence-batch trigger (ongoing monitoring); what-if dry-run; reviewer override loop; **triage** (high-confidence gaps vs review queue). You: Streamlit Community Cloud account | Sep 2026 amendment end to end, one recovered failure | |
-| **Sun 4 (9 h)** | **Streamlit** (profile, gaps, why-panel, review queue, timeline, metrics, guardrails); replay mode; **Streamlit Cloud deploy**. Score the 50-label gold set per judge candidate; freeze + push the Dhanlaxmi key; injection flagging report; eval re-run. **Label cut-off 12:00:** no labels / no review -> judge stays e2e5, Dhanlaxmi left out of the held-out run, claim D1 | **BUILD COMPLETE:** all claimed features exist; public demo URL works without keys. **CHECKPOINT** | |
-| Mon 5 - Tue 6 | Buffer: dev-only tuning from the labels, fixes, UI polish; anything that slipped from Sun 4 | Nothing open before the freeze | |
-| **Wed 7** | **FEATURE FREEZE.** Final eval: dev + first-ever test-set runs (Central Bank; Dhanlaxmi if its key is frozen), in chunks of 30 min or less resumed from the cache, counts per split; evidence matrix; decide claim | Numbers and claim frozen | |
-| Thu 8 | Architecture doc + pitch deck (8-12 slides); **submit v0** | v0 submitted | |
-| Fri 9 | Rehearse; record 2-4 min video (mp4 < 50 MB + unlisted YouTube) | Video link works | |
+| **Fri 2 (holiday)** | Change agent end to end (diff, classify, scope, gate, plan, re-extract, re-map, compare, commit, retry, what-if); policy passages as candidates; lead-in fix; text comparison and tiers; risk rubric; remediation drafts; evidence-batch trigger; reviewer decisions; hosted-model path; Streamlit app deployed; third-bank key frozen (`da58e66`) | **BUILD COMPLETE** (two days early) | done: dev 5/7 planted at the exact spot (3 high-confidence + 2 review), decoys 0/3 high, extras 17 high + 38 review |
+| **Sat 3 (9 h)** | **Scores, day 1:** second dev key on the dev bank (fresh seeded mutations; user reviews realism) to test whether the comparison rules generalise; cut high-confidence false alarms (time-boxed); removed-owner check. README + architecture document | Rules hold on a key they were not written against | |
+| **Sun 4 (9 h)** | **Scores, day 2:** tuning on dev + dev2 only; app polish; pitch deck draft | High-confidence tier: planted found, decoys 0, fewer false alarms | |
+| Mon 5 | Dev-only tuning; video script; demo rehearsal | Script agreed | |
+| Tue 6 | Clean dev re-run from scratch; **code freeze at end of day**; v0 submission draft on Unstop | Nothing open before the freeze | |
+| **Wed 7** | **FREEZE.** First-ever runs on the two held-out banks (Central Bank, Dhanlaxmi), in chunks of 30 min or less resumed from the cache; counts per split; decide the claim (D2, or D1 if they fall short) | Numbers and claim frozen | |
+| Thu 8 | Pitch deck final with the real numbers; v0 updated | v0 submitted | |
+| Fri 9 | Record the 2-4 min video (mp4 < 50 MB + unlisted YouTube) | Video link works | |
 | **Sat 10** | Fixes; final submit by 15:00 | Submitted | |
 | Sun 11 | Buffer only | - | |
 

@@ -154,13 +154,13 @@ Keep the project to industry standards and use open-source tools wherever practi
 - Say explicitly when something is uncertain or speculative.
 
 ## Next action
-State on 2 Oct 13:20 (details: docs/PLAN.md rev 7 and the PROJECT_LOG "Current status" block in the
-metadata folder). User target: every major build part complete by the end of Sun 4 Oct. Dev baseline is
-e2e10 (run_map --passages --dense-only on the lead-in-fixed extraction): planted 2/7 exact, 3/7 at the
-right obligation, extras 54. Both held-out keys are frozen (Central Bank `350b8e0`, Dhanlaxmi `da58e66`).
-Built on 2 Oct: change agent part 1, risk rubric, policy passages as candidates, lead-in fix, gold-set
-scorer. Next, in order: (1) remediation drafts; (2) judge issue for an optional duty (weak_modality) with
-the next dev re-judge; (3) Sat 3: change agent part 2 + evidence trigger, what-if dry-run, reviewer
-override, triage tiers; (4) Sun 4: Streamlit UI + replay mode + Streamlit Cloud deploy. Mon 5 - Tue 6 are
-buffer. No run longer than 30 minutes (run_map --stop-after-min resumes from the cache).
+State on 2 Oct 21:18 (details: docs/PLAN.md rev 8 and the PROJECT_LOG "Current status" block in the
+metadata folder). The build is complete: every claimed feature runs and the demo is deployed
+(https://regcompliance-agent-gg39o3vts7mzhbtds2u6l7.streamlit.app/). Dev baseline is e2e11 + triage (run_map --passages --dense-only, run_tests, run_verify,
+run_risk, run_remediation): planted 5/7 at the exact spot (3 high-confidence, 2 review), decoys 0/3 high,
+extras 17 high + 38 review. Held-out keys frozen: Central Bank `350b8e0`, Dhanlaxmi `da58e66`. Sat 3 -
+Tue 6 go to scores, on dev data only: (1) a second dev key on the dev bank (fresh seeded mutations, user
+reviews realism) to check the comparison rules generalise; (2) cut high-confidence false alarms; (3) a
+check for a removed owner; (4) README + architecture document, deck draft, video script. Code freeze end
+of Tue 6. No run longer than 30 minutes (run_map --stop-after-min resumes from the cache).
 Never run on either held-out test set (Central Bank, Dhanlaxmi) before the 7 Oct freeze.
