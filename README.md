@@ -30,7 +30,9 @@ both ends keep changing. Today it is spreadsheet work, redone after every amendm
 | Sort into two tiers | High-confidence gaps and a review queue | Code |
 | Test controls against evidence | Exception rates from logs against a tolerance | Code |
 | Rank by risk | A rubric file: the subject sets the level, the gap type scales it | Code |
-| Draft remediation | A model drafts; code sets owner and due date and rejects wording that drops a number or a duty | Model drafts, code checks |
+| Draft remediation | A model drafts; code sets owner and due date and rejects wording that drops a number or a duty; one remedy per regulation paragraph | Model drafts, code checks |
+| Cite the source | Every finding carries the document, paragraph, RBI reference number, issue date, version date, amendment date and link, read from the stored source record | Code |
+| Say how sure | A note built from checks code can verify (text comparison, citation, evidence test), with the record of that kind of finding as counts; the model's own confidence number is not shown | Code |
 | React to an amendment | A LangGraph agent: diff → classify → scope → re-extract → re-map → compare → commit, with checkpoints and retries; a dry run is the what-if mode | Agent, within fixed rules |
 | Monitor | A new evidence batch is tested against the last result; a reviewer confirms, dismisses, resolves or accepts | Code and a person |
 
@@ -77,7 +79,7 @@ read those policies. Those results will be added here.
 ```bash
 uv sync                         # core
 uv sync --extra pdf             # adds Docling for PDF parsing (large)
-uv run pytest                   # 83 tests
+uv run pytest                   # 119 tests
 ```
 
 The pipeline, on the development bank (needs Postgres with pgvector, and Ollama with `qwen3:8b`
@@ -87,11 +89,13 @@ and `bge-m3`; copy `.env.example` to `.env`):
 uv run python scripts/run_extract.py --run demo            # obligations and controls
 uv run python scripts/run_level.py --run demo              # obligation level
 uv run python scripts/run_map.py --run demo --passages --dense-only --stop-after-min 25
+uv run python scripts/load_metadata.py                     # source metadata for citations
 uv run python scripts/run_tests.py                         # design and operating tests
 uv run python scripts/run_verify.py                        # wording comparison and tiers
 uv run python scripts/run_applicability.py --apply         # applicability by bank profile
 uv run python scripts/run_risk.py                          # risk ranking
 uv run python scripts/run_remediation.py --top 10          # remediation drafts
+uv run python scripts/clean_remediation.py --apply         # one remedy per paragraph
 uv run python scripts/score.py --run demo                  # against the answer key
 ```
 
@@ -131,6 +135,8 @@ docs/                   architecture, plan, how the test sets were built, decisi
 - **Numbers and duties must survive.** Wording comparison and remediation drafts check that every
   number and every "shall / shall not" is kept.
 - **Instruction-like text in a document is flagged** and treated as data, never followed.
+- **Dates and references come from the source record.** A citation's fields are read from the
+  stored document data and RBI's own amendment markers, never from a model.
 - **Two tiers.** Anything the comparison contradicts, anything procedure-level and anything
   technical goes to a review queue instead of being asserted or silently dropped.
 - **Read-only what-if.** A dry run has no path to the step that writes; a large change pauses for

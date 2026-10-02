@@ -59,7 +59,8 @@ closes the old one in time; nothing is deleted.
 | 6 | Tests | Design: does the control name an owner, a frequency, evidence. Operating: exception rate in an evidence log against a tolerance. |
 | 7 | Wording comparison and tiers | See section 3. |
 | 8 | Risk | [`data/risk_rubric.yaml`](../data/risk_rubric.yaml): the subject of the obligation sets the inherent level; the gap type scales it. |
-| 9 | Remediation | Drafted for the top high-confidence gaps; a draft that fails the fidelity check is replaced by the regulation's own sentence. |
+| 9 | Remediation | Drafted for the top high-confidence gaps; a draft that fails the fidelity check is replaced by the regulation's own sentence. One remedy is kept per regulation paragraph, and prompt tags never reach the reader. |
+| 10 | Citation | Every finding shows the document, paragraph, RBI reference number, link and three separately labelled dates: first issued, version in force ("updated as on"), and, where RBI marks the paragraph, the amendment and its effective date. The bank side shows the policy title, section and the policy's own stated date, and flags a policy dated before the amendment to the cited paragraph. All fields come from [`data/sources.yaml`](../data/sources.yaml) and the parser ([`citation.py`](../src/regcomp/citation.py)); a test checks them against the source record. |
 
 ## 3. Wording comparison and the two tiers
 
