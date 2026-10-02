@@ -51,6 +51,14 @@ _NUMBER = re.compile(
 )
 _PROHIBITION = re.compile(r"\b(?:shall|must|should|will)\s+not\b|\bprohibit", re.I)
 _DUTY = re.compile(r"\b(?:shall|must)\b", re.I)
+# Tags the pipeline gives items inside a prompt (O2 = second obligation of the unit, C3 =
+# third candidate passage). They mean nothing to a reader and must not reach one.
+_LABEL_PHRASE = re.compile(
+    r",?\s*(?:matching|as in|as per|per|in|of|under)\s+(?:the\s+)?"
+    r"(?:obligation|control|candidate|passage)\s+(?:in\s+)?\[?[OC]\d{1,2}\]?",
+    re.I,
+)
+_LABEL = re.compile(r"\s*\(?\[?\b[OC]\d{1,2}\b\]?\)?")
 
 
 def owner_for(gap_type: str) -> tuple[str, str]:
@@ -80,6 +88,53 @@ def unfaithful(obligation: str, wording: str) -> list[str]:
     if _DUTY.search(obligation) and not _DUTY.search(wording):
         problems.append("the duty is no longer mandatory")
     return problems
+
+
+def scrub(text: str) -> str:
+    """The text without internal item tags ("matching the obligation in O2" -> ""). The quoted
+    policy wording after 'Suggested wording:' is never touched, and text without a tag is
+    returned as it is."""
+    head, mark, wording = (text or "").partition(' Suggested wording: "')
+    cleaned = _LABEL.sub("", _LABEL_PHRASE.sub("", head))
+    if cleaned != head:
+        cleaned = re.sub(r"\s+([.,;])", r"\1", re.sub(r"[ \t]{2,}", " ", cleaned))
+    return (cleaned + mark + wording).strip()
+
+
+_O_TAG = re.compile(r"\[?\b[Oo]\d{1,2}\b\]?")
+_C_TAG = re.compile(r"\[?\bC\d{1,2}\b\]?")
+_C_RUN = re.compile(r"(?:\[?\bC\d{1,2}\b\]?(?:\s*,\s*and\s+|\s*,\s*|\s+and\s+))+\[?\bC\d{1,2}\b\]?")
+
+
+def readable(text: str) -> str:
+    """A stored model rationale with its item tags put into words, for display: "C3 ... O2's
+    requirement" becomes "The policy passage ... the obligation's requirement", and a list such
+    as "C1, C2 and C3" becomes "the candidate policy passages"."""
+    out = _C_RUN.sub("the candidate policy passages", text or "")
+    out = _C_TAG.sub("the policy passage", _O_TAG.sub("the obligation", out))
+    return out[:1].upper() + out[1:]
+
+
+def one_per_paragraph(drafts: list[dict]) -> tuple[list[dict], list[dict]]:
+    """(kept, dropped): one remedy per regulation paragraph. drafts: {id, ref, priority,
+    drafted_by, action, success_criterion}. The draft kept is the one on the highest-priority
+    gap; then one that passed the fidelity check; then one free of internal tags; then the
+    lowest id, so the choice is repeatable."""
+
+    def rank(d: dict):
+        text = d["action"] + " " + d["success_criterion"]
+        return (
+            -d["priority"],
+            "verbatim obligation" in d["drafted_by"],
+            scrub(text) != text.strip(),
+            d["id"],
+        )
+
+    kept, dropped, seen = [], [], set()
+    for d in sorted(drafts, key=lambda d: (d["ref"], rank(d))):
+        (dropped if d["ref"] in seen else kept).append(d)
+        seen.add(d["ref"])
+    return kept, dropped
 
 
 def draft(gap: dict, today: date, conn=None) -> dict:
@@ -122,8 +177,8 @@ def draft(gap: dict, today: date, conn=None) -> dict:
         out = dict(out, policy_wording=fallback["policy_wording"])
         drafted_by += " + verbatim obligation (draft failed the fidelity check)"
     return base | {
-        "action": f'{out["action"].strip()} Suggested wording: "{out["policy_wording"].strip()}"',
-        "success_criterion": out["success_criterion"].strip(),
+        "action": f'{scrub(out["action"])} Suggested wording: "{out["policy_wording"].strip()}"',
+        "success_criterion": scrub(out["success_criterion"]),
         "drafted_by": drafted_by,
         "checks": problems,
     }
