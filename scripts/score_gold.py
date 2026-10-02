@@ -74,7 +74,7 @@ def judged(run: str) -> tuple[dict[tuple, dict], list[str]]:
         for n, o in enumerate(obs, 1):
             lv = levels.get(f"{o['char_start']}:{o['char_end']}:{o['action']}", {})
             out[(o["char_start"], o["char_end"], _norm(o["action"]))] = dict(
-                seen[f"O{n}"], level=lv.get("level"), has_levels=bool(levels)
+                seen[f"O{n}"], level=lv.get("level"), has_levels=bool(levels), ref=o["clause_ref"]
             )
     if at != len(stream):
         unresolved.append(f"({len(stream) - at} judgments left over)")
@@ -83,11 +83,19 @@ def judged(run: str) -> tuple[dict[tuple, dict], list[str]]:
 
 def find(index: dict[tuple, dict], row: dict) -> dict | None:
     start, end = row["obligation_span"]
-    hit = index.get((start, end, _norm(row["obligation_action"])))
+    action = _norm(row["obligation_action"])
+    hit = index.get((start, end, action))
     if hit:
         return hit
     same_span = [v for (s, e, _), v in index.items() if (s, e) == (start, end)]
-    return same_span[0] if len(same_span) == 1 else None
+    if len(same_span) == 1:
+        return same_span[0]
+    # The citation may have moved since the sheet was drawn (2 Oct: a lead-in citation now
+    # points at its list item): same clause and same action is the same obligation.
+    moved = [
+        v for (_, _, a), v in index.items() if a == action and v["ref"] == row["obligation_ref"]
+    ]
+    return moved[0] if len(moved) == 1 else None
 
 
 def main() -> None:
