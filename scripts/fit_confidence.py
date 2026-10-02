@@ -29,6 +29,7 @@ from regcomp.evaluation import match
 from regcomp.policies import policy
 
 GOLD = Path("eval/runs/e2e2")
+HIGH_SHEET = Path("eval/runs/confidence")  # scripts/make_high_tier_sheet.py
 TABLE = Path("eval/reports/confidence_table.json")
 FIT_ON = "nainital"  # the development bank; the gold sheet was drawn from it
 _SPAN = "({0}.source_span->>'char_start')::int, ({0}.source_span->>'char_end')::int"
@@ -66,6 +67,30 @@ def gold_index(obligations: list[dict], gold: list[dict]) -> dict[str, bool]:
         hit = exact[:1] or (same_span if len(same_span) == 1 else moved if len(moved) == 1 else [])
         if hit:
             out[hit[0]["id"]] = g["gap"]
+    return out
+
+
+def content_key(g: dict, spans: dict) -> tuple:
+    """A gap's identity by content, stable across database rebuilds."""
+    start, end = spans.get(g["obligation"], (None, None))
+    c_start, c_end = g["control_span"] or (None, None)
+    return (g["ref"], start, end, c_start, c_end)
+
+
+def sheet_labels() -> dict[tuple, bool]:
+    """{content key: labelled as a gap} from the author's high-confidence sheet, if filled in."""
+    sheet, private = HIGH_SHEET / "high_tier_sheet.csv", HIGH_SHEET / "high_tier_private.json"
+    if not (sheet.exists() and private.exists()):
+        return {}
+    import csv
+
+    rows = json.loads(private.read_text(encoding="utf-8"))["rows"]
+    out = {}
+    with sheet.open(encoding="utf-8-sig", newline="") as fh:
+        for r in csv.DictReader(fh):
+            label = next(v for k, v in r.items() if k.startswith("YOUR_label")).strip().lower()
+            if label in ("gap", "no gap") and rows[r["#"]]["system_finding"]:
+                out[tuple(rows[r["#"]]["key"])] = label == "gap"
     return out
 
 
@@ -167,6 +192,19 @@ def main() -> None:
         if g["id"] not in truth and g["obligation"] in gold_gap:
             truth[g["id"]] = "real" if gold_gap[g["obligation"]] else "false_alarm"
 
+    spans = {m["obligation"]: m["span"] for m in mappings}
+    settled = sorted(
+        {content_key(g, spans) for g in gaps if g["id"] in truth and g["tier"] == "high"},
+        key=str,
+    )
+    labelled = sheet_labels() if fitting else {}
+    from_sheet = 0
+    for g in gaps:
+        key_ = content_key(g, spans)
+        if g["id"] not in truth and key_ in labelled:
+            truth[g["id"]] = "real" if labelled[key_] else "false_alarm"
+            from_sheet += 1
+
     combos: dict[str, Counter] = defaultdict(Counter)
     tiers: dict[str, Counter] = defaultdict(Counter)
     for g in gaps:
@@ -220,7 +258,9 @@ def main() -> None:
             "gold_rows_labelled": len(gold),
             "gold_rows_found_in_current_data": len(gold_gap),
             "gaps_with_truth_from_key": dict(by_key),
+            "gaps_with_truth_from_high_tier_sheet": from_sheet,
         },
+        "settled": [list(k) for k in settled],
         "reliability": [
             {
                 "judge_confidence": name,

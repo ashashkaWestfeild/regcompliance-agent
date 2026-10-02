@@ -1,7 +1,7 @@
 {
  "fitted_on": "nainital",
- "fitted_at": "2026-10-02 22:54",
- "code_commit": "52015d9",
+ "fitted_at": "2026-10-03 01:21",
+ "code_commit": "755ca88",
  "ground_truth": {
   "answer_key_rows": 10,
   "gold_rows_labelled": 50,
@@ -10,8 +10,53 @@
    "real_planted": 8,
    "other_passage": 3,
    "false_alarm": 1
-  }
+  },
+  "gaps_with_truth_from_high_tier_sheet": 0
  },
+ "settled": [
+  [
+   "18",
+   32338,
+   32450,
+   45648,
+   45929
+  ],
+  [
+   "42(1)",
+   71659,
+   71922,
+   41688,
+   41963
+  ],
+  [
+   "43",
+   81570,
+   81768,
+   94445,
+   94894
+  ],
+  [
+   "5(1)(iv)(a)",
+   2689,
+   2940,
+   2852,
+   2995
+  ],
+  [
+   "5(1)(iv)(d)",
+   4424,
+   4754,
+   3233,
+   3678
+  ],
+  [
+   "65(2)",
+   104906,
+   105114,
+   125636,
+   125848
+  ]
+ ],
  "reliability": [
   {
    "judge_confidence": "1.00",
