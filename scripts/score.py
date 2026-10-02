@@ -229,6 +229,39 @@ def score_evidence(policy: str) -> list[str]:
     return [f"- evidence rows correct {correct}/{len(out)}", *out]
 
 
+def confidence_card() -> dict:
+    """The frozen development-bank confidence tables (scripts/fit_confidence.py), if fitted:
+    how often the judge's verdict was right per band of its own confidence, and the record of
+    each signal combination. Counts only."""
+    path = Path("eval/reports/confidence_table.json")
+    if not path.exists():
+        return {}
+    table = json.loads(path.read_text(encoding="utf-8"))
+    return {
+        "confidence_fitted_on": table["fitted_on"],
+        "judge_confidence_reliability": [
+            {
+                "Judge confidence": r["judge_confidence"],
+                "Verdicts": r["verdicts_in_band"],
+                "With known answer": r["judged"],
+                "Right": r["right"],
+            }
+            for r in table["reliability"]
+        ],
+        "signal_records": [
+            {
+                "Signals": c["label"]
+                + (
+                    "; citation verified" if c["citation"] == "cited" else "; citation not verified"
+                ),
+                "Findings": c["findings"],
+                "Record": c["record"],
+            }
+            for c in table["combinations"].values()
+        ],
+    }
+
+
 def applicability_lines(profile: str, key: list[dict]) -> list[str]:
     """Counts for the applicability stage, and any planted target it took out of scoring."""
     with connect() as conn:
@@ -358,7 +391,9 @@ def main() -> None:
         f"{len(s.unkeyed)}",
         "- model time by stage (cache totals): " + "; ".join(stage_cost),
         "",
-        "Not yet measured: extraction precision/recall vs the user's labels, calibration.",
+        "Judge confidence and signal records: eval/reports/confidence_table.json (fitted on "
+        "the development bank). Not yet measured: extraction precision/recall vs the "
+        "user's labels.",
     ]
     (run / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     # A small published copy for the demo app (eval/runs is not in the repository).
@@ -382,6 +417,7 @@ def main() -> None:
         "decoys": [{"Row": d["id"], "Flagged": d["flagged"], "Tier": d["tier"]} for d in s.decoys],
         "evidence": evidence_lines,
         "applicability": applicable_lines,
+        **confidence_card(),
     }
     Path(f"eval/reports/scorecard_{args.policy}.json").write_text(
         json.dumps(card, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n"

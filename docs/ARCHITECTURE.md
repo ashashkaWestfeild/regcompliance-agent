@@ -176,6 +176,34 @@ obligation with the wrong passage.
 
 Held-out results: to be added at the freeze.
 
+### Confidence
+
+The judge returns a number from 0 to 1 with each verdict. It is stored and not shown. Measured on
+the development bank against the answer key and the 50 adjudicated pairs
+([table](../eval/reports/confidence_table.json)):
+
+| Judge's number | Verdicts | With a known answer | Right |
+|---|---|---|---|
+| 1.00 | 269 | 27 | 25 |
+| 0.95 to 0.99 | 118 | 15 | 13 |
+| 0.80 to 0.94 | 54 | 7 | 4 |
+| below 0.80 | 17 | 3 | 1 |
+
+The number mostly restates the verdict: every checked verdict at 1.00 was "covered", nearly every
+one below 0.95 was a gap, and two planted gaps were passed as covered at 1.00. The prompt asks for
+"confidence between 0 and 1" without saying confidence in what. It is left as it is, because
+rewording it means judging every obligation again.
+
+Each finding instead carries a note built from checks that code can verify
+([`confidence.py`](../src/regcomp/confidence.py)): an evidence test failed; the judge and the text
+comparison agree; the text comparison found a difference the judge had passed; the judge alone;
+the judge contradicted by near-verbatim policy text; and whether the policy citation was verified.
+Each combination shows its record on the development bank as counts. Two cautions: most findings
+of each kind are not adjudicated (16 of the 21 "judge alone" findings, for example), and most of
+the adjudicated ones are gaps we planted, which are real by construction. The records are
+therefore not hit rates. The table is fitted on the development bank only and frozen before the
+held-out runs, which are then reported against it.
+
 ### Integrity disclosures
 
 - **Same toolchain.** The answer keys were authored with the same AI coding assistant that helped
