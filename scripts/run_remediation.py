@@ -27,7 +27,9 @@ def main() -> None:
             " o.source_clause_ref, o.source_span->>'quote', c.source_span->>'quote'"
             " FROM gap g JOIN obligation o ON o.id = g.obligation_id"
             " LEFT JOIN control c ON c.id = g.control_id"
-            " WHERE g.status = 'open' ORDER BY g.priority_score DESC, o.source_clause_ref"
+            # drafts go to the high-confidence tier; a review-queue item is confirmed first
+            " WHERE g.status = 'open' AND g.tier = 'high' AND g.superseded_at IS NULL"
+            " ORDER BY g.priority_score DESC, o.source_clause_ref"
             " LIMIT %s",
             (args.top,),
         ).fetchall()

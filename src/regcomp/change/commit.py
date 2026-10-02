@@ -55,6 +55,11 @@ def _clauses(conn, event, doc, new_doc, changes: list[dict], version: str, today
         old_id = conn.execute(
             "SELECT id FROM clause WHERE key = %s AND superseded_at IS NULL", (f"REG:{c['ref']}",)
         ).fetchone()
+        if old_id:  # first: only one current row per clause key may exist
+            conn.execute(
+                "UPDATE clause SET effective_to = %s, superseded_at = now() WHERE id = %s",
+                (today, old_id[0]),
+            )
         clause = by_ref.get(c["ref"]) if c["change_class"] != "repealed" else None
         if clause is not None:
             new_clause[c["ref"]] = conn.execute(
@@ -74,11 +79,6 @@ def _clauses(conn, event, doc, new_doc, changes: list[dict], version: str, today
                     clause.quote,
                 ),
             ).fetchone()[0]
-        if old_id:
-            conn.execute(
-                "UPDATE clause SET effective_to = %s, superseded_at = now() WHERE id = %s",
-                (today, old_id[0]),
-            )
         conn.execute(
             "INSERT INTO clause_diff (change_event_id, old_clause_id, new_clause_id,"
             " change_class, summary) VALUES (%s,%s,%s,%s,%s)",

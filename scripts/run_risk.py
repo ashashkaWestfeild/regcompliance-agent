@@ -27,29 +27,32 @@ def main() -> None:
     }
     with connect(autocommit=True) as conn:
         gaps = conn.execute(
-            "SELECT g.id, g.type, o.source_clause_ref, o.action, o.source_span->>'quote'"
-            " FROM gap g JOIN obligation o ON o.id = g.obligation_id WHERE g.status = 'open'"
+            "SELECT g.id, g.type, o.source_clause_ref, o.action, o.source_span->>'quote', g.tier"
+            " FROM gap g JOIN obligation o ON o.id = g.obligation_id"
+            " WHERE g.status = 'open' AND g.superseded_at IS NULL"
         ).fetchall()
         ranked = []
         with conn.cursor() as cur:
-            for gid, gap_type, ref, action, quote in gaps:
+            for gid, gap_type, ref, action, quote, tier in gaps:
                 risk = assess(f"{action}. {quote}", heading.get(ref, ""), gap_type)
                 cur.execute(
                     "UPDATE gap SET inherent_risk = %s, residual_risk = %s, priority_score = %s"
                     " WHERE id = %s",
                     (risk.inherent, risk.residual, risk.priority, gid),
                 )
-                ranked.append((risk, ref, gap_type, action))
-    ranked.sort(key=lambda r: -r[0].priority)
+                ranked.append((risk, ref, gap_type, action, tier))
+    ranked.sort(key=lambda r: (r[4] != "high", -r[0].priority))  # high-confidence tier first
     order = ("critical", "high", "medium", "low")
     by_level = Counter(r[0].residual for r in ranked)
-    print(f"gaps scored: {len(ranked)}")
+    by_tier = Counter(r[4] for r in ranked)
+    tiers = f"high-confidence {by_tier['high']}, review {by_tier['review']}"
+    print(f"gaps scored: {len(ranked)} ({tiers})")
     print("residual risk: " + ", ".join(f"{k} {by_level.get(k, 0)}" for k in order))
-    print("\n| # | Priority | Residual | RBI ref | Gap type | Obligation | Why |")
-    print("|---|---|---|---|---|---|---|")
-    for n, (risk, ref, gap_type, action) in enumerate(ranked[: args.top], 1):
+    print("\n| # | Tier | Priority | Residual | RBI ref | Gap type | Obligation | Why |")
+    print("|---|---|---|---|---|---|---|---|")
+    for n, (risk, ref, gap_type, action, tier) in enumerate(ranked[: args.top], 1):
         print(
-            f"| {n} | {risk.priority:.2f} | {risk.residual} | {ref} | {gap_type} "
+            f"| {n} | {tier} | {risk.priority:.2f} | {risk.residual} | {ref} | {gap_type} "
             f"| {action[:70]} | {risk.reasons[0]} |"
         )
 

@@ -179,8 +179,12 @@ def compare(old: list[dict], new: list[dict]) -> dict:
         before, after = was and was["gap_type"], n["gap_type"]
         if after and not before:
             opened.append(label | {"gap_type": after, "why": n["rationale"], "new": was is None})
-        elif before and not after and n["verdict"]:
+        elif before and not after and n["verdict"] == "covered":
             closed.append(label | {"gap_type": before})
+        elif before and not after:
+            # no longer raised, but not judged covered either (e.g. now classed procedure-level):
+            # a person looks at it; the agent does not count it as closed
+            review.append(label | {"why": f"gap {before} no longer raised: {n['rationale']}"})
         elif before != after:
             changed.append(label | {"from": before, "to": after})
         else:
