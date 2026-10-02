@@ -1,0 +1,11 @@
+# Dependencies of the hosted demo only (Streamlit Community Cloud installs this file).
+# The full pipeline (Docling, FlashRank, local models) is not needed to run the app.
+streamlit>=1.40
+psycopg[binary]>=3.2
+python-dotenv>=1.0
+pyyaml>=6.0
+pydantic>=2.8
+beautifulsoup4>=4.12
+lxml>=5.0
+langgraph>=1.0
+langgraph-checkpoint-postgres>=3.0

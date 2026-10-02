@@ -15,6 +15,7 @@ import hashlib
 import json
 import random
 import subprocess
+import time
 from pathlib import Path
 
 from regcomp.db import connect
@@ -317,6 +318,30 @@ def main() -> None:
         "applicability.",
     ]
     (run / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    # A small published copy for the demo app (eval/runs is not in the repository).
+    card = {
+        "run": args.run,
+        "policy": args.policy,
+        "split": split,
+        "key_commit": key_commit(),
+        "scored_at": time.strftime("%Y-%m-%d %H:%M"),
+        "summary": summary(s),
+        "planted": [
+            {
+                "Row": p["id"],
+                "Planted change": p["operator"].replace("_", " "),
+                "Found": _detected(p),
+                "Tier": p["tier"] or "-",
+                "Type correct": "yes" if p["typed"] else "no",
+            }
+            for p in s.planted
+        ],
+        "decoys": [{"Row": d["id"], "Flagged": d["flagged"], "Tier": d["tier"]} for d in s.decoys],
+        "evidence": evidence_lines,
+    }
+    Path(f"eval/reports/scorecard_{args.policy}.json").write_text(
+        json.dumps(card, indent=1, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n"
+    )
 
     print("\n".join(lines))
     sheet = run / "adjudication_sheet.csv"

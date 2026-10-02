@@ -16,3 +16,7 @@ docs/et_hackathon_detailed_problem_statements_branded.pdf
 # Pipeline run outputs (regenerable from the LLM cache)
 eval/runs/
 data/raw/rbi/changecases/
+
+# local tooling and Streamlit secrets (never committed)
+.claude/
+.streamlit/secrets.toml
