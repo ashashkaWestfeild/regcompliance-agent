@@ -1,86 +1,167 @@
-# regcompliance-agent
+# RegCompliance Agent
 
-An agentic system that keeps a bank's KYC controls traceable to the regulation they implement,
-finds gaps, and re-assesses only what changes when the regulator amends a rule.
+Keeps a bank's KYC policy traceable to the regulation it implements: it reads an RBI Direction and
+a bank's policy, finds where the policy falls short, shows the evidence for each finding, and when
+the regulator amends a rule it re-checks only what the amendment touches.
 
 Built for the **ET AI Hackathon 2026: Agentic Edition (presented by Accenture), Problem 1:
-Banking/financial regulations**.
+Banking / financial regulations**.
 
-> Status: work in progress (build sprint 23 Sep – 11 Oct 2026). Sections marked *planned* are
-> not built yet.
+**Live demo:** <https://regcompliance-agent-gg39o3vts7mzhbtds2u6l7.streamlit.app/>
+(add `?scenario=2` to open the change agent on the what-if draft circular)
 
 ## The problem
 
-Regulations → obligations → applicability → internal policies/controls → evidence → testing →
-gaps → remediation → ongoing monitoring. The chain has to stay traceable while both sides keep
-changing.
+Regulations → obligations → applicability → internal policies and controls → evidence → testing →
+gaps → remediation → ongoing monitoring. A compliance team has to keep that chain intact while
+both ends keep changing. Today it is spreadsheet work, redone after every amendment.
 
-## What this repository does
+## What it does
 
-| Stage | How | Status |
+| Step | How | Who decides |
 |---|---|---|
-| Regulation ingestion | Deterministic parser splits the RBI Directions into numbered clauses with verbatim character spans (no LLM, no fixed-size chunking) | built |
-| Change intelligence | Clause-level diff with deterministic noise filtering; only substantive changes reach the agent | built (diff) |
-| Policy ingestion | Docling layout parsing of public bank KYC/AML policies | in progress |
-| Obligation / control extraction | Open-weights LLMs, strict JSON, two passes | planned |
-| Mapping and gaps | Retrieval (bge-m3 + FlashRank) → LLM judge → citation gate → rule-based gap scoring | planned |
-| Change agent | LangGraph: plan → re-map affected edges only → recover → open remediation; dry-run for what-if | planned |
+| Read the regulation | A parser splits the RBI Direction into numbered clauses with exact character positions | Code |
+| Read the bank policy | Docling layout parsing, then the same clause tree | Code |
+| Extract obligations and controls | An open-weights model returns structured items; every quote is sliced from the source by position, so it cannot be invented | Model proposes, code verifies |
+| Find policy text for each obligation | Embedding search over extracted controls **and** every raw policy passage | Code |
+| Judge coverage | A model gives a verdict and an issue; fixed rules turn that into a gap type | Model judges, code decides |
+| Compare the wording | Near-identical sentences are compared directly: numbers, "shall" against "may", inserted conditions | Code |
+| Sort into two tiers | High-confidence gaps and a review queue | Code |
+| Test controls against evidence | Exception rates from logs against a tolerance | Code |
+| Rank by risk | A rubric file: the subject sets the level, the gap type scales it | Code |
+| Draft remediation | A model drafts; code sets owner and due date and rejects wording that drops a number or a duty | Model drafts, code checks |
+| React to an amendment | A LangGraph agent: diff → classify → scope → re-extract → re-map → compare → commit, with checkpoints and retries; a dry run is the what-if mode | Agent, within fixed rules |
+| Monitor | A new evidence batch is tested against the last result; a reviewer confirms, dismisses, resolves or accepts | Code and a person |
+
+The system opens gaps. Only a person closes one or accepts a risk.
+
+## Results so far (development bank, counts)
+
+Known gaps were planted in a public bank policy before any model run, together with decoys that
+must not be flagged. The numbers below are for the development bank only.
+
+| Measure | Result |
+|---|---|
+| Planted gaps found at the exact passage | 5 of 7 (3 in the high-confidence tier, 2 in the review queue) |
+| Planted gaps found at the right obligation | 6 of 7 |
+| Decoys flagged | 0 of 3 in the high-confidence tier, 1 of 3 in the review queue |
+| Other reports | 17 high-confidence, 38 in the review queue |
+| Injected instruction caught | 1 of 1 |
+| Real findings handled correctly | 2 of 2 |
+| Evidence tests correct | 2 of 2 |
+| Change detection against RBI's own amendment markers | 2 of 2 KYC amendments; 262 of 266 amended clauses in nine other Directions |
+
+Read these with two cautions. The wording-comparison rules were written after studying this bank's
+misses, so they fit it well. And by our own reading about 11 of the 17 high-confidence extras are
+still false alarms ([error analysis](eval/reports/error_analysis_e2e11.md)). Two banks the system
+has never seen are scored once, at the freeze; their answer keys were committed before any model
+read those policies. Those results will be added here.
 
 ## Data (all public or synthetic)
 
-- **Regulation:** RBI (Commercial Banks – Know Your Customer) Directions, 2025
-  (RBI/DOR/2025-26/169). Three real versions: the original (28 Nov 2025) and the versions after
-  the 29 Dec 2025 and 18 Sep 2026 amendments.
-- **Bank policies:** the public KYC/AML policies of Nainital Bank and Central Bank of India.
-- **Evidence:** synthetic CSV logs (planned).
+- **Regulation:** RBI (Commercial Banks – Know Your Customer) Directions, 2025, in three real
+  versions (28 Nov 2025, and after the amendments of 29 Dec 2025 and 18 Sep 2026), plus nine other
+  RBI Directions used only to test change detection.
+- **Bank policies:** the published KYC/AML policies of Nainital Bank (development), Central Bank
+  of India and Dhanlaxmi Bank (both held out).
+- **Evidence:** synthetic logs with identifiers only.
+- **A synthetic draft circular** for the what-if demo: one invented sentence added to the current
+  Direction, clearly marked.
 - Provenance, source URLs and sha256 for every file: [`data/sources.yaml`](data/sources.yaml).
-  Raw files are stored byte-identical (`.gitattributes`) so citation offsets stay valid.
-- No material from any employer is used, in any form.
+  Raw files are stored byte-identical so citation positions stay valid.
 
-## Quick start
+## Run it
 
 ```bash
-uv sync                  # core (HTML parsing, diff, tests)
-uv sync --extra pdf      # adds Docling for PDF parsing (large: pulls PyTorch)
-uv run pytest
-uv run python scripts/parse_corpus.py   # parse all sources into data/parsed/
+uv sync                         # core
+uv sync --extra pdf             # adds Docling for PDF parsing (large)
+uv run pytest                   # 83 tests
 ```
 
-Docling output is cached in `data/parsed/docling_cache/` (keyed by file sha256) and committed,
-so the PDF-derived clauses are reproducible without installing Docling.
+The pipeline, on the development bank (needs Postgres with pgvector, and Ollama with `qwen3:8b`
+and `bge-m3`; copy `.env.example` to `.env`):
 
-Optional local database: `docker compose up -d` (or `podman compose up -d`) starts Postgres 18 +
-pgvector and applies [`db/schema.sql`](db/schema.sql). CI applies the same schema on every push.
-
-## Project layout
-
-```
-src/regcomp/ingest/   deterministic parsing (RBI HTML, Docling PDFs, clause tree, normalization)
-src/regcomp/change/   clause-level diff and change classification
-src/regcomp/schemas.py  domain models (bitemporal versioning)
-db/schema.sql         Postgres + pgvector DDL
-docs/                 plan, mutation taxonomy, architecture decision records
-data/                 public sources + provenance
+```bash
+uv run python scripts/run_extract.py --run demo            # obligations and controls
+uv run python scripts/run_level.py --run demo              # obligation level
+uv run python scripts/run_map.py --run demo --passages --dense-only --stop-after-min 25
+uv run python scripts/run_tests.py                         # design and operating tests
+uv run python scripts/run_verify.py                        # wording comparison and tiers
+uv run python scripts/run_risk.py                          # risk ranking
+uv run python scripts/run_remediation.py --top 10          # remediation drafts
+uv run python scripts/score.py --run demo                  # against the answer key
 ```
 
-## Responsible AI
+Every model call is cached, so a stopped run resumes where it left off and a repeated run is
+free. The change agent and the app:
 
-Guardrails sit where a compliance agent can fail: poisoned inputs (prompt-injection scanner,
-data-egress allowlist), fabricated outputs (strict schemas, verbatim citation gate, number and
-negation checks, human review queue), and unsafe actions (read-only what-if, blast-radius pause,
-humans close gaps). Details: [`docs/PLAN.md`](docs/PLAN.md) section 3a.
+```bash
+uv run python scripts/run_change.py --old data/raw/rbi/kycdir_v2_20251229.html \
+    --new data/raw/rbi/kycdir_v3_20260918.html --dry-run
+uv run python scripts/run_evidence.py                      # a new evidence batch arrives
+uv run python scripts/review.py                            # the review queue
+uv run streamlit run app/streamlit_app.py
+```
+
+Any stage can be moved to a hosted open-weights model with one setting, for example
+`REGCOMP_MODEL=groq:openai/gpt-oss-120b`. The deployed app runs that way, because it has no GPU.
+
+## Layout
+
+```
+src/regcomp/ingest/     parsing: RBI HTML, Docling PDFs, clause tree
+src/regcomp/pipeline/   extraction, citation gate, judge and gap rules, passages, wording comparison
+src/regcomp/change/     clause diff, change classification, scope, the agent, versioned writes
+src/regcomp/            evidence tests, monitoring, risk rubric, remediation, reviewer decisions, LLM access
+scripts/                one script per pipeline stage, the evaluation tools
+app/                    the Streamlit demo
+db/                     Postgres + pgvector schema and migrations (versioned rows, nothing deleted)
+data/                   public sources, planted-gap specifications, rubric and triage settings
+eval/                   answer keys and published reports
+docs/                   architecture, plan, how the test sets were built, decision records
+```
+
+## Safeguards
+
+- **Citations cannot be invented.** The model names where a sentence starts; code cuts the quote
+  from the source.
+- **Numbers and duties must survive.** Wording comparison and remediation drafts check that every
+  number and every "shall / shall not" is kept.
+- **Instruction-like text in a document is flagged** and treated as data, never followed.
+- **Two tiers.** Anything the comparison contradicts, anything procedure-level and anything
+  technical goes to a review queue instead of being asserted or silently dropped.
+- **Read-only what-if.** A dry run has no path to the step that writes; a large change pauses for
+  a person.
+- **Evidence stays in code.** The model never sees evidence rows, only counts.
+
+Not enforced by code: the rule that only public or synthetic data reaches a model is a working
+rule of this project, and there is no per-event spending cap.
+
+## Limits
+
+- Gap detection is measured on small sets (7 planted gaps per bank); results are counts, not
+  statistics.
+- The comparison rules were written after studying development misses.
+- "Policy-level or procedure-level" is a convention: two independent labellers agreed on 30 of 50
+  rows. The system routes such items to review rather than deciding.
+- One regulation end to end; text input only.
+- The hosted demo depends on free tiers (a daily token cap for the hosted model).
+
+More detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md),
+[`docs/mutation_taxonomy.md`](docs/mutation_taxonomy.md), [`docs/adr/`](docs/adr/).
 
 ## AI assistance disclosure
 
-This project was developed with **Claude Code** (Anthropic) as a coding assistant. All design
-decisions, data choices and ground-truth labels are the author's. The system itself runs on
-open-weights models by default.
+Most of the code was written with **Claude Code** (Anthropic) as a coding assistant, under the
+author's direction; the author made the scope, data and evaluation decisions and reviewed the
+planted-gap answer keys. The 50-pair check sheet was labelled blind by two AI models (Claude and
+Gemini) and the author decided the disputed rows. The system itself runs on open-weights models.
 
 ## Acknowledgements
 
-Architecture patterns (Docling parsing, FlashRank reranking, retry-with-fallback, LangGraph
-Postgres checkpointing) were informed by the public "8-hour marathon" RAG sessions and their
-repositories ([d-hackmt/8hr-MARATHON](https://github.com/d-hackmt/8hr-MARATHON),
+Some patterns (Docling parsing, retry with fallback, LangGraph Postgres checkpointing) were
+informed by the public "8-hour marathon" RAG sessions and their repositories
+([d-hackmt/8hr-MARATHON](https://github.com/d-hackmt/8hr-MARATHON),
 [sourangshupal/8hr-MARATHON](https://github.com/sourangshupal/8hr-MARATHON)). No code was copied.
 
 ## Licence
