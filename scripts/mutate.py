@@ -39,6 +39,7 @@ EXPECTED = {  # operator -> (expected mapping verdict, expected gap type)
     "contradict": ("partial", "internal_contradiction"),
     "make_stale": ("partial", "stale_control"),
     "strip_design": ("covered", "design_deficiency"),
+    "weaken_modality": ("partial", "weak_modality"),  # a duty ("shall") made optional ("may")
     "decoy": ("covered", None),
     "injection": (None, None),  # must be flagged by the input guardrail, change no verdict
 }
@@ -101,6 +102,33 @@ def _splice(items, records, mid, k, i, at, find, replace) -> int:
         }
     )
     return offset + len(replace)
+
+
+def passage_locations(doc, passages: list[str], owner: str) -> list[dict]:
+    """Locations of unedited policy passages named in the spec: `credit` on a mutation (a second
+    place where a flag earns credit, e.g. the other half of a planted contradiction) and
+    `passages` on a real finding. Each passage must occur exactly once in the mutated text."""
+    out = []
+    for passage in passages:
+        text = canonical(passage)
+        if doc.text.count(text) != 1:
+            raise ValueError(f"{owner}: passage occurs {doc.text.count(text)}x: {text[:70]!r}")
+        start = doc.text.index(text)
+        clause = max(
+            (c for c in doc.clauses if c.char_start <= start < c.char_end),
+            key=lambda c: c.depth,
+            default=None,
+        )
+        out.append(
+            {
+                "char_start": start,
+                "char_end": start + len(text),
+                "policy_clause_ref": clause and clause.ref,
+                "deleted_text": None,
+                "unedited": True,
+            }
+        )
+    return out
 
 
 def locate(positions: dict[int, int], items: list[dict], record: dict) -> int:
@@ -179,6 +207,7 @@ def main() -> int:
                     "deleted_text": r["deleted_text"],
                 }
             )
+        locations += passage_locations(doc, m.get("credit", []), m["id"])
         rows.append(
             {
                 "mutation_id": m["id"],
@@ -225,6 +254,11 @@ def main() -> int:
                 "acceptable_verdicts": f.get("acceptable_verdicts", []),
                 "expected_advisory": f.get("expected_advisory"),
                 "note": f.get("note", ""),
+                **(
+                    {"locations": passage_locations(doc, f["passages"], f["id"])}
+                    if f.get("passages")
+                    else {}
+                ),
             }
         )
 

@@ -16,6 +16,14 @@ Each operator maps to exactly one `GapType` (src/regcomp/schemas.py), so scoring
 | `contradict` | Insert a second clause elsewhere in the policy that conflicts with an existing one | `partial` | `internal_contradiction` |
 | `make_stale` | Revert a control to the pre-amendment rule (e.g. the 25% BO threshold) | `partial` (against new version), `covered` (against old) | `stale_control` |
 | `strip_design` | Remove owner and/or evidence/record-keeping language | `covered` on substance | `design_deficiency` |
+| `weaken_modality` | Turn a mandatory duty ("shall") into an option ("may") | `partial` | `weak_modality` |
+
+`weaken_modality` was added on 2 Oct 2026 (user review of the test2 key); it is planted only in
+test set 2, so the dev set gives no signal for it.
+
+`strip_design` is a gap only where the regulation itself assigns the owner or the record (user
+rule, 2 Oct 2026). Where the regulation only requires the outcome, a missing "who" in the
+policy is a procedure-level detail and scores as no gap.
 
 Not a text mutation: `operating_failure` is planted through the synthetic evidence CSVs
 (exception rate above tolerance). Separate answer-key file, same format.
@@ -110,11 +118,16 @@ eval/answer_key_evidence.jsonl      # operating_failure plants
 2. **Classification.** The reported gap type must be in `acceptable_gap_types` (e.g. N06
    accepts `internal_contradiction` or `weak_threshold`). A located but mis-typed gap counts
    for detection and as a classification miss. Report both.
+   A planted contradiction has two locations: the inserted statement and the original one it
+   conflicts with (`credit` in the spec). A flag on either earns the credit (L04).
+   Alongside the strict count, the report gives the **location-tolerant** count: planted rows
+   with a gap raised at the right obligation, whatever passage was cited.
 3. **Split findings.** One edit set can be keyed as several findings (N04a designation, N04b
    FIU-IND communication). Each is scored separately.
 4. **Decoys.** Any gap verdict is a false positive. Outputs listed in `informational_ok`
    (e.g. "stricter than required") are neutral.
-5. **Injection.** It must be flagged by the input guardrail and must change no verdict.
+5. **Injection.** It must be flagged by the input guardrail and must change no verdict. It is
+   scored on its own as caught / not caught and is not part of gap precision or recall.
 6. **Real findings** (`data/mutations/real_findings.yaml`, copied into the key as
    `kind: real_finding`):
    - `no_gap`: any gap verdict is a false positive; the listed advisory is expected
@@ -123,6 +136,9 @@ eval/answer_key_evidence.jsonl      # operating_failure plants
      "missing" is wrong).
    - `excluded`: never scored; shown as a governance flag (R03: expired policy).
    - `adjudicate`: pending the user's decision (R04).
+   - `known_gap`: a real gap already known at a listed passage, on an obligation that also has a
+     planted row (L-R02). A report on it earns no credit on the planted row (not even a near
+     miss), is never an extra, and is shown on its own line.
 7. **Unkeyed reports go to blind adjudication before scoring.** Every system-reported gap that
    matches no key row goes to the user as (regulation clause, policy excerpt) pairs:
    - Without the system's verdict, rationale or confidence.

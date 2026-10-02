@@ -22,7 +22,13 @@ from regcomp.ingest.pdf_docling import parse_policy_items
 from regcomp.ingest.rbi_html import parse_file as parse_regulation
 
 REGULATION = "data/raw/rbi/kycdir_v3_20260918.html"
-CHECK_OPERATORS = {"delete_control", "narrow_scope", "weaken_threshold", "make_stale"}
+CHECK_OPERATORS = {
+    "delete_control",
+    "narrow_scope",
+    "weaken_threshold",
+    "make_stale",
+    "weaken_modality",
+}
 OLLAMA = "http://localhost:11434/api/embed"
 TOP_K = 6
 

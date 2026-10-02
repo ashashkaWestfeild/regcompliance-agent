@@ -101,6 +101,7 @@ class GapType(StrEnum):
     INTERNAL_CONTRADICTION = "internal_contradiction"
     STALE_CONTROL = "stale_control"
     DESIGN_DEFICIENCY = "design_deficiency"
+    WEAK_MODALITY = "weak_modality"  # a mandatory duty stated as optional ("may")
     OPERATING_FAILURE = "operating_failure"
     UNSPECIFIED = "unspecified"  # partial mapping without a specific reason
 

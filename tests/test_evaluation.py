@@ -103,3 +103,34 @@ def test_decoy_injection_and_real_findings():
     text = "\n".join(summary(s))
     assert "decoys flagged 1/1" in text and "injections caught 1/1" in text
     assert "%" not in text  # counts only, never bare percentages
+
+
+def test_known_real_gap_counts_neither_way():
+    key = [
+        {
+            "mutation_id": "M5",
+            "kind": "mutation",
+            "operator": "make_stale",
+            "target_obligation_refs": ["5(1)(iv)(b)"],
+            "acceptable_gap_types": ["stale_control"],
+            "locations": [{"char_start": 100, "char_end": 150}],
+        },
+        {
+            "mutation_id": "K1",
+            "kind": "real_finding",
+            "scoring": "known_gap",
+            "target_obligation_refs": ["5(1)(iv)(b)"],
+            "locations": [{"char_start": 800, "char_end": 860}],
+        },
+    ]
+    on_known = f(1, "5(1)(iv)(b)", "partial", "stale_control", (810, 840))
+    s = score(key, [on_known], [])
+    # no credit on the planted row that shares the obligation, not even a near miss ...
+    assert (s.planted[0]["detected"], s.planted[0]["near_miss"]) == (False, False)
+    # ... never an extra, and reported on its own line
+    assert s.unkeyed == [] and s.real[0]["outcome"].startswith("flagged")
+    assert "real findings correct 0/0" in "\n".join(summary(s))
+    both = score(key, [on_known, f(2, "5(1)(iv)(b)", "partial", "stale_control", (110, 140))], [])
+    assert both.planted[0]["detected"] and both.unkeyed == []
+    assert score(key, [], []).real[0]["outcome"] == "not flagged"
+    assert "location-tolerant) 1/1" in "\n".join(summary(both))

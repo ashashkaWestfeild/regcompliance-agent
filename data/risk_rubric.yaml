@@ -59,6 +59,7 @@ gap_factors:
   internal_contradiction: 1.0
   operating_failure: 0.9
   weak_threshold: 0.8
+  weak_modality: 0.8
   narrow_scope: 0.7
   stale_control: 0.6
   design_deficiency: 0.5

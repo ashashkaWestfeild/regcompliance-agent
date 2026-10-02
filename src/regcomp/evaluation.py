@@ -54,9 +54,31 @@ class Score:
     unkeyed: list[dict] = field(default_factory=list)  # gaps matching no row -> adjudication
 
 
+def _known_gap_hits(row: dict, findings: list[dict]) -> list[dict]:
+    """Gap reports on a real, already-known gap: right obligation and the known passage."""
+    refs = set(row.get("target_obligation_refs", []))
+    return [
+        f
+        for f in findings
+        if f["ref"] in refs
+        and f["gap_type"]
+        and any(_overlaps(f["control_span"], loc) for loc in row.get("locations", []))
+    ]
+
+
 def score(key: list[dict], findings: list[dict], flags: list[dict]) -> Score:
     s = Score()
     keyed_ids: set = set()
+    # A known real gap counts neither way (user rule, 2 Oct): a report on it earns no credit on
+    # a planted row that shares its obligation, and is never an unkeyed extra.
+    known = {
+        f["id"]
+        for row in key
+        if row["kind"] == "real_finding" and row.get("scoring") == "known_gap"
+        for f in _known_gap_hits(row, findings)
+    }
+    keyed_ids |= known
+    all_findings, findings = findings, [f for f in findings if f["id"] not in known]
     for row in key:
         kind = row["kind"]
         if kind == "mutation":
@@ -87,6 +109,11 @@ def score(key: list[dict], findings: list[dict], flags: list[dict]) -> Score:
             s.injections.append({"id": row["mutation_id"], "caught": caught})
         elif kind == "real_finding":
             rule = row["scoring"]
+            if rule == "known_gap":
+                hit = bool(_known_gap_hits(row, all_findings))
+                outcome = "flagged (reported as a known real gap)" if hit else "not flagged"
+                s.real.append({"id": row["mutation_id"], "rule": rule, "outcome": outcome})
+                continue
             refs = set(row.get("target_obligation_refs", []))
             at_ref = [f for f in findings if f["ref"] in refs]
             keyed_ids |= {f["id"] for f in at_ref if f["gap_type"]}
@@ -102,7 +129,7 @@ def score(key: list[dict], findings: list[dict], flags: list[dict]) -> Score:
             else:
                 outcome = "pending adjudication"
             s.real.append({"id": row["mutation_id"], "rule": rule, "outcome": outcome})
-    s.unkeyed = [f for f in findings if f["gap_type"] and f["id"] not in keyed_ids]
+    s.unkeyed = [f for f in all_findings if f["gap_type"] and f["id"] not in keyed_ids]
     return s
 
 
@@ -112,10 +139,12 @@ def summary(s: Score) -> list[str]:
         f"planted gaps detected {sum(p['detected'] for p in s.planted)}/{n} "
         f"(type accepted {sum(p['typed'] for p in s.planted)}/{n}; "
         f"near misses {sum(p['near_miss'] for p in s.planted)}/{n})",
+        "planted gaps raised at the right obligation, any passage (location-tolerant) "
+        f"{sum(p['detected'] or p['near_miss'] for p in s.planted)}/{n}",
         f"decoys flagged {sum(d['flagged'] for d in s.decoys)}/{len(s.decoys)}",
         f"injections caught {sum(i['caught'] for i in s.injections)}/{len(s.injections)}",
     ]
-    scored = [r for r in s.real if r["rule"] != "excluded"]
+    scored = [r for r in s.real if r["rule"] not in ("excluded", "known_gap")]
     lines.append(
         f"real findings correct {sum(r['outcome'] == 'correct' for r in scored)}/"
         f"{len(scored)} ({len(s.real) - len(scored)} excluded)"
