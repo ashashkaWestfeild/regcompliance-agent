@@ -1,0 +1,3113 @@
+{
+ "model": "groq:openai/gpt-oss-120b",
+ "failed_units": [],
+ "rows": [
+  {
+   "unit": "5(1)(iv)(a)",
+   "group": "key",
+   "ref": "5(1)(iv)(a)",
+   "key_row": "N02",
+   "action": "apply Beneficial Owner as: natural person(s) with controlling ownership interest or who exercises control through other means",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": "high",
+   "hosted_verdict": "partial",
+   "hosted_issue": "weaker_threshold",
+   "hosted_gap": "weak_threshold",
+   "hosted_span": [
+    2552,
+    2851
+   ],
+   "hosted_rationale": "C1 matches definition but omits the required >10% threshold, making it weaker than the obligation."
+  },
+  {
+   "unit": "5(1)(iv)(b)",
+   "group": "key",
+   "ref": "5(1)(iv)(b)",
+   "key_row": "N-D02",
+   "action": "apply Beneficial Owner as: natural person(s) with ownership of more than 10 percent of capital or profits",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_threshold",
+   "tier": "review",
+   "hosted_verdict": "partial",
+   "hosted_issue": "weaker_threshold",
+   "hosted_gap": "weak_threshold",
+   "hosted_span": [
+    3233,
+    3678
+   ],
+   "hosted_rationale": "C1 addresses partnership firms but sets the ownership threshold at >5%, lower than the required >10%, so it only partially satisfies the obligation."
+  },
+  {
+   "unit": "5(1)(iv)(d)",
+   "group": "key",
+   "ref": "5(1)(iv)(d)",
+   "key_row": "N03",
+   "action": "apply Beneficial Owner as: identify author of trust",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_threshold",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No candidate control addresses trust customers, required 10% threshold, or identification of author, trustee, beneficiaries, or ultimate controllers."
+  },
+  {
+   "unit": "5(1)(xvii)",
+   "group": "key",
+   "ref": "5(1)(xvii)",
+   "key_row": "N04a",
+   "action": "apply Principal Officer as: a bank’s nominated officer at the management level, responsible for furnishing information as per rule 8 of the Rules.",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    11587,
+    11761
+   ],
+   "hosted_rationale": "C1 defines a management‑level officer nominated and responsible for furnishing information per rule 8, exactly matching the obligation’s definition."
+  },
+  {
+   "unit": "15",
+   "group": "key",
+   "ref": "15(1)",
+   "key_row": "N04a",
+   "action": "ensure compliance, monitor transactions, and share and report information",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    26283,
+    26452
+   ],
+   "hosted_rationale": "Control C1 mirrors the obligation text exactly, fulfilling the mandatory responsibilities for the Principal Officer."
+  },
+  {
+   "unit": "15",
+   "group": "key",
+   "ref": "15(2)",
+   "key_row": "N04b",
+   "action": "communicate the name, designation, address and contact details of the Principal Officer",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "review",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No candidate control requires communicating the Principal Officer's details to FIU-IND and RBI."
+  },
+  {
+   "unit": "41",
+   "group": "key",
+   "ref": "41",
+   "key_row": null,
+   "action": "align the extent of monitoring with the risk category of the customer",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    77834,
+    77915
+   ],
+   "hosted_rationale": "Control C1 directly mirrors the obligation wording."
+  },
+  {
+   "unit": "41",
+   "group": "key",
+   "ref": "41(1)",
+   "key_row": "N06",
+   "action": "put in place a system of periodic review of risk categorisation of accounts",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    78043,
+    78244
+   ],
+   "hosted_rationale": "C6 specifies the system, six‑month periodicity and EDD need."
+  },
+  {
+   "unit": "41",
+   "group": "key",
+   "ref": "41(1)",
+   "key_row": "N06",
+   "action": "establish the need for applying enhanced due diligence measures",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    78043,
+    78244
+   ],
+   "hosted_rationale": "C6 meets the periodic review and enhanced due diligence requirement."
+  },
+  {
+   "unit": "41",
+   "group": "key",
+   "ref": "41(2)",
+   "key_row": "N05",
+   "action": "closely monitor the transactions in accounts of marketing firms",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    78248,
+    78385
+   ],
+   "hosted_rationale": "C11 exactly requires close monitoring of MLM marketing firm accounts."
+  },
+  {
+   "unit": "41",
+   "group": "key",
+   "ref": "41(2)",
+   "key_row": "N05",
+   "action": "subject high-risk accounts to more intensified monitoring",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    77830,
+    78039
+   ],
+   "hosted_rationale": "C16 mandates intensified monitoring for high‑risk accounts, satisfying the requirement."
+  },
+  {
+   "unit": "41",
+   "group": "key",
+   "ref": "41(2)",
+   "key_row": "N05",
+   "action": "immediately report to RBI and other appropriate authorities such as FIU-IND",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    78245,
+    78832
+   ],
+   "hosted_rationale": "C19 includes the mandatory reporting clause for large cheque book and cash deposit patterns."
+  },
+  {
+   "unit": "42(1)",
+   "group": "key",
+   "ref": "42(1)",
+   "key_row": "N01",
+   "action": "adopt a risk-based approach for periodic updation of KYC",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "weaker_threshold",
+   "hosted_gap": "weak_threshold",
+   "hosted_span": [
+    78864,
+    79135
+   ],
+   "hosted_rationale": "Control provides risk‑based approach and up‑to‑date info for high‑risk customers but does not state the required two‑year update frequency."
+  },
+  {
+   "unit": "42(1)",
+   "group": "key",
+   "ref": "42(1)",
+   "key_row": "N01",
+   "action": "carry out periodic updation for high-risk customers",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No candidate control specifies a two‑year periodic KYC update for high‑risk customers."
+  },
+  {
+   "unit": "42(1)",
+   "group": "key",
+   "ref": "42(1)",
+   "key_row": "N01",
+   "action": "carry out periodic updation for medium risk customers",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    41688,
+    41963
+   ],
+   "hosted_rationale": "Control mandates at least an eight‑year update for medium‑risk customers, matching the obligation."
+  },
+  {
+   "unit": "42(1)",
+   "group": "key",
+   "ref": "42(1)",
+   "key_row": "N01",
+   "action": "carry out periodic updation for low-risk customers",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    41688,
+    41963
+   ],
+   "hosted_rationale": "Control requires a ten‑year update for low‑risk customers, satisfying the obligation."
+  },
+  {
+   "unit": "42(1)",
+   "group": "key",
+   "ref": "42(1)",
+   "key_row": "N01",
+   "action": "document its policy in this regard as part of the bank’s internal KYC policy",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": "review",
+   "hosted_verdict": "partial",
+   "hosted_issue": "optional_not_mandatory",
+   "hosted_gap": "weak_modality",
+   "hosted_span": [
+    45648,
+    45929
+   ],
+   "hosted_rationale": "Control mentions an internal KYC policy approved by the Board but frames it as optional and focuses on convenience rather than mandatory documentation."
+  },
+  {
+   "unit": "52",
+   "group": "key",
+   "ref": "52",
+   "key_row": "N-D03",
+   "action": "furnish information to the Director, Financial Intelligence Unit-India (FIU-IND)",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    105083,
+    105273
+   ],
+   "hosted_rationale": "Control C1 directly mirrors the obligation, specifying furnishing the Rule 3 information to FIU‑IND per Rule 7."
+  },
+  {
+   "unit": "68",
+   "group": "key",
+   "ref": "68",
+   "key_row": "N-D01",
+   "action": "strictly adhere to the instructions on opening of accounts and monitoring of transactions",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    130488,
+    130846
+   ],
+   "hosted_rationale": "C1 directly mirrors the obligation, stating strict adherence to account opening and monitoring to minimise money mules."
+  },
+  {
+   "unit": "68",
+   "group": "key",
+   "ref": "68",
+   "key_row": "N-D01",
+   "action": "undertake diligence measures and meticulous monitoring to identify accounts which are operated as Money Mules",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    130847,
+    131050
+   ],
+   "hosted_rationale": "C2 exactly repeats the required diligence, monitoring, and reporting to FIU‑IND."
+  },
+  {
+   "unit": "68",
+   "group": "key",
+   "ref": "68",
+   "key_row": "N-D01",
+   "action": "take appropriate action, including reporting of suspicious transactions to FIU-IND",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    130847,
+    131050
+   ],
+   "hosted_rationale": "C2 satisfies the duplicated requirement for diligence, monitoring, and FIU‑IND reporting."
+  },
+  {
+   "unit": "68",
+   "group": "key",
+   "ref": "68",
+   "key_row": "N-D01",
+   "action": "report suspicious transactions to FIU-IND",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "no_owner_or_evidence",
+   "hosted_gap": "design_deficiency",
+   "hosted_span": [
+    130963,
+    131050
+   ],
+   "hosted_rationale": "C8 mentions the required action and reporting but lacks an accountable owner."
+  },
+  {
+   "unit": "68",
+   "group": "key",
+   "ref": "68",
+   "key_row": "N-D01",
+   "action": "fail to file STR if an account opened and operated is that of a Money Mule",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    131246,
+    131458
+   ],
+   "hosted_rationale": "C12 restates the non‑filing consequence, matching the must‑not requirement."
+  },
+  {
+   "unit": "68",
+   "group": "key",
+   "ref": "68",
+   "key_row": "N-D01",
+   "action": "comply with these directions",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    131246,
+    131458
+   ],
+   "hosted_rationale": "C12 restates the non‑filing consequence, matching the must requirement."
+  },
+  {
+   "unit": "2",
+   "group": "gap",
+   "ref": "2",
+   "key_row": null,
+   "action": "comply with these directions",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "high",
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    236796,
+    237439
+   ],
+   "hosted_rationale": "C4 mentions RBI directives automatically become part of policy, but only within the policy period and without stating immediate effect upon website posting."
+  },
+  {
+   "unit": "5(1)(xiv)(b)",
+   "group": "gap",
+   "ref": "5(1)(xiv)(b)",
+   "key_row": null,
+   "action": "apply Officially Valid Document as: utility bill which is not more than two months old of any service provider (electricity, telephone, post-paid mobile phone, piped gas, water bill)",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "unspecified",
+   "tier": "review",
+   "hosted_verdict": "partial",
+   "hosted_issue": "weaker_threshold",
+   "hosted_gap": "weak_threshold",
+   "hosted_span": [
+    9350,
+    9554
+   ],
+   "hosted_rationale": "C1 matches the deeming rule but omits the required two‑month freshness threshold, so the obligation is only partially satisfied."
+  },
+  {
+   "unit": "6",
+   "group": "gap",
+   "ref": "6(1)",
+   "key_row": null,
+   "action": "have a KYC policy",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    26613,
+    26670
+   ],
+   "hosted_rationale": "Control C3 references compliance through a KYC Policy, confirming the bank has an established policy."
+  },
+  {
+   "unit": "6",
+   "group": "gap",
+   "ref": "6(1)",
+   "key_row": null,
+   "action": "duly approve the KYC policy",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "high",
+   "hosted_verdict": "partial",
+   "hosted_issue": "optional_not_mandatory",
+   "hosted_gap": "weak_modality",
+   "hosted_span": [
+    45648,
+    45929
+   ],
+   "hosted_rationale": "C7 mentions the KYC policy is duly approved by the Board, but uses optional language."
+  },
+  {
+   "unit": "6",
+   "group": "gap",
+   "ref": "6(2)",
+   "key_row": null,
+   "action": "include following four key elements",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    25758,
+    25817
+   ],
+   "hosted_rationale": "C8 explicitly states the policy includes the four required key elements."
+  },
+  {
+   "unit": "6",
+   "group": "gap",
+   "ref": "6(3)(i)",
+   "key_row": null,
+   "action": "include Periodic updation of KYC",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    41688,
+    41963
+   ],
+   "hosted_rationale": "C12 defines periodic KYC updation frequencies, satisfying the requirement."
+  },
+  {
+   "unit": "6",
+   "group": "gap",
+   "ref": "6(3)(ii)",
+   "key_row": null,
+   "action": "include Any exceptional measures for KYC updation",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    88474,
+    88705
+   ],
+   "hosted_rationale": "C15 lists exceptional measures such as recent photograph and physical presence."
+  },
+  {
+   "unit": "6",
+   "group": "gap",
+   "ref": "6(3)(iii)",
+   "key_row": null,
+   "action": "include Obtaining a copy of OVD or deemed OVD",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    83899,
+    84154
+   ],
+   "hosted_rationale": "C18 requires obtaining OVD or deemed OVD for address proof during updation."
+  },
+  {
+   "unit": "6",
+   "group": "gap",
+   "ref": "6(3)(iv)",
+   "key_row": null,
+   "action": "include Providing facility of updation / periodic updation of KYC at any branch",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    82031,
+    82178
+   ],
+   "hosted_rationale": "C23 allows KYC updation to be performed at any branch."
+  },
+  {
+   "unit": "6",
+   "group": "gap",
+   "ref": "6(4)(i)",
+   "key_row": null,
+   "action": "have Policies approved by the Board detailing a robust due diligence process",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    61848,
+    62393
+   ],
+   "hosted_rationale": "C26 confirms a board‑approved policy with robust due‑diligence for mobile number changes in non‑face‑to‑face accounts."
+  },
+  {
+   "unit": "6",
+   "group": "gap",
+   "ref": "6(4)(ii)",
+   "key_row": null,
+   "action": "have Policy approved by the Board or a committee headed by the Chairman / CEO / MD",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    133088,
+    133313
+   ],
+   "hosted_rationale": "C30 provides a board‑approved policy for parameters and post‑facto approval of correspondent banking relationships."
+  },
+  {
+   "unit": "16",
+   "group": "gap",
+   "ref": "16",
+   "key_row": null,
+   "action": "frame a Customer Acceptance Policy",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "missing_control",
+   "tier": "review",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No candidate control requires the bank to create or frame a Customer Acceptance Policy; they only reference an existing policy."
+  },
+  {
+   "unit": "17",
+   "group": "gap",
+   "ref": "17(1)",
+   "key_row": null,
+   "action": "not open any account in an anonymous or fictitious / benami name",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    31496,
+    31888
+   ],
+   "hosted_rationale": "Control explicitly forbids opening accounts in anonymous or fictitious/benami names, matching the obligation fully."
+  },
+  {
+   "unit": "17",
+   "group": "gap",
+   "ref": "17(2)",
+   "key_row": null,
+   "action": "open no account where it is unable to apply appropriate CDD measures",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "review",
+   "hosted_verdict": "partial",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": [
+    31496,
+    31888
+   ],
+   "hosted_rationale": "C1 covers inability to apply CDD but does not mention the required STR filing."
+  },
+  {
+   "unit": "17",
+   "group": "gap",
+   "ref": "17(2)",
+   "key_row": null,
+   "action": "consider filing an STR, if necessary, when it is unable to comply with the relevant CDD measures in relation to the customer",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "review",
+   "hosted_verdict": "partial",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": [
+    31496,
+    31888
+   ],
+   "hosted_rationale": "Same as O2; control lacks the STR filing requirement."
+  },
+  {
+   "unit": "17",
+   "group": "gap",
+   "ref": "17(3)",
+   "key_row": null,
+   "action": "not undertake a transaction or commence an account-based relationship without following the CDD procedure",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    32838,
+    33281
+   ],
+   "hosted_rationale": "Control states no transaction or relationship is undertaken without following the CDD procedure."
+  },
+  {
+   "unit": "17",
+   "group": "gap",
+   "ref": "17(4)",
+   "key_row": null,
+   "action": "specify the mandatory information to be sought for KYC purposes while opening an account and during the periodic updation",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    33282,
+    33412
+   ],
+   "hosted_rationale": "Control specifies the mandatory KYC information required at opening and during periodic updates."
+  },
+  {
+   "unit": "17",
+   "group": "gap",
+   "ref": "17(5)",
+   "key_row": null,
+   "action": "obtain additional information, where its internal KYC Policy has not specified such information requirement, with the explicit consent of the customer",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    23109,
+    23287
+   ],
+   "hosted_rationale": "Control requires obtaining additional information with explicit customer consent when not specified in policy."
+  },
+  {
+   "unit": "17",
+   "group": "gap",
+   "ref": "17(6)",
+   "key_row": null,
+   "action": "apply the CDD procedure at the UCIC level",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    33533,
+    33844
+   ],
+   "hosted_rationale": "Control mandates applying CDD at UCIC level and exempts fresh CDD for existing compliant customers."
+  },
+  {
+   "unit": "17",
+   "group": "gap",
+   "ref": "17(7)",
+   "key_row": null,
+   "action": "follow the CDD Procedure for all the joint account holders, while opening a joint account",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    33845,
+    33939
+   ],
+   "hosted_rationale": "Control requires CDD procedure for all joint account holders when opening a joint account."
+  },
+  {
+   "unit": "17",
+   "group": "gap",
+   "ref": "17(8)",
+   "key_row": null,
+   "action": "clearly spell out the circumstances in which a customer is permitted to act on behalf of another person / entity",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    33940,
+    34055
+   ],
+   "hosted_rationale": "Control clearly spells out circumstances where a customer may act on behalf of another entity."
+  },
+  {
+   "unit": "17",
+   "group": "gap",
+   "ref": "17(9)",
+   "key_row": null,
+   "action": "put in place a suitable system to ensure that the identity of the customer does not match with any person or entity, whose name appears in the sanctions lists indicated in Chapter IX of these Directions",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    34059,
+    34307
+   ],
+   "hosted_rationale": "Control puts a suitable system in place to prevent matches with sanctioned persons/entities."
+  },
+  {
+   "unit": "17",
+   "group": "gap",
+   "ref": "17(10)",
+   "key_row": null,
+   "action": "verify the Permanent Account Number (PAN) (if obtained) from the verification facility of the issuing authority",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    34311,
+    34444
+   ],
+   "hosted_rationale": "Control mandates verification of PAN through the issuing authority's verification facility."
+  },
+  {
+   "unit": "17",
+   "group": "gap",
+   "ref": "17(11)",
+   "key_row": null,
+   "action": "verify the customer’s digital signature on the equivalent e-document (if obtained) as per the provisions of the Information Technology Act, 2000 (21 of 2000)",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    34445,
+    34625
+   ],
+   "hosted_rationale": "Control requires verification of digital signature on e‑documents per the IT Act provisions."
+  },
+  {
+   "unit": "17",
+   "group": "gap",
+   "ref": "17(12)",
+   "key_row": null,
+   "action": "verify the Goods and Services Tax (GST) number from the search / verification facility of the issuing authority, where the GST details are available",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    35713,
+    35867
+   ],
+   "hosted_rationale": "Control directs verification of GST number via the issuing authority's search/verification facility."
+  },
+  {
+   "unit": "18",
+   "group": "gap",
+   "ref": "18",
+   "key_row": null,
+   "action": "result in denial of a banking / financial facility",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    36355,
+    36560
+   ],
+   "hosted_rationale": "Control mirrors requirement but omits Persons with Disabilities, narrowing the scope."
+  },
+  {
+   "unit": "18",
+   "group": "gap",
+   "ref": "18",
+   "key_row": null,
+   "action": "reject an application for onboarding or periodic updation of KYC without application of mind",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No candidate control addresses rejection of onboarding or KYC updates without applying mind."
+  },
+  {
+   "unit": "18",
+   "group": "gap",
+   "ref": "18",
+   "key_row": null,
+   "action": "duly record the reason(s) for rejection",
+   "level": "sop_system",
+   "local_verdict": "missing",
+   "local_gap": "missing_control",
+   "tier": "review",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No control requires the officer to record reasons for rejection."
+  },
+  {
+   "unit": "19",
+   "group": "gap",
+   "ref": "19",
+   "key_row": null,
+   "action": "pursue the CDD process",
+   "level": "policy",
+   "local_verdict": "missing",
+   "local_gap": "missing_control",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    36111,
+    36350
+   ],
+   "hosted_rationale": "C1 exactly mirrors the mandatory requirement to not pursue CDD and file an STR with FIU-IND when tip‑off risk exists."
+  },
+  {
+   "unit": "40",
+   "group": "gap",
+   "ref": "40",
+   "key_row": null,
+   "action": "monitor the following types of transactions",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    76928,
+    77073
+   ],
+   "hosted_rationale": "Control repeats the exact wording of the obligation, confirming required monitoring of transaction types."
+  },
+  {
+   "unit": "40",
+   "group": "gap",
+   "ref": "40(1)",
+   "key_row": null,
+   "action": "monitor large and complex transactions including RTGS transactions",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    77074,
+    77302
+   ],
+   "hosted_rationale": "Exact match to the mandatory description of large, complex, unusual RTGS transactions."
+  },
+  {
+   "unit": "40",
+   "group": "gap",
+   "ref": "40(1)",
+   "key_row": null,
+   "action": "monitor transactions with unusual patterns",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    77074,
+    77302
+   ],
+   "hosted_rationale": "Control C6 fully satisfies the repeated obligation wording."
+  },
+  {
+   "unit": "40",
+   "group": "gap",
+   "ref": "40(1)",
+   "key_row": null,
+   "action": "monitor transactions inconsistent with the normal and expected activity of the customer",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    77074,
+    77302
+   ],
+   "hosted_rationale": "Control C6 meets the mandatory requirement for monitoring large, complex transactions."
+  },
+  {
+   "unit": "40",
+   "group": "gap",
+   "ref": "40(1)",
+   "key_row": null,
+   "action": "monitor transactions which have no apparent economic rationale or legitimate purpose",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    77074,
+    77302
+   ],
+   "hosted_rationale": "Control C6 addresses the same mandatory monitoring need as O5."
+  },
+  {
+   "unit": "40",
+   "group": "gap",
+   "ref": "40(2)",
+   "key_row": null,
+   "action": "monitor transactions which exceed the thresholds prescribed for specific categories of accounts",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    77306,
+    77394
+   ],
+   "hosted_rationale": "Control C3 exactly mirrors the obligation on threshold‑exceeding transactions."
+  },
+  {
+   "unit": "40",
+   "group": "gap",
+   "ref": "40(3)",
+   "key_row": null,
+   "action": "monitor high account turnover inconsistent with the size of the balance maintained",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    77398,
+    77473
+   ],
+   "hosted_rationale": "Control C13 directly states the required high turnover inconsistency condition."
+  },
+  {
+   "unit": "40",
+   "group": "gap",
+   "ref": "40(4)",
+   "key_row": null,
+   "action": "monitor deposit of third-party cheques, drafts, etc. in the existing and newly opened accounts followed by cash withdrawals for large amounts",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    230962,
+    231046
+   ],
+   "hosted_rationale": "C19 includes third‑party cheque deposits and immediate cash withdrawals, satisfying the obligation."
+  },
+  {
+   "unit": "40",
+   "group": "gap",
+   "ref": "40(4)",
+   "key_row": null,
+   "action": "consider adopting appropriate innovations including artificial intelligence and machine learning (AI and ML) technologies to support effective monitoring",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "stricter_than_required",
+   "hosted_gap": null,
+   "hosted_span": [
+    77615,
+    77829
+   ],
+   "hosted_rationale": "Control makes adoption of AI/ML mandatory, stricter than the optional obligation but still satisfies it."
+  },
+  {
+   "unit": "22",
+   "group": "gap",
+   "ref": "22(1)",
+   "key_row": null,
+   "action": "rely on customer due diligence done by a third party",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    49726,
+    49903
+   ],
+   "hosted_rationale": "C1 explicitly requires immediate obtainment of third‑party CDD records from the party or Central KYC Registry, satisfying the obligation."
+  },
+  {
+   "unit": "22",
+   "group": "gap",
+   "ref": "22(1)",
+   "key_row": null,
+   "action": "obtain the records or information of the customer due diligence",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_threshold",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    49726,
+    49903
+   ],
+   "hosted_rationale": "C1 meets the “immediately” threshold for obtaining third‑party CDD records, fully satisfying the requirement."
+  },
+  {
+   "unit": "22",
+   "group": "gap",
+   "ref": "22(2)",
+   "key_row": null,
+   "action": "take adequate steps to satisfy itself that the third party will make copies",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    51015,
+    51267
+   ],
+   "hosted_rationale": "C3 mandates adequate steps to ensure copies of identification data are available from the third party on request without delay, meeting the requirement."
+  },
+  {
+   "unit": "22",
+   "group": "gap",
+   "ref": "22(3)",
+   "key_row": null,
+   "action": "have measures in place for compliance with customer due diligence",
+   "level": "not_applicable",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    51273,
+    51498
+   ],
+   "hosted_rationale": "C10 confirms the third party is regulated, supervised and has measures for CDD and record‑keeping per the PML Act, fulfilling the obligation."
+  },
+  {
+   "unit": "22",
+   "group": "gap",
+   "ref": "22(4)",
+   "key_row": null,
+   "action": "ensure that the third party is not based in a country or jurisdiction",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    51503,
+    51589
+   ],
+   "hosted_rationale": "C15 states the third party must not be based in a high‑risk jurisdiction, directly satisfying the requirement."
+  },
+  {
+   "unit": "22",
+   "group": "gap",
+   "ref": "22(5)",
+   "key_row": null,
+   "action": "have the ultimate responsibility for customer due diligence",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    50466,
+    50607
+   ],
+   "hosted_rationale": "C14 assigns ultimate responsibility for CDD and enhanced due diligence to the bank, matching the obligation."
+  },
+  {
+   "unit": "27(1)(i)",
+   "group": "gap",
+   "ref": "27(1)(i)",
+   "key_row": null,
+   "action": "have complied with the RBI guidelines on minimum baseline cyber security and resilience framework for banks",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_threshold",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No candidate control references RBI cyber security baseline or its updates."
+  },
+  {
+   "unit": "27(1)(i)",
+   "group": "gap",
+   "ref": "27(1)(i)",
+   "key_row": null,
+   "action": "house the technology infrastructure in its own premises",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    64739,
+    65064
+   ],
+   "hosted_rationale": "C6 ensures V-CIP originates from bank domain but does not address housing infrastructure on premises."
+  },
+  {
+   "unit": "27(1)(i)",
+   "group": "gap",
+   "ref": "27(1)(i)",
+   "key_row": null,
+   "action": "have the V-CIP connection and interaction originate from its own secured network domain",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    64739,
+    65064
+   ],
+   "hosted_rationale": "C6 explicitly requires V-CIP connection to originate from the bank’s secured network domain."
+  },
+  {
+   "unit": "27(1)(i)",
+   "group": "gap",
+   "ref": "27(1)(i)",
+   "key_row": null,
+   "action": "comply with relevant RBI guidelines for any technology related outsourcing for the process",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_threshold",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No control mentions compliance of technology outsourcing with RBI guidelines."
+  },
+  {
+   "unit": "27(1)(i)",
+   "group": "gap",
+   "ref": "27(1)(i)",
+   "key_row": null,
+   "action": "ensure ownership of data in the cloud deployment model rests with the bank only",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No control ensures data ownership in cloud or immediate transfer after V-CIP."
+  },
+  {
+   "unit": "27(1)(i)",
+   "group": "gap",
+   "ref": "27(1)(i)",
+   "key_row": null,
+   "action": "transfer all data including video recording to the bank’s exclusively owned / leased server(s) including cloud server, if any, immediately after the V-CIP process is completed",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No control addresses the immediate post‑V‑CIP data transfer requirement."
+  },
+  {
+   "unit": "27(1)(i)",
+   "group": "gap",
+   "ref": "27(1)(i)",
+   "key_row": null,
+   "action": "retain any data",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No control prohibits cloud provider from retaining any V‑CIP data."
+  },
+  {
+   "unit": "26",
+   "group": "gap",
+   "ref": "26",
+   "key_row": null,
+   "action": "undertake V-CIP to carry out",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    62398,
+    62639
+   ],
+   "hosted_rationale": "Control explicitly allows V-CIP, matching the optional obligation."
+  },
+  {
+   "unit": "26",
+   "group": "gap",
+   "ref": "26(1)",
+   "key_row": null,
+   "action": "obtain the equivalent e-document of the activity proofs",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "stricter_than_required",
+   "hosted_gap": null,
+   "hosted_span": [
+    69226,
+    69540
+   ],
+   "hosted_rationale": "Control mandates two equivalent e-documents for proprietorship CDD, exceeding the single document requirement."
+  },
+  {
+   "unit": "26",
+   "group": "gap",
+   "ref": "26(1)",
+   "key_row": null,
+   "action": "undertake CDD of the proprietor",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "stricter_than_required",
+   "hosted_gap": null,
+   "hosted_span": [
+    69226,
+    69540
+   ],
+   "hosted_rationale": "Same as O2; control is stricter but satisfies the mandatory requirement."
+  },
+  {
+   "unit": "27(1)(ii)",
+   "group": "gap",
+   "ref": "27(1)(ii)",
+   "key_row": null,
+   "action": "ensure end-to-end encryption of data between customer device and the hosting point of the V-CIP application",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "partial",
+   "hosted_issue": "weaker_threshold",
+   "hosted_gap": "weak_threshold",
+   "hosted_span": [
+    64207,
+    64442
+   ],
+   "hosted_rationale": "C2 mandates end‑to‑end encryption but does not specify encryption standards required by O1."
+  },
+  {
+   "unit": "27(1)(ii)",
+   "group": "gap",
+   "ref": "27(1)(ii)",
+   "key_row": null,
+   "action": "record the customer consent in an auditable and alteration-proof manner",
+   "level": "policy",
+   "local_verdict": "missing",
+   "local_gap": "missing_control",
+   "tier": "high",
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    84244,
+    84560
+   ],
+   "hosted_rationale": "C8 records self‑declarations electronically, covering consent only in limited BC‑driven scenarios, not the full auditable, alteration‑proof requirement."
+  },
+  {
+   "unit": "27(1)(iii)",
+   "group": "gap",
+   "ref": "27(1)(iii)",
+   "key_row": null,
+   "action": "adhere to the following minimum standards",
+   "level": "policy",
+   "local_verdict": "missing",
+   "local_gap": "missing_control",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No candidate control addresses preventing connections from IPs outside India or spoofed IPs."
+  },
+  {
+   "unit": "27(1)(v)",
+   "group": "gap",
+   "ref": "27(1)(v)",
+   "key_row": null,
+   "action": "take due cognizance of special needs of the customer",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No control mentions special needs or liveness‑check context, so the requirement is unaddressed."
+  },
+  {
+   "unit": "27(1)(vii)",
+   "group": "gap",
+   "ref": "27(1)(vii)",
+   "key_row": null,
+   "action": "regularly update the technology infrastructure including application software as well as workflows",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_threshold",
+   "tier": "high",
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    65190,
+    65415
+   ],
+   "hosted_rationale": "C1 mentions using latest technology but does not mandate regular updates of infrastructure or workflows as required."
+  },
+  {
+   "unit": "27(1)(vii)",
+   "group": "gap",
+   "ref": "27(1)(vii)",
+   "key_row": null,
+   "action": "report any detected case of forged identity through V-CIP as a cyber event under extant regulatory guidelines",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "review",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No candidate control requires reporting forged identity cases via V‑CIP as a cyber event."
+  },
+  {
+   "unit": "27(1)(viii)",
+   "group": "gap",
+   "ref": "27(1)(viii)",
+   "key_row": null,
+   "action": "subject V-CIP infrastructure to necessary tests",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    64565,
+    64738
+   ],
+   "hosted_rationale": "C1 mandates a security audit before rollout but omits periodic vulnerability assessments and penetration testing required by O1."
+  },
+  {
+   "unit": "27(1)(viii)",
+   "group": "gap",
+   "ref": "27(1)(viii)",
+   "key_row": null,
+   "action": "mitigate any critical gap reported under this process",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "weaker_threshold",
+   "hosted_gap": "weak_threshold",
+   "hosted_span": [
+    114116,
+    114238
+   ],
+   "hosted_rationale": "C11 calls for corrective steps on discrepancies, but does not explicitly require mitigation of critical gaps before rollout as O2 demands."
+  },
+  {
+   "unit": "27(1)(viii)",
+   "group": "gap",
+   "ref": "27(1)(viii)",
+   "key_row": null,
+   "action": "conduct such tests",
+   "level": "policy",
+   "local_verdict": "missing",
+   "local_gap": "missing_control",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No candidate control specifies that CERT‑In empanelled auditors must conduct the required tests."
+  },
+  {
+   "unit": "27(1)(ix)",
+   "group": "gap",
+   "ref": "27(1)(ix)",
+   "key_row": null,
+   "action": "subject V-CIP application software and relevant APIs / webservices to appropriate testing of functional, performance, and maintenance strength",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_threshold",
+   "tier": "high",
+   "hosted_verdict": "partial",
+   "hosted_issue": "weaker_threshold",
+   "hosted_gap": "weak_threshold",
+   "hosted_span": [
+    64565,
+    64738
+   ],
+   "hosted_rationale": "C1 requires a software audit before rollout, but only cites security and robustness, not functional, performance, or maintenance testing required by O1."
+  },
+  {
+   "unit": "27(2)(i)",
+   "group": "gap",
+   "ref": "27(2)(i)",
+   "key_row": null,
+   "action": "formulate a clear workflow and standard operating procedure for V-CIP",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    62398,
+    62639
+   ],
+   "hosted_rationale": "C5 mentions adherence to stipulations for live V-CIP but does not define a complete workflow or SOP for V-CIP."
+  },
+  {
+   "unit": "27(2)(i)",
+   "group": "gap",
+   "ref": "27(2)(i)",
+   "key_row": null,
+   "action": "be operated only by officials of the bank specially trained for this purpose",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    64739,
+    65064
+   ],
+   "hosted_rationale": "C6 explicitly states the V‑CIP process shall be operated by officials specifically trained for this purpose."
+  },
+  {
+   "unit": "27(2)(i)",
+   "group": "gap",
+   "ref": "27(2)(i)",
+   "key_row": null,
+   "action": "be capable to carry out liveness check and detect any other fraudulent manipulation or suspicious conduct of the customer and act upon it",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "partial",
+   "hosted_issue": "weaker_threshold",
+   "hosted_gap": "weak_threshold",
+   "hosted_span": [
+    64443,
+    64560
+   ],
+   "hosted_rationale": "C9 requires a liveliness check but does not mandate official capability or required response actions."
+  },
+  {
+   "unit": "27(2)(i)",
+   "group": "gap",
+   "ref": "27(2)(i)",
+   "key_row": null,
+   "action": "result in exclusion of person with special needs",
+   "level": "policy",
+   "local_verdict": "missing",
+   "local_gap": "missing_control",
+   "tier": "high",
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    36355,
+    36560
+   ],
+   "hosted_rationale": "C14 prohibits denial to disadvantaged persons, aligning with non‑exclusion but does not reference liveness checks specifically."
+  },
+  {
+   "unit": "27(2)(v)",
+   "group": "gap",
+   "ref": "27(2)(v)",
+   "key_row": null,
+   "action": "factor in the fact that the V-CIP customer is an existing or new customer",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "Controls do not address factoring customer status, prior rejection, or negative list in workflow."
+  },
+  {
+   "unit": "27(2)(vi)",
+   "group": "gap",
+   "ref": "27(2)(vi)",
+   "key_row": null,
+   "action": "record audio and video as well as capture a photograph of the customer present for identification",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "partial",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": [
+    62640,
+    63027
+   ],
+   "hosted_rationale": "C1 records video and captures a photograph and specifies ID methods, but does not address the mandatory audio recording required by the obligation."
+  },
+  {
+   "unit": "27(2)(ix)",
+   "group": "gap",
+   "ref": "27(2)(ix)",
+   "key_row": null,
+   "action": "undertake video process of the V-CIP",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_threshold",
+   "tier": "high",
+   "hosted_verdict": "partial",
+   "hosted_issue": "weaker_threshold",
+   "hosted_gap": "weak_threshold",
+   "hosted_span": [
+    63842,
+    64053
+   ],
+   "hosted_rationale": "C1 cites a three‑day limit but only for XML/QR generation date, not the video V‑CIP timing, thus only partially meeting the obligation."
+  },
+  {
+   "unit": "27(2)(x)",
+   "group": "gap",
+   "ref": "27(2)(x)",
+   "key_row": null,
+   "action": "capture suitable records of the current address",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    97214,
+    97372
+   ],
+   "hosted_rationale": "C3 requires obtaining current address proof and positive confirmation, satisfying the need to capture suitable records when address differs."
+  },
+  {
+   "unit": "27(2)(x)",
+   "group": "gap",
+   "ref": "27(2)(x)",
+   "key_row": null,
+   "action": "confirm the economic and financial profile / information submitted by the customer",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No candidate control addresses confirming the customer's economic and financial profile in the V-CIP process."
+  },
+  {
+   "unit": "27(3)",
+   "group": "gap",
+   "ref": "27(3)(i)",
+   "key_row": null,
+   "action": "store the entire data and recordings of V-CIP",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No candidate control specifies that V‑CIP data must be stored in systems located in India."
+  },
+  {
+   "unit": "27(3)",
+   "group": "gap",
+   "ref": "27(3)(i)",
+   "key_row": null,
+   "action": "ensure that the video recording is stored in a safe and secure manner",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    65069,
+    65184
+   ],
+   "hosted_rationale": "Control ensures safe storage and timestamp but does not mention easy historical search capability."
+  },
+  {
+   "unit": "27(3)",
+   "group": "gap",
+   "ref": "27(3)(i)",
+   "key_row": null,
+   "action": "bear the date and time stamp that affords easy historical data search",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    65069,
+    65184
+   ],
+   "hosted_rationale": "Control provides timestamp but lacks the requirement for easy historical data search."
+  },
+  {
+   "unit": "27(3)",
+   "group": "gap",
+   "ref": "27(3)(ii)",
+   "key_row": null,
+   "action": "preserve the activity log along with the credentials of the official performing the V-CIP",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    64739,
+    65064
+   ],
+   "hosted_rationale": "Control explicitly states preservation of activity log with official credentials, meeting the obligation."
+  },
+  {
+   "unit": "29",
+   "group": "gap",
+   "ref": "29",
+   "key_row": null,
+   "action": "complete the full KYC verification for the concerned account",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    44516,
+    44997
+   ],
+   "hosted_rationale": "C5 addresses periodic KYC expiry but does not state that KYC completed at one branch is valid at another, so only part of the obligation is met."
+  },
+  {
+   "unit": "35",
+   "group": "gap",
+   "ref": "35",
+   "key_row": null,
+   "action": "obtain the certified copies of each of the following documents",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "unspecified",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    72386,
+    72532
+   ],
+   "hosted_rationale": "Control C1 mirrors the obligation text exactly, covering the trust‑account document requirement."
+  },
+  {
+   "unit": "42(2)",
+   "group": "gap",
+   "ref": "42(2)",
+   "key_row": null,
+   "action": "ensure the updation of KYC",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    82734,
+    82999
+   ],
+   "hosted_rationale": "C1 mirrors the obligation verbatim, allowing all transactions and KYC update within the required one‑year window or June 30 2026."
+  },
+  {
+   "unit": "42(2)",
+   "group": "gap",
+   "ref": "42(2)",
+   "key_row": null,
+   "action": "subject accounts of such customers to regular monitoring",
+   "level": "sop_system",
+   "local_verdict": "partial",
+   "local_gap": "weak_threshold",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    76592,
+    76775
+   ],
+   "hosted_rationale": "C6 requires ongoing due‑diligence of customers, providing regular monitoring of low‑risk accounts as mandated."
+  },
+  {
+   "unit": "42(3)(i)",
+   "group": "gap",
+   "ref": "42(3)(i)",
+   "key_row": null,
+   "action": "obtain a self-declaration from the customer",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    81657,
+    82030
+   ],
+   "hosted_rationale": "C3 explicitly permits self‑declaration via email, mobile, ATMs, digital channels and letter, matching the mandatory requirement."
+  },
+  {
+   "unit": "42(3)(iv)",
+   "group": "gap",
+   "ref": "42(3)(iv)",
+   "key_row": null,
+   "action": "obtain self-declaration from customer",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    84244,
+    84560
+   ],
+   "hosted_rationale": "C1 explicitly permits obtaining self‑declaration via an authorised BC for no‑change or address‑only cases."
+  },
+  {
+   "unit": "42(3)(iv)",
+   "group": "gap",
+   "ref": "42(3)(iv)",
+   "key_row": null,
+   "action": "enable BC systems for recording self-declarations",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    84244,
+    84560
+   ],
+   "hosted_rationale": "C1 states the bank must enable BC systems to record self‑declarations electronically."
+  },
+  {
+   "unit": "42(3)(iv)",
+   "group": "gap",
+   "ref": "42(3)(iv)",
+   "key_row": null,
+   "action": "obtain self-declaration in electronic mode from customer",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    84561,
+    84764
+   ],
+   "hosted_rationale": "C6 matches the mandatory electronic collection through BC after biometric e‑KYC."
+  },
+  {
+   "unit": "42(3)(iv)",
+   "group": "gap",
+   "ref": "42(3)(iv)",
+   "key_row": null,
+   "action": "update customer’s KYC records and intimate customer",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "review",
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    84765,
+    85351
+   ],
+   "hosted_rationale": "C7 updates KYC and intimates customer but cites paragraph 38(c) instead of clause 5 para 42."
+  },
+  {
+   "unit": "42(3)(iv)",
+   "group": "gap",
+   "ref": "42(3)(iv)",
+   "key_row": null,
+   "action": "authenticate self-declaration and supporting documents",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    84765,
+    85351
+   ],
+   "hosted_rationale": "C7 requires BC to authenticate in‑person self‑declaration and forward it to the branch."
+  },
+  {
+   "unit": "42(3)(iv)",
+   "group": "gap",
+   "ref": "42(3)(iv)",
+   "key_row": null,
+   "action": "forward self-declaration to concerned bank branch",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    84765,
+    85351
+   ],
+   "hosted_rationale": "C7 requires BC to authenticate in‑person self‑declaration and forward it to the branch."
+  },
+  {
+   "unit": "42(3)(iv)",
+   "group": "gap",
+   "ref": "42(3)(iv)",
+   "key_row": null,
+   "action": "provide customer acknowledgment of receipt",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    84765,
+    85351
+   ],
+   "hosted_rationale": "C7 mandates BC to give the customer an acknowledgment of receipt."
+  },
+  {
+   "unit": "42(4)",
+   "group": "gap",
+   "ref": "42(4)(i)",
+   "key_row": null,
+   "action": "obtain a self-declaration from the LE customer",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    81657,
+    82030
+   ],
+   "hosted_rationale": "C4 explicitly lists email, mobile, ATMs, digital channels, letter and board resolution for self‑declaration on no KYC change, matching O1's requirements."
+  },
+  {
+   "unit": "42(4)",
+   "group": "gap",
+   "ref": "42(4)(i)",
+   "key_row": null,
+   "action": "ensure Beneficial Ownership information is accurate",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    86579,
+    87095
+   ],
+   "hosted_rationale": "C2 covers email, letter and board resolution but omits ATMs and digital channels required by O2; still addresses the core self‑declaration step."
+  },
+  {
+   "unit": "42(4)",
+   "group": "gap",
+   "ref": "42(4)(i)",
+   "key_row": null,
+   "action": "update the Beneficial Ownership information",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "covered",
+   "hosted_issue": "stricter_than_required",
+   "hosted_gap": null,
+   "hosted_span": [
+    81657,
+    82030
+   ],
+   "hosted_rationale": "C4 obtains self‑declaration in all cases, exceeding O3's optional‑if‑required threshold, thus satisfying the obligation more strictly."
+  },
+  {
+   "unit": "42(4)",
+   "group": "gap",
+   "ref": "42(4)(ii)",
+   "key_row": null,
+   "action": "undertake the KYC process equivalent to that applicable for onboarding a new LE customer",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    87096,
+    87276
+   ],
+   "hosted_rationale": "C8 mirrors O4 exactly, requiring the same KYC process for changed information as for a new Legal Entity onboarding."
+  },
+  {
+   "unit": "43",
+   "group": "gap",
+   "ref": "43",
+   "key_row": null,
+   "action": "obtain the PAN or equivalent e-document thereof or Form No. 60",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    93902,
+    94247
+   ],
+   "hosted_rationale": "C1 explicitly requires obtaining PAN/e‑document or Form 60 from existing customers by the notified date."
+  },
+  {
+   "unit": "43",
+   "group": "gap",
+   "ref": "43",
+   "key_row": null,
+   "action": "give the customer an accessible notice and a reasonable opportunity to be heard",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    94281,
+    94444
+   ],
+   "hosted_rationale": "C6 mandates giving an accessible notice and hearing opportunity before temporary cessation."
+  },
+  {
+   "unit": "43",
+   "group": "gap",
+   "ref": "43",
+   "key_row": null,
+   "action": "include, in its internal policy, appropriate relaxation(s) for continued operation of accounts",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    46868,
+    47072
+   ],
+   "hosted_rationale": "C13 states a relaxation for customers unable to provide KYC documents due to injury, illness or old age."
+  },
+  {
+   "unit": "43",
+   "group": "gap",
+   "ref": "43",
+   "key_row": null,
+   "action": "subject such accounts to enhanced monitoring",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "high",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    46868,
+    47072
+   ],
+   "hosted_rationale": "C13 provides the required relaxation for customers unable to supply PAN/e‑document because of injury, illness or old age."
+  },
+  {
+   "unit": "43",
+   "group": "gap",
+   "ref": "43",
+   "key_row": null,
+   "action": "close the account and all obligations due in relation to the account shall be appropriately settled after establishing the identity of the customer by obtaining the identification documents as applicable to the customer",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    94895,
+    95345
+   ],
+   "hosted_rationale": "C5 requires closing the account after written refusal and verifying identity with other ID documents."
+  },
+  {
+   "unit": "48",
+   "group": "gap",
+   "ref": "48(1)",
+   "key_row": null,
+   "action": "open a Non-Resident Ordinary (NRO) bank account",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    100875,
+    101209
+   ],
+   "hosted_rationale": "C1 mirrors the obligation text exactly, meeting all required documents and optional opening condition."
+  },
+  {
+   "unit": "48",
+   "group": "gap",
+   "ref": "48(1)",
+   "key_row": null,
+   "action": "obtain a declaration about the local address",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_threshold",
+   "tier": "high",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    101213,
+    101371
+   ],
+   "hosted_rationale": "C6 specifies declaration and verification within 30 days, satisfying the timing and verification requirement."
+  },
+  {
+   "unit": "48",
+   "group": "gap",
+   "ref": "48(1)",
+   "key_row": null,
+   "action": "verify the said local address",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_threshold",
+   "tier": "high",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    101213,
+    101371
+   ],
+   "hosted_rationale": "C6 meets the duplicate requirement by mandating a 30‑day declaration and address verification."
+  },
+  {
+   "unit": "48",
+   "group": "gap",
+   "ref": "48(1)",
+   "key_row": null,
+   "action": "operate the account with the condition that allows foreign remittances",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    101376,
+    101654
+   ],
+   "hosted_rationale": "C11 imposes the same remittance and withdrawal caps during the 30‑day address‑verification period."
+  },
+  {
+   "unit": "48",
+   "group": "gap",
+   "ref": "48(2)",
+   "key_row": null,
+   "action": "operate the account in terms of RBI’s instructions",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    101659,
+    101862
+   ],
+   "hosted_rationale": "C2 states the account must follow RBI NRO instructions and FEMA 1999, matching the obligation."
+  },
+  {
+   "unit": "48",
+   "group": "gap",
+   "ref": "48(2)",
+   "key_row": null,
+   "action": "operate the account in terms of the provisions of FEMA 1999",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    101659,
+    101862
+   ],
+   "hosted_rationale": "C2 satisfies the duplicated requirement by referencing RBI instructions and FEMA 1999."
+  },
+  {
+   "unit": "48",
+   "group": "gap",
+   "ref": "48(3)",
+   "key_row": null,
+   "action": "require prior approval of the RBI for opening the account",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    101867,
+    101976
+   ],
+   "hosted_rationale": "C3 requires RBI prior approval for Pakistani students, directly fulfilling the mandatory condition."
+  },
+  {
+   "unit": "56",
+   "group": "gap",
+   "ref": "56(1)",
+   "key_row": null,
+   "action": "ensure that it does not have any account in the name of individuals / entities appearing in the lists",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    116515,
+    116892
+   ],
+   "hosted_rationale": "C1 exactly mirrors O1, ensuring no accounts for listed individuals/entities as per UNSC periodic lists."
+  },
+  {
+   "unit": "56",
+   "group": "gap",
+   "ref": "56(2)",
+   "key_row": null,
+   "action": "ensure to refer to the lists as available in the Schedules to the Prevention and Suppression of Terrorism (Implementation of Security Council Resolutions) Order, 2007, as amended from time to time",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    117465,
+    118098
+   ],
+   "hosted_rationale": "C2 explicitly requires referring to the lists in the 2007 Order and its amendments, satisfying O2."
+  },
+  {
+   "unit": "56",
+   "group": "gap",
+   "ref": "56(2)",
+   "key_row": null,
+   "action": "verify the aforementioned lists, i.e., UNSC Sanctions Lists and lists as available in the Schedules to the Prevention and Suppression of Terrorism (Implementation of Security Council Resolutions) Order, 2007, as amended from time to time, on a daily basis",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    117465,
+    118098
+   ],
+   "hosted_rationale": "C2 mandates daily verification of the UNSC and Schedule lists and incorporation of any changes, meeting O3 fully."
+  },
+  {
+   "unit": "56",
+   "group": "gap",
+   "ref": "56(3)",
+   "key_row": null,
+   "action": "report the details of accounts resembling any of the individuals / entities in the lists to FIU-IND in addition to advising the Ministry of Home Affairs (MHA) as required under UAPA notification dated February 2, 2021 ( Annex I of these Directions)",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "review",
+   "hosted_verdict": "partial",
+   "hosted_issue": "conflicting_statements",
+   "hosted_gap": "internal_contradiction",
+   "hosted_span": [
+    118102,
+    118353
+   ],
+   "hosted_rationale": "C9 reports to FIU‑IND and advises MHA but cites Annex II instead of Annex I, creating a conflict with O4."
+  },
+  {
+   "unit": "56",
+   "group": "gap",
+   "ref": "56(4)",
+   "key_row": null,
+   "action": "strictly follow the procedure laid down in the UAPA Order dated February 2, 2021 ( Annex I of these Directions)",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "conflicting_statements",
+   "hosted_gap": "internal_contradiction",
+   "hosted_span": [
+    118358,
+    118621
+   ],
+   "hosted_rationale": "C14 requires strict compliance with the freezing procedure but references Annex II, conflicting with O5’s Annex I requirement."
+  },
+  {
+   "unit": "65(2)",
+   "group": "gap",
+   "ref": "65(2)",
+   "key_row": null,
+   "action": "capture customer’s KYC records and upload onto CKYCR",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_threshold",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No candidate control specifies uploading KYC records within 10 days of account commencement, as required."
+  },
+  {
+   "unit": "65(8)",
+   "group": "gap",
+   "ref": "65(8)",
+   "key_row": null,
+   "action": "upload / update the KYC data pertaining to accounts",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    126764,
+    127165
+   ],
+   "hosted_rationale": "C1 covers individuals but omits legal entities, so obligation is only partially met."
+  },
+  {
+   "unit": "65(8)",
+   "group": "gap",
+   "ref": "65(8)",
+   "key_row": null,
+   "action": "furnish the updated information to CKYCR",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No control requires reporting updated KYC to CKYCR within seven days."
+  },
+  {
+   "unit": "65(8)",
+   "group": "gap",
+   "ref": "65(8)",
+   "key_row": null,
+   "action": "retrieve the updated KYC records from CKYCR and update the KYC record maintained by the bank",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "high",
+   "hosted_verdict": "partial",
+   "hosted_issue": "weaker_threshold",
+   "hosted_gap": "weak_threshold",
+   "hosted_span": [
+    85169,
+    85351
+   ],
+   "hosted_rationale": "C5 updates bank records but does not specify retrieval after CKYCR notification."
+  },
+  {
+   "unit": "65(10)",
+   "group": "gap",
+   "ref": "65(10)",
+   "key_row": null,
+   "action": "seek the KYC Identifier from the customer",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    127280,
+    127744
+   ],
+   "hosted_rationale": "Control adds consent requirement, narrowing scope of mandatory retrieval."
+  },
+  {
+   "unit": "65(10)",
+   "group": "gap",
+   "ref": "65(10)",
+   "key_row": null,
+   "action": "retrieve the KYC Identifier, if available, from the CKYCR",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    127280,
+    127744
+   ],
+   "hosted_rationale": "Control adds consent requirement, narrowing scope of mandatory retrieval."
+  },
+  {
+   "unit": "65(10)",
+   "group": "gap",
+   "ref": "65(10)",
+   "key_row": null,
+   "action": "proceed to obtain KYC records online by using such KYC Identifier",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    127280,
+    127744
+   ],
+   "hosted_rationale": "Control adds consent requirement, narrowing scope of mandatory retrieval."
+  },
+  {
+   "unit": "65(10)",
+   "group": "gap",
+   "ref": "65(10)",
+   "key_row": null,
+   "action": "require a customer to submit the same KYC records or information",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    127280,
+    127744
+   ],
+   "hosted_rationale": "Control directly mirrors must_not clause, no extra conditions."
+  },
+  {
+   "unit": "65(10)",
+   "group": "gap",
+   "ref": "65(10)",
+   "key_row": null,
+   "action": "require a customer to submit any other additional identification documents or details",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    127280,
+    127744
+   ],
+   "hosted_rationale": "Control directly mirrors must_not clause, no extra conditions."
+  },
+  {
+   "unit": "65(10)",
+   "group": "gap",
+   "ref": "65(10)(iv)",
+   "key_row": null,
+   "action": "verify the identity and / or address of the customer",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "weak_modality",
+   "tier": "high",
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No control assigns verification responsibility to the RE that last uploaded KYC."
+  },
+  {
+   "unit": "65(10)",
+   "group": "gap",
+   "ref": "65(10)(iv)",
+   "key_row": null,
+   "action": "re-verify the authenticity of the customer’s identity and / or address",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "missing",
+   "hosted_issue": "not_addressed",
+   "hosted_gap": "missing_control",
+   "hosted_span": null,
+   "hosted_rationale": "No control states bank is exempt from re‑verifying authenticity when records are current."
+  },
+  {
+   "unit": "65(10)",
+   "group": "gap",
+   "ref": "65(10)(iv)",
+   "key_row": null,
+   "action": "remain responsible for all aspects of CDD procedure and provisions of these Directions",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    127166,
+    127279
+   ],
+   "hosted_rationale": "Control covers CDD update but not full responsibility except verification."
+  },
+  {
+   "unit": "74(1)(iii)",
+   "group": "gap",
+   "ref": "74(1)(iii)",
+   "key_row": null,
+   "action": "provide originator and beneficiary information",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    136663,
+    136880
+   ],
+   "hosted_rationale": "Control C1 mirrors the obligation verbatim, covering originator and beneficiary information for domestic transfers where the originator is an account holder."
+  },
+  {
+   "unit": "74(1)(v)",
+   "group": "gap",
+   "ref": "74(1)(v)",
+   "key_row": null,
+   "action": "ensure that all the information on the wire transfers shall be immediately made available",
+   "level": "policy",
+   "local_verdict": "partial",
+   "local_gap": "narrow_scope",
+   "tier": "review",
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    137810,
+    138054
+   ],
+   "hosted_rationale": "C1 mirrors the obligation wording, ensuring immediate availability of full wire‑transfer information to law‑enforcement, prosecutorial and FIU‑IND authorities with appropriate legal provisions."
+  },
+  {
+   "unit": "28#lead",
+   "group": "covered",
+   "ref": "28",
+   "key_row": null,
+   "action": "open a 'Small Account'",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    66692,
+    66921
+   ],
+   "hosted_rationale": "C1 explicitly mandates opening a Small Account for any individual who wishes to open a bank account, matching O1 exactly."
+  },
+  {
+   "unit": "28#lead",
+   "group": "covered",
+   "ref": "28",
+   "key_row": null,
+   "action": "entails the following limitations",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    66692,
+    66921
+   ],
+   "hosted_rationale": "C1 requires opening a Small Account only when the individual desires one, narrower than O2's unconditional requirement."
+  },
+  {
+   "unit": "27(2)(xi)",
+   "group": "covered",
+   "ref": "27(2)(xi)",
+   "key_row": null,
+   "action": "capture a clear image of PAN card displayed by the customer",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    63028,
+    63263
+   ],
+   "hosted_rationale": "C1 explicitly requires capturing a clear PAN image, with the same e-PAN exception as the obligation."
+  },
+  {
+   "unit": "27(2)(xi)",
+   "group": "covered",
+   "ref": "27(2)(xi)",
+   "key_row": null,
+   "action": "verify the PAN details from the database of the issuing authority",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    63028,
+    63263
+   ],
+   "hosted_rationale": "C1 mandates verification of PAN details from the issuing authority's database, satisfying the mandatory verification requirement."
+  },
+  {
+   "unit": "78",
+   "group": "covered",
+   "ref": "78(1)",
+   "key_row": null,
+   "action": "monitor and review arrangements",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    149166,
+    149361
+   ],
+   "hosted_rationale": "C1 mirrors the obligation verbatim, covering monitoring, review, and risk assessment for co‑operative banks."
+  },
+  {
+   "unit": "78",
+   "group": "covered",
+   "ref": "78(2)",
+   "key_row": null,
+   "action": "retain the right to verify records maintained by customer cooperative banks / societies for compliance with the extant instructions on KYC and AML",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    149366,
+    149563
+   ],
+   "hosted_rationale": "C4 directly states the bank retains verification right over cooperative banks' KYC/AML records, satisfying the requirement."
+  },
+  {
+   "unit": "57(5)",
+   "group": "covered",
+   "ref": "57(5)",
+   "key_row": null,
+   "action": "note that, in terms of Paragraph 1 of the Order",
+   "level": "not_applicable",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    190244,
+    190697
+   ],
+   "hosted_rationale": "C1 explicitly designates Director FIU‑India as the Central Nodal Officer, enabling the bank to note this as required."
+  },
+  {
+   "unit": "63",
+   "group": "covered",
+   "ref": "63(1)",
+   "key_row": null,
+   "action": "maintain secrecy regarding the customer information",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    124149,
+    124293
+   ],
+   "hosted_rationale": "C1 mirrors O1 verbatim, fulfilling the secrecy requirement."
+  },
+  {
+   "unit": "63",
+   "group": "covered",
+   "ref": "63(2)",
+   "key_row": null,
+   "action": "treat information collected from customers as confidential",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    124298,
+    124554
+   ],
+   "hosted_rationale": "C2 exactly matches O2, imposing confidentiality and permission constraints."
+  },
+  {
+   "unit": "63",
+   "group": "covered",
+   "ref": "63(3)",
+   "key_row": null,
+   "action": "satisfy itself that the information being sought is not of such a nature",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    124559,
+    124822
+   ],
+   "hosted_rationale": "C3 aligns with O3, requiring verification that government requests do not breach secrecy laws."
+  },
+  {
+   "unit": "63",
+   "group": "covered",
+   "ref": "63(2)",
+   "key_row": null,
+   "action": "divulge details thereof for the purpose of cross-selling",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "conflicting_statements",
+   "hosted_gap": "internal_contradiction",
+   "hosted_span": [
+    124298,
+    124554
+   ],
+   "hosted_rationale": "C2 mandates confidentiality, whereas O4 prohibits it, creating a direct conflict."
+  },
+  {
+   "unit": "57(1)",
+   "group": "covered",
+   "ref": "57(1)",
+   "key_row": null,
+   "action": "ensure meticulous compliance with the 'Procedure for Implementation of Section 12A'",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "weaker_threshold",
+   "hosted_gap": "weak_threshold",
+   "hosted_span": [
+    118845,
+    119230
+   ],
+   "hosted_rationale": "C1 commits to compliance but references Order dated Jan 30 2023 and Annex III, not the required Sept 1 2023 Order Annex II, so it falls short of the mandatory threshold."
+  },
+  {
+   "unit": "24(5)",
+   "group": "covered",
+   "ref": "24(5)",
+   "key_row": null,
+   "action": "capture only a live photograph of the customer",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    152950,
+    153114
+   ],
+   "hosted_rationale": "C1 explicitly states the application captures only live photos and excludes printed or video‑graphed images, matching the obligation."
+  },
+  {
+   "unit": "24(5)",
+   "group": "covered",
+   "ref": "24(5)",
+   "key_row": null,
+   "action": "not capture any printed or video graphed photograph",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    152950,
+    153114
+   ],
+   "hosted_rationale": "C1 meets the requirement by prohibiting capture of printed or video‑graphed photographs."
+  },
+  {
+   "unit": "24(5)",
+   "group": "covered",
+   "ref": "24(5)",
+   "key_row": null,
+   "action": "have the background behind the customer while capturing live photograph be of white colour",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    152947,
+    153303
+   ],
+   "hosted_rationale": "C10 specifies white background and prohibits other persons in frame, directly satisfying the requirement."
+  },
+  {
+   "unit": "24(5)",
+   "group": "covered",
+   "ref": "24(5)",
+   "key_row": null,
+   "action": "not allow any other person to come into the frame while capturing the live photograph of the customer",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    152947,
+    153303
+   ],
+   "hosted_rationale": "C10 also includes the prohibition of additional persons in the frame, fulfilling the obligation."
+  },
+  {
+   "unit": "74(1)(ii)",
+   "group": "covered",
+   "ref": "74(1)(ii)",
+   "key_row": null,
+   "action": "include originator’s account number",
+   "level": "sop_system",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "covered",
+   "hosted_issue": "none",
+   "hosted_gap": null,
+   "hosted_span": [
+    136080,
+    136657
+   ],
+   "hosted_rationale": "Control C1 exactly mirrors the obligation, providing the same exemption criteria and information requirements, thus fully satisfying it."
+  },
+  {
+   "unit": "5(2)(xi)",
+   "group": "covered",
+   "ref": "5(2)(xi)",
+   "key_row": null,
+   "action": "apply On-going Due Diligence as: regular monitoring of transactions in accounts",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    76592,
+    76775
+   ],
+   "hosted_rationale": "C1 matches monitoring of transactions against customer knowledge and risk profile but does not address source of funds/wealth, leaving the obligation only partially satisfied."
+  },
+  {
+   "unit": "5(1)(vii)",
+   "group": "covered",
+   "ref": "5(1)(vii)",
+   "key_row": null,
+   "action": "apply Designated Director as: a person whom the bank designates to ensure overall compliance with the obligations imposed under chapter IV of the PML Act and the Rules and shall include the Managing Director or a whole-time Director, whom the Board of Directors has duly authorised",
+   "level": "policy",
+   "local_verdict": "covered",
+   "local_gap": null,
+   "tier": null,
+   "hosted_verdict": "partial",
+   "hosted_issue": "narrower_scope",
+   "hosted_gap": "narrow_scope",
+   "hosted_span": [
+    5813,
+    5998
+   ],
+   "hosted_rationale": "Controls define a Designated Director for compliance but do not require inclusion of the Managing Director or whole‑time Director as mandated."
+  }
+ ]
+}
