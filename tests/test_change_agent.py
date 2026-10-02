@@ -115,6 +115,10 @@ class FakeTools:
             ),
         ]
 
+    def commit(self, state):
+        self.calls.append(("commit", state["delta"]["gap_delta"]))
+        return {"change_event": "e1", "gaps opened": len(state["delta"]["opened"])}
+
     def current(self, ids):
         return [
             {"id": "o1", "ref": "5(1)(v)", "action": "Compare the copy", "verdict": "partial",
@@ -161,3 +165,17 @@ def test_changed_units_are_the_units_holding_the_changed_clause():
 
     us = changed_units(parse(V3), ["5(1)(v)"])
     assert us and all(u.ref.startswith("5(1)(v)") for u in us) and us[0].kind == "definition"
+
+
+def test_commit_runs_only_outside_a_dry_run(monkeypatch):
+    duty = ClauseChange(
+        "modified", "5(1)(v)", "5(1)(v)", "x shall y.", "x shall y. z shall w.", 0.9
+    )
+    monkeypatch.setattr("regcomp.change.agent.classify", lambda c, d: classify(duty, d))
+    for dry, last, status in ((True, "re_map", "projected"), (False, "commit", "committed")):
+        tools = FakeTools()
+        out = build(lambda: GRAPH, None, tools).invoke(
+            {"old_path": V2, "new_path": V3, "dry_run": dry}
+        )
+        assert tools.calls[-1][0] == last and out["status"] == status
+        assert ("committed" in out) is (not dry)

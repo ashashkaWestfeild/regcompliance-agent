@@ -16,6 +16,7 @@ completed step when the same command is given again.
 import argparse
 import json
 import sys
+from datetime import date
 from pathlib import Path
 
 from langgraph.checkpoint.postgres import PostgresSaver
@@ -23,12 +24,16 @@ from langgraph.types import Command
 
 from regcomp.change import execute
 from regcomp.change.agent import build, graph_from_db, parse
+from regcomp.change.commit import commit
 from regcomp.db import connect, database_url
 
 
 class DbTools:
     """Part 2 tools on the live graph. Each call opens its own connection: a model call can
     outlive an idle connection (Neon closes them)."""
+
+    def __init__(self, thread: str):
+        self.thread = thread
 
     def re_extract(self, new_path: str, refs: list[str]) -> list[dict]:
         with connect(autocommit=True) as conn:
@@ -41,6 +46,11 @@ class DbTools:
     def current(self, obligation_ids: list[str]) -> list[dict]:
         with connect(autocommit=True) as conn:
             return execute.current(conn, obligation_ids)
+
+    def commit(self, state: dict) -> dict:
+        path = state["new_path"]
+        with connect(autocommit=True) as conn:
+            return commit(conn, path, parse(path), state, date.today(), self.thread)
 
 
 def main() -> int:
@@ -69,7 +79,7 @@ def main() -> int:
 
     with PostgresSaver.from_conn_string(database_url()) as saver:
         saver.setup()
-        agent = build(load_graph, saver, DbTools())
+        agent = build(load_graph, saver, DbTools(thread))
         if args.approve or args.reject:
             out = agent.invoke(Command(resume=args.approve), config)
         else:
@@ -93,7 +103,9 @@ def main() -> int:
         )
         return 2
     print(f"status: {out['status']}")
-    show = out["delta"] if "delta" in out else out["plan"]
+    show = out.get("delta") or out["plan"]
+    if "committed" in out:
+        print("written: " + json.dumps(out["committed"], ensure_ascii=False))
     print(json.dumps(show, indent=1, ensure_ascii=False))
     return 0
 

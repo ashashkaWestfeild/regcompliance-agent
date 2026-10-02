@@ -15,6 +15,7 @@ Part 2: re_extract -> re_map -> compare (tools in change/execute.py).
     re_map      retrieve and judge them against the policy; a failed model call is retried by
                 the graph (RetryPolicy), and a unit that still has no answer goes to review
     compare     old verdicts against new: which gaps would open or close
+    commit      write the new version next to the old one (change/commit.py); not in dry-run
 
 State is checkpointed after every node (Postgres in normal use), so a crashed or paused run
 resumes from where it stopped with the same thread id. The graph, the regulation text and the
@@ -50,7 +51,8 @@ class ChangeState(TypedDict, total=False):
     new_obligations: list[dict]
     results: list[dict]
     delta: dict
-    status: str  # no_change | planned | rejected | projected | ready_to_commit
+    committed: dict
+    status: str  # no_change | planned | rejected | projected | committed
     log: Annotated[list[str], operator.add]
 
 
@@ -69,9 +71,16 @@ def graph_from_db(conn) -> dict:
     """The current compliance graph in the shape scope() reads."""
     obligations = conn.execute(
         "SELECT id::text, source_clause_ref, action, source_span->>'quote' FROM obligation"
+        " WHERE superseded_at IS NULL"
     ).fetchall()
-    mappings = conn.execute("SELECT id::text, obligation_id::text, control_id::text FROM mapping")
-    gaps = conn.execute("SELECT id::text, obligation_id::text FROM gap WHERE status = 'open'")
+    mappings = conn.execute(
+        "SELECT id::text, obligation_id::text, control_id::text FROM mapping"
+        " WHERE superseded_at IS NULL"
+    )
+    gaps = conn.execute(
+        "SELECT id::text, obligation_id::text FROM gap"
+        " WHERE status = 'open' AND superseded_at IS NULL"
+    )
     return {
         "obligations": [
             {"id": i, "ref": ref, "action": action, "quote": quote}
@@ -89,7 +98,8 @@ RETRY = RetryPolicy(max_attempts=3, initial_interval=0.2, retry_on=LLMError)
 
 def build(load_graph, checkpointer=None, tools=None):
     """Compile the agent. `load_graph()` returns the compliance graph (see graph_from_db).
-    `tools` supplies part 2: re_extract(new_path, refs), re_map(obligations), current(ids)
+    `tools` supplies part 2: re_extract(new_path, refs), re_map(obligations), current(ids),
+    commit(state)
     (see scripts/run_change.py); without it the agent stops at the plan."""
     failed_once: set[str] = set()
 
@@ -207,12 +217,20 @@ def build(load_graph, checkpointer=None, tools=None):
         dry = state.get("dry_run")
         return {
             "delta": delta,
-            "status": "projected" if dry else "ready_to_commit",
+            "status": "projected" if dry else "compared",
             "log": [
                 f"compare: {len(delta['opened'])} gaps would open, {len(delta['closed'])} would "
                 f"close, {delta['unchanged']} unchanged, {len(delta['needs_review'])} need review"
                 + (" (what-if: nothing written)" if dry else "")
             ],
+        }
+
+    def node_commit(state: ChangeState) -> dict:
+        written = tools.commit(state)
+        return {
+            "committed": written,
+            "status": "committed",
+            "log": ["commit: " + ", ".join(f"{k} {v}" for k, v in written.items())],
         }
 
     def node_no_change(state: ChangeState) -> dict:
@@ -247,5 +265,8 @@ def build(load_graph, checkpointer=None, tools=None):
         g.add_conditional_edges("plan", redo)
         g.add_edge("re_extract", "re_map")
         g.add_edge("re_map", "compare")
-        g.add_edge("compare", END)
+        g.add_node("commit", node_commit)
+        # least privilege: a dry run (what-if) has no path to the node that writes
+        g.add_conditional_edges("compare", lambda s: END if s.get("dry_run") else "commit")
+        g.add_edge("commit", END)
     return g.compile(checkpointer=checkpointer)

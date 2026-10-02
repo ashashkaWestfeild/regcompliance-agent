@@ -9,7 +9,7 @@
     compare      old against new: gaps that would open, gaps that would close
 
 Nothing here writes to the compliance graph. With dry_run the agent stops after compare, which
-is the what-if mode; committing the result is a separate step.
+is the what-if mode; writing the result is change/commit.py.
 """
 
 import re
@@ -134,6 +134,7 @@ def re_map(obligations: list[dict], conn) -> list[dict]:
                     "issue": r["issue"],
                     # as in ingestion: a gap is raised only on a policy-level obligation
                     "gap_type": r["gap_type"] if o["level"] == "policy" else None,
+                    "control_id": control and control["id"],
                     "control_ref": control and control["ref"],
                     "control_quote": control and control["quote"],
                     "rationale": r["rationale"],
@@ -151,8 +152,9 @@ def current(conn, obligation_ids: list[str]) -> list[dict]:
     rows = conn.execute(
         "SELECT o.id::text, o.source_clause_ref, o.action, m.verdict::text, g.type::text"
         " FROM obligation o LEFT JOIN mapping m ON m.obligation_id = o.id"
+        " AND m.superseded_at IS NULL"
         " LEFT JOIN gap g ON g.obligation_id = o.id AND g.status = 'open'"
-        " WHERE o.id = ANY(%s::uuid[])",
+        " AND g.superseded_at IS NULL WHERE o.id = ANY(%s::uuid[])",
         (obligation_ids,),
     ).fetchall()
     return [
