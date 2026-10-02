@@ -48,6 +48,8 @@ def main() -> None:
         cited = conn.execute(
             "SELECT DISTINCT c.id, c.owner, c.frequency, c.threshold, c.expected_evidence"
             " FROM mapping m JOIN control c ON c.id = m.control_id"
+            # a policy passage has no extracted attributes to test
+            " WHERE c.extraction->>'method' IS DISTINCT FROM 'passage'"
         ).fetchall()
         design = {"effective": 0, "ineffective": 0}
         for cid, owner, freq, threshold, evidence in cited:

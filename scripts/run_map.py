@@ -7,6 +7,11 @@ applies the deterministic gap rules, and writes mappings + gaps. Prints a crude 
 the frozen dev answer key as counts.
 
     uv run python scripts/run_map.py --run e2e1
+    uv run python scripts/run_map.py --run e2e8 --passages --stop-after-min 25   # resumable
+
+--passages also offers every policy passage that extracted controls do not cover as a candidate
+(pipeline/passages.py). --stop-after-min ends the run cleanly once the time is up, before any
+result is written; the same command then resumes from the LLM cache.
 """
 
 import argparse
@@ -28,6 +33,7 @@ from regcomp.ingest.rbi_html import parse_file
 from regcomp.llm import STAGE_MODELS, LLMError, embed
 from regcomp.pipeline import rerank as rerank_mod
 from regcomp.pipeline.judge import judge_unit
+from regcomp.pipeline.passages import passage_controls
 from regcomp.pipeline.rerank import rerank
 
 REGULATION = "data/raw/rbi/kycdir_v3_20260918.html"
@@ -43,6 +49,15 @@ PIPELINE_TABLES = (
     "gap, remediation, mapping, control_test, evidence, review_override, clause_diff, "
     "change_event, embedding, obligation, control, clause, document, bank_profile"
 )
+
+
+# A policy passage offered as a candidate: plain text, no attributes were extracted from it.
+PASSAGE_EXTRACTION = {"model": None, "method": "passage", "passes": 0, "pass_agreement": False}
+
+
+def control_text(c: dict) -> str:
+    """What retrieval and reranking see for a candidate."""
+    return f"{c['objective']}. {c['quote']}" if c["objective"] else c["quote"]
 
 
 def deepest(doc, pos: int) -> str | None:
@@ -193,7 +208,7 @@ def load(conn, reg, pol, obligations, controls):
                 c.get("owner"),
                 c.get("evidence"),
                 Jsonb(span),
-                Jsonb(ctl_extraction),
+                Jsonb(PASSAGE_EXTRACTION if c.get("passage") else ctl_extraction),
             )
         )
     with conn.cursor() as cur:
@@ -215,7 +230,7 @@ def load(conn, reg, pol, obligations, controls):
 
 def embed_all(conn, obligations, controls):
     ob_text = [f"{o['action']}. {o.get('threshold') or ''} {o['quote']}" for o in obligations]
-    ct_text = [f"{c['objective']}. {c['quote']}" for c in controls]
+    ct_text = [control_text(c) for c in controls]
     vectors = embed(ob_text + ct_text)
     rows = [
         ("obligation", o["id"], "bge-m3", vec_literal(v))
@@ -237,7 +252,7 @@ def retrieve(conn, ob_vectors, obligations, controls) -> dict:
     """bge-m3 top-RETRIEVE_K from pgvector, then FlashRank rerank to TOP_K.
     Returns {obligation_id: [(control_id, reranker_score), ...]} best first."""
     ob_text = {o["id"]: f"{o['action']}. {o['quote']}" for o in obligations}
-    ct_text = {c["id"]: f"{c['objective']}. {c['quote']}" for c in controls}
+    ct_text = {c["id"]: control_text(c) for c in controls}
     out = {}
     for oid, v in ob_vectors.items():
         rows = conn.execute(
@@ -254,6 +269,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
     ap.add_argument("--judge-think", action="store_true", help="judge with thinking mode on")
+    ap.add_argument("--passages", action="store_true", help="policy passages as candidates too")
+    ap.add_argument("--stop-after-min", type=float, help="stop cleanly after this many minutes")
     args = ap.parse_args()
     run = Path("eval/runs") / args.run
     obligations = json.loads((run / "obligations.json").read_text(encoding="utf-8"))["items"]
@@ -261,6 +278,12 @@ def main() -> int:
     apply_levels(run, obligations)
     reg = parse_file(REGULATION)
     pol = parse_policy_items(json.loads(Path(DEV_POLICY).read_text(encoding="utf-8")))
+    if args.passages:
+        extracted = len(controls)
+        controls = controls + passage_controls(pol, controls)
+        print(
+            f"candidates: {extracted} controls + {len(controls) - extracted} passages", flush=True
+        )
     t0 = time.time()
 
     with connect(autocommit=True) as conn:
@@ -285,6 +308,13 @@ def main() -> int:
             units[o["unit_ref"]].append(o)
         results, failed_units = {}, []
         for i, obs in enumerate(units.values(), 1):
+            if args.stop_after_min and time.time() - t0 > args.stop_after_min * 60:
+                print(
+                    f"[{time.strftime('%H:%M:%S')}] time is up at {i - 1}/{len(units)} units; "
+                    "nothing written. Run the same command again to resume from the cache.",
+                    flush=True,
+                )
+                return 3
             cand_ids = list(dict.fromkeys(cid for o in obs for cid, _ in hits[o["id"]]))
             local = {f"C{n}": cid for n, cid in enumerate(cand_ids, 1)}
             candidates = {k: by_ctl[v] for k, v in local.items()}
