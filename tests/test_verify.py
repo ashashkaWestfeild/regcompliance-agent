@@ -1,6 +1,6 @@
 """Text comparison: numbers, force and inserted limits between an obligation and the policy."""
 
-from regcomp.pipeline.verify import Comparer, force, inserted, numbers, sweep
+from regcomp.pipeline.verify import Comparer, direction, force, inserted, numbers, sweep
 
 POLICY = (
     "20. Periodic updation of KYC is carried out at least once in every eight years for high "
@@ -80,3 +80,22 @@ def test_sweep_checks_regulation_sentences_that_no_obligation_covers():
 
     (hit,) = sweep(Regulation, Comparer(POLICY))
     assert hit["ref"] == "5(1)" and hit["evidence"].kind == "number_differs"
+
+
+def test_direction_of_a_changed_number_follows_the_wording_around_it():
+    trigger = "the natural person with ownership of more than 10 per cent of the capital"
+    assert direction(trigger, trigger.replace("10 per cent", "25 percent"))[0] == "weaker"
+    assert direction(trigger, trigger.replace("10 per cent", "five per cent"))[0] == "stricter"
+    interval = "periodic updation at least once in every two years for high risk customers"
+    assert direction(interval, interval.replace("two", "eight"))[0] == "weaker"
+    deadline = "upload the records within 10 days of opening the account"
+    assert direction(deadline, deadline.replace("10", "seven"))[0] == "stricter"
+    floor = "preserve the records for at least five years after the relationship ends"
+    assert direction(floor, floor.replace("five", "three"))[0] == "weaker"
+    assert direction(floor, floor.replace("five", "eight"))[0] == "stricter"
+    # no wording that decides it, or more than one number changed: left to a model or a person
+    assert (
+        direction("the limit is rupees 50,000 per day", "the limit is rupees 25,000 per day")
+        is None
+    )
+    assert direction(interval, "something else entirely about 9 branches") is None

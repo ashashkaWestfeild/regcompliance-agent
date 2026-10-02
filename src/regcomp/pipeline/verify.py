@@ -114,6 +114,81 @@ def numbers(text: str) -> set[str]:
     return out
 
 
+# How the number before which these words stand binds the bank. For a trigger ("more than X
+# per cent") and for a deadline or interval ("within X days", "once in every X years") a larger
+# number in the policy asks less of the bank; for a floor ("at least X", unless it is "at least
+# once in ...") a smaller number asks less.
+_LARGER_IS_WEAKER = re.compile(
+    r"(?:more than|exceed(?:s|ing)?|above|in excess of|over|within|not later than|"
+    r"once in every|once every|once in|every|at intervals of|period of)(?:\s+\w+){0,2}$",
+    re.I,
+)
+_SMALLER_IS_WEAKER = re.compile(
+    r"(?:at least|not less than|no less than|minimum of|minimum)(?:\s+\w+){0,1}$", re.I
+)
+_PIECE = re.compile(r"[A-Za-z]+|\d[\d,]*(?:\.\d+)?|[^A-Za-z\d\s]+|\s+")
+
+
+def _digits(text: str) -> str:
+    """`text` with number words written as digits ("fifty thousand" -> "50000")."""
+    out, run = [], None
+    for w in _PIECE.findall(text):
+        low = w.lower()
+        if low in _UNITS:
+            run = (run or 0) + _UNITS[low]
+        elif low in _SCALES and run is not None:
+            run *= _SCALES[low]
+        elif w.isspace() and run is not None:
+            continue
+        else:
+            if run is not None:
+                out.append(f"{run} ")
+                run = None
+            out.append(w.replace(",", "") if w[0].isdigit() else w)
+    if run is not None:
+        out.append(str(run))
+    return "".join(out)
+
+
+def changed_number(obligation: str, passage: str) -> tuple[float, float, str] | None:
+    """(obligation value, policy value, the words before it) for the one number that the policy
+    sentence states differently, or None if the two sentences do not line up on a single
+    number-for-number replacement."""
+    a = _TOKEN.findall(_digits(body(obligation)).lower())
+    b = _TOKEN.findall(_digits(passage).lower())
+    pairs = []
+    for tag, i1, i2, j1, j2 in SequenceMatcher(None, a, b, autojunk=False).get_opcodes():
+        if tag != "replace" or i2 - i1 > 3 or j2 - j1 > 4:
+            continue  # only a number (and its unit wording) swapped inside matching text
+        left = [(k, w) for k, w in enumerate(a[i1:i2], i1) if w[0].isdigit()]
+        right = [w for w in b[j1:j2] if w[0].isdigit()]
+        if len(left) == 1 and len(right) == 1 and left[0][1] != right[0]:
+            at = left[0][0]
+            pairs.append((float(left[0][1]), float(right[0]), " ".join(a[max(0, at - 6) : at])))
+    return pairs[0] if len(pairs) == 1 else None
+
+
+def direction(obligation: str, passage: str) -> tuple[str, str] | None:
+    """("weaker" | "stricter", reason) when the wording around the changed number decides it,
+    None when it does not (the caller may then ask a model, or leave it to a reviewer)."""
+    change = changed_number(obligation, passage)
+    if change is None:
+        return None
+    required, stated, before = change
+    if _SMALLER_IS_WEAKER.search(before) and not re.search(r"at least once", before, re.I):
+        weaker = stated < required
+        rule = "a minimum"
+    elif _LARGER_IS_WEAKER.search(before):
+        weaker = stated > required
+        rule = "a trigger, deadline or interval"
+    else:
+        return None
+    why = (
+        f"the requirement sets {rule} of {required:g} ('{before} ...'); the policy says {stated:g}"
+    )
+    return ("weaker" if weaker else "stricter", why)
+
+
 def force(text: str) -> str | None:
     """ "must" if the sentence imposes a duty, "may" if it only permits, None if neither."""
     if re.search(
