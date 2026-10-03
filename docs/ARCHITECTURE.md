@@ -195,7 +195,40 @@ What the second key showed: (1) a weakened "one year" to "two years" was judged 
 
 Not fixed: the contradiction, the duty made optional where the regulation sentence has no "shall", and the deleted duty classed as procedure-level.
 
-Held-out results: to be added at the freeze.
+### Held-out results
+
+Run once each, from a clean checkout (git worktree) of the tag `eval-freeze-2026-10-03` (commit
+`5cb728b`); answer keys frozen at `350b8e0` (Central Bank) and `da58e66` (Dhanlaxmi). Nothing
+was tuned afterwards. Reports: [`heldout_centralbank_report.md`](../eval/reports/heldout_centralbank_report.md),
+[`heldout_dhanlaxmi_report.md`](../eval/reports/heldout_dhanlaxmi_report.md); scorecards and
+confidence checks in `eval/reports/` carry the evaluated tag.
+
+| Measure | Central Bank | Dhanlaxmi |
+|---|---|---|
+| Planted gaps, exact passage (all in the high-confidence tier) | 3 of 7 | 2 of 6 |
+| Planted gaps, right obligation | 4 of 7 | 3 of 6 |
+| Decoys flagged | 1 of 3, high-confidence | 0 of 3 |
+| Hidden instruction flagged | 1 of 1, by the code-level scan only | 1 of 1, by the code-level scan only |
+| Other reports: high-confidence + review | 15 + 36 | 42 + 43 |
+| Obligations excluded by applicability | 0 | 0 (3 to confirm) |
+
+What it shows:
+- **Numbers are found; omissions and contradictions are not.** The hits are changed or stale
+  thresholds. A deleted duty, a narrowed scope, a contradiction and a removed owner were missed on
+  both banks.
+- **The high-confidence tier is precise about what it finds, not complete.** Every exact hit was
+  high-confidence, but that tier also holds 15 and 42 other reports, most of them unchecked.
+- **The code-level scan mattered.** The extraction model flagged neither hidden instruction;
+  the scan, written before the held-out keys were opened, flagged both.
+- **The judge's own confidence number misleads** (confidence checks in `eval/reports/`): at
+  1.00 it called five Central Bank and two Dhanlaxmi planted-gap mappings covered.
+- **"Judge and text comparison agree" is the most reliable signal**: 4 of its 5 findings on the
+  two banks were planted gaps, the fifth a stricter-number decoy.
+- **A parser limit found after the freeze.** On Dhanlaxmi, control extraction covered about 8%
+  of the policy text: the unit builder turns few of its 4.1.2-numbered clauses into units. The
+  judge still compared every passage (passages are candidates), but extraction-based checks saw
+  little of the policy. Not fixed: fixing it after seeing the result would be tuning on the
+  test.
 
 ### Confidence
 
@@ -297,7 +330,13 @@ held-out runs, which are then reported against it.
 
 ## 10. Claim
 
-Functional scope: ingestion, change intelligence, obligation extraction, control understanding,
-mapping, gap identification, risk ranking and impact analysis, with remediation, evidence testing
-and what-if as built extras. Depth: structured and text input with measured reliability on the
-development bank; the level claimed is decided from the held-out results at the freeze.
+**F3 / D1.** Functional scope (F3): ingestion, change intelligence, obligation extraction,
+control understanding, mapping, gap identification, risk ranking and impact analysis, with
+remediation, evidence testing, applicability and what-if as built extras.
+
+Depth (D1, not D2): the input is text and structured data, and the outputs are acceptable and
+traceable: every citation is verbatim by construction, change detection is exact against RBI's
+own markers, hidden instructions were caught on both unseen banks, and 5 of 6 decoys were left
+alone. But the plan's own rule was D2 only if the unseen banks showed high reliability, and gap
+detection did not: 5 of 13 planted gaps at the exact passage, 7 of 13 at the right obligation,
+with many unchecked high-confidence extras. So the claim is D1.
