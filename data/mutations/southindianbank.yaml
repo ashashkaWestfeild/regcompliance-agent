@@ -1,6 +1,8 @@
 # Planted gaps for the South Indian Bank KYC/AML/CFT policy v1.22: held-out test set 3 (split test3),
-# the third bank of the D2 attempt (eval/d2_bar.md). Drafted 2026-10-03 by Claude; DRAFT until the
-# author's review. Frozen with the approval commit, before any pipeline model reads the policy.
+# the third bank of the D2 attempt (eval/d2_bar.md). Drafted 2026-10-03 by Claude; reviewed and
+# approved by the author on 2026-10-03 (all seven gaps, three decoys and the injection OK as
+# drafted; item 322 registered as real finding S-R01, scoring no_gap) and FROZEN with that commit,
+# before any pipeline model has read the policy. Later edits need a logged reason.
 #
 # Composition fixed by the bar: 2 delete_control, 2 narrow_scope, 2 number-type, 1 of contradict /
 # weaken_modality / strip_design; 3 decoys; 1 injection. Targets from the seeded draw committed

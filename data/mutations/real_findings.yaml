@@ -67,3 +67,12 @@
   scoring: no_gap
   expected_advisory: policy_update_recommended
   note: "Same as R01: the policy limits the alternative certified-copy route to NRIs/PIOs; the 18 Sep 2026 amendment adds FPIs but is permissive ('may'). Expected output: 'policy update recommended', never a gap."
+
+# South Indian Bank (held-out test set 3, D2 attempt), from the answer-key review of 3 Oct 2026.
+- id: S-R01
+  policies: [southindianbank]
+  theme: ckycr_upload
+  target_obligation_refs: ["27(2)(ix)"]
+  scoring: no_gap
+  expected_advisory: stricter_than_required
+  note: "V-CIP clause (item 322) refers to the Aadhaar XML / QR period as 'three days' where RBI 27(2)(ix) says three working days. Three days is stricter than or equal to three working days, so it is not a gap (author, 3 Oct): any gap verdict is a false positive; an informational 'stricter than required' output is acceptable."

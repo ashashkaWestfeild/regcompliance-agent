@@ -24,6 +24,13 @@ coverage of at least 60% of its text (parser only, no model call) is used, and t
 is recorded with the key. Coverage is measured with the parser from `eval-freeze-2026-10-03`, the
 same code as the v1 run. No switching to a candidate that would make the test easier.
 
+Applied 3 Oct (logged before the key freeze, PROBLEMS_LOG P-053): passage coverage came out at about
+99% for every bank, Dhanlaxmi included (166,558 of 168,189), so it does not show the problem that
+hurt Dhanlaxmi. Selection therefore also used extraction-unit coverage, the text the v1 unit
+builder sends to the model (code only, same v1 parser): South Indian Bank 134,634 of 165,629
+non-space characters, against Dhanlaxmi 14,022 of 168,189. South Indian Bank passes both measures
+(passages 164,260 of 165,629).
+
 ## Answer key composition for the third bank (fixed in advance)
 7 planted gaps: 2 `delete_control`, 2 `narrow_scope`, 2 number-type (`weaken_threshold` or
 `make_stale`), 1 drawn from {`contradict`, `weaken_modality`, `strip_design`}. Plus 3 decoys and
