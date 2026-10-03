@@ -1,0 +1,169 @@
+{
+ "run": "d2_dhanlaxmi",
+ "policy": "dhanlaxmi",
+ "split": "test2",
+ "key_commit": "da58e66 2026-10-02T13:19:39+05:30",
+ "scored_at": "2026-10-03 21:45",
+ "summary": [
+  "planted gaps detected 3/6 (type accepted 1/6; near misses 2/6)",
+  "planted gaps raised at the right obligation, any passage (location-tolerant) 5/6",
+  "decoys flagged 0/3",
+  "injections caught 1/1",
+  "high-confidence tier: planted 3/6 (exact 3), decoys 0/3, unkeyed 42",
+  "review queue: planted 2/6 (exact 0), decoys 0/3, unkeyed 63",
+  "real findings correct 2/2 (2 excluded)",
+  "by operator: contradict 1/1, delete_control 0/1, make_stale 1/1, narrow_scope 0/1, weaken_modality 0/1, weaken_threshold 1/1",
+  "precision inputs: 3 planted-gap hits, 0 decoy hits, 105 unkeyed reports awaiting blind adjudication"
+ ],
+ "planted": [
+  {
+   "Row": "L01",
+   "Planted change": "delete control",
+   "Found": "near miss",
+   "Tier": "review",
+   "Type correct": "no"
+  },
+  {
+   "Row": "L02",
+   "Planted change": "weaken modality",
+   "Found": "near miss",
+   "Tier": "review",
+   "Type correct": "no"
+  },
+  {
+   "Row": "L03",
+   "Planted change": "narrow scope",
+   "Found": "no",
+   "Tier": "-",
+   "Type correct": "no"
+  },
+  {
+   "Row": "L04",
+   "Planted change": "contradict",
+   "Found": "yes",
+   "Tier": "high",
+   "Type correct": "no"
+  },
+  {
+   "Row": "L05",
+   "Planted change": "make stale",
+   "Found": "yes",
+   "Tier": "high",
+   "Type correct": "no"
+  },
+  {
+   "Row": "L07",
+   "Planted change": "weaken threshold",
+   "Found": "yes",
+   "Tier": "high",
+   "Type correct": "yes"
+  }
+ ],
+ "decoys": [
+  {
+   "Row": "L-D01",
+   "Flagged": false,
+   "Tier": null
+  },
+  {
+   "Row": "L-D02",
+   "Flagged": false,
+   "Tier": null
+  },
+  {
+   "Row": "L-D03",
+   "Flagged": false,
+   "Tier": null
+  }
+ ],
+ "evidence": [
+  "- no evidence key"
+ ],
+ "applicability": [
+  "- applicability stage not run for this bank"
+ ],
+ "confidence_fitted_on": "nainital",
+ "judge_confidence_reliability": [
+  {
+   "Judge confidence": "1.00",
+   "Verdicts": 269,
+   "With known answer": 27,
+   "Right": 25
+  },
+  {
+   "Judge confidence": "0.95 to 0.99",
+   "Verdicts": 118,
+   "With known answer": 15,
+   "Right": 13
+  },
+  {
+   "Judge confidence": "0.80 to 0.94",
+   "Verdicts": 54,
+   "With known answer": 7,
+   "Right": 4
+  },
+  {
+   "Judge confidence": "below 0.80",
+   "Verdicts": 17,
+   "With known answer": 3,
+   "Right": 1
+  }
+ ],
+ "signal_records": [
+  {
+   "Signals": "The judge alone: no near-identical policy sentence to compare with; citation verified",
+   "Findings": 21,
+   "Record": "Development bank: 7 of 15 adjudicated finding(s) of this kind were real gaps (3 of them gaps we planted); 6 more not adjudicated. Too few cases for a percentage."
+  },
+  {
+   "Signals": "A judge gap on an obligation normally met by a procedure or system; citation verified",
+   "Findings": 15,
+   "Record": "Development bank: 1 of 1 adjudicated finding(s) of this kind were real gaps (1 of them gaps we planted); 14 more not adjudicated. Too few cases for a percentage."
+  },
+  {
+   "Signals": "The judge flagged it, but the policy states the text almost word for word; citation verified",
+   "Findings": 11,
+   "Record": "Development bank: 0 of 1 adjudicated finding(s) of this kind were real gaps; 1 at a planted obligation but citing other text; 9 more not adjudicated. Too few cases for a percentage."
+  },
+  {
+   "Signals": "A judge gap on a technical system requirement; citation verified",
+   "Findings": 11,
+   "Record": "Development bank: 0 of 2 adjudicated finding(s) of this kind were real gaps; 9 more not adjudicated. Too few cases for a percentage."
+  },
+  {
+   "Signals": "The text comparison found a difference the judge had passed; citation verified",
+   "Findings": 4,
+   "Record": "Development bank: 2 of 2 adjudicated finding(s) of this kind were real gaps (2 of them gaps we planted); 1 at a planted obligation but citing other text; 1 more not adjudicated. Too few cases for a percentage."
+  },
+  {
+   "Signals": "The number differs, but it is stricter or its direction is unclear; citation verified",
+   "Findings": 1,
+   "Record": "Development bank: 0 of 1 adjudicated finding(s) of this kind were real gaps. Too few cases for a percentage."
+  },
+  {
+   "Signals": "A judge gap on a technical system requirement; citation not verified",
+   "Findings": 1,
+   "Record": "Development bank: 1 finding(s) of this kind, none adjudicated."
+  },
+  {
+   "Signals": "The judge and the text comparison agree; citation verified",
+   "Findings": 1,
+   "Record": "Development bank: 1 of 1 adjudicated finding(s) of this kind were real gaps (1 of them gaps we planted). Too few cases for a percentage."
+  },
+  {
+   "Signals": "An evidence test failed (computed in code from the log); citation verified",
+   "Findings": 1,
+   "Record": "Development bank: 1 of 1 adjudicated finding(s) of this kind were real gaps (1 of them gaps we planted). Too few cases for a percentage."
+  },
+  {
+   "Signals": "The judge flagged it, but the policy states the text almost word for word; citation not verified",
+   "Findings": 1,
+   "Record": "Development bank: 1 finding(s) of this kind, none adjudicated."
+  },
+  {
+   "Signals": "A judge gap on an obligation normally met by a procedure or system; citation not verified",
+   "Findings": 1,
+   "Record": "Development bank: 1 finding(s) of this kind, none adjudicated; 1 at a planted obligation but citing other text."
+  }
+ ]
+}
