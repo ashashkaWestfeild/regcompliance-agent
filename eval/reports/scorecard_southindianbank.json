@@ -1,0 +1,184 @@
+{
+ "evaluated_code": {
+  "tag": "eval-freeze-2026-10-03",
+  "commit": "5cb728b8e488f28fd66b47e4d34e0288119a8a89",
+  "how": "run once, on 3 Oct, from a clean checkout (git worktree) of the tag with only South Indian Bank's data files added (key c556c42, profile 79a164b); nothing tuned after this run"
+ },
+ "procedure_note": "Corrected tail. The first pass ran three code-only steps without --policy, so they took Nainital defaults: load_metadata stored Nainital's title, run_tests used Nainital's synthetic evidence logs (a CKYCR exception log landed on this bank's 10-day CKYCR sentence, decoy S-D01, and flagged it high), and run_applicability used Nainital's profile (0 gaps moved). Those three steps were re-run with --policy southindianbank, as in the Central Bank and Dhanlaxmi runs (with run_verify between them, in the v1 order), and the bank was scored again with the tag's score.py. No model output changed (every model call came from the cache). First scoring: planted 4/7 exact, decoys flagged 2/3 (S-D01 high, S-D03 review); corrected: planted 4/7 exact, decoys flagged 1/3 (S-D03 review).",
+ "run": "ho_southindianbank",
+ "policy": "southindianbank",
+ "split": "test3",
+ "key_commit": "unknown",
+ "scored_at": "2026-10-03 23:24",
+ "summary": [
+  "planted gaps detected 4/7 (type accepted 3/7; near misses 0/7)",
+  "planted gaps raised at the right obligation, any passage (location-tolerant) 4/7",
+  "decoys flagged 1/3",
+  "injections caught 1/1",
+  "high-confidence tier: planted 2/7 (exact 2), decoys 0/3, unkeyed 12",
+  "review queue: planted 2/7 (exact 2), decoys 1/3, unkeyed 29",
+  "real findings correct 1/1 (0 excluded)",
+  "by operator: delete_control 0/2, make_stale 1/1, narrow_scope 1/2, weaken_modality 1/1, weaken_threshold 1/1",
+  "precision inputs: 4 planted-gap hits, 1 decoy hits, 41 unkeyed reports awaiting blind adjudication"
+ ],
+ "planted": [
+  {
+   "Row": "S01",
+   "Planted change": "delete control",
+   "Found": "no",
+   "Tier": "-",
+   "Type correct": "no"
+  },
+  {
+   "Row": "S02",
+   "Planted change": "delete control",
+   "Found": "no",
+   "Tier": "-",
+   "Type correct": "no"
+  },
+  {
+   "Row": "S03",
+   "Planted change": "narrow scope",
+   "Found": "no",
+   "Tier": "-",
+   "Type correct": "no"
+  },
+  {
+   "Row": "S04",
+   "Planted change": "narrow scope",
+   "Found": "yes",
+   "Tier": "review",
+   "Type correct": "yes"
+  },
+  {
+   "Row": "S05",
+   "Planted change": "make stale",
+   "Found": "yes",
+   "Tier": "high",
+   "Type correct": "no"
+  },
+  {
+   "Row": "S06",
+   "Planted change": "weaken threshold",
+   "Found": "yes",
+   "Tier": "high",
+   "Type correct": "yes"
+  },
+  {
+   "Row": "S07",
+   "Planted change": "weaken modality",
+   "Found": "yes",
+   "Tier": "review",
+   "Type correct": "yes"
+  }
+ ],
+ "decoys": [
+  {
+   "Row": "S-D01",
+   "Flagged": false,
+   "Tier": null
+  },
+  {
+   "Row": "S-D02",
+   "Flagged": false,
+   "Tier": null
+  },
+  {
+   "Row": "S-D03",
+   "Flagged": true,
+   "Tier": "review"
+  }
+ ],
+ "evidence": [
+  "- no evidence key"
+ ],
+ "applicability": [
+  "- obligations checked against the bank profile `southindianbank`: applies 458, does not apply 0, to confirm 0 (decided by rule 458, by model 0)",
+  "- gaps taken out of scoring as not applicable 0; gaps carrying a 'to confirm' note 0 (a note moves nothing)",
+  "- planted gaps whose obligation was taken out: none"
+ ],
+ "confidence_fitted_on": "nainital",
+ "judge_confidence_reliability": [
+  {
+   "Judge confidence": "1.00",
+   "Verdicts": 269,
+   "With known answer": 27,
+   "Right": 25
+  },
+  {
+   "Judge confidence": "0.95 to 0.99",
+   "Verdicts": 118,
+   "With known answer": 15,
+   "Right": 13
+  },
+  {
+   "Judge confidence": "0.80 to 0.94",
+   "Verdicts": 54,
+   "With known answer": 7,
+   "Right": 4
+  },
+  {
+   "Judge confidence": "below 0.80",
+   "Verdicts": 17,
+   "With known answer": 3,
+   "Right": 1
+  }
+ ],
+ "signal_records": [
+  {
+   "Signals": "The judge alone: no near-identical policy sentence to compare with; citation verified",
+   "Findings": 21,
+   "Record": "Development bank: 7 of 15 adjudicated finding(s) of this kind were real gaps (3 of them gaps we planted); 6 more not adjudicated. Too few cases for a percentage."
+  },
+  {
+   "Signals": "A judge gap on an obligation normally met by a procedure or system; citation verified",
+   "Findings": 15,
+   "Record": "Development bank: 1 of 1 adjudicated finding(s) of this kind were real gaps (1 of them gaps we planted); 14 more not adjudicated. Too few cases for a percentage."
+  },
+  {
+   "Signals": "The judge flagged it, but the policy states the text almost word for word; citation verified",
+   "Findings": 11,
+   "Record": "Development bank: 0 of 1 adjudicated finding(s) of this kind were real gaps; 1 at a planted obligation but citing other text; 9 more not adjudicated. Too few cases for a percentage."
+  },
+  {
+   "Signals": "A judge gap on a technical system requirement; citation verified",
+   "Findings": 11,
+   "Record": "Development bank: 0 of 2 adjudicated finding(s) of this kind were real gaps; 9 more not adjudicated. Too few cases for a percentage."
+  },
+  {
+   "Signals": "The text comparison found a difference the judge had passed; citation verified",
+   "Findings": 4,
+   "Record": "Development bank: 2 of 2 adjudicated finding(s) of this kind were real gaps (2 of them gaps we planted); 1 at a planted obligation but citing other text; 1 more not adjudicated. Too few cases for a percentage."
+  },
+  {
+   "Signals": "The number differs, but it is stricter or its direction is unclear; citation verified",
+   "Findings": 1,
+   "Record": "Development bank: 0 of 1 adjudicated finding(s) of this kind were real gaps. Too few cases for a percentage."
+  },
+  {
+   "Signals": "A judge gap on a technical system requirement; citation not verified",
+   "Findings": 1,
+   "Record": "Development bank: 1 finding(s) of this kind, none adjudicated."
+  },
+  {
+   "Signals": "The judge and the text comparison agree; citation verified",
+   "Findings": 1,
+   "Record": "Development bank: 1 of 1 adjudicated finding(s) of this kind were real gaps (1 of them gaps we planted). Too few cases for a percentage."
+  },
+  {
+   "Signals": "An evidence test failed (computed in code from the log); citation verified",
+   "Findings": 1,
+   "Record": "Development bank: 1 of 1 adjudicated finding(s) of this kind were real gaps (1 of them gaps we planted). Too few cases for a percentage."
+  },
+  {
+   "Signals": "The judge flagged it, but the policy states the text almost word for word; citation not verified",
+   "Findings": 1,
+   "Record": "Development bank: 1 finding(s) of this kind, none adjudicated."
+  },
+  {
+   "Signals": "A judge gap on an obligation normally met by a procedure or system; citation not verified",
+   "Findings": 1,
+   "Record": "Development bank: 1 finding(s) of this kind, none adjudicated; 1 at a planted obligation but citing other text."
+  }
+ ]
+}
