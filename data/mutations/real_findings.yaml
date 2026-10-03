@@ -71,7 +71,7 @@
 # South Indian Bank (held-out test set 3, D2 attempt), from the answer-key review of 3 Oct 2026.
 - id: S-R01
   policies: [southindianbank]
-  theme: ckycr_upload
+  theme: vcip
   target_obligation_refs: ["27(2)(ix)"]
   scoring: no_gap
   expected_advisory: stricter_than_required

@@ -39,9 +39,11 @@ non-space characters, against Dhanlaxmi 14,022 of 168,189. South Indian Bank pas
 any model reads the policy.
 
 ## Runs on the third bank (both pre-registered, each run once)
-- **v1 run:** from a clean checkout of `eval-freeze-2026-10-03`. Its code is frozen, so it may run
-  as soon as the key is frozen, before the second tag.
-- **v2 run:** from a clean checkout of the second tag.
+- **v1 run:** from a clean checkout of `eval-freeze-2026-10-03`, run only after the kill point is
+  passed and the second tag exists, so its results cannot be seen while the detector is built and
+  the D2 database is not shared with development re-measurements in the meantime (amended 3 Oct,
+  PROBLEMS_LOG P-054).
+- **v2 run:** from a clean checkout of the second tag, after the v1 run.
 - Both read the same frozen key and policy copy, on the D2 database branch, in chunks of 30
   minutes or less. The report states what the detector added: planted gaps found and extras
   (unkeyed findings), v2 against v1.
