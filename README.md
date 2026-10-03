@@ -230,6 +230,11 @@ rule of this project, and there is no per-event spending cap.
 - One regulation end to end; text input only. A person chooses which policy is checked against which Direction.
 - A bank profile lists what the bank's policy mentions. A policy that restates the regulation mentions almost everything, so the applicability step excluded nothing on the banks tested, and no precision gain is claimed from it. The what-if in the app is hypothetical: it shows what would drop out if a bank stated it did not offer something. A profile built from independent facts is on the roadmap.
 - The hosted demo depends on free tiers (a daily token cap for the hosted model).
+- **Tried and stopped: D2.** A pre-registered attempt ([bar](eval/d2_bar.md)) stopped at its own
+  gate on development data: 1 of 4 target misses found, and the new-finding ceiling broken on all
+  three banks (local qwen3:8b). A code rule caught a deleted duty without a model; judging scope
+  needs a stronger model. Unmerged branch `d2`,
+  [closing note](https://github.com/ashashkaWestfeild/regcompliance-agent/blob/d2/eval/reports/d2_closing_note.md).
 
 More detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md),
 [`docs/mutation_taxonomy.md`](docs/mutation_taxonomy.md), [`docs/adr/`](docs/adr/).
