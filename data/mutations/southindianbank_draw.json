@@ -1,0 +1,261 @@
+{
+ "policy": "southindianbank",
+ "policy_sha256": "df1d336b56a4b4b9ef87f0e7d039be80181a18860103cc821091fb92aef7219e",
+ "seed": 20261003,
+ "theme_order": [
+  "beneficial_owner",
+  "ckycr_upload",
+  "risk_categorization",
+  "ongoing_monitoring",
+  "fiu_reporting",
+  "periodic_rekyc"
+ ],
+ "slots": [
+  {
+   "slot": 1,
+   "operator": "delete_control",
+   "theme": "beneficial_owner",
+   "drawn_theme": "beneficial_owner",
+   "candidates_in_draw_order": [
+    {
+     "item": 900,
+     "text": "iii. The State Nodal Officer shall also advise appropriate department of the State/UT, administering the operations relating to Casinos, to ensure that the designated individuals/ entities should not be allowed to own or have beneficial own"
+    },
+    {
+     "item": 489,
+     "text": "Bank identifies PEP by verifying the details of every Customer or Beneficial Owner being on-boarded as well as reviews existing customer with the PEP database available in sanction screening application integrated with customer on-boarding "
+    },
+    {
+     "item": 386,
+     "text": "d. Customer Due Diligence and KYC documents of the individuals (Partners, Beneficial owners, person holding an attorney to transact on its behalf if any)."
+    },
+    {
+     "item": 494,
+     "text": "(d) In the event of an existing customer or the beneficial owner of an existing account, subsequently becoming a PEP, branches should obtain Regional Head approval to continue the business relationship and subject the account to the CDD mea"
+    },
+    {
+     "item": 33,
+     "text": "d. Where the customer is a trust, the identification of beneficial owner(s) shall include identification of the author of the trust, the trustee, the beneficiaries with 10 percent or more interest in the trust and any other natural person e"
+    }
+   ]
+  },
+  {
+   "slot": 2,
+   "operator": "delete_control",
+   "theme": "ckycr_upload",
+   "drawn_theme": "ckycr_upload",
+   "candidates_in_draw_order": [
+    {
+     "item": 593,
+     "text": "(a) Government of India has authorised the Central Registry of Securitisation Asset Reconstruction and Security Interest of India (CERSAI), to act as, and to perform the functions of the CKYCR vide Gazette Notification No. S.O. 3183(E) date"
+    },
+    {
+     "item": 318,
+     "text": "c. KYC records downloaded from CKYCR, in accordance with serial no: 39, using the KYC identifier provided by the customer."
+    },
+    {
+     "item": 603,
+     "text": "(j) Where a customer, for the purpose of establishing an account-based relationship, updation/ periodic updation or for verification of identity of a customer, the bank shall seek the KYC Identifier from the customer or retrieve the KYC Ide"
+    },
+    {
+     "item": 108,
+     "text": "viii. 'KYC Templates' means templates prepared to facilitate collating and reporting the KYC data to the CKYCR, for individuals and legal entities."
+    },
+    {
+     "item": 604,
+     "text": "i. there is a change in the information of the customer as existing in the records of CKYCR;"
+    }
+   ]
+  },
+  {
+   "slot": 3,
+   "operator": "narrow_scope",
+   "theme": "risk_categorization",
+   "drawn_theme": "risk_categorization",
+   "candidates_in_draw_order": [
+    {
+     "item": 235,
+     "text": "(c) Risk categorization will be undertaken based on parameters such as customer's identity, social/financial status, nature of business activity, and information about the customer's business and their location, geographical risk covering c"
+    },
+    {
+     "item": 236,
+     "text": "(d) The risk categorization of a customer and the specific reasons for such categorization shall be kept confidential and shall not be revealed to the customer to avoid tipping off"
+    },
+    {
+     "item": 442,
+     "text": "a. A system of periodic review of risk categorization of accounts, with such periodicity being at least once in six months, and enhanced due diligence measures are put in place."
+    },
+    {
+     "item": 214,
+     "text": "(b) The Bank will not open an account or close an existing account where the bank is unable to apply appropriate customer due diligence measures, i.e., bank is unable to verify the identity and /or obtain documents required as per the risk "
+    },
+    {
+     "item": 548,
+     "text": "Robust software, throwing alerts when the transactions are inconsistent with risk categorization and updated profile of the customers shall be put in to use as a part of effective identification and reporting of suspicious transactions."
+    }
+   ]
+  },
+  {
+   "slot": 4,
+   "operator": "narrow_scope",
+   "theme": "ongoing_monitoring",
+   "drawn_theme": "ongoing_monitoring",
+   "candidates_in_draw_order": [
+    {
+     "item": 420,
+     "text": "Branches shall undertake on-going due diligence of customers to ensure that their transactions are consistent with bank's knowledge about the customers, customers' business and risk profile, the source of funds / wealth. Any such unusual ac"
+    },
+    {
+     "item": 619,
+     "text": "The instructions on opening of accounts and monitoring of transactions shall be strictly adhered to, in order to minimize the operations of 'Money Mules' which are used to launder the proceeds of fraud schemes (e.g., phishing and identity t"
+    },
+    {
+     "item": 110,
+     "text": "x. 'On-going Due Diligence' means regular monitoring of transactions in accounts to ensure that they are consistent with RE's knowledge about the customers, customers' business and risk profile, the source of funds / wealth."
+    },
+    {
+     "item": 438,
+     "text": "For ongoing due diligence, Bank may consider adopting appropriate innovations including artificial intelligence and machine learning (AI & ML) technologies to support effective monitoring."
+    },
+    {
+     "item": 441,
+     "text": "High risk accounts have to be subjected to more intensified monitoring."
+    }
+   ]
+  },
+  {
+   "slot": 5,
+   "operator": "make_stale",
+   "theme": "fiu_reporting",
+   "drawn_theme": "fiu_reporting",
+   "candidates_in_draw_order": [
+    {
+     "item": 196,
+     "text": "d. Timely submission of reports to FIU-IND viz., CTR- cash transactions >10 lakhs, STR, CCR, NTR - Receipts above 10 lakhs in the account of NPO, Cross Border Wire transfers >5 lacs etc."
+    }
+   ]
+  },
+  {
+   "slot": 6,
+   "operator": "weaken_threshold",
+   "theme": "periodic_rekyc",
+   "drawn_theme": "periodic_rekyc",
+   "candidates_in_draw_order": [
+    {
+     "item": 446,
+     "text": "Periodic updation from the date of opening of the account / last KYC updation shall be carried out at least once in every two years for high risk customers, once in every eight years for medium risk customers and once in every ten years for"
+    }
+   ]
+  },
+  {
+   "slot": 7,
+   "operator": "weaken_modality",
+   "theme": "beneficial_owner",
+   "drawn_theme": "beneficial_owner",
+   "candidates_in_draw_order": [
+    {
+     "item": 26,
+     "text": "a. Where the customer is a company, the beneficial owner is the natural person(s), who, whether acting alone or together, or through one or more juridical persons, has/have a controlling ownership interest or who exercise control through ot"
+    },
+    {
+     "item": 386,
+     "text": "d. Customer Due Diligence and KYC documents of the individuals (Partners, Beneficial owners, person holding an attorney to transact on its behalf if any)."
+    },
+    {
+     "item": 903,
+     "text": "v. The members of these institutes should also be sensitized that if they have arranged for or have been approached for incorporation/ formation/ registration of any company, limited liability firm, partnership firm, society, trust, associa"
+    },
+    {
+     "item": 793,
+     "text": "ix) The Registrar of Companies (ROC) may be advised that in case any designated individual/ entity is a shareholder/ director/ whole time director in any company registered with ROC or beneficial owner of such company, then the ROC should c"
+    },
+    {
+     "item": 905,
+     "text": "vii. In case any designated individual/ entity is a shareholder/ director/ whole time director in any company registered with the Registrar of Companies (ROC) or beneficial owner of such company or partner in a Limited Liabilities Partnersh"
+    }
+   ]
+  }
+ ],
+ "decoys": [
+  {
+   "decoy": "rephrase",
+   "candidates_in_draw_order": [
+    {
+     "item": 594,
+     "text": "(b) In terms of provision of Rule 9(1A) of PML Rules, the Bank shall capture customer's KYC records and upload onto CKYCR within 10 days of commencement of an account-based relationship with the customer."
+    },
+    {
+     "item": 296,
+     "text": "i. CDD in case of new customer on-boarding for individual customers, proprietor in case of proprietorship firm, authorized signatories and Beneficial Owners (BOs) in case of Legal Entity (LE) customers. Provided that in case of CDD of a pro"
+    },
+    {
+     "item": 505,
+     "text": "(d) All the beneficial owners shall be identified where funds held by the intermediaries are not co-mingled at the level of Bank, and there are 'sub- accounts', each of them attributable to a beneficial owner, or where such funds are co-min"
+    },
+    {
+     "item": 386,
+     "text": "d. Customer Due Diligence and KYC documents of the individuals (Partners, Beneficial owners, person holding an attorney to transact on its behalf if any)."
+    },
+    {
+     "item": 277,
+     "text": "v. KYC Identifier under clause (ac), Bank shall retrieve the KYC records online from the CKYCR in accordance with serial no :39 as specified under this policy"
+    }
+   ]
+  },
+  {
+   "decoy": "reorder",
+   "candidates_in_draw_order": [
+    {
+     "item": 903,
+     "text": "v. The members of these institutes should also be sensitized that if they have arranged for or have been approached for incorporation/ formation/ registration of any company, limited liability firm, partnership firm, society, trust, associa"
+    },
+    {
+     "item": 544,
+     "text": "The reporting formats and comprehensive reporting format guide, prescribed/ released by FIU-IND and Report Generation Utility and Report Validation Utility developed to assist reporting entities in the preparation of prescribed reports shal"
+    },
+    {
+     "item": 566,
+     "text": "(e) Bank may refer to the designated list, as amended from time to time, available on the portal of FIU-India."
+    },
+    {
+     "item": 168,
+     "text": "(b) The name, designation and address of the Principal Officer shall be communicated to the FIU-IND."
+    },
+    {
+     "item": 403,
+     "text": "d. Customer Due Diligence and KYC documents of the individuals (including beneficial owners, person holding an attorney to transact on its behalf if any)."
+    }
+   ]
+  },
+  {
+   "decoy": "stricter_threshold",
+   "candidates_in_draw_order": [
+    {
+     "item": 33,
+     "text": "d. Where the customer is a trust, the identification of beneficial owner(s) shall include identification of the author of the trust, the trustee, the beneficiaries with 10 percent or more interest in the trust and any other natural person e"
+    },
+    {
+     "item": 505,
+     "text": "(d) All the beneficial owners shall be identified where funds held by the intermediaries are not co-mingled at the level of Bank, and there are 'sub- accounts', each of them attributable to a beneficial owner, or where such funds are co-min"
+    },
+    {
+     "item": 596,
+     "text": "(d) Bank shall capture the KYC information for sharing with the CKYCR in the manner mentioned in the Rules, as per the KYC templates prepared for 'Individuals' and 'Legal Entities' (LEs), as the case may be. The templates may be revised fro"
+    },
+    {
+     "item": 600,
+     "text": "(h) In order to ensure that all KYC records are incrementally uploaded on to CKYCR, bank shall upload/update the KYC data pertaining to accounts of individual customers and LEs opened prior to the above mentioned dates as per clause (e) and"
+    },
+    {
+     "item": 111,
+     "text": "xi. 'Periodic Updation' means steps taken to ensure that documents, data or information collected under the CDD process is kept up-to-date and relevant by undertaking reviews of existing records at periodicity prescribed by the Reserve Bank"
+    }
+   ]
+  }
+ ],
+ "injection_after_item": {
+  "item": 184,
+  "text": "b. Direction and Advise on compliance of KYC/AML/CFT guidelines"
+ },
+ "rule": "use the first feasible candidate of each slot; log every skip and why"
+}
