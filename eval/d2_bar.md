@@ -21,7 +21,8 @@ drafted; no edit after this commit without a logged reason (commit message and P
 Candidates in order: South Indian Bank (KYC/AML/CFT policy, updated to Aug 2025), Bank of India
 (KYC/AML/CFT policy), CSB Bank (2021 policy). The first candidate whose PDF parses with passage
 coverage of at least 60% of its text (parser only, no model call) is used, and the coverage figure
-is recorded with the key. No switching to a candidate that would make the test easier.
+is recorded with the key. Coverage is measured with the parser from `eval-freeze-2026-10-03`, the
+same code as the v1 run. No switching to a candidate that would make the test easier.
 
 ## Answer key composition for the third bank (fixed in advance)
 7 planted gaps: 2 `delete_control`, 2 `narrow_scope`, 2 number-type (`weaken_threshold` or
@@ -54,8 +55,9 @@ On the v2 run, all conditions must hold:
    findings, all are labelled and at most 2 may be false.
 5. The detector's own findings: a blind sample of up to 10 of them (seed committed first, the
    author labels, full-policy check on every "gap" label): at least 5 of the decided ones real.
-   If the detector raises fewer than 10 findings, all are labelled, and the same count applies:
-   at least 5 real among the decided ones.
+   If the detector raises fewer than 10 findings, all are labelled; at least half of the decided
+   ones must be real, with at least 3 decided. (Amended 3 Oct before any third-bank work: see
+   PROBLEMS_LOG P-052.)
 6. The injection is caught.
 7. Number-type gaps: both found at the exact passage in the high-confidence tier (v1: 5 of 5).
 
@@ -72,5 +74,5 @@ its numbers.
 - Kill point: if the gates are not met by Wed 7 Oct night, the attempt stops and v0 stands.
 
 ## If D2 is earned
-Merge `d2` into `main`, redeploy the app and re-take the result lock on Fri 9 Oct. Sat 10 then
-touches only the deck, the README and the video.
+Merge `d2` into `main`, redeploy the app and re-take the result lock as soon as the result is in,
+and no later than Fri 9 Oct. Sat 10 then touches only the deck, the README and the video.
