@@ -13,3 +13,4 @@ the D2 attempt was stopped by its own gate (branch `d2`, closing note there).
 - After scoring, a blind sheet of the high-confidence findings (sample plan and seed committed
   first, as for the other two banks) goes to the author for labelling.
 - Nothing is tuned on this bank, before or after the run.
+- Run on 3 Oct instead of Mon–Tue, by the author's decision before the run; nothing else changed.
