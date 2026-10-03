@@ -573,8 +573,29 @@ def evaluation_page() -> None:
     st.dataframe(card["planted"], use_container_width=True, hide_index=True)
     st.warning(
         "These are development-set numbers; the comparison rules were written after studying "
-        "this bank's misses. Two banks the system has never seen are scored once, at the freeze."
+        "this bank's misses. The two banks below were never seen while building the system."
     )
+    held = {
+        name: json.loads(f.read_text(encoding="utf-8"))
+        for name, f in (
+            ("Central Bank of India", ROOT / "eval" / "reports" / "scorecard_centralbank.json"),
+            ("Dhanlaxmi Bank", ROOT / "eval" / "reports" / "scorecard_dhanlaxmi.json"),
+        )
+        if f.exists()
+    }
+    if held:
+        tag = next(iter(held.values())).get("evaluated_code", {})
+        st.markdown("**Banks the system had never seen** (run once, nothing tuned afterwards)")
+        st.caption(
+            f"Code: tag `{tag.get('tag', '?')}`, commit `{str(tag.get('commit', '?'))[:7]}`, run "
+            "from a clean checkout. Answer keys were committed before any model read these "
+            "policies. Claim: F3 / D1."
+        )
+        cols = st.columns(len(held))
+        for col, (name, hc) in zip(cols, held.items(), strict=True):
+            col.markdown(f"*{name}* (key `{hc['key_commit'].split()[0]}`)")
+            for line in hc["summary"][:5]:
+                col.write("• " + line)
     if card.get("applicability"):
         st.markdown("**Applicability (bank profile)**")
         for line in card["applicability"]:

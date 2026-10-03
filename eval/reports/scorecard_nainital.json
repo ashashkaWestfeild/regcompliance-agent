@@ -3,7 +3,7 @@
  "policy": "nainital",
  "split": "dev",
  "key_commit": "350b8e0 2026-09-27T14:48:06+05:30",
- "scored_at": "2026-10-03 10:20",
+ "scored_at": "2026-10-03 12:26",
  "summary": [
   "planted gaps detected 5/7 (type accepted 2/7; near misses 1/7)",
   "planted gaps raised at the right obligation, any passage (location-tolerant) 6/7",
