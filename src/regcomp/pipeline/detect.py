@@ -15,7 +15,7 @@ import re
 from dataclasses import dataclass
 from difflib import SequenceMatcher
 
-from regcomp.pipeline.verify import _MARKER, _STOP, CLOSE
+from regcomp.pipeline.verify import _MARKER, _REFERENCE, _STOP, ABSENT, CLOSE
 
 _TOKEN = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*(?:'[a-z]+)?", re.I)  # "pre-existing" is one word
 MAX_ADDED = 3  # a modifier in front of a noun is short; longer insertions are headers or names
@@ -215,3 +215,34 @@ def limiting_words_found(result: dict, item: dict) -> bool:
     words = " ".join((result.get("limiting_words") or "").split()).lower()
     where = " ".join(f"{item.get('lead_in') or ''} {item['passage']}".split()).lower()
     return bool(words) and words in where
+
+
+def rbi_paragraph(clauses: dict[str, str], ref: str) -> str:
+    """RBI's text for a reference together with every enclosing clause up to the paragraph
+    ("65(10)(iv)" -> 65(10)(iv), 65(10), 65): the wording and lead-ins the duty sits under."""
+    parts, r = [], ref
+    while True:
+        if r in clauses:
+            parts.append(clauses[r])
+        if "(" not in r:
+            return " ".join(parts)
+        r = re.sub(r"\([^()]*\)$", "", r)
+
+
+def scope_answer_check(result: dict, item: dict, paragraph: str) -> str | None:
+    """Code checks on a 'narrower' answer; the reason to drop it, or None to keep it.
+    Dropped when the limiting words are not in the policy text, are only a cross-reference to
+    another provision, are all RBI's own words in that paragraph (the limit is RBI's too), or
+    when the supporting sentence shares so little of RBI's wording (below ABSENT) that it is not
+    the same duty."""
+    if not limiting_words_found(result, item):
+        return "limiting words not in the policy text"
+    rest = _REFERENCE.sub(" ", result["limiting_words"])
+    new = [w for w in _tokens(rest) if w not in _FUNCTION and not w.isdigit()]
+    if not new:
+        return "limit is only a cross-reference"
+    if all(w in set(_tokens(paragraph)) for w in new):
+        return "limit is RBI's own"
+    if item["overlap"] < ABSENT:
+        return "support is not the same duty"
+    return None

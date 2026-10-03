@@ -24,6 +24,7 @@ from collections import Counter
 from psycopg.types.json import Jsonb
 
 from regcomp.db import connect
+from regcomp.ingest.rbi_html import parse_file
 from regcomp.llm import LLMError, complete_json, model_for
 from regcomp.pipeline.detect import (
     SCOPE_SCHEMA,
@@ -32,13 +33,15 @@ from regcomp.pipeline.detect import (
     added_modifiers,
     definition_support,
     lead_in,
-    limiting_words_found,
+    rbi_paragraph,
+    scope_answer_check,
     scope_prompt,
     support_overlap,
 )
 from regcomp.pipeline.verify import CLOSE
 
 TAG = "run_detect"
+REGULATION = "data/raw/rbi/kycdir_v3_20260918.html"
 BATCH = 5  # items per scope question
 
 
@@ -74,6 +77,7 @@ def main() -> None:
     with connect(autocommit=True) as conn:
         conn.execute("DELETE FROM gap WHERE evidence->>'added_by' = %s", (TAG,))
         text = conn.execute("SELECT text FROM document WHERE kind = 'policy'").fetchone()[0]
+        rbi = {c.ref: c.quote for c in parse_file(REGULATION).clauses}
         clauses = [
             Clause(ref, s, e)
             for ref, s, e in conn.execute(
@@ -83,14 +87,14 @@ def main() -> None:
             ).fetchall()
         ]
         fields = ["oid", "version", "effective", "obligation", "mapping", "control", "passage",
-                  "start", "end"]  # fmt: skip
+                  "start", "end", "ref"]  # fmt: skip
         rows = [
             dict(zip(fields, r, strict=True))
             for r in conn.execute(
                 "SELECT o.id, o.source_version, o.effective_from, o.source_span->>'quote',"
                 " m.id, c.id, c.source_span->>'quote',"
-                " (c.source_span->>'char_start')::int, (c.source_span->>'char_end')::int"
-                " FROM mapping m JOIN obligation o ON o.id = m.obligation_id"
+                " (c.source_span->>'char_start')::int, (c.source_span->>'char_end')::int,"
+                " o.source_clause_ref FROM mapping m JOIN obligation o ON o.id = m.obligation_id"
                 " JOIN control c ON c.id = m.control_id"
                 " WHERE m.verdict = 'covered' AND m.superseded_at IS NULL"
                 " AND o.superseded_at IS NULL"
@@ -165,8 +169,9 @@ def main() -> None:
                 stats[f"scope answer: {r['scope']}"] += 1
                 if r["scope"] != "narrower":
                     continue
-                if not limiting_words_found(r, it):
-                    stats["narrower, but limiting words not in the policy text (dropped)"] += 1
+                why = scope_answer_check(r, it, rbi_paragraph(rbi, it["ref"]))
+                if why:
+                    stats[f"narrower, dropped: {why}"] += 1
                     continue
                 add_gap(
                     conn,

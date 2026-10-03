@@ -162,3 +162,33 @@ def test_limiting_words_must_be_in_the_policy_text():
     listed = item | {"lead_in": "b. Responsibilities of the Principal Officer:"}
     assert "<lead_in>b. Responsibilities" in scope_prompt([listed])
     assert "<lead_in>" not in scope_prompt([item])
+
+
+def test_rbi_paragraph_includes_enclosing_clauses():
+    from regcomp.pipeline.detect import rbi_paragraph
+
+    clauses = {"65": "A.", "65(10)": "B:", "65(10)(iv)": "C."}
+    assert rbi_paragraph(clauses, "65(10)(iv)") == "C. B: A."
+    assert rbi_paragraph(clauses, "66") == ""
+
+
+def test_scope_answer_checks():
+    from regcomp.pipeline.detect import scope_answer_check
+
+    item = {"passage": CB_MULES, "lead_in": None, "overlap": 0.95}
+    narrower = {"scope": "narrower", "limiting_words": "savings accounts"}
+    assert scope_answer_check(narrower, item, RBI_68) is None
+    # the same words in RBI's own paragraph: the limit is RBI's too
+    assert scope_answer_check(narrower, item, RBI_68 + " savings accounts") == "limit is RBI's own"
+    # a cross-reference to another provision does not narrow anything
+    ref = item | {"passage": CB_MULES + " as per Section 15"}
+    assert scope_answer_check({"limiting_words": "as per Section 15"}, ref, RBI_68) == (
+        "limit is only a cross-reference"
+    )
+    # support that shares little of RBI's wording is not the same duty
+    assert scope_answer_check(narrower, item | {"overlap": 0.2}, RBI_68) == (
+        "support is not the same duty"
+    )
+    assert scope_answer_check({"limiting_words": "current"}, item, RBI_68) == (
+        "limiting words not in the policy text"
+    )
