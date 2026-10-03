@@ -47,6 +47,21 @@ system. The two other banks were run once, from a clean checkout of the tag
 ([Central Bank](eval/reports/heldout_centralbank_report.md),
 [Dhanlaxmi](eval/reports/heldout_dhanlaxmi_report.md)).
 
+**Proven on two banks the system had never seen** (each run once, counts):
+
+- every weakened number and stale threshold was found: **5 of 5**, all in the high-confidence
+  tier (3 of 5 with the right gap type);
+- hidden instructions in the policy: **2 of 2** caught, both by the code-level scan;
+- real findings in the published policies: **3 of 3** handled correctly;
+- decoys (rewordings and stricter numbers) left alone: **5 of 6**;
+- change detection against RBI's own amendment markers: **2 of 2** on the KYC Direction and
+  **262 of 266** amended clauses on nine other Directions.
+
+**Not yet, the next milestone:** deleted duties 0 of 2, narrowed scope 0 of 2, contradictions
+0 of 2 (one found at the right obligation), a removed owner 0 of 1, a duty made optional 0 of 1
+(found at the right obligation). Overall: 5 of 13 planted gaps at the exact passage, 7 of 13 at
+the right obligation. Claim: **F3 / D1** (see the architecture document for why not D2).
+
 | Measure | Development bank | Central Bank (unseen) | Dhanlaxmi (unseen) |
 |---|---|---|---|
 | Planted gaps found at the exact passage | 5 of 7 | 3 of 7 | 2 of 6 |
@@ -57,16 +72,11 @@ system. The two other banks were run once, from a clean checkout of the tag
 | Other reports: high-confidence + review | 17 + 38 | 15 + 36 | 42 + 43 |
 | Applicability: obligations excluded | 0 of 458 | 0 of 458 | 0 of 458 |
 
-On the unseen banks the system found 5 of 13 planted gaps at the exact passage and 7 of 13 at the
-right obligation. Every exact hit was in the high-confidence tier. Missed on both: a deleted duty,
-a narrowed scope, a contradiction, a removed owner. Both hidden instructions were caught by the
-code-level scan, not by the model. On Dhanlaxmi, control extraction covered only about 8% of the
-policy text (its clauses are numbered 4.1.2-style); the judge still saw every passage, but the
-extra findings rose to 42 high-confidence. That was found after the freeze and is not fixed.
-
-Also measured: change detection against RBI's own amendment markers, 2 of 2 KYC amendments and
-262 of 266 amended clauses in nine other Directions; evidence tests 2 of 2; real findings in the
-published policies handled correctly 5 of 5.
+The other reports (15 and 42 high-confidence on the unseen banks) are not yet adjudicated; a
+blind precision check on a sample of them is in progress. On Dhanlaxmi, control extraction
+covered only about 8% of the policy text (its clauses are numbered 4.1.2-style): the judge still
+compared every passage, but extraction-based checks saw little of it. That was found after the
+freeze and is not fixed. Evidence tests: 2 of 2 on the development bank.
 
 **A second answer key on the same bank** (4 planted gaps, 3 decoys, 1 injection, on passages picked by a seeded draw and written after the comparison rules) checks whether those rules hold on gaps they were not written for. Result: 3 of 4 planted gaps found, all three in the review queue and none in the high-confidence tier; the contradiction was missed; the stricter-number decoy was flagged in the review queue; the injected instruction was not flagged (0 of 1). Two causes were fixed afterwards, from the general principle and before the freeze: the number comparison ignored the number one ("one year" against "two years"), and instruction detection depended on the extraction model noticing the text; a code-level scan now checks every sentence. With both fixes the first key's results are unchanged, and the second key reads 3 of 4 found (1 high-confidence) and the injection flagged. That second reading is not a test, because the fixes were made knowing its misses.
 

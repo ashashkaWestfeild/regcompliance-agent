@@ -212,6 +212,18 @@ confidence checks in `eval/reports/` carry the evaluated tag.
 | Other reports: high-confidence + review | 15 + 36 | 42 + 43 |
 | Obligations excluded by applicability | 0 | 0 (3 to confirm) |
 
+By type of planted gap (both banks):
+
+| Planted change | Found at the exact passage | At the right obligation |
+|---|---|---|
+| Weakened number | 3 of 3 (all high-confidence) | 3 of 3 |
+| Stale threshold (an older value) | 2 of 2 (high-confidence, typed as weakened) | 2 of 2 |
+| Deleted duty | 0 of 2 | 0 of 2 |
+| Narrowed scope | 0 of 2 | 0 of 2 |
+| Contradiction | 0 of 2 | 1 of 2 (review) |
+| Duty made optional | 0 of 1 | 1 of 1 (review) |
+| Removed owner | 0 of 1 | 0 of 1 |
+
 What it shows:
 - **Numbers are found; omissions and contradictions are not.** The hits are changed or stale
   thresholds. A deleted duty, a narrowed scope, a contradiction and a removed owner were missed on
@@ -330,7 +342,9 @@ held-out runs, which are then reported against it.
 
 ## 10. Claim
 
-**F3 / D1.** Functional scope (F3): ingestion, change intelligence, obligation extraction,
+**F3 / D1.** Proven on the unseen banks: every weakened number and stale threshold, 5 of 5; hidden instructions 2 of 2 (code-level scan); real findings 3 of 3; decoys left alone 5 of 6; change detection 2 of 2 on the KYC Direction and 262 of 266 on nine other Directions. Next milestone: deletions, narrowed scope, contradictions, removed owners and duties made optional (0 of 8 at the exact passage).
+
+Functional scope (F3): ingestion, change intelligence, obligation extraction,
 control understanding, mapping, gap identification, risk ranking and impact analysis, with
 remediation, evidence testing, applicability and what-if as built extras.
 
