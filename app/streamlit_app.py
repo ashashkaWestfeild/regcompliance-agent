@@ -392,11 +392,22 @@ def change_page() -> None:
     start = {"old_path": old, "new_path": new, "dry_run": True}
     if fail:
         start["inject_failure"] = "re_map"
-    with st.spinner("Running: diff, classify, scope, plan, re-extract, re-map, compare"):
+    config = {"configurable": {"thread_id": f"demo-{name}-{fail}"}}
+    # each step is shown as it finishes (the agent's own log lines), then the summary below
+    with st.status("Running the agent", expanded=True) as status:
         try:
             agent = build(load_graph, InMemorySaver(), DbTools("demo"))
-            out = agent.invoke(start, {"configurable": {"thread_id": f"demo-{name}-{fail}"}})
+            for update in agent.stream(start, config, stream_mode="updates"):
+                for step, change in update.items():
+                    if step.startswith("__"):
+                        continue
+                    lines = change.get("log", []) if isinstance(change, dict) else []
+                    for line in lines or [step.replace("_", " ")]:
+                        status.write(f"• {line}")
+            out = agent.get_state(config).values
+            status.update(label="Finished", state="complete", expanded=False)
         except Exception as e:  # shown to the visitor instead of a stack trace
+            status.update(label="Stopped", state="error")
             if any(word in str(e) for word in LIMIT_WORDS):
                 st.warning(
                     "The hosted model's free allowance is used up for now, so the steps that "
@@ -404,7 +415,12 @@ def change_page() -> None:
                     "the data. Please try again later; the first scenario needs no model call."
                 )
             else:
-                st.error(f"The run stopped: {e}")
+                st.error(
+                    "The run stopped before it finished, most often because the hosted model "
+                    "could not be reached just now. Nothing was written. The first scenario "
+                    "needs no model and still runs; the other tabs need no model at all."
+                )
+                st.caption(f"Technical detail: {type(e).__name__}: {str(e)[:200]}")
             return
     st.markdown("**What the agent did**")
     for line in out.get("log", []):
