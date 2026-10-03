@@ -71,6 +71,7 @@ def add_gap(conn, row: dict, gap_type: str, evidence: dict, rationale: str) -> N
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--stop-after-min", type=float, default=None)
+    ap.add_argument("--explain", nargs="*", default=[], help="RBI refs to explain item by item")
     args = ap.parse_args()
     started = time.time()
     stats = Counter()
@@ -127,6 +128,13 @@ def main() -> None:
             overlap = support_overlap(row["obligation"], row["passage"])
             if overlap < CLOSE:
                 triggers.append("low_overlap")
+            if row["ref"] in args.explain:
+                support = " ".join(row["passage"].split())[:220]
+                print(
+                    f"EXPLAIN {row['ref']}: triggers {triggers or 'none'}; overlap {overlap}; "
+                    f"modifiers {[m.added for m in mods]}; lead-in {lead!r}; support: {support}",
+                    flush=True,
+                )
             if not triggers:
                 continue
             for t in triggers:
@@ -163,6 +171,8 @@ def main() -> None:
             by_id = {r.get("item"): r for r in answer.get("results", [])}
             for it in local:
                 r = by_id.get(it["id"])
+                if it["ref"] in args.explain:
+                    print(f"EXPLAIN {it['ref']}: answer {r}", flush=True)
                 if not r:
                     stats["scope question: no answer"] += 1
                     continue
