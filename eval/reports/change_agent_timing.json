@@ -74,5 +74,6 @@
     "first_run_estimate_s": 20.2
    }
   ]
- }
+ },
+ "notes": "Local, December 2025 amendment: the 8B model's re-extraction returned no obligations from paragraph 65(10)(iv), so that run re-judged nothing and its 27 s is not a full run (the hosted model extracted 3 obligations and reported 3 gaps that would open and 1 that would close). Valid full runs: local, synthetic draft circular, 17 s measured, about 81 s uncached; hosted, 14-22 s per circular. The hosted demo uses the hosted model."
 }

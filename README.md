@@ -91,11 +91,13 @@ read those policies. Those results will be added here.
 ## Business impact (measured time, estimated baseline)
 
 Change agent, dry run, per circular ([timing](eval/reports/change_agent_timing.json)):
-on one laptop GPU (RTX 4060, local qwen3:8b) 1.7 s for a permissive amendment (no model call),
-27 s for the Dec 2025 amendment and 17 s for the draft circular, about 81 s on a first, uncached
-run; with the hosted open-weights model 1 to 22 s. Baseline: 5 to 10 analyst hours per circular,
-the author's own estimate, not a measurement. The agent produces a scoped draft assessment; a
-person still reviews it.
+a circular with one new duty took 17 s on one laptop GPU (RTX 4060, local qwen3:8b), about 81 s
+on a first, uncached run; with the hosted open-weights model (what the demo uses) 14 to 22 s; a
+permissive amendment needs no model call (about 2 s). Baseline: 5 to 10 analyst hours per
+circular, the author's own estimate, not a measurement. The agent produces a scoped draft
+assessment; a person still reviews it. One caution: on the December 2025 amendment the local 8B
+model extracted no obligations from the amended paragraph, so that run is not counted; the hosted
+model extracted three.
 
 ## Data (all public or synthetic)
 
