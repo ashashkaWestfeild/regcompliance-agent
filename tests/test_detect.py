@@ -1,7 +1,7 @@
 """Second-pass detector rules (D2). Text from the development banks only (Central Bank,
 Dhanlaxmi, Nainital) and from the RBI Directions; never from the third held-out bank."""
 
-from regcomp.pipeline.detect import added_modifiers, is_definition
+from regcomp.pipeline.detect import added_modifiers, definition_support, is_definition
 
 # RBI 68 and Central Bank 7.5.7.1 as planted (C05): "savings" added in front of "accounts".
 RBI_68 = (
@@ -84,3 +84,26 @@ def test_duty_is_not_a_definition():
         "contact point verification, deliverables, etc."
     )
     assert not is_definition("The bank shall keep records which means keeping them for 5 years.")
+
+
+# RBI 5(2)(xiii) is itself a definition; Nainital defines the same term: right support, no finding.
+RBI_PU = (
+    "‘Periodic Updation’ means the steps taken to ensure that documents, data or "
+    "information collected under the CDD process are kept up-to-date and relevant by undertaking "
+    "reviews of existing records at the periodicity prescribed by the RBI."
+)
+NAINITAL_PU = (
+    "ii. 'Periodic Updation' means steps taken to ensure that documents, data or information "
+    "collected under the CDD process is kept up-to-date and relevant by undertaking reviews of "
+    "existing records at periodicity prescribed by the Reserve Bank."
+)
+DH_DEF = (
+    "4.2.10 On-going Due Diligence' means regular monitoring of transactions in accounts to ensure "
+    "that those are consistent with the Bank's knowledge about the customers."
+)
+
+
+def test_definition_support_needs_a_duty():
+    assert not definition_support(RBI_PU, NAINITAL_PU)
+    assert definition_support(RBI_68, DH_DEF)
+    assert not definition_support(RBI_68, CB_MULES)

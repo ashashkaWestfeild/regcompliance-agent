@@ -17,7 +17,21 @@ from difflib import SequenceMatcher
 
 from regcomp.pipeline.verify import _MARKER, _STOP, CLOSE
 
-_TOKEN = re.compile(r"[a-z0-9]+(?:'[a-z]+)?", re.I)
+_TOKEN = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*(?:'[a-z]+)?", re.I)  # "pre-existing" is one word
+MAX_ADDED = 3  # a modifier in front of a noun is short; longer insertions are headers or names
+# Closed-class English words (grammar, not qualifiers): articles and determiners, negation,
+# pronouns, prepositions, conjunctions, auxiliaries and modals. A modifier neither starts nor
+# ends with one, and the word it stands in front of is not one.
+_FUNCTION = _STOP | frozenset(
+    {
+        "no", "not", "nor", "all", "each", "every", "some", "other", "these", "those", "there",
+        "he", "she", "they", "them", "his", "her", "we", "our", "you", "your", "who", "whom",
+        "whose", "what", "where", "when", "while", "whether", "if", "but", "so", "than", "then",
+        "into", "onto", "upon", "under", "over", "about", "after", "before", "between", "during",
+        "through", "within", "without", "against", "per", "via", "are", "was", "were", "been",
+        "being", "has", "have", "had", "do", "does", "did", "can", "could", "would", "might",
+    }
+)  # fmt: skip
 # A definition: a named term of at most eight words, then a defining verb. The term is a name:
 # quoted ("'Customer' means") or written with capitals ("KYC Templates means"), so an ordinary
 # sentence that happens to contain "means" is not a definition.
@@ -41,6 +55,12 @@ def is_definition(passage: str) -> bool:
     if any(q in term for q in _QUOTES):
         return True
     return all(w[0].isupper() or w[0].isdigit() for w in term.split())
+
+
+def definition_support(obligation: str, passage: str) -> bool:
+    """The judge relied on a definition for a duty. When RBI's own text is a definition, a
+    policy definition is the right support and this is not a finding."""
+    return is_definition(passage) and not is_definition(obligation)
 
 
 def _tokens(text: str) -> list[str]:
@@ -82,10 +102,19 @@ def added_modifiers(obligation: str, passage: str) -> list[Modifier]:
                 continue
             if n + 1 >= len(ops) or ops[n + 1][0] != "equal":
                 continue
-            new = [w for w in b[j1:j2] if w not in _STOP and w not in rbi_words]
+            span = b[j1:j2]
             noun = a[i1] if i1 < len(a) else ""
-            if new and not any(w.isdigit() for w in new) and noun and noun not in _STOP:
-                found.append(Modifier(" ".join(b[j1:j2]), noun, sentence, round(overlap, 2)))
+            if (
+                len(span) > MAX_ADDED
+                or span[0] in _FUNCTION
+                or span[-1] in _FUNCTION
+                or not noun
+                or noun in _FUNCTION
+                or any(any(ch.isdigit() for ch in w) for w in span)
+            ):
+                continue
+            if [w for w in span if w not in _FUNCTION and w not in rbi_words]:
+                found.append(Modifier(" ".join(span), noun, sentence, round(overlap, 2)))
         if found and (not best or overlap > best[0].overlap):
             best = found
     return best
