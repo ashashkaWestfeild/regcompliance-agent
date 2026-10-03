@@ -72,8 +72,25 @@ the right obligation. Claim: **F3 / D1** (see the architecture document for why 
 | Other reports: high-confidence + review | 17 + 38 | 15 + 36 | 42 + 43 |
 | Applicability: obligations excluded | 0 of 458 | 0 of 458 | 0 of 458 |
 
-The other reports (15 and 42 high-confidence on the unseen banks) are not yet adjudicated; a
-blind precision check on a sample of them is in progress. On Dhanlaxmi, control extraction
+**Precision of the high-confidence tier on the unseen banks** (measured after the freeze, not
+tuned on): a blind sample of 10 high-confidence findings per bank, mixed with 10 pairs the system
+judged covered, no verdict shown, seed committed first. The author labelled them; every "gap"
+label was then checked against the whole policy.
+
+| | Central Bank | Dhanlaxmi |
+|---|---|---|
+| Sampled findings that are real gaps (of those decided) | 8 of 9 | 9 of 9 |
+| ...counting duties only (leaving out reliefs the policy has not adopted) | 6 of 7 | 8 of 8 |
+| Unsure | 1 | 1 |
+| Sampled covered pairs that really are covered | 9 of 10 | 10 of 10 |
+| Control-extraction coverage of the policy text | about 62% | about 8% |
+
+Most of these real gaps are provisions the 2024 policies predate (for example the December 2025
+CKYCR responsibility and the advance-intimation rules). The samples are small (10 of 14 and 10 of
+41 distinct findings), so these are counts, not rates. On the development bank, whose policy is
+more recent, the same tier did worse: of 14 findings checked, 3 real, 7 false alarms, 4 unclear.
+
+On Dhanlaxmi, control extraction
 covered only about 8% of the policy text (its clauses are numbered 4.1.2-style): the judge still
 compared every passage, but extraction-based checks saw little of it. That was found after the
 freeze and is not fixed. Evidence tests: 2 of 2 on the development bank.

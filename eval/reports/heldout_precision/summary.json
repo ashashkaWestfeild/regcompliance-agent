@@ -1,0 +1,174 @@
+{
+ "centralbank": {
+  "findings": {
+   "label": {
+    "no gap": 1,
+    "gap": 8,
+    "unsure": 1
+   },
+   "after_check": {
+    "no gap": 1,
+    "gap": 8,
+    "unsure": 1
+   },
+   "reliefs_among_real": 2
+  },
+  "covered_pairs": {
+   "label": {
+    "no gap": 7,
+    "gap": 3
+   },
+   "after_check": {
+    "no gap": 9,
+    "gap": 1
+   }
+  },
+  "precision_high_tier": {
+   "labelled_before_check": "8 of 9",
+   "after_full_policy_check": "8 of 9",
+   "duties_only": "6 of 7 (leaving out reliefs and permissions the policy has not adopted)",
+   "unsure": 1
+  },
+  "covered_pairs_really_covered": "9 of 10",
+  "control_extraction_coverage": "about 62% of the policy text",
+  "checks": {
+   "2": {
+    "outcome": "held",
+    "kind": "relief",
+    "note": "65(10)(iv): no text on relying on CKYCR records without re-verifying; the policy predates the Dec 2025 amendment"
+   },
+   "7": {
+    "outcome": "held",
+    "kind": "relief",
+    "note": "42(2): no low-risk relaxation (one year after falling due or 30 Jun 2026)"
+   },
+   "9": {
+    "outcome": "covered",
+    "kind": null,
+    "note": "68: a general section flags and monitors accounts as suspected money mules, not only savings accounts"
+   },
+   "12": {
+    "outcome": "held",
+    "kind": null,
+    "note": "42(7): no text on three advance intimations"
+   },
+   "13": {
+    "outcome": "held",
+    "kind": null,
+    "note": "18: no text against rejecting an application without application of mind"
+   },
+   "14": {
+    "outcome": "held",
+    "kind": null,
+    "note": "42(7): no implementation deadline; the policy predates it"
+   },
+   "16": {
+    "outcome": "held",
+    "kind": null,
+    "note": "65(10)(iv): responsibility for the rest of CDD when relying on CKYCR is not stated (only a general BC responsibility line)"
+   },
+   "17": {
+    "outcome": "held",
+    "kind": null,
+    "note": "42(7): no text on advance intimation of customers"
+   },
+   "18": {
+    "outcome": "held",
+    "kind": null,
+    "note": "25(8): the declaration covers 'any other Bank', not any other regulated entity"
+   },
+   "19": {
+    "outcome": "covered",
+    "kind": null,
+    "note": "44(2): the policy sets a due-diligence process for changing a registered mobile number (e-KYC authentication, enhanced monitoring)"
+   },
+   "20": {
+    "outcome": "held",
+    "kind": null,
+    "note": "42(7): no text on three reminders after the due date"
+   }
+  }
+ },
+ "dhanlaxmi": {
+  "findings": {
+   "label": {
+    "gap": 9,
+    "unsure": 1
+   },
+   "after_check": {
+    "gap": 9,
+    "unsure": 1
+   },
+   "reliefs_among_real": 1
+  },
+  "covered_pairs": {
+   "label": {
+    "no gap": 9,
+    "gap": 1
+   },
+   "after_check": {
+    "no gap": 10
+   }
+  },
+  "precision_high_tier": {
+   "labelled_before_check": "9 of 9",
+   "after_full_policy_check": "9 of 9",
+   "duties_only": "8 of 8 (leaving out reliefs and permissions the policy has not adopted)",
+   "unsure": 1
+  },
+  "covered_pairs_really_covered": "10 of 10",
+  "control_extraction_coverage": "about 8%",
+  "checks": {
+   "1": {
+    "outcome": "held",
+    "kind": null,
+    "note": "24(6): no skew-or-tilt rule for document photographs"
+   },
+   "3": {
+    "outcome": "held",
+    "kind": null,
+    "note": "24(11): no completion information or transaction id from the application"
+   },
+   "7": {
+    "outcome": "covered",
+    "kind": null,
+    "note": "44(2): alerts and OTPs go only to the Aadhaar-registered number, so alternate numbers are not used"
+   },
+   "10": {
+    "outcome": "held",
+    "kind": null,
+    "note": "24(9): consent to OTP authentication is stated; OTP as the signature on the CAF is not"
+   },
+   "11": {
+    "outcome": "held",
+    "kind": null,
+    "note": "74(3)(i)(c): no review of existing arrangements within three months"
+   },
+   "12": {
+    "outcome": "held",
+    "kind": null,
+    "note": "65(10)(iv): no text on which RE verifies identity when relying on CKYCR"
+   },
+   "16": {
+    "outcome": "held",
+    "kind": null,
+    "note": "42(7): no text on three advance intimations"
+   },
+   "17": {
+    "outcome": "held",
+    "kind": null,
+    "note": "24(4): no live photograph embedded in the CAF (only a self-attested photograph for small accounts)"
+   },
+   "19": {
+    "outcome": "held",
+    "kind": "relief",
+    "note": "24(9): the option to use a family member's mobile number is not adopted; a permission, not a duty"
+   },
+   "20": {
+    "outcome": "held",
+    "kind": null,
+    "note": "74(3)(i)(a): general wire-transfer information rules, nothing on unregulated entities in the chain"
+   }
+  }
+ }
+}

@@ -224,6 +224,30 @@ By type of planted gap (both banks):
 | Duty made optional | 0 of 1 | 1 of 1 (review) |
 | Removed owner | 0 of 1 | 0 of 1 |
 
+
+**Precision of the high-confidence tier on the held-out banks** (measured after the freeze; nothing
+tuned on it; plan and seed committed first, `a050a1d`). The frozen findings were reconstructed from
+the model-call cache with the tag's code, and the sampler refused to continue unless each bank
+scored exactly as its frozen scorecard. Per bank: 10 high-confidence findings matching no key row
+(of 14 and 41 distinct), mixed with 10 pairs judged covered, shuffled, no verdict shown. The author
+labelled them; Claude ran the full-policy text check on every row labelled gap
+([`summary.json`](../eval/reports/heldout_precision/summary.json), sheets alongside).
+
+| | Central Bank | Dhanlaxmi |
+|---|---|---|
+| Findings labelled gap, of those decided | 8 of 9 | 9 of 9 |
+| After the full-policy check | 8 of 9 | 9 of 9 |
+| Duties only (3 reliefs or permissions not adopted left out) | 6 of 7 | 8 of 8 |
+| Unsure | 1 | 1 |
+| Covered pairs really covered (after the check) | 9 of 10 | 10 of 10 |
+| Control-extraction coverage of the policy text | about 62% | about 8% |
+
+The check overturned no "gap" label on a finding and two on covered pairs (the policy covered the
+duty elsewhere). Most real gaps are provisions the 2024 policies predate. Several are procedure or
+system details (photograph capture, application messages) rather than policy statements. The
+development bank's newer policy gave a much weaker result for the same tier (3 real, 7 false
+alarms, 4 unclear of 14), so precision depends on how far the policy lags the regulation.
+
 What it shows:
 - **Numbers are found; omissions and contradictions are not.** The hits are changed or stale
   thresholds. A deleted duty, a narrowed scope, a contradiction and a removed owner were missed on
@@ -291,6 +315,7 @@ held-out runs, which are then reported against it.
 - **Correlated error.** The redundancy check and the pipeline both use bge-m3; a passage both
   miss would make a planted gap look valid. Lexical search and manual reading reduce this.
 - **Bank profiles.** The profiles of all three banks are built by a script from the published policies and were committed (`c286fd7`) before any held-out run; no model read the held-out policies. The vocabulary behind them was written from the regulation's own conditions. A profile lists what a policy mentions, which is weaker than what the bank offers: a policy that restates the regulation mentions almost everything, so the stage excluded nothing on the banks tested (no profile states an absence) and no precision gain is claimed from it. The step has no accuracy number of its own: a blind label sheet of 50 conditions was prepared and, by the author's decision, not labelled, because no label could change any result. The what-if in the app is hypothetical.
+- **Held-out precision sheets (3 Oct).** Labelled by the author after the freeze, blind to the system's verdict (half the rows were covered pairs); each row carries a written reason. Every "gap" label was checked against the whole policy by Claude, who also chose which labels the check overturned. Measurement only: no code or threshold changed.
 - **High-confidence check sheet (3 Oct).** The 14 high-confidence findings that neither the
   answer key nor the 50-pair sheet had settled were mixed with 7 covered pairs and labelled
   by the author from the two texts shown, with an AI model (Gemini) helping to write the
