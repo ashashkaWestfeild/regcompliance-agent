@@ -107,3 +107,58 @@ def test_definition_support_needs_a_duty():
     assert not definition_support(RBI_PU, NAINITAL_PU)
     assert definition_support(RBI_68, DH_DEF)
     assert not definition_support(RBI_68, CB_MULES)
+
+
+# Dhanlaxmi 30.6 b: a list with a lead-in (structure of the L03 miss, different subject).
+PO_TEXT = (
+    "b. Responsibilities of the Principal Officer: "
+    "i. Compliance Oversight: Oversee the bank's compliance with KYC regulations and internal "
+    "policies. "
+    "ii. Transaction Monitoring: Monitor customer transactions for any suspicious activities."
+)
+
+
+def _po_clauses():
+    from regcomp.pipeline.detect import Clause
+
+    first = PO_TEXT.index("i. Compliance")
+    second = PO_TEXT.index("ii. Transaction")
+    return [
+        Clause("b", 0, len(PO_TEXT)),
+        Clause("b(i)", first, second - 1),
+        Clause("b(ii)", second, len(PO_TEXT)),
+    ]
+
+
+def test_lead_in_of_a_list_item():
+    from regcomp.pipeline.detect import lead_in
+
+    clauses = _po_clauses()
+    item = clauses[2]
+    # the last sentence of the lead-in; a list marker such as "b." is not part of it
+    assert lead_in(clauses, PO_TEXT, item.start, item.end) == (
+        "Responsibilities of the Principal Officer:"
+    )
+    # the lead-in itself has no lead-in; nor does text outside any list
+    assert lead_in(clauses, PO_TEXT, 0, 20) is None
+    assert lead_in([], PO_TEXT, item.start, item.end) is None
+
+
+def test_support_overlap():
+    from regcomp.pipeline.detect import support_overlap
+    from regcomp.pipeline.verify import CLOSE
+
+    assert support_overlap(RBI_68, CB_MULES) >= 0.9
+    assert support_overlap(RBI_68, CB_46) < CLOSE
+
+
+def test_limiting_words_must_be_in_the_policy_text():
+    from regcomp.pipeline.detect import limiting_words_found, scope_prompt
+
+    item = {"id": "1", "obligation": RBI_68, "passage": CB_MULES, "lead_in": None}
+    assert limiting_words_found({"limiting_words": "savings  accounts"}, item)
+    assert not limiting_words_found({"limiting_words": "current accounts"}, item)
+    assert not limiting_words_found({"limiting_words": None}, item)
+    listed = item | {"lead_in": "b. Responsibilities of the Principal Officer:"}
+    assert "<lead_in>b. Responsibilities" in scope_prompt([listed])
+    assert "<lead_in>" not in scope_prompt([item])
