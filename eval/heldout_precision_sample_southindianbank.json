@@ -1,0 +1,14 @@
+{
+ "purpose": "Precision of the high-confidence tier on South Indian Bank (third unseen bank), from the single run of the frozen v1 code. Measurement only: nothing is tuned on it.",
+ "seed": 20261005,
+ "per_bank": 10,
+ "banks": [
+  "southindianbank"
+ ],
+ "population": "high-confidence findings (gap rows, tier high) that match no answer-key row, from the single run ho_southindianbank of tag eval-freeze-2026-10-03 against key c556c42",
+ "fillers": "an equal number of pairs the system judged covered (no gap on the obligation), same bank, same seed",
+ "order": "population and fillers sorted by content key (RBI reference, obligation span, passage span) before sampling; rows shuffled with the same seed",
+ "blind": "the sheet shows the regulation text, the obligation and the policy passage only; no verdict, tier, type or reason",
+ "adjudication": "the author labels gap / no gap; every row labelled gap gets the full-policy text check before it counts as a real gap; both figures are reported",
+ "committed": "before the run (3 Oct 2026), so before any sampling"
+}

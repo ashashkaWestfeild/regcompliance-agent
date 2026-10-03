@@ -197,6 +197,11 @@ Not fixed: the contradiction, the duty made optional where the regulation senten
 
 ### Held-out results
 
+> **Since 3 Oct 2026:** Central Bank and Dhanlaxmi have been studied (the D2 error analysis on
+> the `d2` branch), so the figures below are the v1 result of record and are no longer evidence
+> of anything unseen. A third bank, South Indian Bank (key frozen at `c556c42`), is run once by
+> the same frozen v1 code ([pre-run note](../eval/third_bank_v1_prerun.md)).
+
 Run once each, from a clean checkout (git worktree) of the tag `eval-freeze-2026-10-03` (commit
 `5cb728b`); answer keys frozen at `350b8e0` (Central Bank) and `da58e66` (Dhanlaxmi). Nothing
 was tuned afterwards. Reports: [`heldout_centralbank_report.md`](../eval/reports/heldout_centralbank_report.md),

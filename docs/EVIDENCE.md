@@ -7,6 +7,9 @@ was built on. Demo times refer to the video script and are confirmed after recor
 
 **Claim: F3 / D1.** Eight floor features plus built extras; depth D1 because gap detection on the
 unseen banks is not yet reliable enough for D2 (see the architecture document, section 10).
+A pre-registered attempt at D2 (`eval/d2_bar.md`) was stopped by its own gate on 3 Oct, on
+development data and before any third-bank run: 1 of 4 target misses found, new-finding
+ceiling broken on all three banks (local qwen3:8b; closing note on the unmerged `d2` branch).
 
 | # | Feature | Demo | Architecture | Measured |
 |---|---|---|---|---|
