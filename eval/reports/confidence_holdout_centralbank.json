@@ -1,0 +1,193 @@
+{
+ "evaluated_code": {
+  "tag": "eval-freeze-2026-10-03",
+  "commit": "5cb728b8e488f28fd66b47e4d34e0288119a8a89",
+  "how": "run from a clean checkout (git worktree) of the tag; nothing tuned after these runs"
+ },
+ "checked_on": "centralbank",
+ "checked_at": "2026-10-03 11:39",
+ "code_commit": "5cb728b",
+ "ground_truth": {
+  "answer_key_rows": 10,
+  "gold_rows_labelled": 0,
+  "gold_rows_found_in_current_data": 0,
+  "gaps_with_truth_from_key": {
+   "real_planted": 4,
+   "other_passage": 3,
+   "false_alarm": 1
+  },
+  "gaps_with_truth_from_high_tier_sheet": 0
+ },
+ "settled": [
+  [
+   "41(1)",
+   70585,
+   70814,
+   157914,
+   158109
+  ],
+  [
+   "5(1)(iv)(b)",
+   3372,
+   3693,
+   2622,
+   2935
+  ],
+  [
+   "5(1)(iv)(d)",
+   4424,
+   4754,
+   3684,
+   4021
+  ],
+  [
+   "65(2)",
+   104906,
+   105114,
+   120766,
+   120987
+  ]
+ ],
+ "reliability": [
+  {
+   "judge_confidence": "1.00",
+   "verdicts_in_band": 268,
+   "judged": 7,
+   "right": 2,
+   "key_judged": 7,
+   "key_right": 2,
+   "gold_judged": 0,
+   "gold_right": 0,
+   "said_gap": 0,
+   "said_covered": 7
+  },
+  {
+   "judge_confidence": "0.95 to 0.99",
+   "verdicts_in_band": 127,
+   "judged": 4,
+   "right": 3,
+   "key_judged": 4,
+   "key_right": 3,
+   "gold_judged": 0,
+   "gold_right": 0,
+   "said_gap": 3,
+   "said_covered": 1
+  },
+  {
+   "judge_confidence": "0.80 to 0.94",
+   "verdicts_in_band": 47,
+   "judged": 2,
+   "right": 2,
+   "key_judged": 2,
+   "key_right": 2,
+   "gold_judged": 0,
+   "gold_right": 0,
+   "said_gap": 2,
+   "said_covered": 0
+  },
+  {
+   "judge_confidence": "below 0.80",
+   "verdicts_in_band": 16,
+   "judged": 0,
+   "right": 0,
+   "key_judged": 0,
+   "key_right": 0,
+   "gold_judged": 0,
+   "gold_right": 0,
+   "said_gap": 0,
+   "said_covered": 0
+  }
+ ],
+ "combinations": {
+  "judge_contradicted|cited": {
+   "label": "The judge flagged it, but the policy states the text almost word for word",
+   "citation": "cited",
+   "findings": 20,
+   "real": 0,
+   "real_planted": 0,
+   "false_alarm": 0,
+   "other_passage": 3,
+   "not_adjudicated": 17,
+   "tiers": {
+    "review": 20
+   },
+   "record": "Development bank: 20 finding(s) of this kind, none adjudicated; 3 at a planted obligation but citing other text.",
+   "development_record": "Development bank: 0 of 1 adjudicated finding(s) of this kind were real gaps; 1 at a planted obligation but citing other text; 9 more not adjudicated. Too few cases for a percentage."
+  },
+  "judge_only|cited": {
+   "label": "The judge alone: no near-identical policy sentence to compare with",
+   "citation": "cited",
+   "findings": 16,
+   "real": 1,
+   "real_planted": 1,
+   "false_alarm": 0,
+   "other_passage": 0,
+   "not_adjudicated": 15,
+   "tiers": {
+    "high": 16
+   },
+   "record": "Development bank: 1 of 1 adjudicated finding(s) of this kind were real gaps (1 of them gaps we planted); 15 more not adjudicated. Too few cases for a percentage.",
+   "development_record": "Development bank: 7 of 15 adjudicated finding(s) of this kind were real gaps (3 of them gaps we planted); 6 more not adjudicated. Too few cases for a percentage."
+  },
+  "procedure_level|cited": {
+   "label": "A judge gap on an obligation normally met by a procedure or system",
+   "citation": "cited",
+   "findings": 13,
+   "real": 1,
+   "real_planted": 1,
+   "false_alarm": 0,
+   "other_passage": 0,
+   "not_adjudicated": 12,
+   "tiers": {
+    "review": 13
+   },
+   "record": "Development bank: 1 of 1 adjudicated finding(s) of this kind were real gaps (1 of them gaps we planted); 12 more not adjudicated. Too few cases for a percentage.",
+   "development_record": "Development bank: 1 of 1 adjudicated finding(s) of this kind were real gaps (1 of them gaps we planted); 14 more not adjudicated. Too few cases for a percentage."
+  },
+  "technical_requirement|cited": {
+   "label": "A judge gap on a technical system requirement",
+   "citation": "cited",
+   "findings": 5,
+   "real": 0,
+   "real_planted": 0,
+   "false_alarm": 0,
+   "other_passage": 0,
+   "not_adjudicated": 5,
+   "tiers": {
+    "review": 5
+   },
+   "record": "Development bank: 5 finding(s) of this kind, none adjudicated.",
+   "development_record": "Development bank: 0 of 2 adjudicated finding(s) of this kind were real gaps; 9 more not adjudicated. Too few cases for a percentage."
+  },
+  "judge_and_text|cited": {
+   "label": "The judge and the text comparison agree",
+   "citation": "cited",
+   "findings": 3,
+   "real": 2,
+   "real_planted": 2,
+   "false_alarm": 1,
+   "other_passage": 0,
+   "not_adjudicated": 0,
+   "tiers": {
+    "high": 3
+   },
+   "record": "Development bank: 2 of 3 adjudicated finding(s) of this kind were real gaps (2 of them gaps we planted). Too few cases for a percentage.",
+   "development_record": "Development bank: 1 of 1 adjudicated finding(s) of this kind were real gaps (1 of them gaps we planted). Too few cases for a percentage."
+  },
+  "text_only|cited": {
+   "label": "The text comparison found a difference the judge had passed",
+   "citation": "cited",
+   "findings": 2,
+   "real": 0,
+   "real_planted": 0,
+   "false_alarm": 0,
+   "other_passage": 0,
+   "not_adjudicated": 2,
+   "tiers": {
+    "review": 2
+   },
+   "record": "Development bank: 2 finding(s) of this kind, none adjudicated.",
+   "development_record": "Development bank: 2 of 2 adjudicated finding(s) of this kind were real gaps (2 of them gaps we planted); 1 at a planted obligation but citing other text; 1 more not adjudicated. Too few cases for a percentage."
+  }
+ }
+}
