@@ -74,8 +74,8 @@ the right obligation. Claim: **F3 / D1** (see the architecture document for why 
 
 **Precision of the high-confidence tier on the unseen banks** (measured after the freeze, not
 tuned on): a blind sample of 10 high-confidence findings per bank, mixed with 10 pairs the system
-judged covered, no verdict shown, seed committed first. The author labelled them; every "gap"
-label was then checked against the whole policy.
+judged covered, no verdict shown, seed committed first. The author labelled them (an AI model,
+Gemini, helped write the reasons); every "gap" label was then checked against the whole policy.
 
 | | Central Bank | Dhanlaxmi |
 |---|---|---|
@@ -222,7 +222,9 @@ More detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md),
 Most of the code was written with **Claude Code** (Anthropic) as a coding assistant, under the
 author's direction; the author made the scope, data and evaluation decisions and reviewed the
 planted-gap answer keys. The 50-pair check sheet was labelled blind by two AI models (Claude and
-Gemini) and the author decided the disputed rows. The system itself runs on open-weights models.
+Gemini) and the author decided the disputed rows. On the later high-confidence and held-out
+precision sheets the author decided the labels, with Gemini helping to write the reasons. The
+system itself runs on open-weights models.
 
 ## Acknowledgements
 

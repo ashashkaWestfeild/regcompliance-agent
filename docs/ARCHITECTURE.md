@@ -230,7 +230,7 @@ tuned on it; plan and seed committed first, `a050a1d`). The frozen findings were
 the model-call cache with the tag's code, and the sampler refused to continue unless each bank
 scored exactly as its frozen scorecard. Per bank: 10 high-confidence findings matching no key row
 (of 14 and 41 distinct), mixed with 10 pairs judged covered, shuffled, no verdict shown. The author
-labelled them; Claude ran the full-policy text check on every row labelled gap
+labelled them, with Gemini helping to write the reasons; Claude ran the full-policy text check on every row labelled gap
 ([`summary.json`](../eval/reports/heldout_precision/summary.json), sheets alongside).
 
 | | Central Bank | Dhanlaxmi |
@@ -315,7 +315,7 @@ held-out runs, which are then reported against it.
 - **Correlated error.** The redundancy check and the pipeline both use bge-m3; a passage both
   miss would make a planted gap look valid. Lexical search and manual reading reduce this.
 - **Bank profiles.** The profiles of all three banks are built by a script from the published policies and were committed (`c286fd7`) before any held-out run; no model read the held-out policies. The vocabulary behind them was written from the regulation's own conditions. A profile lists what a policy mentions, which is weaker than what the bank offers: a policy that restates the regulation mentions almost everything, so the stage excluded nothing on the banks tested (no profile states an absence) and no precision gain is claimed from it. The step has no accuracy number of its own: a blind label sheet of 50 conditions was prepared and, by the author's decision, not labelled, because no label could change any result. The what-if in the app is hypothetical.
-- **Held-out precision sheets (3 Oct).** Labelled by the author after the freeze, blind to the system's verdict (half the rows were covered pairs); each row carries a written reason. Every "gap" label was checked against the whole policy by Claude, who also chose which labels the check overturned. Measurement only: no code or threshold changed.
+- **Held-out precision sheets (3 Oct).** Labelled by the author after the freeze, blind to the system's verdict (half the rows were covered pairs); the written reason for each row was drafted with help from an AI model (Gemini). Every "gap" label was checked against the whole policy by Claude, who also chose which labels the check overturned. Measurement only: no code or threshold changed.
 - **High-confidence check sheet (3 Oct).** The 14 high-confidence findings that neither the
   answer key nor the 50-pair sheet had settled were mixed with 7 covered pairs and labelled
   by the author from the two texts shown, with an AI model (Gemini) helping to write the
