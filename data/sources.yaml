@@ -106,3 +106,16 @@ policies:
     sha256: 0fb244a00d92d8b308a68d0a7eb9a902c2deacb4338ed34b91734b00d6ccd8f8
     retrieved_from: "https://www.dhan.bank.in/pdf/55-KYC%20AML%20CFT%20Policy%202025_Version%208.1.pdf"
     retrieved_on: 2026-09-26
+  - id: southindianbank
+    bank: "The South Indian Bank Ltd"
+    bank_type: "scheduled commercial bank (private sector)"
+    title: "KYC Standards and AML Policy (KYC AML CFT Policy) of The South Indian Bank Ltd, version 1.22"
+    pages: 70
+    note: "Added 2026-10-03 as the third held-out test set for the D2 attempt (eval/d2_bar.md). Chosen by the pre-registered coverage rule with the v1 parser: passages 164,260 of 165,629 non-space characters; extraction units 134,634 of 165,629. Answer key drawn with seed 20261003 (composition d2bar), reviewed by the author and frozen before any model reads the policy."
+    split: test3  # held out: run only for final numbers, never tuned on
+    stated_date: 2026-03-21   # version table, version 1.22
+    stated_date_kind: "version dated"
+    file: data/raw/policies/southindianbank_kyc_aml_cft_policy_v1.22.pdf
+    sha256: df1d336b56a4b4b9ef87f0e7d039be80181a18860103cc821091fb92aef7219e
+    retrieved_from: "https://www.southindianbank.bank.in/userfiles/file/kyc_aml_cft_policy.pdf"
+    retrieved_on: 2026-10-03

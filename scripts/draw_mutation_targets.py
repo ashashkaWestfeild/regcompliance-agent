@@ -54,12 +54,24 @@ def main() -> None:
     ap.add_argument("--seed", type=int, required=True)
     ap.add_argument("--operators", help="comma-separated gap slots (default: the standard seven)")
     ap.add_argument(
+        "--composition",
+        choices=["d2bar"],
+        help="d2bar: the slots fixed in eval/d2_bar.md, with the open choices drawn from the seed",
+    )
+    ap.add_argument(
         "--exclude-spec",
         type=Path,
         help="a mutation spec whose edited passages are left out (a second key on the same bank)",
     )
     args = ap.parse_args()
     operators = args.operators.split(",") if args.operators else OPERATORS
+    if args.composition == "d2bar":
+        # eval/d2_bar.md: 2 delete_control, 2 narrow_scope, 2 number-type, 1 of three others.
+        # The open choices come from their own seeded generator, before the target draw.
+        pick = random.Random(f"{args.seed}-composition")
+        operators = ["delete_control", "delete_control", "narrow_scope", "narrow_scope"]
+        operators += [pick.choice(["weaken_threshold", "make_stale"]) for _ in range(2)]
+        operators.append(pick.choice(["contradict", "weaken_modality", "strip_design"]))
     src = next(
         p
         for p in yaml.safe_load(Path("data/sources.yaml").read_text("utf-8"))["policies"]
