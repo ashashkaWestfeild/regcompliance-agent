@@ -1,0 +1,12 @@
+{
+ "purpose": "Precision of the high-confidence tier on the two held-out banks, measured after the freeze. Measurement only: nothing is tuned on it, and the frozen evaluation stays the evaluation of record.",
+ "seed": 20261004,
+ "per_bank": 10,
+ "banks": ["centralbank", "dhanlaxmi"],
+ "population": "high-confidence findings (gap rows, tier high) that match no answer-key row, from the frozen runs ho_centralbank and ho_dhanlaxmi, reconstructed from the model-call cache with the code of tag eval-freeze-2026-10-03",
+ "fillers": "for each bank, an equal number of pairs the system judged covered (no gap on the obligation), same bank, same seed",
+ "order": "population and fillers sorted by content key (RBI reference, obligation span, passage span) before sampling; rows shuffled with the same seed",
+ "blind": "the sheet shows the regulation text, the obligation and the policy passage only; no verdict, tier, type or reason",
+ "adjudication": "the author labels gap / no gap; every row labelled gap gets the full-policy text check before it counts as a real gap; both figures are reported",
+ "committed": "before any sampling"
+}
