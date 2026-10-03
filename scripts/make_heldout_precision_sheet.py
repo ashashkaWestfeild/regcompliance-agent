@@ -50,9 +50,12 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--policy", required=True)
     ap.add_argument("--runs", type=Path, required=True, help="folder holding the frozen runs")
+    ap.add_argument("--plan", type=Path, default=PLAN, help="the sample plan committed first")
     args = ap.parse_args()
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    plan = json.loads(PLAN.read_text(encoding="utf-8"))
+    plan = json.loads(args.plan.read_text(encoding="utf-8"))
+    if args.policy not in plan["banks"]:
+        raise SystemExit(f"{args.policy} is not in the sample plan {args.plan}")
     pol = policy(args.policy, held_out=True)
     run = args.runs / f"ho_{args.policy}"
     key = [json.loads(x) for x in pol.key.read_text(encoding="utf-8").splitlines()]
