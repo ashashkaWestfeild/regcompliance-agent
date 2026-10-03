@@ -245,11 +245,12 @@ held-out runs, which are then reported against it.
   policy-level. Level therefore routes items to review and is not reported as an accuracy figure.
 - **Correlated error.** The redundancy check and the pipeline both use bge-m3; a passage both
   miss would make a planted gap look valid. Lexical search and manual reading reduce this.
-- **Bank profiles.** The profiles of all three banks are built by a script from the published policies and were committed (`c286fd7`) before any held-out run; no model read the held-out policies. The vocabulary behind them was written from the regulation's own conditions. A profile lists what a policy mentions, which is weaker than what the bank offers: a policy that restates the regulation mentions almost everything, so the stage excluded nothing on the banks tested (no profile states an absence) and no precision gain is claimed from it. The what-if in the app is hypothetical.
+- **Bank profiles.** The profiles of all three banks are built by a script from the published policies and were committed (`c286fd7`) before any held-out run; no model read the held-out policies. The vocabulary behind them was written from the regulation's own conditions. A profile lists what a policy mentions, which is weaker than what the bank offers: a policy that restates the regulation mentions almost everything, so the stage excluded nothing on the banks tested (no profile states an absence) and no precision gain is claimed from it. The step has no accuracy number of its own: a blind label sheet of 50 conditions was prepared and, by the author's decision, not labelled, because no label could change any result. The what-if in the app is hypothetical.
 - **High-confidence check sheet (3 Oct).** The 14 high-confidence findings that neither the
   answer key nor the 50-pair sheet had settled were mixed with 7 covered pairs and labelled
-  by the author from the two texts shown. The sheet was not blind to the system's call: two
-  thirds of its rows were findings. Every row labelled "gap" was then checked against the
+  by the author from the two texts shown, with an AI model (Gemini) helping to write the
+  reason for each row. The sheet was not blind to the system's call: two thirds of its rows
+  were findings. Every row labelled "gap" was then checked against the
   whole policy (`scripts/full_policy_check.py`): 3 of 8 held, 5 were covered elsewhere.
   Result for the 14 findings: 3 real, 7 false alarms, 4 unclear. One covered pair was
   labelled "gap" (a policy that says "should have" where RBI says "shall have"); it is

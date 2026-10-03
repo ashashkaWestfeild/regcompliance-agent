@@ -1,5 +1,6 @@
 # Local Postgres 18 + pgvector. db/schema.sql runs automatically on first start
 # (only when the data volume is empty; `docker compose down -v` to re-init).
+# Then apply the migrations: `uv run python scripts/db_init.py` (idempotent).
 services:
   db:
     image: pgvector/pgvector:pg18

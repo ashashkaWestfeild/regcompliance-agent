@@ -59,8 +59,8 @@ must not be flagged. The numbers below are for the development bank only.
 
 Read these with two cautions. The wording-comparison rules were written after studying this bank's
 misses, so they fit it well. And the high-confidence extras are mostly false alarms: of 14
-high-confidence findings that nothing else had settled, the author's check (with every "gap" label
-verified against the full policy) found 3 real gaps, 7 false alarms and 4 unclear
+high-confidence findings that nothing else had settled, the author's check (helped by an AI model,
+with every "gap" label verified against the full policy) found 3 real gaps, 7 false alarms and 4 unclear
 ([error analysis](eval/reports/error_analysis_e2e11.md)). Two banks the system
 has never seen are scored once, at the freeze; their answer keys were committed before any model
 read those policies. Those results will be added here.

@@ -36,6 +36,15 @@ jobs:
         env:
           PGPASSWORD: regcomp_ci_only
         run: psql -h localhost -U regcomp -d regcomp -v ON_ERROR_STOP=1 -f db/schema.sql
+      - name: Apply migrations twice (they must be idempotent)
+        env:
+          PGPASSWORD: regcomp_ci_only
+        run: |
+          for pass in 1 2; do
+            for f in db/migrations/*.sql; do
+              psql -h localhost -U regcomp -d regcomp -v ON_ERROR_STOP=1 -f "$f"
+            done
+          done
       - name: Smoke-check tables
         env:
           PGPASSWORD: regcomp_ci_only

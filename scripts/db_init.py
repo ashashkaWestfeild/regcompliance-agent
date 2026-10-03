@@ -1,4 +1,5 @@
-"""Apply db/schema.sql to the database in DATABASE_URL, once.
+"""Apply db/schema.sql to the database in DATABASE_URL, once, then every migration in
+db/migrations/ in order (each is written to be safe to re-run).
 
     uv run python scripts/db_init.py            # apply if the schema is not there yet
     uv run python scripts/db_init.py --status   # report only
@@ -58,8 +59,8 @@ def main() -> int:
         if args.status:
             return 0
         if present == EXPECTED_TABLES:
-            print("schema already applied; nothing to do")
-            return 0
+            print("schema already applied")
+            return migrate(conn)
         if present:
             print(
                 f"partial schema found ({sorted(present)}); refusing to guess, fix manually",
@@ -70,7 +71,17 @@ def main() -> int:
         server, vector, tables = status(conn)
         missing = EXPECTED_TABLES - tables
         print(f"applied: pgvector {vector}; missing tables: {sorted(missing) or 'none'}")
-        return 1 if missing else 0
+        return 1 if missing else migrate(conn)
+
+
+def migrate(conn) -> int:
+    """Apply db/migrations/*.sql in name order. Each file is idempotent, so this is safe on a
+    database that already has some or all of them."""
+    files = sorted(Path("db/migrations").glob("*.sql"))
+    for f in files:
+        conn.execute(f.read_text(encoding="utf-8"))
+    print(f"migrations applied (idempotent): {len(files)}")
+    return 0
 
 
 if __name__ == "__main__":
