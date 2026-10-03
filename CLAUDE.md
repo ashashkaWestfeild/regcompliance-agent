@@ -15,7 +15,7 @@ All decisions below are settled unless the user reopens them.
 Chain to implement and keep traceable over time:
 Regulations -> obligations -> applicability -> internal policies/controls -> evidence -> testing -> gaps -> remediation -> ongoing monitoring.
 
-Target grid position: F3 / D2. Final claim decided on 8 Oct from the evidence matrix. Do NOT claim D3.
+Claim: F3 / D1 (decided 3 Oct by the plan's rule after the held-out runs; D2 was the target). Do NOT claim D2 or D3.
 - D2 = mostly structured/textual input, high demonstrable reliability.
 - F3 = at least 8 of the 14 listed features.
 
@@ -125,7 +125,7 @@ Get the time with `date "+%Y-%m-%d %H:%M"`; never guess timestamps.
 Keep the project to industry standards and use open-source tools wherever practical. Stack and licences: docs/PLAN.md section 3. Any non-open component must be named as an exception with a reason.
 
 ## Evaluation integrity (user rules, 27 Sep)
-- Nainital = dev set (prompts, thresholds and routing may be tuned on it). Central Bank = held-out test set: run only for final numbers (freeze, Wed 7 Oct), never inspected while tuning. Report metrics separately per split.
+- Nainital = dev set (prompts, thresholds and routing may be tuned on it). Central Bank = held-out test set: run only for final numbers (done 3 Oct at tag eval-freeze-2026-10-03), never inspected while tuning; never re-run and present as unseen. Report metrics separately per split.
 - Extraction and mapping prompts must NOT reference specific clauses, thresholds or themes from either answer key (e.g. no "re-KYC", "10 days", "25%", "trust beneficial owner" hints). Schema-generic instructions only; few-shot examples, if any, must come from non-KYC text or from reviewer overrides on the dev set.
 - Every delete / narrow / weaken mutation must pass scripts/coverage_check.py (lexical + bge-m3 semantic search of the altered policy) with each remaining hit judged; a planted gap is only valid if no other passage still satisfies the obligation.
 - Report evaluation results as counts per row type ("6/7 gaps, 0/3 decoys, 1/1 injection"), never bare percentages.
