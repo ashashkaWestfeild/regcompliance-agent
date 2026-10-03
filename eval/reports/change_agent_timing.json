@@ -1,0 +1,78 @@
+{
+ "local": {
+  "model": "qwen3:8b",
+  "machine": "one laptop, AMD64 CPU, GPU NVIDIA GeForce RTX 4060 Laptop GPU (8 GB)",
+  "measured_at": "2026-10-03 13:52",
+  "dry_run": true,
+  "scenarios": [
+   {
+    "scenario": "Real amendment, 29 Dec 2025 (CKYCR reliance)",
+    "status": "projected",
+    "model_calls": 1,
+    "calls_from_cache": 0,
+    "calls_made_now": 1,
+    "measured_wall_s": 27.2,
+    "cached_calls_first_run_s": 0.0,
+    "first_run_estimate_s": 27.2
+   },
+   {
+    "scenario": "Real amendment, 18 Sep 2026 (FPIs, certified copy)",
+    "status": "planned",
+    "model_calls": 0,
+    "calls_from_cache": 0,
+    "calls_made_now": 0,
+    "measured_wall_s": 1.7,
+    "cached_calls_first_run_s": 0.0,
+    "first_run_estimate_s": 1.7
+   },
+   {
+    "scenario": "Synthetic draft circular (one new duty)",
+    "status": "projected",
+    "model_calls": 3,
+    "calls_from_cache": 3,
+    "calls_made_now": 0,
+    "measured_wall_s": 17.2,
+    "cached_calls_first_run_s": 63.3,
+    "first_run_estimate_s": 80.5
+   }
+  ]
+ },
+ "hosted": {
+  "model": "groq:openai/gpt-oss-120b",
+  "machine": "hosted endpoint (groq:openai/gpt-oss-120b, Groq free tier); run from one laptop, AMD64 CPU, GPU NVIDIA GeForce RTX 4060 Laptop GPU (8 GB)",
+  "measured_at": "2026-10-03 13:53",
+  "dry_run": true,
+  "scenarios": [
+   {
+    "scenario": "Real amendment, 29 Dec 2025 (CKYCR reliance)",
+    "status": "projected",
+    "model_calls": 3,
+    "calls_from_cache": 2,
+    "calls_made_now": 1,
+    "measured_wall_s": 14.1,
+    "cached_calls_first_run_s": 8.1,
+    "first_run_estimate_s": 22.2
+   },
+   {
+    "scenario": "Real amendment, 18 Sep 2026 (FPIs, certified copy)",
+    "status": "planned",
+    "model_calls": 0,
+    "calls_from_cache": 0,
+    "calls_made_now": 0,
+    "measured_wall_s": 1.1,
+    "cached_calls_first_run_s": 0.0,
+    "first_run_estimate_s": 1.1
+   },
+   {
+    "scenario": "Synthetic draft circular (one new duty)",
+    "status": "projected",
+    "model_calls": 3,
+    "calls_from_cache": 2,
+    "calls_made_now": 1,
+    "measured_wall_s": 14.5,
+    "cached_calls_first_run_s": 5.7,
+    "first_run_estimate_s": 20.2
+   }
+  ]
+ }
+}

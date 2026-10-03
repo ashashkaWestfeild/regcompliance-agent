@@ -88,6 +88,15 @@ with every "gap" label verified against the full policy) found 3 real gaps, 7 fa
 has never seen are scored once, at the freeze; their answer keys were committed before any model
 read those policies. Those results will be added here.
 
+## Business impact (measured time, estimated baseline)
+
+Change agent, dry run, per circular ([timing](eval/reports/change_agent_timing.json)):
+on one laptop GPU (RTX 4060, local qwen3:8b) 1.7 s for a permissive amendment (no model call),
+27 s for the Dec 2025 amendment and 17 s for the draft circular, about 81 s on a first, uncached
+run; with the hosted open-weights model 1 to 22 s. Baseline: 5 to 10 analyst hours per circular,
+the author's own estimate, not a measurement. The agent produces a scoped draft assessment; a
+person still reviews it.
+
 ## Data (all public or synthetic)
 
 - **Regulation:** RBI (Commercial Banks – Know Your Customer) Directions, 2025, in three real
