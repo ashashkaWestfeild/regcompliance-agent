@@ -5,7 +5,7 @@ suggested policy wording and a success criterion (one model call each; owner, du
 fidelity check are rules, see src/regcomp/remediation.py), stores them in `remediation` and
 prints them. Drafts are proposals for a reviewer; nothing is closed or accepted here.
 
-    uv run python scripts/run_remediation.py --top 10
+    uv run python scripts/run_remediation.py --top 100   # every open high-confidence gap
 """
 
 import argparse

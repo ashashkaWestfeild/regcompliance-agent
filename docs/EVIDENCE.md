@@ -21,7 +21,7 @@ unseen banks is not yet reliable enough for D2 (see the architecture document, s
 | | **Built extras** | | | |
 | 6 | Control effectiveness (design and operating) | Evidence tab | §2 stage 6 | Operating tests on synthetic logs: 2 of 2 correct (dev) |
 | 7 | Evidence-based assessment and monitoring | Evidence tab | §4 (second trigger) | Newly failing, still failing, recovered, healthy; the model never sees evidence rows |
-| 10 | Remediation recommendations | Gaps tab: one remedy per paragraph, owner and due date | §2 stage 9 | 7 remedies on dev (one per paragraph); 5 of 7 keep the model's wording after the fidelity check; appropriateness rating pending |
+| 10 | Remediation recommendations | Gaps tab: one remedy per paragraph, owner and due date | §2 stage 9 | Every open high-confidence gap on dev has a remedy: 24 gaps, 16 remedies (one per paragraph, 3 Oct); 11 keep the model's wording, 4 were replaced by the regulation's own sentence after failing the fidelity check, 1 is a rule-written evidence remedy. Remedies follow the gaps, so a false alarm gets a remedy too; appropriateness not rated |
 | 12 | What-if and simulation | Change agent on a draft circular; Applicability tab what-if | §4 | Dry run cannot reach the write step; hypothetical "no V-CIP": 12 obligations stop applying, 6 open gaps drop out (nothing written) |
 | | Applicability by bank profile | Applicability tab | §2 stage 3b | Excluded nothing on the three banks tested; no accuracy number of its own |
 | | Citations with dates | Gaps tab: source citation | §2 stage 10 | Fields tested against the source record; three dates labelled separately |

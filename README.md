@@ -166,7 +166,7 @@ uv run python scripts/run_tests.py                         # design and operatin
 uv run python scripts/run_verify.py                        # wording comparison and tiers
 uv run python scripts/run_applicability.py --apply         # applicability by bank profile
 uv run python scripts/run_risk.py                          # risk ranking
-uv run python scripts/run_remediation.py --top 10          # remediation drafts
+uv run python scripts/run_remediation.py --top 100         # drafts for every high-confidence gap
 uv run python scripts/clean_remediation.py --apply         # one remedy per paragraph
 uv run python scripts/score.py --run demo                  # against the answer key
 ```
