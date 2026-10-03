@@ -58,8 +58,10 @@ must not be flagged. The numbers below are for the development bank only.
 **A second answer key on the same bank** (4 planted gaps, 3 decoys, 1 injection, on passages picked by a seeded draw and written after the comparison rules) checks whether those rules hold on gaps they were not written for. Result: 3 of 4 planted gaps found, all three in the review queue and none in the high-confidence tier; the contradiction was missed; the stricter-number decoy was flagged in the review queue; the injected instruction was not flagged (0 of 1). Two causes were fixed afterwards, from the general principle and before the freeze: the number comparison ignored the number one ("one year" against "two years"), and instruction detection depended on the extraction model noticing the text; a code-level scan now checks every sentence. With both fixes the first key's results are unchanged, and the second key reads 3 of 4 found (1 high-confidence) and the injection flagged. That second reading is not a test, because the fixes were made knowing its misses.
 
 Read these with two cautions. The wording-comparison rules were written after studying this bank's
-misses, so they fit it well. And by our own reading about 11 of the 17 high-confidence extras are
-still false alarms ([error analysis](eval/reports/error_analysis_e2e11.md)). Two banks the system
+misses, so they fit it well. And the high-confidence extras are mostly false alarms: of 14
+high-confidence findings that nothing else had settled, the author's check (with every "gap" label
+verified against the full policy) found 3 real gaps, 7 false alarms and 4 unclear
+([error analysis](eval/reports/error_analysis_e2e11.md)). Two banks the system
 has never seen are scored once, at the freeze; their answer keys were committed before any model
 read those policies. Those results will be added here.
 

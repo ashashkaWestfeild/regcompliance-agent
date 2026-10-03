@@ -88,7 +88,10 @@ def sheet_labels() -> dict[tuple, bool]:
     out = {}
     with sheet.open(encoding="utf-8-sig", newline="") as fh:
         for r in csv.DictReader(fh):
-            label = next(v for k, v in r.items() if k.startswith("YOUR_label")).strip().lower()
+            # the outcome after the full-policy text check wins over the label from two texts
+            after = (r.get("AFTER_full_policy_check") or "").strip().lower()
+            label = after or next(v for k, v in r.items() if k.startswith("YOUR_label"))
+            label = label.strip().lower()
             if label in ("gap", "no gap") and rows[r["#"]]["system_finding"]:
                 out[tuple(rows[r["#"]]["key"])] = label == "gap"
     return out

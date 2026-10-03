@@ -220,9 +220,10 @@ Each finding instead carries a note built from checks that code can verify
 comparison agree; the text comparison found a difference the judge had passed; the judge alone;
 the judge contradicted by near-verbatim policy text; and whether the policy citation was verified.
 Each combination shows its record on the development bank as counts. Two cautions: most findings
-of each kind are not adjudicated (16 of the 21 "judge alone" findings, for example), and most of
-the adjudicated ones are gaps we planted, which are real by construction. The records are
-therefore not hit rates. The table is fitted on the development bank only and frozen before the
+of each kind are not adjudicated, and many adjudicated ones are gaps we planted, which are real by
+construction. The records are therefore not hit rates. The "judge alone" findings of the
+high-confidence tier are the best measured: of 21, 7 are real (3 planted), 8 are false alarms
+and 6 are not adjudicated. The table is fitted on the development bank only and frozen before the
 held-out runs, which are then reported against it.
 
 ### Integrity disclosures
@@ -245,6 +246,14 @@ held-out runs, which are then reported against it.
 - **Correlated error.** The redundancy check and the pipeline both use bge-m3; a passage both
   miss would make a planted gap look valid. Lexical search and manual reading reduce this.
 - **Bank profiles.** The profiles of all three banks are built by a script from the published policies and were committed (`c286fd7`) before any held-out run; no model read the held-out policies. The vocabulary behind them was written from the regulation's own conditions. A profile lists what a policy mentions, which is weaker than what the bank offers: a policy that restates the regulation mentions almost everything, so the stage excluded nothing on the banks tested (no profile states an absence) and no precision gain is claimed from it. The what-if in the app is hypothetical.
+- **High-confidence check sheet (3 Oct).** The 14 high-confidence findings that neither the
+  answer key nor the 50-pair sheet had settled were mixed with 7 covered pairs and labelled
+  by the author from the two texts shown. The sheet was not blind to the system's call: two
+  thirds of its rows were findings. Every row labelled "gap" was then checked against the
+  whole policy (`scripts/full_policy_check.py`): 3 of 8 held, 5 were covered elsewhere.
+  Result for the 14 findings: 3 real, 7 false alarms, 4 unclear. One covered pair was
+  labelled "gap" (a policy that says "should have" where RBI says "shall have"); it is
+  borderline and left as covered.
 - **Real findings** in the published policies are labelled separately and scored by their own
   rules, never as false alarms. A real gap that shares an obligation with a planted one counts
   neither way.
@@ -275,9 +284,9 @@ held-out runs, which are then reported against it.
 
 ## 9. Limits and what comes next
 
-- Detection is measured on 7 planted gaps per bank. About 11 of the 17 high-confidence extras on
-  the development bank are false alarms, mostly passages that restate an obligation with a
-  different sentence structure.
+- Detection is measured on 7 planted gaps per bank. Most high-confidence extras on the
+  development bank are false alarms (of 14 checked by hand: 3 real, 7 false, 4 unclear), mostly
+  duties the policy states elsewhere or in a different sentence structure.
 - A removed owner is not detected on plain policy passages.
 - One regulation end to end; nine others only for change detection. Text input only.
 - No cross-regulation analysis and no detection of contradictions between regulations.

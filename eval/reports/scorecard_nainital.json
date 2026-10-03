@@ -3,7 +3,7 @@
  "policy": "nainital",
  "split": "dev",
  "key_commit": "350b8e0 2026-09-27T14:48:06+05:30",
- "scored_at": "2026-10-03 02:30",
+ "scored_at": "2026-10-03 10:20",
  "summary": [
   "planted gaps detected 5/7 (type accepted 2/7; near misses 1/7)",
   "planted gaps raised at the right obligation, any passage (location-tolerant) 6/7",
@@ -124,7 +124,7 @@
   {
    "Signals": "The judge alone: no near-identical policy sentence to compare with; citation verified",
    "Findings": 21,
-   "Record": "Development bank: 4 of 5 adjudicated finding(s) of this kind were real gaps (3 of them gaps we planted); 16 more not adjudicated. Too few cases for a percentage."
+   "Record": "Development bank: 7 of 15 adjudicated finding(s) of this kind were real gaps (3 of them gaps we planted); 6 more not adjudicated. Too few cases for a percentage."
   },
   {
    "Signals": "A judge gap on an obligation normally met by a procedure or system; citation verified",
