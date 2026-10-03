@@ -63,3 +63,48 @@ author labelled "no gap").
 
 Risk to watch: pattern 3 changes what the judge sees for every obligation, so it can move many
 verdicts; it is measured on all four development keys before anything is promoted.
+
+## Guardrails for the detector (author, 3 Oct; PROBLEMS_LOG P-055)
+
+1. **The qualifier rule is structural.** It flags any modifier added in front of RBI's own noun,
+   found by aligning the policy sentence with RBI's sentence word by word. There is no list of
+   qualifier words.
+2. **No third-bank text.** Unit tests and prompt examples use only text from the development banks
+   (Nainital, Central Bank, Dhanlaxmi). No South Indian Bank text appears in the detector, its
+   tests or its prompts.
+3. **Leak check before the second tag.** A script searches the detector code, tests and prompts
+   for every South Indian Bank edit string and edited sentence and reports where each match comes
+   from. Its output is committed with the tag.
+4. **Cost estimated before the runs** (below), against the 30-minute run limit and Groq's limits.
+
+## Cost estimate for the gates and the two third-bank runs
+
+Measured on the v1 runs (local qwen3:8b, RTX 4060): one uncached judge pass is 189 prompts and
+takes about 32-35 minutes per bank (Central Bank 34 min, Dhanlaxmi 32 min; 13.7 s a prompt on
+average); a new policy's control extraction took 33 minutes for Central Bank's 278 extraction
+units (South Indian Bank has 217, so about 26 minutes). The scope question is asked only for
+covered verdicts (about 390 per bank), batched per unit like the judge, with shorter answers:
+estimate 25-30 minutes per bank.
+
+| Run | A: lead-in in every judge prompt | B: lead-in only in the detector's second pass |
+|---|---|---|
+| Each development key (4: Nainital key 1 and 2, Central Bank, Dhanlaxmi) | judge 35 + scope 28 = about 63 min, 3 chunks | judge cached + scope 28 = about 28 min, 2 chunks |
+| All four development keys, one iteration | about 4 h 10 min | about 1 h 50 min |
+| South Indian Bank, v1 (frozen code, nothing cached) | extraction 26 + judge 35 = about 61 min, 3 chunks | same |
+| South Indian Bank, v2 | judge 35 + scope 28 = about 63 min, 3 chunks | judge cached from v1 + scope 28 = about 28 min, 2 chunks |
+| **Total, one development iteration + both third-bank runs** | **about 6 h 15 min of GPU** | **about 3 h 20 min of GPU** |
+
+Every chunk stops at 25 minutes (`--stop-after-min 25`) and resumes from the cache, so no single
+run exceeds the 30-minute limit. A second development iteration costs another 4 h 10 min under A
+and 1 h 50 min under B.
+
+**Groq is not an option for these runs.** Its free tier for gpt-oss-120b allows 200,000 tokens a
+day; one judge pass is about 189 prompts of 1,400 input and 1,000 output tokens, roughly 450,000
+tokens, more than two days' allowance per bank. It would also change the model between v1 (local
+qwen3:8b) and v2, so the comparison the bar asks for (v2 against v1 on the same bank) would mix two
+effects. All runs stay on the local model.
+
+**Recommendation: B.** It catches the L03 pattern the same way: the second pass shows the
+supporting passage with its lead-in and asks whether the duty applies to RBI's whole subject. It
+leaves every judge verdict of v1 unchanged, which removes the main precision risk named above,
+halves the GPU time, and fits Tuesday evening with room for a second iteration.
