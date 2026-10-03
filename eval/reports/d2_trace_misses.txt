@@ -1,0 +1,525 @@
+
+====================================================================================================
+centralbank C04 delete_control -> RBI ['41(2)']
+  note: Intensified monitoring of high-risk accounts removed. User review: OK if no other coverage. Coverage check (27 Sep): the Do's-and-Don'ts table row 6 restated it and is removed too; remaining enhanced-monitoring passages are category-specific (PEPs, non-face-to-face, STR-reported, fintech), not the general high-risk duty.
+  location 6~2(d) (157914, 157914): ...d party cheques, drafts, etc. in the existing and newly opened accounts followed by cash withdrawals for large amounts. A system of periodic review of risk categorization of accounts, with such periodicity being at least once in a year, and...
+  deleted: High risk accounts have to be subjected to more intensified monitoring.
+  [stage 2] extracted controls at the location: 1
+     - 6~2(d): A system of periodic review of risk categorization of accounts, with such periodicity being at least once in a year, and the need for applying enhanced due diligence measures shall be undertaken.
+  location 3~6 (252284, 252284): ...her current or permanent address And the officially valid documents for proof of address and proof of identity. | | 6 | | 6 | In the case of ‗Small Accounts', if the balance (in all the accounts taken together) exceeds Rs. 50,000/- or total...
+  deleted: High risk accounts are subject to intensive monitoring and special
+  [stage 2] extracted controls at the location: 0
+  [stage 1] obligations extracted for ['41(2)']: 3
+
+  O245 [41] (must) The bank shall closely monitor the transactions in accounts of marketing firms, especially accounts of Multi-level Marketing (MLM) companies.
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 Branches shall undertake on-going due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers' business and risk profile; and the so
+     C2 Bank shall undertake on-going due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers' business, risk profile and the source of 
+     C3 A system of periodic review of risk categorization of accounts, with such periodicity being at least once in a year, and the need for applying enhanced due diligence measures shall be undertaken.  <== at/near the mutated location
+     C4 Branches should carry out on-going due diligence of existing customers which is regular monitoring of transactions in accounts in order to ensure that their transactions are consistent with the branch
+     C5 Customers shall be categorized as low, medium and high risk category, based on the assessment and risk perception.
+     C6 2.2.7.2 There should be periodical review of risk categorization of accounts followed by enhanced due diligence measures. Such review of risk categorization of customers should be carried out at least
+     C7 There should be periodical review of risk categorization of accounts followed by enhanced due diligence measures.
+     C8 b) The risk assessment by the Bank shall be properly documented and be proportionate to the nature, size, geographical presence, complexity of activities/structure, etc. of our Bank. Further, the peri
+     C9 c. Further, Bank shall run a check, on the given parameters, at the time of establishing a relation with a customer and on a periodic basis (at monthly intervals) to verify whether individuals and ent
+     C10 Bank shall ensure that respondent banks have KYC/AML policies and procedures in place and apply enhanced 'due diligence' procedures for transactions carried out through the correspondent accounts.
+     C11 6.2.2 Branches shall closely monitor the transactions in accounts of marketing firms, especially accounts of Multi-level Marketing (MLM) Companies.
+     C12 As per PMLA rules, Bank is required to submit details of
+     C13 Banks shall clearly document and understand the respective AML/CFT responsibilities of institutions involved
+     C14 6. MONITORING OF TRANSACTIONS - ON-GOING DUE DILIGENCE :
+     C15 The accounts reported in STR should be classified as high risk and should be subjected to enhanced monitoring.
+     C16 Such customers shall be categorized as high-risk customers and accounts opened in non-face to face mode shall be subjected to enhanced monitoring until the identity of the customer is verified in face
+     C17 Locations identified by the bank as high-risk because of its prior experiences, transaction history, or other factors.
+     C18 Countries identified by the bank as high-risk because of its prior experiences, transaction history, or other factors (e.g.
+     C19 All Cash transactions where forged or counterfeit currency notes or bank notes has been used as genuine or where any forgery of valuable security or a document has taken place facilitating the transac
+     C20 vi. Bank shall ensure that all the information on the wire transfers shall be immediately made available to appropriate law enforcement and/or prosecutorial authorities as well as FIU-IND on receiving
+     C21 The banks, stock exchanges/depositories, intermediaries regulated by SEBI and insurance companies shall also send a copy of the communication mentioned in 5.1 (ii) above to the UAPA Nodal Officer of t
+     C22 d. While furnishing information to the Director, FIU-IND, delay of each day in not reporting a transaction or delay of each day in rectifying a mis-represented transaction beyond the time limit as spe
+   [stage 4] judge (O4): covered / issue none / best C11 / conf 0.95: C11 explicitly mentions monitoring transactions in accounts of marketing firms, especially MLM companies.
+
+  O246 [41] (must) Explanation: The bank shall subject high-risk accounts to more intensified monitoring.
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 Branches shall undertake on-going due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers' business and risk profile; and the so
+     C2 Bank shall undertake on-going due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers' business, risk profile and the source of 
+     C3 A system of periodic review of risk categorization of accounts, with such periodicity being at least once in a year, and the need for applying enhanced due diligence measures shall be undertaken.  <== at/near the mutated location
+     C4 Branches should carry out on-going due diligence of existing customers which is regular monitoring of transactions in accounts in order to ensure that their transactions are consistent with the branch
+     C5 Customers shall be categorized as low, medium and high risk category, based on the assessment and risk perception.
+     C6 2.2.7.2 There should be periodical review of risk categorization of accounts followed by enhanced due diligence measures. Such review of risk categorization of customers should be carried out at least
+     C7 There should be periodical review of risk categorization of accounts followed by enhanced due diligence measures.
+     C8 b) The risk assessment by the Bank shall be properly documented and be proportionate to the nature, size, geographical presence, complexity of activities/structure, etc. of our Bank. Further, the peri
+     C9 c. Further, Bank shall run a check, on the given parameters, at the time of establishing a relation with a customer and on a periodic basis (at monthly intervals) to verify whether individuals and ent
+     C10 Bank shall ensure that respondent banks have KYC/AML policies and procedures in place and apply enhanced 'due diligence' procedures for transactions carried out through the correspondent accounts.
+     C11 6.2.2 Branches shall closely monitor the transactions in accounts of marketing firms, especially accounts of Multi-level Marketing (MLM) Companies.
+     C12 As per PMLA rules, Bank is required to submit details of
+     C13 Banks shall clearly document and understand the respective AML/CFT responsibilities of institutions involved
+     C14 6. MONITORING OF TRANSACTIONS - ON-GOING DUE DILIGENCE :
+     C15 The accounts reported in STR should be classified as high risk and should be subjected to enhanced monitoring.
+     C16 Such customers shall be categorized as high-risk customers and accounts opened in non-face to face mode shall be subjected to enhanced monitoring until the identity of the customer is verified in face
+     C17 Locations identified by the bank as high-risk because of its prior experiences, transaction history, or other factors.
+     C18 Countries identified by the bank as high-risk because of its prior experiences, transaction history, or other factors (e.g.
+     C19 All Cash transactions where forged or counterfeit currency notes or bank notes has been used as genuine or where any forgery of valuable security or a document has taken place facilitating the transac
+     C20 vi. Bank shall ensure that all the information on the wire transfers shall be immediately made available to appropriate law enforcement and/or prosecutorial authorities as well as FIU-IND on receiving
+     C21 The banks, stock exchanges/depositories, intermediaries regulated by SEBI and insurance companies shall also send a copy of the communication mentioned in 5.1 (ii) above to the UAPA Nodal Officer of t
+     C22 d. While furnishing information to the Director, FIU-IND, delay of each day in not reporting a transaction or delay of each day in rectifying a mis-represented transaction beyond the time limit as spe
+   [stage 4] judge (O5): covered / issue none / best C15 / conf 0.95: C15 explicitly mentions subjecting high-risk accounts to enhanced monitoring.
+
+  O247 [41] (must) Explanation: Cases where a large number of cheque books are sought by the company and / or multiple small deposits (generally in cash) across the country in one bank account and / or where a large number of cheques are issued bearing simila
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 Branches shall undertake on-going due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers' business and risk profile; and the so
+     C2 Bank shall undertake on-going due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers' business, risk profile and the source of 
+     C3 A system of periodic review of risk categorization of accounts, with such periodicity being at least once in a year, and the need for applying enhanced due diligence measures shall be undertaken.  <== at/near the mutated location
+     C4 Branches should carry out on-going due diligence of existing customers which is regular monitoring of transactions in accounts in order to ensure that their transactions are consistent with the branch
+     C5 Customers shall be categorized as low, medium and high risk category, based on the assessment and risk perception.
+     C6 2.2.7.2 There should be periodical review of risk categorization of accounts followed by enhanced due diligence measures. Such review of risk categorization of customers should be carried out at least
+     C7 There should be periodical review of risk categorization of accounts followed by enhanced due diligence measures.
+     C8 b) The risk assessment by the Bank shall be properly documented and be proportionate to the nature, size, geographical presence, complexity of activities/structure, etc. of our Bank. Further, the peri
+     C9 c. Further, Bank shall run a check, on the given parameters, at the time of establishing a relation with a customer and on a periodic basis (at monthly intervals) to verify whether individuals and ent
+     C10 Bank shall ensure that respondent banks have KYC/AML policies and procedures in place and apply enhanced 'due diligence' procedures for transactions carried out through the correspondent accounts.
+     C11 6.2.2 Branches shall closely monitor the transactions in accounts of marketing firms, especially accounts of Multi-level Marketing (MLM) Companies.
+     C12 As per PMLA rules, Bank is required to submit details of
+     C13 Banks shall clearly document and understand the respective AML/CFT responsibilities of institutions involved
+     C14 6. MONITORING OF TRANSACTIONS - ON-GOING DUE DILIGENCE :
+     C15 The accounts reported in STR should be classified as high risk and should be subjected to enhanced monitoring.
+     C16 Such customers shall be categorized as high-risk customers and accounts opened in non-face to face mode shall be subjected to enhanced monitoring until the identity of the customer is verified in face
+     C17 Locations identified by the bank as high-risk because of its prior experiences, transaction history, or other factors.
+     C18 Countries identified by the bank as high-risk because of its prior experiences, transaction history, or other factors (e.g.
+     C19 All Cash transactions where forged or counterfeit currency notes or bank notes has been used as genuine or where any forgery of valuable security or a document has taken place facilitating the transac
+     C20 vi. Bank shall ensure that all the information on the wire transfers shall be immediately made available to appropriate law enforcement and/or prosecutorial authorities as well as FIU-IND on receiving
+     C21 The banks, stock exchanges/depositories, intermediaries regulated by SEBI and insurance companies shall also send a copy of the communication mentioned in 5.1 (ii) above to the UAPA Nodal Officer of t
+     C22 d. While furnishing information to the Director, FIU-IND, delay of each day in not reporting a transaction or delay of each day in rectifying a mis-represented transaction beyond the time limit as spe
+   [stage 4] judge (O6): covered / issue none / best C11 / conf 0.95: C11 explicitly mentions reporting specific transaction patterns to authorities.
+
+  [stage 5] gaps raised at ['41(2)'] in the frozen run: 0
+
+====================================================================================================
+centralbank C05 narrow_scope -> RBI ['68']
+  note: Money-mule monitoring limited to savings accounts (current accounts escape). User review: OK. Coverage check (27 Sep): 7.5.7.4/7.5.7.5 monitor only accounts flagged by product-code criteria (small accounts), so the general duty is still narrowed.
+  location 7.5.7.1 (183315, 183399): ...s to deposit accounts by recruiting third parties to act as -money mules.‖ Banks shall undertake diligence measures and meticulous monitoring to identify savings accounts which are operated as Money Mules and take appropriate action, including reporting of suspicious transactions to FIU-IND. Further, if it is established t...
+  [stage 2] extracted controls at the location: 0
+  [stage 1] obligations extracted for ['68']: 6
+
+  O392 [68] (must) The bank shall strictly adhere to the instructions on opening of accounts and monitoring of transactions, to minimise the operations of ‘Money Mules’ that are used to launder the proceeds of fraud schemes (e.g., phishing and identity theft)
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 7.5.7.1 -Money mules‖ can be used to launder the proceeds of fraud schemes (e.g., phishing and identity theft) by criminals who gain illegal access to deposit accounts by recruiting third parties to a  <== at/near the mutated location
+     C2 7.5.7.3 The operations of such mule accounts can be minimized if branches strictly follow the guidelines of KYC/AML/CFT/Obligation of banks under PMLA, 2002 issued from time to time and to those relat
+     C3 7.5.7.2In a money mule transaction, an individual with a bank account is recruited to receive cheque deposits or wire transfers and then transfer these funds to accounts held on behalf of another pers
+     C4 7.5.7.4 Identification and monitoring of Money Mule Accounts: Considering the advisory/ notification issued by RBI, it is proposed to incorporate the criteria for flagging of accounts as -Suspected Mo
+     C5 Branches shall undertake on-going due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers' business and risk profile; and the so
+     C6 7.5.7.5 Customer Due Diligence and transaction monitoring.
+     C7 6. MONITORING OF TRANSACTIONS - ON-GOING DUE DILIGENCE :
+     C8 7.2 In terms of PMLA Rules, suspicious transaction should include inter alia transactions which give rise to a reasonable ground of suspicion that these may involve financing of the activities relatin
+     C9 b) However, if a bank has reason to believe that a customer is intentionally structuring a transaction into a series of transactions below the threshold of Rs.50,000/- the bank should verify the ident
+     C10 8.1.6 Delay in Reporting to FIU-IND
+     C11 All Cash transactions where forged or counterfeit currency notes or bank notes has been used as genuine or where any forgery of valuable security or a document has taken place facilitating the transac
+     C12 STR alerts, based on scenarios, are generated through AML software (AML system).
+     C13 b. shall file an STR with FIU, in accordance with the PML Rules, if a transaction is found to be suspicious.
+     C14 The banks, stock exchanges/depositories, intermediaries regulated by SEBI and insurance companies shall also send a copy of the communication mentioned in 5.1 (ii) above to the UAPA Nodal Officer of t
+     C15 In cases, where STR has been filed in a particular account and fresh alerts are observed in the same account, the following factors have to be considered by the Bank, to judge and to take a decision f
+     C16 In case a transaction is abandoned / aborted by customers, on being asked to produce details / or to provide information, the Bank should report all attempted transactions, even if not completed by cu
+     C17 10.3.1 STR reported accounts
+     C18 d. While furnishing information to the Director, FIU-IND, delay of each day in not reporting a transaction or delay of each day in rectifying a mis-represented transaction beyond the time limit as spe
+   [stage 4] judge (O1): covered / issue none / best C1 / conf 1.0: C1 directly addresses the obligation by mentioning money mules, fraud schemes, and reporting to FIU-IND.
+
+  O393 [68] (must) The bank shall undertake diligence measures and meticulous monitoring to identify accounts which are operated as Money Mules and take appropriate action, including reporting of suspicious transactions to FIU-IND.
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 7.5.7.1 -Money mules‖ can be used to launder the proceeds of fraud schemes (e.g., phishing and identity theft) by criminals who gain illegal access to deposit accounts by recruiting third parties to a  <== at/near the mutated location
+     C2 7.5.7.3 The operations of such mule accounts can be minimized if branches strictly follow the guidelines of KYC/AML/CFT/Obligation of banks under PMLA, 2002 issued from time to time and to those relat
+     C3 7.5.7.2In a money mule transaction, an individual with a bank account is recruited to receive cheque deposits or wire transfers and then transfer these funds to accounts held on behalf of another pers
+     C4 7.5.7.4 Identification and monitoring of Money Mule Accounts: Considering the advisory/ notification issued by RBI, it is proposed to incorporate the criteria for flagging of accounts as -Suspected Mo
+     C5 Branches shall undertake on-going due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers' business and risk profile; and the so
+     C6 7.5.7.5 Customer Due Diligence and transaction monitoring.
+     C7 6. MONITORING OF TRANSACTIONS - ON-GOING DUE DILIGENCE :
+     C8 7.2 In terms of PMLA Rules, suspicious transaction should include inter alia transactions which give rise to a reasonable ground of suspicion that these may involve financing of the activities relatin
+     C9 b) However, if a bank has reason to believe that a customer is intentionally structuring a transaction into a series of transactions below the threshold of Rs.50,000/- the bank should verify the ident
+     C10 8.1.6 Delay in Reporting to FIU-IND
+     C11 All Cash transactions where forged or counterfeit currency notes or bank notes has been used as genuine or where any forgery of valuable security or a document has taken place facilitating the transac
+     C12 STR alerts, based on scenarios, are generated through AML software (AML system).
+     C13 b. shall file an STR with FIU, in accordance with the PML Rules, if a transaction is found to be suspicious.
+     C14 The banks, stock exchanges/depositories, intermediaries regulated by SEBI and insurance companies shall also send a copy of the communication mentioned in 5.1 (ii) above to the UAPA Nodal Officer of t
+     C15 In cases, where STR has been filed in a particular account and fresh alerts are observed in the same account, the following factors have to be considered by the Bank, to judge and to take a decision f
+     C16 In case a transaction is abandoned / aborted by customers, on being asked to produce details / or to provide information, the Bank should report all attempted transactions, even if not completed by cu
+     C17 10.3.1 STR reported accounts
+     C18 d. While furnishing information to the Director, FIU-IND, delay of each day in not reporting a transaction or delay of each day in rectifying a mis-represented transaction beyond the time limit as spe
+   [stage 4] judge (O2): covered / issue none / best C1 / conf 1.0: C1 includes diligence measures, monitoring, and reporting to FIU-IND as required by O2.
+
+  O394 [68] (must) The bank shall undertake diligence measures and meticulous monitoring to identify accounts which are operated as Money Mules and take appropriate action, including reporting of suspicious transactions to FIU-IND.
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 7.5.7.1 -Money mules‖ can be used to launder the proceeds of fraud schemes (e.g., phishing and identity theft) by criminals who gain illegal access to deposit accounts by recruiting third parties to a  <== at/near the mutated location
+     C2 7.5.7.3 The operations of such mule accounts can be minimized if branches strictly follow the guidelines of KYC/AML/CFT/Obligation of banks under PMLA, 2002 issued from time to time and to those relat
+     C3 7.5.7.2In a money mule transaction, an individual with a bank account is recruited to receive cheque deposits or wire transfers and then transfer these funds to accounts held on behalf of another pers
+     C4 7.5.7.4 Identification and monitoring of Money Mule Accounts: Considering the advisory/ notification issued by RBI, it is proposed to incorporate the criteria for flagging of accounts as -Suspected Mo
+     C5 Branches shall undertake on-going due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers' business and risk profile; and the so
+     C6 7.5.7.5 Customer Due Diligence and transaction monitoring.
+     C7 6. MONITORING OF TRANSACTIONS - ON-GOING DUE DILIGENCE :
+     C8 7.2 In terms of PMLA Rules, suspicious transaction should include inter alia transactions which give rise to a reasonable ground of suspicion that these may involve financing of the activities relatin
+     C9 b) However, if a bank has reason to believe that a customer is intentionally structuring a transaction into a series of transactions below the threshold of Rs.50,000/- the bank should verify the ident
+     C10 8.1.6 Delay in Reporting to FIU-IND
+     C11 All Cash transactions where forged or counterfeit currency notes or bank notes has been used as genuine or where any forgery of valuable security or a document has taken place facilitating the transac
+     C12 STR alerts, based on scenarios, are generated through AML software (AML system).
+     C13 b. shall file an STR with FIU, in accordance with the PML Rules, if a transaction is found to be suspicious.
+     C14 The banks, stock exchanges/depositories, intermediaries regulated by SEBI and insurance companies shall also send a copy of the communication mentioned in 5.1 (ii) above to the UAPA Nodal Officer of t
+     C15 In cases, where STR has been filed in a particular account and fresh alerts are observed in the same account, the following factors have to be considered by the Bank, to judge and to take a decision f
+     C16 In case a transaction is abandoned / aborted by customers, on being asked to produce details / or to provide information, the Bank should report all attempted transactions, even if not completed by cu
+     C17 10.3.1 STR reported accounts
+     C18 d. While furnishing information to the Director, FIU-IND, delay of each day in not reporting a transaction or delay of each day in rectifying a mis-represented transaction beyond the time limit as spe
+   [stage 4] judge (O2): covered / issue none / best C1 / conf 1.0: C1 includes diligence measures, monitoring, and reporting to FIU-IND as required by O2.
+
+  O395 [68] (must) take appropriate action, including reporting of suspicious transactions to FIU-IND.
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 7.5.7.1 -Money mules‖ can be used to launder the proceeds of fraud schemes (e.g., phishing and identity theft) by criminals who gain illegal access to deposit accounts by recruiting third parties to a  <== at/near the mutated location
+     C2 7.5.7.3 The operations of such mule accounts can be minimized if branches strictly follow the guidelines of KYC/AML/CFT/Obligation of banks under PMLA, 2002 issued from time to time and to those relat
+     C3 7.5.7.2In a money mule transaction, an individual with a bank account is recruited to receive cheque deposits or wire transfers and then transfer these funds to accounts held on behalf of another pers
+     C4 7.5.7.4 Identification and monitoring of Money Mule Accounts: Considering the advisory/ notification issued by RBI, it is proposed to incorporate the criteria for flagging of accounts as -Suspected Mo
+     C5 Branches shall undertake on-going due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers' business and risk profile; and the so
+     C6 7.5.7.5 Customer Due Diligence and transaction monitoring.
+     C7 6. MONITORING OF TRANSACTIONS - ON-GOING DUE DILIGENCE :
+     C8 7.2 In terms of PMLA Rules, suspicious transaction should include inter alia transactions which give rise to a reasonable ground of suspicion that these may involve financing of the activities relatin
+     C9 b) However, if a bank has reason to believe that a customer is intentionally structuring a transaction into a series of transactions below the threshold of Rs.50,000/- the bank should verify the ident
+     C10 8.1.6 Delay in Reporting to FIU-IND
+     C11 All Cash transactions where forged or counterfeit currency notes or bank notes has been used as genuine or where any forgery of valuable security or a document has taken place facilitating the transac
+     C12 STR alerts, based on scenarios, are generated through AML software (AML system).
+     C13 b. shall file an STR with FIU, in accordance with the PML Rules, if a transaction is found to be suspicious.
+     C14 The banks, stock exchanges/depositories, intermediaries regulated by SEBI and insurance companies shall also send a copy of the communication mentioned in 5.1 (ii) above to the UAPA Nodal Officer of t
+     C15 In cases, where STR has been filed in a particular account and fresh alerts are observed in the same account, the following factors have to be considered by the Bank, to judge and to take a decision f
+     C16 In case a transaction is abandoned / aborted by customers, on being asked to produce details / or to provide information, the Bank should report all attempted transactions, even if not completed by cu
+     C17 10.3.1 STR reported accounts
+     C18 d. While furnishing information to the Director, FIU-IND, delay of each day in not reporting a transaction or delay of each day in rectifying a mis-represented transaction beyond the time limit as spe
+   [stage 4] judge (O2): covered / issue none / best C1 / conf 1.0: C1 includes diligence measures, monitoring, and reporting to FIU-IND as required by O2.
+
+  O396 [68] (must_not) if it is established that an account opened and operated is that of a Money Mule, but STR was not filed by the concerned bank, it shall then be deemed that the bank has not complied with these directions.
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 7.5.7.1 -Money mules‖ can be used to launder the proceeds of fraud schemes (e.g., phishing and identity theft) by criminals who gain illegal access to deposit accounts by recruiting third parties to a  <== at/near the mutated location
+     C2 7.5.7.3 The operations of such mule accounts can be minimized if branches strictly follow the guidelines of KYC/AML/CFT/Obligation of banks under PMLA, 2002 issued from time to time and to those relat
+     C3 7.5.7.2In a money mule transaction, an individual with a bank account is recruited to receive cheque deposits or wire transfers and then transfer these funds to accounts held on behalf of another pers
+     C4 7.5.7.4 Identification and monitoring of Money Mule Accounts: Considering the advisory/ notification issued by RBI, it is proposed to incorporate the criteria for flagging of accounts as -Suspected Mo
+     C5 Branches shall undertake on-going due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers' business and risk profile; and the so
+     C6 7.5.7.5 Customer Due Diligence and transaction monitoring.
+     C7 6. MONITORING OF TRANSACTIONS - ON-GOING DUE DILIGENCE :
+     C8 7.2 In terms of PMLA Rules, suspicious transaction should include inter alia transactions which give rise to a reasonable ground of suspicion that these may involve financing of the activities relatin
+     C9 b) However, if a bank has reason to believe that a customer is intentionally structuring a transaction into a series of transactions below the threshold of Rs.50,000/- the bank should verify the ident
+     C10 8.1.6 Delay in Reporting to FIU-IND
+     C11 All Cash transactions where forged or counterfeit currency notes or bank notes has been used as genuine or where any forgery of valuable security or a document has taken place facilitating the transac
+     C12 STR alerts, based on scenarios, are generated through AML software (AML system).
+     C13 b. shall file an STR with FIU, in accordance with the PML Rules, if a transaction is found to be suspicious.
+     C14 The banks, stock exchanges/depositories, intermediaries regulated by SEBI and insurance companies shall also send a copy of the communication mentioned in 5.1 (ii) above to the UAPA Nodal Officer of t
+     C15 In cases, where STR has been filed in a particular account and fresh alerts are observed in the same account, the following factors have to be considered by the Bank, to judge and to take a decision f
+     C16 In case a transaction is abandoned / aborted by customers, on being asked to produce details / or to provide information, the Bank should report all attempted transactions, even if not completed by cu
+     C17 10.3.1 STR reported accounts
+     C18 d. While furnishing information to the Director, FIU-IND, delay of each day in not reporting a transaction or delay of each day in rectifying a mis-represented transaction beyond the time limit as spe
+   [stage 4] judge (O5): covered / issue none / best C2 / conf 1.0: C2 directly addresses the obligation by stating that if an account is a money mule and no STR is filed, the bank has not complied.
+
+  O397 [68] (must) if it is established that an account opened and operated is that of a Money Mule, but STR was not filed by the concerned bank, it shall then be deemed that the bank has not complied with these directions.
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 7.5.7.1 -Money mules‖ can be used to launder the proceeds of fraud schemes (e.g., phishing and identity theft) by criminals who gain illegal access to deposit accounts by recruiting third parties to a  <== at/near the mutated location
+     C2 7.5.7.3 The operations of such mule accounts can be minimized if branches strictly follow the guidelines of KYC/AML/CFT/Obligation of banks under PMLA, 2002 issued from time to time and to those relat
+     C3 7.5.7.2In a money mule transaction, an individual with a bank account is recruited to receive cheque deposits or wire transfers and then transfer these funds to accounts held on behalf of another pers
+     C4 7.5.7.4 Identification and monitoring of Money Mule Accounts: Considering the advisory/ notification issued by RBI, it is proposed to incorporate the criteria for flagging of accounts as -Suspected Mo
+     C5 Branches shall undertake on-going due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers' business and risk profile; and the so
+     C6 7.5.7.5 Customer Due Diligence and transaction monitoring.
+     C7 6. MONITORING OF TRANSACTIONS - ON-GOING DUE DILIGENCE :
+     C8 7.2 In terms of PMLA Rules, suspicious transaction should include inter alia transactions which give rise to a reasonable ground of suspicion that these may involve financing of the activities relatin
+     C9 b) However, if a bank has reason to believe that a customer is intentionally structuring a transaction into a series of transactions below the threshold of Rs.50,000/- the bank should verify the ident
+     C10 8.1.6 Delay in Reporting to FIU-IND
+     C11 All Cash transactions where forged or counterfeit currency notes or bank notes has been used as genuine or where any forgery of valuable security or a document has taken place facilitating the transac
+     C12 STR alerts, based on scenarios, are generated through AML software (AML system).
+     C13 b. shall file an STR with FIU, in accordance with the PML Rules, if a transaction is found to be suspicious.
+     C14 The banks, stock exchanges/depositories, intermediaries regulated by SEBI and insurance companies shall also send a copy of the communication mentioned in 5.1 (ii) above to the UAPA Nodal Officer of t
+     C15 In cases, where STR has been filed in a particular account and fresh alerts are observed in the same account, the following factors have to be considered by the Bank, to judge and to take a decision f
+     C16 In case a transaction is abandoned / aborted by customers, on being asked to produce details / or to provide information, the Bank should report all attempted transactions, even if not completed by cu
+     C17 10.3.1 STR reported accounts
+     C18 d. While furnishing information to the Director, FIU-IND, delay of each day in not reporting a transaction or delay of each day in rectifying a mis-represented transaction beyond the time limit as spe
+   [stage 4] judge (O5): covered / issue none / best C2 / conf 1.0: C2 directly addresses the obligation by stating that if an account is a money mule and no STR is filed, the bank has not complied.
+
+  [stage 5] gaps raised at ['68'] in the frozen run: 0
+
+====================================================================================================
+centralbank C06 contradict -> RBI ['42(1)']
+  note: The FAQ annex was not updated: it says high-risk re-KYC every 5 years while the policy body says 2.
+  location U2 (344066, 344169): ...Different periodicities have been prescribed for updation of KYC records depending on the risk perception of the bank. Periodic updation of KYC is to be carried out at least once in every five years for high risk customers, once in every eight years for medium risk customers and once in every ten years for low risk customers. Branch has to...
+  [stage 2] extracted controls at the location: 0
+  [stage 1] obligations extracted for ['42(1)']: 5
+
+  O248 [42(1)] (must) (1) The bank shall adopt a risk-based approach for periodic updation of KYC ensuring that it keeps the information or data collected under CDD is kept up-to-date and relevant, particularly where there is high risk.
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 Bank shall adopt a risk-based approach for periodic updation of KYC ensuring that the information or data collected under CDD is kept up-to-date and relevant, particularly where there is high risk.
+     C2 Periodic updation of KYC is to be carried out at least once in every five years for high risk customers, once in every eight years for medium risk customers and once in every ten years for low risk cu  <== at/near the mutated location
+     C3 Further, the Bank may insist for KYC updation, whenever there is a doubt about the authenticity or adequacy of the customer identification data it has obtained. Regular monitoring of transactions in a
+     C4 (j) Bank shall ensure that during periodic updation, the customers are migrated to the current CDD standard.
+     C5 In order to ensure customer convenience, the facility of periodic updation of KYC can be done at any branch of the Bank.
+     C6 3.1.7 Updation/ Periodical Updation of KYC:
+     C7 Risk profiles of customers should be reviewed, once in a year. | 7 | Banking services should not be denied to general public, especially, to those who are financially or socially disadvantaged. | | 8 
+     C8 Periodic updation of KYC of all customers having operative accounts that were due for updation as on March 31, 2022 should be completed by June 30, 2023.
+     C9 The Bank shall have -Know Your Customer (KYC) policy‖ duly approved by the Board of Directors or any committee of the Board to which power has been delegated.
+     C10 Additional information, where information requirement has not been specified in the internal KYC Policy of the Bank, is obtained with the explicit consent of the customer.
+     C11 3.8 Compliance of KYC policy: Ensuring compliance with KYC Policy through: (i) Specifying as to who constitute ‗Senior Management' for the purpose of KYC compliance. A Senior officer in the rank of Ge
+     C12 Bank should have a policy approved by the Boards, or by a committee headed by the Chairman/CEO/MD to lay down parameters for approving cross-border correspondent banking and other similar relationship
+     C13 Bank shall ensure that respondent banks have KYC/AML policies and procedures in place and apply enhanced 'due diligence' procedures for transactions carried out through the correspondent accounts.
+   [stage 4] judge (O1): covered / issue none / best C6 / conf 0.95: C6 explicitly adopts a risk-based approach for periodic KYC updation, matching O1's requirement for high-risk customers.
+
+  O249 [42(1)] (must) the bank shall carry out periodic updation at least once in every two years for high-risk customers, once in every eight years for medium risk customers and once in every 10 years for low-risk customers from the date of opening of the accou
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 Bank shall adopt a risk-based approach for periodic updation of KYC ensuring that the information or data collected under CDD is kept up-to-date and relevant, particularly where there is high risk.
+     C2 Periodic updation of KYC is to be carried out at least once in every five years for high risk customers, once in every eight years for medium risk customers and once in every ten years for low risk cu  <== at/near the mutated location
+     C3 Further, the Bank may insist for KYC updation, whenever there is a doubt about the authenticity or adequacy of the customer identification data it has obtained. Regular monitoring of transactions in a
+     C4 (j) Bank shall ensure that during periodic updation, the customers are migrated to the current CDD standard.
+     C5 In order to ensure customer convenience, the facility of periodic updation of KYC can be done at any branch of the Bank.
+     C6 3.1.7 Updation/ Periodical Updation of KYC:
+     C7 Risk profiles of customers should be reviewed, once in a year. | 7 | Banking services should not be denied to general public, especially, to those who are financially or socially disadvantaged. | | 8 
+     C8 Periodic updation of KYC of all customers having operative accounts that were due for updation as on March 31, 2022 should be completed by June 30, 2023.
+     C9 The Bank shall have -Know Your Customer (KYC) policy‖ duly approved by the Board of Directors or any committee of the Board to which power has been delegated.
+     C10 Additional information, where information requirement has not been specified in the internal KYC Policy of the Bank, is obtained with the explicit consent of the customer.
+     C11 3.8 Compliance of KYC policy: Ensuring compliance with KYC Policy through: (i) Specifying as to who constitute ‗Senior Management' for the purpose of KYC compliance. A Senior officer in the rank of Ge
+     C12 Bank should have a policy approved by the Boards, or by a committee headed by the Chairman/CEO/MD to lay down parameters for approving cross-border correspondent banking and other similar relationship
+     C13 Bank shall ensure that respondent banks have KYC/AML policies and procedures in place and apply enhanced 'due diligence' procedures for transactions carried out through the correspondent accounts.
+   [stage 4] judge (O2): partial / issue weaker_threshold / best C6 / conf 0.85: C6 specifies a two-year interval for high-risk customers, which matches O2's threshold, but lacks the mandatory requirement for periodicity.
+
+  O250 [42(1)] (must) the bank shall carry out periodic updation at least once in every two years for high-risk customers, once in every eight years for medium risk customers and once in every 10 years for low-risk customers from the date of opening of the accou
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 Bank shall adopt a risk-based approach for periodic updation of KYC ensuring that the information or data collected under CDD is kept up-to-date and relevant, particularly where there is high risk.
+     C2 Periodic updation of KYC is to be carried out at least once in every five years for high risk customers, once in every eight years for medium risk customers and once in every ten years for low risk cu  <== at/near the mutated location
+     C3 Further, the Bank may insist for KYC updation, whenever there is a doubt about the authenticity or adequacy of the customer identification data it has obtained. Regular monitoring of transactions in a
+     C4 (j) Bank shall ensure that during periodic updation, the customers are migrated to the current CDD standard.
+     C5 In order to ensure customer convenience, the facility of periodic updation of KYC can be done at any branch of the Bank.
+     C6 3.1.7 Updation/ Periodical Updation of KYC:
+     C7 Risk profiles of customers should be reviewed, once in a year. | 7 | Banking services should not be denied to general public, especially, to those who are financially or socially disadvantaged. | | 8 
+     C8 Periodic updation of KYC of all customers having operative accounts that were due for updation as on March 31, 2022 should be completed by June 30, 2023.
+     C9 The Bank shall have -Know Your Customer (KYC) policy‖ duly approved by the Board of Directors or any committee of the Board to which power has been delegated.
+     C10 Additional information, where information requirement has not been specified in the internal KYC Policy of the Bank, is obtained with the explicit consent of the customer.
+     C11 3.8 Compliance of KYC policy: Ensuring compliance with KYC Policy through: (i) Specifying as to who constitute ‗Senior Management' for the purpose of KYC compliance. A Senior officer in the rank of Ge
+     C12 Bank should have a policy approved by the Boards, or by a committee headed by the Chairman/CEO/MD to lay down parameters for approving cross-border correspondent banking and other similar relationship
+     C13 Bank shall ensure that respondent banks have KYC/AML policies and procedures in place and apply enhanced 'due diligence' procedures for transactions carried out through the correspondent accounts.
+   [stage 4] judge (O2): partial / issue weaker_threshold / best C6 / conf 0.85: C6 specifies a two-year interval for high-risk customers, which matches O2's threshold, but lacks the mandatory requirement for periodicity.
+
+  O251 [42(1)] (must) the bank shall carry out periodic updation at least once in every two years for high-risk customers, once in every eight years for medium risk customers and once in every 10 years for low-risk customers from the date of opening of the accou
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 Bank shall adopt a risk-based approach for periodic updation of KYC ensuring that the information or data collected under CDD is kept up-to-date and relevant, particularly where there is high risk.
+     C2 Periodic updation of KYC is to be carried out at least once in every five years for high risk customers, once in every eight years for medium risk customers and once in every ten years for low risk cu  <== at/near the mutated location
+     C3 Further, the Bank may insist for KYC updation, whenever there is a doubt about the authenticity or adequacy of the customer identification data it has obtained. Regular monitoring of transactions in a
+     C4 (j) Bank shall ensure that during periodic updation, the customers are migrated to the current CDD standard.
+     C5 In order to ensure customer convenience, the facility of periodic updation of KYC can be done at any branch of the Bank.
+     C6 3.1.7 Updation/ Periodical Updation of KYC:
+     C7 Risk profiles of customers should be reviewed, once in a year. | 7 | Banking services should not be denied to general public, especially, to those who are financially or socially disadvantaged. | | 8 
+     C8 Periodic updation of KYC of all customers having operative accounts that were due for updation as on March 31, 2022 should be completed by June 30, 2023.
+     C9 The Bank shall have -Know Your Customer (KYC) policy‖ duly approved by the Board of Directors or any committee of the Board to which power has been delegated.
+     C10 Additional information, where information requirement has not been specified in the internal KYC Policy of the Bank, is obtained with the explicit consent of the customer.
+     C11 3.8 Compliance of KYC policy: Ensuring compliance with KYC Policy through: (i) Specifying as to who constitute ‗Senior Management' for the purpose of KYC compliance. A Senior officer in the rank of Ge
+     C12 Bank should have a policy approved by the Boards, or by a committee headed by the Chairman/CEO/MD to lay down parameters for approving cross-border correspondent banking and other similar relationship
+     C13 Bank shall ensure that respondent banks have KYC/AML policies and procedures in place and apply enhanced 'due diligence' procedures for transactions carried out through the correspondent accounts.
+   [stage 4] judge (O2): partial / issue weaker_threshold / best C6 / conf 0.85: C6 specifies a two-year interval for high-risk customers, which matches O2's threshold, but lacks the mandatory requirement for periodicity.
+
+  O252 [42(1)] (must) The bank shall document its policy in this regard as part of the bank’s internal KYC policy duly approved by the Board of Directors of bank or any committee of the Board to which power has been delegated.
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 Bank shall adopt a risk-based approach for periodic updation of KYC ensuring that the information or data collected under CDD is kept up-to-date and relevant, particularly where there is high risk.
+     C2 Periodic updation of KYC is to be carried out at least once in every five years for high risk customers, once in every eight years for medium risk customers and once in every ten years for low risk cu  <== at/near the mutated location
+     C3 Further, the Bank may insist for KYC updation, whenever there is a doubt about the authenticity or adequacy of the customer identification data it has obtained. Regular monitoring of transactions in a
+     C4 (j) Bank shall ensure that during periodic updation, the customers are migrated to the current CDD standard.
+     C5 In order to ensure customer convenience, the facility of periodic updation of KYC can be done at any branch of the Bank.
+     C6 3.1.7 Updation/ Periodical Updation of KYC:
+     C7 Risk profiles of customers should be reviewed, once in a year. | 7 | Banking services should not be denied to general public, especially, to those who are financially or socially disadvantaged. | | 8 
+     C8 Periodic updation of KYC of all customers having operative accounts that were due for updation as on March 31, 2022 should be completed by June 30, 2023.
+     C9 The Bank shall have -Know Your Customer (KYC) policy‖ duly approved by the Board of Directors or any committee of the Board to which power has been delegated.
+     C10 Additional information, where information requirement has not been specified in the internal KYC Policy of the Bank, is obtained with the explicit consent of the customer.
+     C11 3.8 Compliance of KYC policy: Ensuring compliance with KYC Policy through: (i) Specifying as to who constitute ‗Senior Management' for the purpose of KYC compliance. A Senior officer in the rank of Ge
+     C12 Bank should have a policy approved by the Boards, or by a committee headed by the Chairman/CEO/MD to lay down parameters for approving cross-border correspondent banking and other similar relationship
+     C13 Bank shall ensure that respondent banks have KYC/AML policies and procedures in place and apply enhanced 'due diligence' procedures for transactions carried out through the correspondent accounts.
+   [stage 4] judge (O5): covered / issue none / best C9 / conf 0.95: C9 explicitly states that the KYC policy must be approved by the Board of Directors, matching O5's requirement.
+
+  [stage 5] gaps raised at ['42(1)'] in the frozen run: 3
+     partial / weak_threshold: C6 specifies a ten-year interval for low-risk customers, matching O4's threshold, but lacks the mandatory requirement for periodicity.
+     partial / weak_threshold: C6 specifies a two-year interval for high-risk customers, which matches O2's threshold, but lacks the mandatory requirement for periodicity.
+     partial / weak_threshold: C6 specifies an eight-year interval for medium-risk customers, matching O3's threshold, but lacks the mandatory requirement for periodicity.
+
+====================================================================================================
+centralbank C07 strip_design -> RBI ['52', '15(1)']
+  note: STR alert workflow loses its maker-checker levels and Principal Officer approval; the duty to file STRs remains but has no accountable reviewer. User review: acceptable = design deficiency or partial.
+  location 8.1.11.1 (203604, 203651): ...hrough AML software (AML system). A team of front line officers at AML-KYC Cell are screening the generated STR alerts. The suspicious alert shall be put up before the appropriate authority to file an STR to FIU-IND by AML Cell, CO, uploaded electronically on its FIN net site. Indicativ...
+  [stage 2] extracted controls at the location: 0
+  location 8.1.11.1 (203652, 203699): ...t line officers at AML-KYC Cell are screening the generated STR alerts. The suspicious alert shall be put up before the appropriate authority to file an STR to FIU-IND by AML Cell, CO, uploaded electronically on its FIN net site. Indicative guidelines given to Front line Officers (MLRO)...
+  [stage 2] extracted controls at the location: 0
+  [stage 1] obligations extracted for ['52', '15(1)']: 2
+
+  O59 [15] (must) The Principal Officer shall be responsible for ensuring compliance, monitoring transactions, and sharing and reporting information as required under the law / regulations.
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 In addition, it shall be the duty of every reporting entity, its Designated Director, officers and employees to observe the procedure and manner of furnishing and reporting information on transactions
+     C2 The front line staff at branches should be vigilant, as they are the first point to detect any suspicious transaction in an account and accordingly any suspicious transaction/activity should immediate
+     C3 10.6.1 The Zonal/Regional offices should designate a senior most officer not below the rank of Chief Manager, to act as Compliance Officer. The branches will report the suspicious transactions to the 
+     C4 10.6.3 The COMPLIANCE OFFICER will analyze the suspicious activities reported and track patterns, which should be brought to the notice of the operating staff. This will enable the staff to remain vig
+     C5 It should be ensured that there is no undue delay in arriving at a conclusion whether or not a transaction is of suspicious nature and that the principal officer should record his reasons for treating
+     C6 d. In case of match in the above cases, bank shall immediately inform the transaction details with full particulars of the funds, financial assets or economic resources involved to the Central Nodal O
+     C7 Bank, its directors, officers, and all employees shall ensure that the fact of maintenance of records referred to in rule 3 of the PML (Maintenance of Records) Rules, 2005 and furnishing of the inform
+     C8 The communication to the Central Nodal Officer would include the details of funds and assets held and the details of the transaction.
+     C9 -Designated Director -means a person designated by the Banks Board to ensure overall compliance with the obligations imposed under chapter IV of the PML Act and the Rules and includes the Managing Dir
+   [stage 4] judge (O1): covered / issue none / best C1 / conf 0.95: C1 directly addresses the Principal Officer's responsibilities for compliance, monitoring, and reporting as required by O1.
+
+  O328 [52] (must) The bank shall furnish to the Director, Financial Intelligence Unit-India (FIU-IND), the information referred to in Rule 3 of the PML (Maintenance of Records) Rules, 2005 in accordance with Rule 7 thereof.
+   [stage 3] cached judge prompts on centralbank: 1
+     C1 a. Bank shall furnish to the Director, Financial Intelligence Unit-India (FIU-IND), information referred to in Rule 3 of the PML (Maintenance of Records) Rules, 2005 in terms of Rule 7 thereof.
+     C2 Bank, its directors, officers, and all employees shall ensure that the fact of maintenance of records referred to in rule 3 of the PML (Maintenance of Records) Rules, 2005 and furnishing of the inform
+     C3 In addition, it shall be the duty of every reporting entity, its Designated Director, officers and employees to observe the procedure and manner of furnishing and reporting information on transactions
+     C4 8. REPORTING REQUIREMENTS TO FINANCIAL INTELLIGENCE UNIT - INDIA (FIU- INDIA) UNDER PMLACT 2002
+     C5 7.2 In terms of PMLA Rules, suspicious transaction should include inter alia transactions which give rise to a reasonable ground of suspicion that these may involve financing of the activities relatin
+   [stage 4] judge (O1): covered / issue none / best C1 / conf 1.0: C1 directly matches O1's requirement to furnish information to FIU-IND in accordance with Rule 7.
+
+  [stage 5] gaps raised at ['52', '15(1)'] in the frozen run: 0
+
+====================================================================================================
+dhanlaxmi L01 delete_control -> RBI ['39']
+  note: Ongoing due diligence of customers removed: the three statements of the duty (20.1, the second sentence of 25.1, the first sentence of 26.3) are deleted; transaction-monitoring lists remain.
+  location 20.2 (61186, 61186): ...are acting, as well as details regarding the nature of the trust or other arrangements in place. On-going Due Diligence 20.2 Without prejudice to the generality of factors that call for close monitoring following types of transactions shall...
+  deleted: 20.1 Bank shall undertake on-going due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers' business and risk profile; and the source of funds.
+  [stage 2] extracted controls at the location: 0
+  location 25.1 (71460, 71471): ...lication. Monitoring of Transactions: 25.1 Ongoing monitoring is an essential element of effective KYC/ AML procedures. The ongoing due diligence may be based on the following principles: 25.1.1 The extent of monitoring will depend on the risk categor...
+  [stage 2] extracted controls at the location: 0
+  location 26.3 (76478, 76492): ...her the accounts are held as on balance sheet, off balance sheet or as assets under management or on a fiduciary basis. 26.3 The Board of Directors of the Bank shall ensure that an effective KYC/AML/CFT programme is put in place by establishing appropria...
+  [stage 2] extracted controls at the location: 0
+  [stage 1] obligations extracted for ['39']: 1
+
+  O232 [39] (must) The bank shall undertake ongoing due diligence of customers to ensure that their transactions are consistent with their knowledge about the customers, customers’ business and risk profile, the source of funds / wealth.
+   [stage 3] cached judge prompts on dhanlaxmi: 1
+     C1 4.2.10 On-going Due Diligence' means regular monitoring of transactions in accounts to ensure that those are consistent with the Bank's knowledge about the customers, customers' business and risk prof
+     C2 10.1 Bank shall obtain sufficient information necessary to establish, to its satisfaction, the identity of each new customer, whether regular or occasional and the purpose of the intended nature of ba
+     C3 26.4.6 Branches shall prepare a profile for each new customer based on risk categorization. The customer profile may contain information relating to customer's identity, social/financial status, natur
+     C4 26.4.7 Branches shall categorise the customers into low, medium and high-risk category based on the assessment and risk perception of the customers, identifying transactions that fall outside the regu
+     C5 Branches/offices are required to prepare a profile for all new customers based on risk categorization, taking into account the location of the customer and the customer's clients as well as factors su
+   [stage 4] judge (O1): covered / issue none / best C1 / conf 0.95: C1 directly addresses ongoing due diligence to ensure transactions are consistent with the bank's knowledge about customers.
+
+  [stage 5] gaps raised at ['39'] in the frozen run: 0
+
+====================================================================================================
+dhanlaxmi L02 weaken_modality -> RBI ['15(2)']
+  note: Communicating the Principal Officer's name, designation and address to FIU-IND made optional ('may') in both places that state it (30.6 a.ii and 29.2.1). Communication to RBI (30.6 a.iii) stays mandatory, so the obligation is partly met.
+  location 30.6(a)(ii) (111058, 111191): ...the sharing and reporting of information as mandated by applicable laws and regulations. ii. Communication to FIU-IND: The name, designation, and address of the Principal Officer may be communicated to the Financial Intelligence Unit - India (FIU-IND). iii. Communication to RBI: Additionally, the name, designation, address, and contact details of the Princip...
+  [stage 2] extracted controls at the location: 0
+  location 29.2.1 (102428, 102600): ...us transactions. 29.2 As per Rule 7 of PML Rules, the procedure and manner of furnishing information shall be as under: 29.2.1 The Bank shall communicate to the Director, FIU IND the name, designation and address of the Designated Director, and may communicate those of the Principal Officer. 29.2.2 The Principal Officer shall furnish the information referred...
+  [stage 2] extracted controls at the location: 0
+  [stage 1] obligations extracted for ['15(2)']: 1
+
+  O60 [15] (must) The bank shall communicate the name, designation, address and contact details of the Principal Officer to the FIU-IND and RBI.
+   [stage 3] cached judge prompts on dhanlaxmi: 1
+     C1 i. Responsibilities: The Principal Officer of our bank shall be responsible for ensuring compliance with KYC requirements, monitoring transactions, and facilitating the sharing and reporting of inform  <== at/near the mutated location
+     C2 vii. Internal Controls: Establish and maintain robust internal controls and systems to detect and prevent money laundering, terrorist financing, and other illicit activities.
+     C3 b. Responsibilities of the Principal Officer:  <== at/near the mutated location
+     C4 ii. Transaction Monitoring: Monitor customer transactions for any suspicious activities and promptly report any findings in accordance with applicable laws and regulations. The Principal Officer under
+     C5 iv. Reporting Obligations: Ensure timely reporting of suspicious transactions and the fulfillment of reporting obligations in accordance with the provisions of the law and regulations.
+     C6 iii. Communication to RBI: Additionally, the name, designation, address, and contact details of the Principal Officer shall be communicated to the Reserve Bank of India (RBI).  <== at/near the mutated location
+     C7 29.2.1 The Bank shall communicate to the Director, FIU IND the name, designation and address of the Designated Director, and may communicate those of the Principal Officer.  <== at/near the mutated location
+     C8 ii. Communication to FIU-IND: The name, designation, and address of the Principal Officer may be communicated to the Financial Intelligence Unit - India (FIU-IND).  <== at/near the mutated location
+     C9 iii. Communication to RBI: Additionally, the name, designation, address, and contact details of the Designated Director shall be communicated to the Reserve Bank of India (RBI).  <== at/near the mutated location
+     C10 ii. Communication to FIU-IND: The name, designation, and address of the Designated Director shall be communicated to the Financial Intelligence Unit - India (FIU-IND).  <== at/near the mutated location
+   [stage 4] judge (O2): partial / issue optional_not_mandatory / best C6 / conf 0.8: C6 mentions communication to RBI but lacks mandatory language, while C7 and C8 use 'may' instead of 'shall'.
+
+  [stage 5] gaps raised at ['15(2)'] in the frozen run: 0
+
+====================================================================================================
+dhanlaxmi L03 narrow_scope -> RBI ['42(1)']
+  note: Re-KYC periodicity (2 / 8 / 10 years) limited to individual customers; the section for customers other than individuals states no periodicity, so legal entities are left without one.
+  location 20.2(a)~3 (63023, 63103): ...hat the information or data collected under CDD is kept up-to-date and relevant, particularly where there is high risk. The frequency of periodic updation for individual customers shall be as follows: i. High-risk customers: At least once every two years from the date of account opening or the last KYC updation. ii. Me...
+  [stage 2] extracted controls at the location: 0
+  [stage 1] obligations extracted for ['42(1)']: 5
+
+  O248 [42(1)] (must) (1) The bank shall adopt a risk-based approach for periodic updation of KYC ensuring that it keeps the information or data collected under CDD is kept up-to-date and relevant, particularly where there is high risk.
+   [stage 3] cached judge prompts on dhanlaxmi: 1
+     C1 a. Risk-Based Approach for Periodic Updation:  <== at/near the mutated location
+     C2 i. High-risk customers: At least once every two years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C3 vi. During periodic updation, the Bank shall ensure that customers are migrated to the current Customer Due Diligence (CDD) standard.
+     C4 ii. Medium-risk customers: At least once every eight years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C5 iii. Low-risk customers: At least once every ten years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C6 v. To ensure incremental uploading of all KYC records onto the CKYCR, the Bank shall upload/ update the KYC data of individual customers and LEs who opened accounts prior to the mentioned dates (in po
+     C7 25.3 Bank shall put in place a system of periodical review of risk categorization of accounts and the need for applying enhanced due diligence measures. Such review of risk categorisation of customers
+     C8 iii. Updation/ Periodic updation of KYC for eligible customers.
+     C9 A risk-based approach shall be adopted, and any additional measures not mandated under the above instructions shall be clearly specified in our internal KYC policy, duly approved by the Board of Direc
+     C10 i. Compliance Oversight: Oversee the bank's compliance with KYC regulations and internal policies.
+     C11 26.3 The Board of Directors of the Bank shall ensure that an effective KYC/AML/CFT programme is put in place by establishing appropriate procedures and ensuring their effective implementation. It shal
+     C12 10.2 Bank shall have a policy approved by the Board which clearly spells out the Customer Identification Procedure to be carried out at different stages, i.e.,
+     C13 7.6 Bank shall ensure that decision-making functions of determining compliance with KYC norms are not outsourced.
+   [stage 4] judge (O1): covered / issue none / best C1 / conf 1: C1 directly addresses the risk-based approach for periodic KYC updation for high-risk customers.
+
+  O249 [42(1)] (must) the bank shall carry out periodic updation at least once in every two years for high-risk customers, once in every eight years for medium risk customers and once in every 10 years for low-risk customers from the date of opening of the accou
+   [stage 3] cached judge prompts on dhanlaxmi: 1
+     C1 a. Risk-Based Approach for Periodic Updation:  <== at/near the mutated location
+     C2 i. High-risk customers: At least once every two years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C3 vi. During periodic updation, the Bank shall ensure that customers are migrated to the current Customer Due Diligence (CDD) standard.
+     C4 ii. Medium-risk customers: At least once every eight years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C5 iii. Low-risk customers: At least once every ten years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C6 v. To ensure incremental uploading of all KYC records onto the CKYCR, the Bank shall upload/ update the KYC data of individual customers and LEs who opened accounts prior to the mentioned dates (in po
+     C7 25.3 Bank shall put in place a system of periodical review of risk categorization of accounts and the need for applying enhanced due diligence measures. Such review of risk categorisation of customers
+     C8 iii. Updation/ Periodic updation of KYC for eligible customers.
+     C9 A risk-based approach shall be adopted, and any additional measures not mandated under the above instructions shall be clearly specified in our internal KYC policy, duly approved by the Board of Direc
+     C10 i. Compliance Oversight: Oversee the bank's compliance with KYC regulations and internal policies.
+     C11 26.3 The Board of Directors of the Bank shall ensure that an effective KYC/AML/CFT programme is put in place by establishing appropriate procedures and ensuring their effective implementation. It shal
+     C12 10.2 Bank shall have a policy approved by the Board which clearly spells out the Customer Identification Procedure to be carried out at different stages, i.e.,
+     C13 7.6 Bank shall ensure that decision-making functions of determining compliance with KYC norms are not outsourced.
+   [stage 4] judge (O2): covered / issue none / best C2 / conf 1: C2 specifies the required frequency for high-risk customers as once every two years.
+
+  O250 [42(1)] (must) the bank shall carry out periodic updation at least once in every two years for high-risk customers, once in every eight years for medium risk customers and once in every 10 years for low-risk customers from the date of opening of the accou
+   [stage 3] cached judge prompts on dhanlaxmi: 1
+     C1 a. Risk-Based Approach for Periodic Updation:  <== at/near the mutated location
+     C2 i. High-risk customers: At least once every two years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C3 vi. During periodic updation, the Bank shall ensure that customers are migrated to the current Customer Due Diligence (CDD) standard.
+     C4 ii. Medium-risk customers: At least once every eight years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C5 iii. Low-risk customers: At least once every ten years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C6 v. To ensure incremental uploading of all KYC records onto the CKYCR, the Bank shall upload/ update the KYC data of individual customers and LEs who opened accounts prior to the mentioned dates (in po
+     C7 25.3 Bank shall put in place a system of periodical review of risk categorization of accounts and the need for applying enhanced due diligence measures. Such review of risk categorisation of customers
+     C8 iii. Updation/ Periodic updation of KYC for eligible customers.
+     C9 A risk-based approach shall be adopted, and any additional measures not mandated under the above instructions shall be clearly specified in our internal KYC policy, duly approved by the Board of Direc
+     C10 i. Compliance Oversight: Oversee the bank's compliance with KYC regulations and internal policies.
+     C11 26.3 The Board of Directors of the Bank shall ensure that an effective KYC/AML/CFT programme is put in place by establishing appropriate procedures and ensuring their effective implementation. It shal
+     C12 10.2 Bank shall have a policy approved by the Board which clearly spells out the Customer Identification Procedure to be carried out at different stages, i.e.,
+     C13 7.6 Bank shall ensure that decision-making functions of determining compliance with KYC norms are not outsourced.
+   [stage 4] judge (O2): covered / issue none / best C2 / conf 1: C2 specifies the required frequency for high-risk customers as once every two years.
+
+  O251 [42(1)] (must) the bank shall carry out periodic updation at least once in every two years for high-risk customers, once in every eight years for medium risk customers and once in every 10 years for low-risk customers from the date of opening of the accou
+   [stage 3] cached judge prompts on dhanlaxmi: 1
+     C1 a. Risk-Based Approach for Periodic Updation:  <== at/near the mutated location
+     C2 i. High-risk customers: At least once every two years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C3 vi. During periodic updation, the Bank shall ensure that customers are migrated to the current Customer Due Diligence (CDD) standard.
+     C4 ii. Medium-risk customers: At least once every eight years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C5 iii. Low-risk customers: At least once every ten years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C6 v. To ensure incremental uploading of all KYC records onto the CKYCR, the Bank shall upload/ update the KYC data of individual customers and LEs who opened accounts prior to the mentioned dates (in po
+     C7 25.3 Bank shall put in place a system of periodical review of risk categorization of accounts and the need for applying enhanced due diligence measures. Such review of risk categorisation of customers
+     C8 iii. Updation/ Periodic updation of KYC for eligible customers.
+     C9 A risk-based approach shall be adopted, and any additional measures not mandated under the above instructions shall be clearly specified in our internal KYC policy, duly approved by the Board of Direc
+     C10 i. Compliance Oversight: Oversee the bank's compliance with KYC regulations and internal policies.
+     C11 26.3 The Board of Directors of the Bank shall ensure that an effective KYC/AML/CFT programme is put in place by establishing appropriate procedures and ensuring their effective implementation. It shal
+     C12 10.2 Bank shall have a policy approved by the Board which clearly spells out the Customer Identification Procedure to be carried out at different stages, i.e.,
+     C13 7.6 Bank shall ensure that decision-making functions of determining compliance with KYC norms are not outsourced.
+   [stage 4] judge (O2): covered / issue none / best C2 / conf 1: C2 specifies the required frequency for high-risk customers as once every two years.
+
+  O252 [42(1)] (must) The bank shall document its policy in this regard as part of the bank’s internal KYC policy duly approved by the Board of Directors of bank or any committee of the Board to which power has been delegated.
+   [stage 3] cached judge prompts on dhanlaxmi: 1
+     C1 a. Risk-Based Approach for Periodic Updation:  <== at/near the mutated location
+     C2 i. High-risk customers: At least once every two years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C3 vi. During periodic updation, the Bank shall ensure that customers are migrated to the current Customer Due Diligence (CDD) standard.
+     C4 ii. Medium-risk customers: At least once every eight years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C5 iii. Low-risk customers: At least once every ten years from the date of account opening or the last KYC updation.  <== at/near the mutated location
+     C6 v. To ensure incremental uploading of all KYC records onto the CKYCR, the Bank shall upload/ update the KYC data of individual customers and LEs who opened accounts prior to the mentioned dates (in po
+     C7 25.3 Bank shall put in place a system of periodical review of risk categorization of accounts and the need for applying enhanced due diligence measures. Such review of risk categorisation of customers
+     C8 iii. Updation/ Periodic updation of KYC for eligible customers.
+     C9 A risk-based approach shall be adopted, and any additional measures not mandated under the above instructions shall be clearly specified in our internal KYC policy, duly approved by the Board of Direc
+     C10 i. Compliance Oversight: Oversee the bank's compliance with KYC regulations and internal policies.
+     C11 26.3 The Board of Directors of the Bank shall ensure that an effective KYC/AML/CFT programme is put in place by establishing appropriate procedures and ensuring their effective implementation. It shal
+     C12 10.2 Bank shall have a policy approved by the Board which clearly spells out the Customer Identification Procedure to be carried out at different stages, i.e.,
+     C13 7.6 Bank shall ensure that decision-making functions of determining compliance with KYC norms are not outsourced.
+   [stage 4] judge (O5): covered / issue none / best C9 / conf 1: C9 mentions the internal KYC policy being approved by the Board of Directors.
+
+  [stage 5] gaps raised at ['42(1)'] in the frozen run: 0
+
+====================================================================================================
+dhanlaxmi L04 contradict -> RBI ['65(2)']
+  note: Slot 4 fallback (see header). A second, conflicting CKYCR upload deadline (30 days of account opening) inserted in the KYC-information-sharing clause; clause 30.10 a.ii still states the 10-day rule.
+  location 30.10(b)(i) (117746, 117899): ...uidelines mentioned in the Rules. This includes using the KYC templates prepared for 'Individuals' and 'Legal Entities' (LEs), which may be revised by CERSAI from time to time. KYC records of new customers shall be uploaded onto the CKYCR within 30 days of account opening. ii. The CKYCR's "live run" commenced on July 15, 2016, with a phased approach starting...
+  [stage 2] extracted controls at the location: 0
+  location 30.10(a)(ii) (117261, 117417): ...ember 26, 2015. ii. In accordance with Rule 9(1A) of the Prevention of Money Laundering (Maintenance of Records) Rules, the Bank shall capture customer's KYC records and upload them onto the CKYCR within 10 days of establishing an account-based relationship with the customer. iii. Operational guidelines for uploading KYC data have been released by CERSAI. b....
+  [stage 2] extracted controls at the location: 0
+  [stage 1] obligations extracted for ['65(2)']: 1
+
+  O365 [65(2)] (must) (2) In terms of provision of Rule 9(1A) of the PML Rules, the bank shall capture customer’s KYC records and upload onto CKYCR within 10 days of commencement of an account-based relationship with the customer.
+   [stage 3] cached judge prompts on dhanlaxmi: 1
+     C1 ii. In accordance with Rule 9(1A) of the Prevention of Money Laundering (Maintenance of Records) Rules, the Bank shall capture customer's KYC records and upload them onto the CKYCR within 10 days of e  <== at/near the mutated location
+     C2 i. The Bank shall capture the KYC information of customers to be shared with the CKYCR as per the guidelines mentioned in the Rules. This includes using the KYC templates prepared for 'Individuals' an  <== at/near the mutated location
+     C3 Also, whenever Bank obtains additional or updated information from any customer as per clause (j) below in this paragraph or Rule 9 (1C) of the PML Rules, the Bank shall within seven days or within su
+     C4 v. To ensure incremental uploading of all KYC records onto the CKYCR, the Bank shall upload/ update the KYC data of individual customers and LEs who opened accounts prior to the mentioned dates (in po
+     C5 iii. The Bank shall upload KYC records pertaining to accounts of LEs opened on or after April 1, 2021, with the CKYCR, as per the provisions of the Rules. The KYC records should be uploaded using the 
+   [stage 4] judge (O1): covered / issue none / best C1 / conf 1: C1 directly satisfies O1 with the same threshold and obligation.
+
+  [stage 5] gaps raised at ['65(2)'] in the frozen run: 0
