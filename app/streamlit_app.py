@@ -156,6 +156,18 @@ def overview() -> None:
         )
     )
     docs = documents()
+    st.info(
+        "**Start here: three clicks, about two minutes**\n\n"
+        "1. **Change agent** tab: choose *Real amendment, 29 Dec 2025* and press *Run the agent*. "
+        "In about 15 seconds it re-checks only the amended paragraph and reports the gaps that "
+        "would open and close (5 to 10 analyst hours by our own estimate). Adding `?scenario=3` "
+        "to the address preselects it.\n"
+        "2. **Gaps** tab: select the row **65(10)(iv)**, then *Source citation*: the RBI sentence "
+        "beside the policy sentence, three labelled dates, and a warning that the policy "
+        "predates the amendment.\n"
+        "3. **Evaluation** tab: *Banks the system had never seen*. Answer keys were frozen in "
+        "git before the first run; the code was run once from a tagged commit."
+    )
     st.subheader("What is loaded")
     if "regulation" in docs:
         st.markdown(f"**Regulation:** {docs['regulation']['source_title']}")

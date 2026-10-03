@@ -7,8 +7,25 @@ the regulator amends a rule it re-checks only what the amendment touches.
 Built for the **ET AI Hackathon 2026: Agentic Edition (presented by Accenture), Problem 1:
 Banking / financial regulations**.
 
-**Live demo:** <https://regcompliance-agent-gg39o3vts7mzhbtds2u6l7.streamlit.app/>
-(add `?scenario=2` to open the change agent on the what-if draft circular)
+**Live demo:** <https://regcompliance-agent-gg39o3vts7mzhbtds2u6l7.streamlit.app/?scenario=3>
+(the free tier sleeps: if the page says the app is asleep, press the button and allow about a
+minute)
+
+**In one minute**
+
+- **About 15 seconds per amendment, against 5 to 10 analyst hours** (our own estimate): on RBI's
+  real 29 Dec 2025 amendment the agent re-checks only the amended paragraph and reports the gaps
+  it would open and close.
+- **Measured on two banks it had never seen**, with answer keys frozen in git before the first
+  run and the code run once from a tagged commit: every weakened number found (5 of 5), both
+  hidden instructions caught (2 of 2), and in a blind sample 8 of 9 and 9 of 9 high-confidence
+  findings were real gaps.
+- **Every finding cited to its source**: the RBI sentence beside the policy sentence, cut from
+  the documents by position, with the reference number and three labelled dates.
+
+To try it: open the link, go to the **Change agent** tab and press *Run the agent* (the 29 Dec
+2025 amendment is preselected); then **Gaps** → row 65(10)(iv) → *Source citation*; then
+**Evaluation** → *Banks the system had never seen*.
 
 ## The problem
 
