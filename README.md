@@ -64,6 +64,13 @@ system. The two other banks were run once, from a clean checkout of the tag
 ([Central Bank](eval/reports/heldout_centralbank_report.md),
 [Dhanlaxmi](eval/reports/heldout_dhanlaxmi_report.md)).
 
+> **Since 4 Oct 2026 (D2 attempt, `d2` branch):** Central Bank and Dhanlaxmi are development
+> banks. Their misses were analysed ([d2_error_analysis](eval/reports/d2_error_analysis.md)) and
+> the next detector is built with them in view, so their numbers above are the v1 result of
+> record and are no longer evidence of anything unseen. A third bank (South Indian Bank, key
+> frozen in `c556c42`) is the new held-out test; the bar is pre-registered in
+> [eval/d2_bar.md](eval/d2_bar.md).
+
 **Proven on two banks the system had never seen** (each run once, counts):
 
 - every weakened number and stale threshold was found: **5 of 5**, all in the high-confidence

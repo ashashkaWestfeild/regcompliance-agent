@@ -197,6 +197,14 @@ Not fixed: the contradiction, the duty made optional where the regulation senten
 
 ### Held-out results
 
+> **Since 4 Oct 2026 (D2 attempt, `d2` branch):** Central Bank and Dhanlaxmi are development
+> banks. Their misses were analysed ([d2_error_analysis](../eval/reports/d2_error_analysis.md)) and
+> the next detector is built with them in view, so their numbers above are the v1 result of
+> record and are no longer evidence of anything unseen. A third bank (South Indian Bank, key
+> frozen in `c556c42`) is the new held-out test; the bar is pre-registered in
+> [eval/d2_bar.md](../eval/d2_bar.md).
+
+
 Run once each, from a clean checkout (git worktree) of the tag `eval-freeze-2026-10-03` (commit
 `5cb728b`); answer keys frozen at `350b8e0` (Central Bank) and `da58e66` (Dhanlaxmi). Nothing
 was tuned afterwards. Reports: [`heldout_centralbank_report.md`](../eval/reports/heldout_centralbank_report.md),
