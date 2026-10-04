@@ -19,3 +19,13 @@ def test_a_decision_needs_a_known_action_a_reviewer_and_a_reason():
         decide(None, "g1", "dismiss", "", "because")
     with pytest.raises(ValueError, match="reviewer name and a reason"):
         decide(None, "g1", "dismiss", "A. Reviewer", "  ")
+
+
+def test_reviewer_code_check():
+    from regcomp.review import code_matches
+
+    assert code_matches("s3cret-code", "s3cret-code")
+    assert not code_matches("wrong", "s3cret-code")
+    assert not code_matches("", "s3cret-code")
+    assert not code_matches("anything", "")  # no code configured: always a simulation
+    assert not code_matches("", "")

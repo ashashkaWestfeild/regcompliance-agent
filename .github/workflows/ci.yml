@@ -4,6 +4,10 @@ on:
   push:
   pull_request:
 
+# Read-only token: no job here writes to the repository.
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -49,3 +53,27 @@ jobs:
         env:
           PGPASSWORD: regcomp_ci_only
         run: psql -h localhost -U regcomp -d regcomp -v ON_ERROR_STOP=1 -c "SELECT count(*) FROM information_schema.tables WHERE table_schema='public';"
+
+  audit:
+    # The app's pinned dependencies (exported from uv.lock) against known vulnerabilities; fails if
+    # requirements-app.txt has drifted from the lock.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Pins match uv.lock
+        run: |
+          uv export --format requirements-txt --no-dev --no-emit-project --no-hashes --locked             -o /tmp/req.txt
+          diff <(grep -v '^#' /tmp/req.txt) <(grep -v '^#' requirements-app.txt)
+      - run: uvx pip-audit -r requirements-app.txt --strict
+
+  secrets:
+    # Scans the full history for committed secrets.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

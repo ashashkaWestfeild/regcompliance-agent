@@ -41,7 +41,7 @@ from regcomp.db import connect  # noqa: E402
 from regcomp.llm import model_for  # noqa: E402
 from regcomp.monitor import preview_batch  # noqa: E402
 from regcomp.remediation import readable  # noqa: E402
-from regcomp.review import DECISIONS, decide  # noqa: E402
+from regcomp.review import DECISIONS, code_matches, decide  # noqa: E402
 from regcomp.risk import assess  # noqa: E402
 from regcomp.sources import document_fields, regulation_meta_for_file  # noqa: E402
 
@@ -333,17 +333,27 @@ def gaps_page(tier: str) -> None:
         review_form(g)
 
 
+MAX_CODE_ATTEMPTS = 5  # wrong reviewer codes per session; after that, simulation only
+
+
 def review_form(g: dict) -> None:
     st.markdown("**Reviewer decision**")
     with st.form(f"review-{g['id']}"):
         decision = st.radio("Decision", list(DECISIONS), horizontal=True)
-        reviewer = st.text_input("Reviewer name")
-        reason = st.text_input("Reason")
-        code = st.text_input("Reviewer code (leave empty to simulate)", type="password")
+        reviewer = st.text_input("Reviewer name", max_chars=80)
+        reason = st.text_input("Reason", max_chars=500)
+        code = st.text_input("Reviewer code (leave empty to simulate)", type="password",
+                             max_chars=64)  # fmt: skip
         sent = st.form_submit_button("Record decision")
     if not sent:
         return
-    real = bool(os.environ.get("REVIEWER_CODE")) and code == os.environ["REVIEWER_CODE"]
+    failed = st.session_state.get("code_failures", 0)
+    if code and failed >= MAX_CODE_ATTEMPTS:
+        st.warning("Too many wrong reviewer codes in this session; decisions are simulated only.")
+        code = ""
+    real = code_matches(code, os.environ.get("REVIEWER_CODE", ""))
+    if code and not real:
+        st.session_state["code_failures"] = failed + 1
     conn = connect()
     try:
         out = decide(conn, g["id"], decision, reviewer, reason)
@@ -434,7 +444,7 @@ def change_page() -> None:
                     "could not be reached just now. Nothing was written. The first scenario "
                     "needs no model and still runs; the other tabs need no model at all."
                 )
-                st.caption(f"Technical detail: {type(e).__name__}: {str(e)[:200]}")
+                print(f"change agent stopped: {type(e).__name__}: {e}", file=sys.stderr)
             return
     st.markdown("**What the agent did**")
     for line in out.get("log", []):
@@ -699,6 +709,18 @@ def review_trail() -> None:
         )
 
 
+SOURCE = {
+    "offline": "results computed offline (local qwen3:8b, one laptop GPU), read from the database",
+    "live": "live: runs now, with the hosted model (gpt-oss-120b) for re-extraction and judging",
+    "code": "live: computed now by code from stored results (no model)",
+}
+
+
+def source_label(kind: str, also: str = "") -> None:
+    """Say where a tab's content comes from: computed offline, or live in this app."""
+    st.caption(f"Source: {SOURCE[kind]}" + (f"; {also}" if also else "") + ".")
+
+
 def evaluation_page() -> None:
     st.subheader("How well does it work?")
     path = ROOT / "eval" / "reports" / "scorecard_nainital.json"
@@ -772,20 +794,28 @@ try:
          "Evaluation"]
     )  # fmt: skip
     with tabs[0]:
+        source_label("offline")
         overview()
     with tabs[1]:
+        source_label("offline")
         gaps_page("high")
     with tabs[2]:
+        source_label("offline")
         gaps_page("review")
         review_trail()
     with tabs[3]:
+        source_label("code")
         applicability_page()
     with tabs[4]:
+        source_label("live")
         change_page()
         version_history()
     with tabs[5]:
+        source_label("offline", also="the batch simulation runs live, in code")
         evidence_page()
     with tabs[6]:
+        source_label("offline")
         evaluation_page()
 except RuntimeError as e:  # database not configured or unreachable: say so, without details
-    st.error(f"Cannot reach the database: {e}")
+    print(f"database error: {e}", file=sys.stderr)  # host only (regcomp.db), never credentials
+    st.error("The database cannot be reached right now. Please try again in a minute.")
