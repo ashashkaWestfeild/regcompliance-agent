@@ -38,6 +38,47 @@ def transition(before: str | None, now: str) -> str:
     return "recovered" if before == "ineffective" else "healthy"
 
 
+WOULD = {
+    "newly_failing": "an operating-failure gap would open in the high-confidence tier",
+    "still_failing": "the open operating-failure gap would stay, with the new figures",
+    "recovered": "the open gap would move to the review queue, awaiting a reviewer to close it",
+    "healthy": "nothing to do",
+    "cannot_assess": "cannot assess: no control is mapped to this obligation",
+}
+
+
+def preview_batch(conn, entry: dict, path: Path) -> dict:
+    """What assess_batch would do with this evidence file, without writing anything: the same
+    rule and the same comparison with the control's previous operating test (reads only)."""
+    mapping = conn.execute(
+        "SELECT m.control_id FROM mapping m JOIN obligation o ON o.id = m.obligation_id"
+        " WHERE o.source_clause_ref = %s AND m.control_id IS NOT NULL"
+        " AND m.superseded_at IS NULL ORDER BY m.confidence DESC LIMIT 1",
+        (entry["obligation_ref"],),
+    ).fetchone()
+    base = {"file": path.name, "obligation_ref": entry["obligation_ref"]}
+    if mapping is None:
+        return base | {"previous": None, "result": "cannot_assess", "change": "cannot_assess",
+                       "figures": "", "would": WOULD["cannot_assess"]}  # fmt: skip
+    previous = conn.execute(
+        "SELECT result::text FROM control_test WHERE control_id = %s AND kind = 'operating'"
+        " ORDER BY tested_at DESC LIMIT 1",
+        (mapping[0],),
+    ).fetchone()
+    t = operating_test(
+        read_csv(path), RULES[entry["rule"]](entry), tolerance=float(entry["tolerance"]),
+        rule=entry["rule"],
+    )  # fmt: skip
+    change = transition(previous and previous[0], t.result)
+    return base | {
+        "previous": previous and previous[0],
+        "result": t.result,
+        "change": change,
+        "figures": t.rationale,
+        "would": WOULD[change],
+    }
+
+
 def assess_batch(conn, entry: dict, path: Path, today: date | None = None) -> dict:
     """Test one evidence file (`entry`: file, obligation_ref, rule, tolerance and the rule's
     parameters, as in data/evidence/<policy>/manifest.yaml) and record the outcome."""

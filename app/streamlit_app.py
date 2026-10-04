@@ -39,6 +39,7 @@ from regcomp.citation import (  # noqa: E402
 from regcomp.confidence import note as confidence_note  # noqa: E402
 from regcomp.db import connect  # noqa: E402
 from regcomp.llm import model_for  # noqa: E402
+from regcomp.monitor import preview_batch  # noqa: E402
 from regcomp.remediation import readable  # noqa: E402
 from regcomp.review import DECISIONS, decide  # noqa: E402
 from regcomp.risk import assess  # noqa: E402
@@ -583,6 +584,45 @@ def evidence_page() -> None:
         ],
         use_container_width=True, hide_index=True,
     )  # fmt: skip
+    batch_simulation()
+
+
+BATCH = ROOT / "data" / "evidence" / "nainital" / "batches"
+
+
+def batch_simulation() -> None:
+    """Features 6 and 7, ongoing monitoring: test the next evidence batch in memory."""
+    import yaml
+
+    st.markdown("**Test a new evidence batch (simulation)**")
+    st.caption(
+        "The October batch (synthetic, identifiers only) is tested by the same code-only rules as "
+        "the offline monitor (`scripts/run_evidence.py`) and compared with each control's last "
+        "result. Runs in memory: no model, nothing is written."
+    )
+    if not st.button("Test a new evidence batch (simulation)"):
+        return
+    entries = yaml.safe_load((BATCH / "manifest_2026-10.yaml").read_text(encoding="utf-8"))
+    conn = connect()
+    try:
+        out = [preview_batch(conn, e, BATCH / e["file"]) for e in entries]
+    finally:
+        conn.rollback()
+        conn.close()
+    st.dataframe(
+        [
+            {"Evidence file": r["file"], "RBI ref": r["obligation_ref"],
+             "Last result": r["previous"] or "none", "This batch": r["result"],
+             "Figures": r["figures"], "Change": r["change"].replace("_", " "),
+             "What would happen": r["would"]}
+            for r in out
+        ],
+        use_container_width=True, hide_index=True,
+    )  # fmt: skip
+    st.info(
+        "Simulation only: nothing was saved. A recovered control is never closed by the "
+        "system; a reviewer closes it."
+    )
 
 
 def evaluation_page() -> None:
