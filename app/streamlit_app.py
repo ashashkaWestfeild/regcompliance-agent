@@ -575,7 +575,38 @@ def applicability_page() -> None:
         st.dataframe(moved, use_container_width=True, hide_index=True)
 
 
+def design_effectiveness() -> None:
+    """Feature 6, design side: the stored design test of every control a mapping cites."""
+    st.subheader("Design effectiveness")
+    st.caption(
+        "Every policy control that a mapping cites, tested by a fixed rule: does the passage name "
+        "an owner, a frequency (or trigger or threshold) and the evidence the control produces? "
+        "The model extracted these attributes offline; code decides. The rule checks that each "
+        "attribute is stated, not that it is adequate ('as needed' counts as a frequency)."
+    )
+    rows = query(
+        "SELECT k.control_ref, k.objective, k.owner, k.frequency, k.expected_evidence,"
+        " t.result::text, t.rationale FROM control_test t JOIN control k ON k.id = t.control_id"
+        " WHERE t.kind = 'design' ORDER BY t.result, k.control_ref"
+    )
+    a, b, c = st.columns(3)
+    a.metric("Controls tested", len(rows))
+    b.metric("Design-effective", sum(r[5] == "effective" for r in rows))
+    c.metric("Missing an attribute", sum(r[5] != "effective" for r in rows))
+    with st.expander("All design tests", expanded=False):
+        st.dataframe(
+            [
+                {"Policy passage": ref, "Control": obj, "Owner": own or "",
+                 "Frequency": freq or "", "Evidence": ev or "", "Result": res,
+                 "Why": why}
+                for ref, obj, own, freq, ev, res, why in rows
+            ],
+            use_container_width=True, hide_index=True,
+        )  # fmt: skip
+
+
 def evidence_page() -> None:
+    design_effectiveness()
     st.subheader("Operating evidence")
     st.caption(
         "Synthetic logs (identifiers only) are tested by fixed rules; the model never sees a row. "
