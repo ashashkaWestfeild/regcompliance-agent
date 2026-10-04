@@ -6,7 +6,11 @@ and the full-policy text check of every row labelled gap.
 Inputs (eval/reports/heldout_precision/): <policy>_labelled.csv (the sheet with the author's
 labels), <policy>_private.json (which rows were findings), and the CHECK table below (the
 outcome of scripts/heldout_full_policy_check.py for each row labelled gap, read by Claude).
-Writes eval/reports/heldout_precision/summary.json. Counts only.
+Writes eval/reports/heldout_precision/summary.json and report.md. Counts only.
+
+A "gap" label is set aside only when another passage of the policy carries the whole duty: the
+same subject (and the same scope), mandatory wording, and the same requirement or a stricter one
+(the three-part test, applied to all three banks on 4 Oct).
 """
 
 import csv
@@ -37,10 +41,12 @@ CHECK = {
             "42(2): no low-risk relaxation (one year after falling due or 30 Jun 2026)",
         ),
         "9": (
-            "covered",
+            "held",
             None,
-            "68: a general section flags and monitors accounts as suspected "
-            "money mules, not only savings accounts",
+            "68 (planted gap C05): reversed on 4 Oct under the three-part test. The first pass "
+            "relied on 7.5.7.4, which flags only accounts meeting listed criteria (small "
+            "accounts under named product codes, dormant individual SB/CD accounts) and states "
+            "no action and no STR to FIU-IND; the full duty appears only in the narrowed 7.5.7.1",
         ),
         "12": ("held", None, "42(7): no text on three advance intimations"),
         "13": (
@@ -64,8 +70,10 @@ CHECK = {
         "19": (
             "covered",
             None,
-            "44(2): the policy sets a due-diligence process for changing a "
-            "registered mobile number (e-KYC authentication, enhanced monitoring)",
+            "44(2): 3.1.2.10(b) i-iii, same scope as RBI 44 (non-face-to-face accounts other "
+            "than Section 17): a change of registered mobile number 'shall be done after' "
+            "conversion to face-to-face or V-CIP, UIDAI e-KYC, or Regional Office approval at "
+            "Scale IV and above; the policy is Board-approved (2(a)). Passes the three-part test",
         ),
         "20": ("held", None, "42(7): no text on three reminders after the due date"),
     },
@@ -77,10 +85,12 @@ CHECK = {
             "24(11): no completion information or transaction id from the application",
         ),
         "7": (
-            "covered",
+            "held",
             None,
-            "44(2): alerts and OTPs go only to the Aadhaar-registered number, "
-            "so alternate numbers are not used",
+            "44(2): reversed on 4 Oct under the three-part test. The first pass relied on 'alerts "
+            "and OTPs only to the Aadhaar-registered number', which sits in the Aadhaar OTP "
+            "e-KYC section, the accounts RBI 44 excludes; nothing covers other non-face-to-face "
+            "accounts",
         ),
         "10": (
             "held",
@@ -128,11 +138,12 @@ CHECK = {
             "(planted gap S01, judged covered by the system)",
         ),
         "5": (
-            "covered",
+            "held",
             None,
-            "17(2): section 9(b), page 18: 'Bank if finds any kind of suspicious activity under "
-            "such situations shall consider filing an STR, if necessary, when it is unable to "
-            "comply with the relevant CDD measures' (pending author confirmation)",
+            "17(2): first-pass set-aside reversed under the three-part test (author, 4 Oct). "
+            "Section 9(b), page 18 adds a precondition: 'Bank if finds any kind of suspicious "
+            "activity under such situations shall consider filing an STR'; RBI makes failed CDD "
+            "itself the trigger to consider one. Not the same or stricter",
         ),
         "10": (
             "held",
@@ -143,29 +154,31 @@ CHECK = {
         "12": (
             "not_applicable",
             None,
-            "65(5): the sentence binds REs other than SCBs, so it does not apply to a scheduled "
-            "commercial bank; the applicability step did not exclude it. The SCB duty (upload "
-            "from 1 Jan 2017) is section 39(e), page 43",
+            "65(5): not applicable (author, 4 Oct): the sentence binds REs other than SCBs; the "
+            "applicability step did not exclude it. Counted as a false positive. The SCB duty "
+            "(upload from 1 Jan 2017) is section 39(e), page 43",
         ),
         "15": (
-            "covered",
+            "held",
             None,
-            "6(4)(i): section 22(b), page 35: 'Change of mobile number and email id will be "
-            "allowed only after the identity of the customer is verified in face-to-face manner "
-            "or through V-CIP' (pending author confirmation)",
+            "6(4)(i): first-pass set-aside reversed under the three-part test (author, 4 Oct). "
+            "Section 22(b), page 35 ('Change of mobile number ... only after the identity of the "
+            "customer is verified in face-to-face manner or through V-CIP') excludes Aadhaar OTP "
+            "e-KYC accounts (section 13), which RBI 6(4)(i) covers; section 13 has no rule for "
+            "change requests. Narrower scope",
         ),
         "16": (
             "covered",
             None,
             "42(7): section 21(e), page 34, states the whole requirement as in force (three "
             "advance intimations, three reminders, audit trail) in a policy approved 21 Mar 2026, "
-            "after the 1 Jan 2026 deadline (pending author confirmation)",
+            "after the 1 Jan 2026 deadline",
         ),
         "20": (
             "covered",
             None,
             "18: section 9.2, page 19: 'Reason(s) of rejection shall be duly recorded by the "
-            "officer concerned' (pending author confirmation)",
+            "officer concerned'",
         ),
     },
 }
@@ -217,12 +230,85 @@ def main() -> None:
     (DIR / "summary.json").write_text(
         json.dumps(summary, indent=1, ensure_ascii=False) + "\n", "utf-8"
     )
+    (DIR / "report.md").write_text(report(summary), encoding="utf-8", newline="\n")
     for bank, out in summary.items():
         p = out["precision_high_tier"]
         print(f"{bank}: findings labelled gap {p['labelled_before_check']} (decided)")
         print(f"  after the full-policy check {p['after_full_policy_check']}")
         print(f"  duties only {p['duties_only']}; unsure {p['unsure']}")
         print(f"  covered pairs really covered {out['covered_pairs_really_covered']}")
+
+
+NAMES = {
+    "centralbank": "Central Bank",
+    "dhanlaxmi": "Dhanlaxmi",
+    "southindianbank": "South Indian Bank",
+}
+
+
+def report(summary: dict) -> str:
+    banks = list(summary)
+    p = {b: summary[b]["precision_high_tier"] for b in banks}
+
+    def total(key: str) -> str:
+        num = sum(int(p[b][key].split(" of ")[0]) for b in banks)
+        den = sum(int(p[b][key].split(" of ")[1].split()[0]) for b in banks)
+        return f"{num} of {den}"
+
+    head = "| | " + " | ".join(NAMES[b] for b in banks) + " | Three banks |"
+    rows = [
+        head,
+        "|---" * (len(banks) + 2) + "|",
+        "| Findings labelled gap, of those decided | "
+        + " | ".join(p[b]["labelled_before_check"] for b in banks)
+        + f" | {total('labelled_before_check')} |",
+        "| Real gaps after the full-policy check | "
+        + " | ".join(p[b]["after_full_policy_check"] for b in banks)
+        + f" | {total('after_full_policy_check')} |",
+        "| Covered pairs really covered | "
+        + " | ".join(summary[b]["covered_pairs_really_covered"] for b in banks)
+        + " | |",
+    ]
+    lines = [
+        "# Precision of the high-confidence tier on the unseen banks",
+        "",
+        "Generated by `scripts/heldout_precision_report.py` from the author's blind labels and the",
+        "full-policy check. Counts only.",
+        "",
+        *rows,
+        "",
+        '**The three-part test.** A "gap" label is set aside only when another passage of the',
+        "policy carries the whole duty: the same subject and scope, mandatory wording, and the",
+        "same requirement or a stricter one. On 4 Oct the test was re-applied to every set-aside",
+        "on all three banks:",
+        "",
+        "- South Indian Bank rows 5 and 15: the first-pass set-asides were reversed (row 5: the",
+        "  policy adds a precondition before an STR is considered; row 15: the passage excludes",
+        "  Aadhaar OTP e-KYC accounts). Both are real gaps.",
+        "- South Indian Bank row 12 is recorded as not applicable: RBI 65(5) binds lenders other",
+        "  than scheduled commercial banks, and the applicability step did not exclude it. It",
+        "  counts as a false positive.",
+        "- Central Bank row 9 (planted gap C05) and Dhanlaxmi row 7, both covered pairs: the",
+        "  first-pass set-asides were reversed (row 9: the other passage flags only listed account",
+        "  types and states no STR; row 7: the passage is in the Aadhaar OTP e-KYC section, which",
+        "  RBI 44 excludes). Central Bank row 19 passes the test and stays covered.",
+        "- No finding on Central Bank or Dhanlaxmi was set aside, so their precision is unchanged.",
+        "",
+        "On the third bank most high-confidence findings were duties the policy states in a",
+        "different passage from the one the system compared, so its high-confidence tier was weak",
+        "there.",
+        "",
+        "## Every checked row",
+        "",
+    ]
+    for b in banks:
+        lines.append(f"**{NAMES[b]}**")
+        lines.append("")
+        for n, c in summary[b]["checks"].items():
+            lines.append(f"- row {n}: {c['outcome']}" + (f" ({c['kind']})" if c["kind"] else "")
+                         + f". {c['note']}")  # fmt: skip
+        lines.append("")
+    return "\n".join(lines)
 
 
 if __name__ == "__main__":

@@ -313,25 +313,29 @@ the model-call cache with the tag's code, and the sampler refused to continue un
 scored exactly as its frozen scorecard. Per bank: 10 high-confidence findings matching no key row
 (of 14 and 41 distinct), mixed with 10 pairs judged covered, shuffled, no verdict shown. The author
 labelled them, with Gemini helping to write the reasons; Claude ran the full-policy text check on every row labelled gap
-([`summary.json`](../eval/reports/heldout_precision/summary.json), sheets alongside).
+([`report.md`](../eval/reports/heldout_precision/report.md), `summary.json` and the sheets
+alongside). A "gap" label is set aside only when another passage carries the whole duty: same subject and scope, mandatory, same or stricter (the three-part test, applied to all three banks).
 
 | | Central Bank | Dhanlaxmi | South Indian Bank |
 |---|---|---|---|
 | Findings labelled gap, of those decided | 8 of 9 | 9 of 9 | 7 of 10 |
-| After the full-policy check | 8 of 9 | 9 of 9 | 2 of 10 (pending author confirmation) |
-| Duties only (reliefs or permissions not adopted left out) | 6 of 7 | 8 of 8 | 2 of 10 |
+| After the full-policy check | 8 of 9 | 9 of 9 | 4 of 10 |
+| Duties only (reliefs or permissions not adopted left out) | 6 of 7 | 8 of 8 | 4 of 10 |
 | Unsure | 1 | 1 | 0 |
-| Covered pairs really covered (after the check) | 9 of 10 | 10 of 10 | 9 of 10 (the miss is planted gap S01) |
+| Covered pairs really covered (after the check) | 8 of 10 (one miss is planted gap C05) | 9 of 10 | 9 of 10 (the miss is planted gap S01) |
 | Control-extraction coverage of the policy text | about 62% | about 8% | extraction units: 134,634 of 165,629 characters |
 
 South Indian Bank: every high-confidence finding outside the key (12 findings, 10 distinct
 regulation-passage pairs, all 10 on the sheet; plan and seed committed before the run). The check
-set aside 5 of the 7 "gap" labels on findings (pending author confirmation): in four the policy, approved
-March 2026, states the duty in another passage; one (RBI 65(5)) does not apply to a scheduled
-commercial bank. On the third bank most high-confidence findings were duties the policy states in a different passage from the one the system compared, so its high-confidence tier was weak there.
+set aside 3 of the 7 "gap" labels on findings: in two the policy, approved March 2026, states
+the duty in another passage; one (RBI 65(5)) does not apply to a scheduled commercial bank and
+counts as a false positive. Two first-pass set-asides (rows 5 and 15) failed the three-part test
+and were reversed: row 5's passage adds a precondition before an STR is considered, row 15's
+excludes Aadhaar OTP e-KYC accounts. On the third bank most high-confidence findings were duties the policy states in a different passage from the one the system compared, so its high-confidence tier was weak there. Over three banks: 21 of 28.
 
-The check overturned no "gap" label on a finding and two on covered pairs (the policy covered the
-duty elsewhere). Most real gaps are provisions the 2024 policies predate. Several are procedure or
+On Central Bank and Dhanlaxmi the check set aside no "gap" label on a finding. It set aside three
+on covered pairs; re-tested on 4 Oct, two failed the three-part test and were reversed (Central
+Bank row 9, planted gap C05; Dhanlaxmi row 7), and one stands. Most real gaps are provisions the 2024 policies predate. Several are procedure or
 system details (photograph capture, application messages) rather than policy statements. The
 development bank's newer policy gave a much weaker result for the same tier (3 real, 7 false
 alarms, 4 unclear of 14), so precision depends on how far the policy lags the regulation.
@@ -484,7 +488,7 @@ Partial: 4 (policy text, not a control library). Not claimed: 13, 14.
 type:
 
 - reported outputs acceptable: high-confidence findings real in blind samples after the
-  full-policy check 8 of 9, 9 of 9, 2 of 10 (19 of 28 overall; the third bank pending author confirmation);
+  full-policy check 8 of 9, 9 of 9, 4 of 10 (21 of 28 overall);
   hidden instructions caught 3 of 3;
   decoys left alone 7 of 9 (first scoring 6 of 9, see the third bank's report); real findings
   handled 4 of 4;
