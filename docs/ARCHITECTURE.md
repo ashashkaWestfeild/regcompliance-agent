@@ -79,7 +79,7 @@ closes the old one in time; nothing is deleted.
 | 11 | Autonomous impact analysis | §4 change agent | Change agent, with the injected failure |
 | 12 | What-if / simulation | §4 dry run; stage 3b profile what-if | Scenario 2; Applicability tab |
 | 13 | Cross-regulation intelligence | Not built | - |
-| 14 | Contradiction detection | Not built as a feature (the judge has a "conflicting statements" issue; 0 of 2 on the unseen banks) | - |
+| 14 | Contradiction detection | Not claimed (the judge has a "conflicting statements" issue; 0 of 2 on the unseen banks). Development analysis only: numeric conflicts inside one policy (`regcomp/conflicts.py`, [report](../eval/reports/policy_conflicts_dev.md)) | - |
 
 ### Data model
 
@@ -473,6 +473,11 @@ gap itself, and a person confirms, dismisses or accepts every finding with a nam
 - One regulation end to end; nine others only for change detection. Text input only.
 - No cross-regulation analysis and no detection of contradictions between regulations.
 - No document routing: a person chooses which policy is checked against which Direction.
+- Conflicts inside one policy: a code-only check for two passages restating one RBI sentence with
+  different numbers or periods found the 3 planted numeric contradictions on the development keys
+  and flagged nothing else, a best case since its rules were written on those keys
+  ([report](../eval/reports/policy_conflicts_dev.md)). Next: conflicts in wording (planted S04),
+  then between regulations.
 - Next: a bank profile built from independent facts (licences, product lists) instead of the policy's own text, so that applicability can exclude; a design check for owners the regulation itself names; a wider comparison for reworded
   sentences; more than one development bank.
 

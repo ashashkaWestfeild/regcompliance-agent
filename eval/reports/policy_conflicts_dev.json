@@ -1,0 +1,153 @@
+{
+ "what": "Conflicting numbers or periods inside one policy. Development data.",
+ "policies": {
+  "nainital": {
+   "planted": [
+    {
+     "id": "N06",
+     "numeric": true,
+     "target": [
+      "41(1)"
+     ],
+     "found": true
+    }
+   ],
+   "flags": [
+    {
+     "ref": "41(1)",
+     "dimension": "days",
+     "grade": "",
+     "entity": "",
+     "rbi_values": [
+      180.0
+     ],
+     "on_planted_passage": true,
+     "rbi_sentence": "The bank shall put in place a system of periodic review of risk categorisation of accounts, with such periodicity being at least once in every six months, and shall establish the need for applying enhanced due diligence measures.",
+     "passages": {
+      "180.0": [
+       {
+        "start": 40196,
+        "end": 40301,
+        "quantity": "six months",
+        "text": "Such review of risk categorization of customers should be carried out at least once in every six months."
+       },
+       {
+        "start": 78042,
+        "end": 78244,
+        "quantity": "six months",
+        "text": "A system of periodic review of risk categorisation of accounts, with such periodicity being at least once in six months, and the need for applying enhanced due diligence measures shall be put in place."
+       }
+      ],
+      "730.0": [
+       {
+        "start": 78385,
+        "end": 78473,
+        "quantity": "two years",
+        "text": "Branches may carry out the review of risk categorisation of accounts once in two years."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  "nainital2": {
+   "planted": [
+    {
+     "id": "S04",
+     "numeric": false,
+     "target": [
+      "39"
+     ],
+     "found": false
+    }
+   ],
+   "flags": []
+  },
+  "centralbank": {
+   "planted": [
+    {
+     "id": "C06",
+     "numeric": true,
+     "target": [
+      "42(1)"
+     ],
+     "found": true
+    }
+   ],
+   "flags": [
+    {
+     "ref": "42(1)",
+     "dimension": "days",
+     "grade": "high",
+     "entity": "",
+     "rbi_values": [
+      730.0
+     ],
+     "on_planted_passage": true,
+     "rbi_sentence": "the bank shall carry out periodic updation at least once in every two years for high-risk customers, once in every eight years for medium risk customers and once in every 10 years for low-risk customers from the date of opening of the account / last KYC updation.",
+     "passages": {
+      "730.0": [
+       {
+        "start": 83895,
+        "end": 84178,
+        "quantity": "two years",
+        "text": "However, Periodic updation of KYC of customer is carried out at least once in every two years for high risk customers, once in every eight years for medium risk customers and once in every ten years for low risk customers from the date of opening of the account / last KYC updation."
+       }
+      ],
+      "1825.0": [
+       {
+        "start": 344065,
+        "end": 344274,
+        "quantity": "five years",
+        "text": "Periodic updation of KYC is to be carried out at least once in every five years for high risk customers, once in every eight years for medium risk customers and once in every ten years for low risk customers."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  "dhanlaxmi": {
+   "planted": [
+    {
+     "id": "L04",
+     "numeric": true,
+     "target": [
+      "65(2)"
+     ],
+     "found": true
+    }
+   ],
+   "flags": [
+    {
+     "ref": "65(2)",
+     "dimension": "days",
+     "grade": "",
+     "entity": "",
+     "rbi_values": [
+      10.0
+     ],
+     "on_planted_passage": true,
+     "rbi_sentence": "In terms of provision of Rule 9(1A) of the PML Rules, the bank shall capture customer’s KYC records and upload onto CKYCR within 10 days of commencement of an account-based relationship with the customer.",
+     "passages": {
+      "10.0": [
+       {
+        "start": 117160,
+        "end": 117417,
+        "quantity": "10 days",
+        "text": "In accordance with Rule 9(1A) of the Prevention of Money Laundering (Maintenance of Records) Rules, the Bank shall capture customer's KYC records and upload them onto the CKYCR within 10 days of establishing an account-based relationship with the customer."
+       }
+      ],
+      "30.0": [
+       {
+        "start": 117802,
+        "end": 117899,
+        "quantity": "30 days",
+        "text": "KYC records of new customers shall be uploaded onto the CKYCR within 30 days of account opening."
+       }
+      ]
+     }
+    }
+   ]
+  }
+ }
+}

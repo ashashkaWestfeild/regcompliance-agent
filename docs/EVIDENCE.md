@@ -41,4 +41,4 @@ was built on. Demo times refer to the video script and are confirmed after recor
 | | Citations with dates | Gaps tab: source citation | §2 stage 10 | Fields tested against the source record; three dates labelled separately |
 | | Guardrail: hidden instructions | Evaluation tab | §7 | Unseen: 3 of 3 caught (Central Bank and Dhanlaxmi by the code-level scan; the model flagged neither); 0 false flags on the unaltered dev policy |
 | 13 | Cross-regulation intelligence | | | Not claimed |
-| 14 | Regulatory contradiction detection | | | Not claimed |
+| 14 | Regulatory contradiction detection | | | Not claimed. Development analysis: numeric conflicts inside one policy, 3 of 3 planted on the development keys, no other flag, a best case ([report](../eval/reports/policy_conflicts_dev.md)) |

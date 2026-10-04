@@ -299,6 +299,12 @@ rule of this project, and there is no per-event spending cap.
   three banks (local qwen3:8b). A code rule caught a deleted duty without a model; judging scope
   needs a stronger model. Unmerged branch `d2`,
   [closing note](https://github.com/ashashkaWestfeild/regcompliance-agent/blob/d2/eval/reports/d2_closing_note.md).
+- **Started, not claimed: conflicts inside one policy.** A code-only check flags two passages of
+  one policy that restate the same RBI sentence with different numbers or periods. On the
+  development keys it found the 3 planted numeric contradictions with no other flag, but its
+  rules were written on those keys, so this is a best case
+  ([report](eval/reports/policy_conflicts_dev.md), development data). Not in the app or the gap
+  table; feature 14 stays not claimed. Next: conflicts in wording, and between regulations.
 
 More detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md),
 [`docs/mutation_taxonomy.md`](docs/mutation_taxonomy.md), [`docs/adr/`](docs/adr/).
