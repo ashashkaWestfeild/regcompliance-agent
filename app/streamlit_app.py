@@ -159,8 +159,9 @@ def overview() -> None:
     st.info(
         "**Start here: three clicks, about two minutes**\n\n"
         "1. **Change agent** tab: choose *Real amendment, 29 Dec 2025* and press *Run the agent*. "
-        "In about 15 seconds it re-checks only the amended paragraph and reports the gaps that "
-        "would open and close (5 to 10 analyst hours by our own estimate). Adding `?scenario=3` "
+        "In about 15 seconds from the cache (under half a minute on a first run) it re-checks "
+        "only the amended paragraph and reports the gaps that would open and close (5 to 10 "
+        "analyst hours by our own estimate). Adding `?scenario=3` "
         "to the address preselects it.\n"
         "2. **Gaps** tab: select the row **65(10)(iv)**, then *Source citation*: the RBI sentence "
         "beside the policy sentence, three labelled dates, and a warning that the policy "
@@ -601,13 +602,14 @@ def evaluation_page() -> None:
     st.dataframe(card["planted"], use_container_width=True, hide_index=True)
     st.warning(
         "These are development-set numbers; the comparison rules were written after studying "
-        "this bank's misses. The two banks below were never seen while building the system."
+        "this bank's misses. The three banks below were never seen while building the system."
     )
     held = {
         name: json.loads(f.read_text(encoding="utf-8"))
         for name, f in (
             ("Central Bank of India", ROOT / "eval" / "reports" / "scorecard_centralbank.json"),
             ("Dhanlaxmi Bank", ROOT / "eval" / "reports" / "scorecard_dhanlaxmi.json"),
+            ("South Indian Bank", ROOT / "eval" / "reports" / "scorecard_southindianbank.json"),
         )
         if f.exists()
     }
@@ -624,6 +626,8 @@ def evaluation_page() -> None:
             col.markdown(f"*{name}* (key `{hc['key_commit'].split()[0]}`)")
             for line in hc["summary"][:5]:
                 col.write("• " + line)
+            if hc.get("procedure_note"):
+                col.caption("Note: " + hc["procedure_note"])
     if card.get("applicability"):
         st.markdown("**Applicability (bank profile)**")
         for line in card["applicability"]:
