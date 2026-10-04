@@ -55,17 +55,20 @@ jobs:
         run: psql -h localhost -U regcomp -d regcomp -v ON_ERROR_STOP=1 -c "SELECT count(*) FROM information_schema.tables WHERE table_schema='public';"
 
   audit:
-    # The app's pinned dependencies (exported from uv.lock) against known vulnerabilities; fails if
-    # requirements-app.txt has drifted from the lock.
+    # The hosted app's pinned dependencies (app/requirements.txt, what Streamlit Cloud installs)
+    # against known vulnerabilities; fails if the file has drifted from uv.lock.
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
-      - name: Pins match uv.lock
+      - name: App pins match uv.lock
         run: |
-          uv export --format requirements-txt --no-dev --no-emit-project --no-hashes --locked             -o /tmp/req.txt
-          diff <(grep -v '^#' /tmp/req.txt) <(grep -v '^#' requirements-app.txt)
-      - run: uvx pip-audit -r requirements-app.txt --strict
+          uv export --format requirements-txt --no-dev --no-emit-project --no-hashes --locked \
+            -o /tmp/lock.txt
+          uv pip compile app/requirements.in --constraint /tmp/lock.txt --universal \
+            --python-version 3.13 --no-header --no-annotate -o /tmp/app.txt
+          diff <(grep -v '^#' /tmp/app.txt) <(grep -v '^#' app/requirements.txt)
+      - run: uvx pip-audit -r app/requirements.txt --strict
 
   secrets:
     # Scans the full history for committed secrets.

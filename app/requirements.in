@@ -1,0 +1,11 @@
+# Direct dependencies of the hosted demo. app/requirements.txt is generated from this file with
+# every version pinned to uv.lock (see that file's header); edit here, then regenerate.
+streamlit
+psycopg[binary]
+python-dotenv
+pyyaml
+pydantic
+beautifulsoup4
+lxml
+langgraph
+langgraph-checkpoint-postgres
