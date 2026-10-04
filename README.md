@@ -200,7 +200,7 @@ model extracted three.
 ```bash
 uv sync                         # core
 uv sync --extra pdf             # adds Docling for PDF parsing (large)
-uv run pytest                   # 126 tests
+uv run pytest                   # 138 tests
 ```
 
 The pipeline, on the development bank (needs Postgres with pgvector, and Ollama with `qwen3:8b`
