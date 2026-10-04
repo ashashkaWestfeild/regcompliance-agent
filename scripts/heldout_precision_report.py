@@ -130,8 +130,9 @@ CHECK = {
         "5": (
             "covered",
             None,
-            "17(2): 'shall consider filing an STR, if necessary, when it is unable to comply with "
-            "the relevant CDD measures' is stated in another passage",
+            "17(2): section 9(b), page 18: 'Bank if finds any kind of suspicious activity under "
+            "such situations shall consider filing an STR, if necessary, when it is unable to "
+            "comply with the relevant CDD measures' (pending author confirmation)",
         ),
         "10": (
             "held",
@@ -140,27 +141,31 @@ CHECK = {
             "'establish the need'",
         ),
         "12": (
-            "covered",
+            "not_applicable",
             None,
-            "65(5): that sentence is for REs other than SCBs; the bank's own duty (upload from "
-            "1 Jan 2017) is clause (e)",
+            "65(5): the sentence binds REs other than SCBs, so it does not apply to a scheduled "
+            "commercial bank; the applicability step did not exclude it. The SCB duty (upload "
+            "from 1 Jan 2017) is section 39(e), page 43",
         ),
         "15": (
             "covered",
             None,
-            "6(4)(i): mobile number changes only after identity is verified face to face or by "
-            "V-CIP",
+            "6(4)(i): section 22(b), page 35: 'Change of mobile number and email id will be "
+            "allowed only after the identity of the customer is verified in face-to-face manner "
+            "or through V-CIP' (pending author confirmation)",
         ),
         "16": (
             "covered",
             None,
-            "42(7): the requirement is implemented (three advance intimations, 21(e)), so the "
-            "deadline is met",
+            "42(7): section 21(e), page 34, states the whole requirement as in force (three "
+            "advance intimations, three reminders, audit trail) in a policy approved 21 Mar 2026, "
+            "after the 1 Jan 2026 deadline (pending author confirmation)",
         ),
         "20": (
             "covered",
             None,
-            "18: 'Reason(s) of rejection shall be duly recorded by the officer concerned'",
+            "18: section 9.2, page 19: 'Reason(s) of rejection shall be duly recorded by the "
+            "officer concerned' (pending author confirmation)",
         ),
     },
 }

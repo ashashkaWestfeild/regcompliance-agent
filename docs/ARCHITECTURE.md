@@ -318,7 +318,7 @@ labelled them, with Gemini helping to write the reasons; Claude ran the full-pol
 | | Central Bank | Dhanlaxmi | South Indian Bank |
 |---|---|---|---|
 | Findings labelled gap, of those decided | 8 of 9 | 9 of 9 | 7 of 10 |
-| After the full-policy check | 8 of 9 | 9 of 9 | 2 of 10 |
+| After the full-policy check | 8 of 9 | 9 of 9 | 2 of 10 (pending author confirmation) |
 | Duties only (reliefs or permissions not adopted left out) | 6 of 7 | 8 of 8 | 2 of 10 |
 | Unsure | 1 | 1 | 0 |
 | Covered pairs really covered (after the check) | 9 of 10 | 10 of 10 | 9 of 10 (the miss is planted gap S01) |
@@ -326,8 +326,9 @@ labelled them, with Gemini helping to write the reasons; Claude ran the full-pol
 
 South Indian Bank: every high-confidence finding outside the key (12 findings, 10 distinct
 regulation-passage pairs, all 10 on the sheet; plan and seed committed before the run). The check
-overturned 5 of the 7 "gap" labels on findings: the policy, dated March 2026, states those duties
-in another passage.
+set aside 5 of the 7 "gap" labels on findings (pending author confirmation): in four the policy, approved
+March 2026, states the duty in another passage; one (RBI 65(5)) does not apply to a scheduled
+commercial bank. On the third bank most high-confidence findings were duties the policy states in a different passage from the one the system compared, so its high-confidence tier was weak there.
 
 The check overturned no "gap" label on a finding and two on covered pairs (the policy covered the
 duty elsewhere). Most real gaps are provisions the 2024 policies predate. Several are procedure or
@@ -463,6 +464,8 @@ gap itself, and a person confirms, dismisses or accepts every finding with a nam
   development bank are false alarms (of 14 checked by hand: 3 real, 7 false, 4 unclear), mostly
   duties the policy states elsewhere or in a different sentence structure.
 - A removed owner is not detected on plain policy passages.
+- Applicability missed an obligation that does not apply: RBI 65(5) binds lenders other than
+  scheduled commercial banks, yet it was raised as a high-confidence gap on the third bank.
 - One regulation end to end; nine others only for change detection. Text input only.
 - No cross-regulation analysis and no detection of contradictions between regulations.
 - No document routing: a person chooses which policy is checked against which Direction.
@@ -473,15 +476,16 @@ gap itself, and a person confirms, dismisses or accepts every finding with a nam
 
 **F3 / D1**, against the brief's definitions.
 
-**F3 (at least 8 of 14 features): 11 demonstrated in the live demo**: 1, 2, 3, 5, 6, 7, 8, 9, 10,
-11, 12 (see the feature → stage map in §2; 6 and 7 on the development bank with synthetic logs).
+**F3 (at least 8 of 14 features): 11 of 14: 9 on real policies, plus 6 and 7 on development data with synthetic logs**, all in the live demo: 1, 2, 3, 5,
+8, 9, 10, 11, 12, then 6 and 7 (see the feature → stage map in §2).
 Partial: 4 (policy text, not a control library). Not claimed: 13, 14.
 
 **D1 (acceptable outputs in a majority of situations)**, three unseen banks, frozen v1, per output
 type:
 
-- reported outputs acceptable: high-confidence findings real in blind samples, 19 of 28 decided
-  after the full-policy check (8 of 9, 9 of 9, 2 of 10); hidden instructions caught 3 of 3;
+- reported outputs acceptable: high-confidence findings real in blind samples after the
+  full-policy check 8 of 9, 9 of 9, 2 of 10 (19 of 28 overall; the third bank pending author confirmation);
+  hidden instructions caught 3 of 3;
   decoys left alone 7 of 9 (first scoring 6 of 9, see the third bank's report); real findings
   handled 4 of 4;
 - a majority of planted gaps raised at the right obligation, 11 of 20 (9 of 20 at the exact

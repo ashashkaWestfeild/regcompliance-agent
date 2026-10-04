@@ -7,11 +7,10 @@ was built on. Demo times refer to the video script and are confirmed after recor
 
 **Claim: F3 / D1**, against the brief's definitions (full statement: README, "Grid position").
 
-- **F3:** 11 of the 14 features are demonstrated in the live demo (1, 2, 3, 5, 6, 7, 8, 9, 10,
-  11, 12; 6 and 7 on the development bank with synthetic logs); 4 is partial; 13 and 14 are not
-  claimed.
+- **F3:** 11 of 14: 9 on real policies, plus 6 and 7 on development data with synthetic logs (1, 2, 3, 5, 8, 9, 10, 11, 12; then 6 and 7), all in the live
+  demo; 4 is partial; 13 and 14 are not claimed.
 - **D1** (acceptable outputs in a majority of situations), three unseen banks, frozen v1, per
-  output type: high-confidence findings real in blind samples 19 of 28 decided after the full-policy check (8 of 9, 9 of 9, 2 of 10); hidden
+  output type: high-confidence findings real in blind samples after the full-policy check 8 of 9, 9 of 9, 2 of 10 (19 of 28 overall; the third bank pending author confirmation); hidden
   instructions 3 of 3; decoys left alone 7 of 9 (first scoring 6 of 9: three code-only steps first
   ran with the development bank's defaults, P-057); real findings 4 of 4; a majority of planted
   gaps at the right obligation, 11 of 20 (9 of 20 exact). Blind spot: deleted duties 0 of 4.
@@ -30,7 +29,7 @@ was built on. Demo times refer to the video script and are confirmed after recor
 | 3 | Obligation extraction | Gaps tab: obligation beside its RBI sentence | §2 stage 2 | 458 obligations, each citation verified against the source (16 rejected by the citation gate); prohibitions: 21 of 37 sentences extracted as "must not" (P-049) |
 | 4 | Bank control-framework understanding (partial: policy text, not a control library) | Gaps tab: the policy passage | §2 stages 2, 4 | Controls extracted: 495 dev, 482 Central Bank, 28 Dhanlaxmi (its 4.1.2 numbering left about 8% of the text covered; every passage is still a candidate) |
 | 5 | Regulatory-to-control mapping | Gaps tab: cited passage and full citation | §2 stage 4 | Right passage in the top five: 16 of 18 on the dev retrieval check; unseen: 11 of 20 planted gaps raised at the right obligation (three banks) |
-| 8 | Gap identification | Gaps and Review queue tabs | §3 | Three unseen banks: every weakened number and stale threshold 7 of 7 (4 of 7 right type), all high-confidence; decoys left alone 7 of 9 (first scoring 6 of 9); deletions 0 of 4, narrowed scope 1 of 4, contradictions 0 of 2, removed owner 0 of 1, made optional 1 of 2. High-tier precision on blind samples (after the full-policy check): Central Bank 8 of 9 (6 of 7 duties only), Dhanlaxmi 9 of 9 (8 of 8), South Indian Bank 2 of 10 (7 of 10 as first labelled); covered pairs really covered 9 of 10, 10 of 10, 9 of 10 |
+| 8 | Gap identification | Gaps and Review queue tabs | §3 | Three unseen banks: every weakened number and stale threshold 7 of 7 (4 of 7 right type), all high-confidence; decoys left alone 7 of 9 (first scoring 6 of 9); deletions 0 of 4, narrowed scope 1 of 4, contradictions 0 of 2, removed owner 0 of 1, made optional 1 of 2. High-tier precision on blind samples (after the full-policy check): Central Bank 8 of 9 (6 of 7 duties only), Dhanlaxmi 9 of 9 (8 of 8), South Indian Bank 2 of 10, pending author confirmation (7 of 10 as first labelled; duties stated in a different passage from the one compared); covered pairs really covered 9 of 10, 10 of 10, 9 of 10 |
 | 9 | Risk-based gap prioritisation | Gaps tab: residual risk and priority | §2 stage 8 | Rule-based rubric ([`risk_rubric.yaml`](../data/risk_rubric.yaml)); not scored against a key |
 | 11 | Autonomous regulatory impact analysis | Change agent: scope and gaps that would open or close | §4 | 3 of 458 mappings in the scope of each real amendment; wall time per circular (dry run, first run included): hosted model 1.1 to 22 s, local qwen3:8b on one laptop GPU 1.7 to 81 s; analyst baseline 5-10 h is the author's estimate ([timing](../eval/reports/change_agent_timing.json)) |
 | | **Built extras** | | | |
