@@ -16,6 +16,7 @@ Chain to implement and keep traceable over time:
 Regulations -> obligations -> applicability -> internal policies/controls -> evidence -> testing -> gaps -> remediation -> ongoing monitoring.
 
 Claim: F3 / D1 (decided 3 Oct by the plan's rule after the held-out runs; D2 was the target). Do NOT claim D2 or D3.
+From 4 Oct to 10 Oct (user rule): no new pipeline features; only fixes, figures and presentation work. The D2 attempt was stopped by its own gate on 3 Oct (branch d2, unmerged).
 - D2 = mostly structured/textual input, high demonstrable reliability.
 - F3 = at least 8 of the 14 listed features.
 
