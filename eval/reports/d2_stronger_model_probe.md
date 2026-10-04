@@ -34,11 +34,12 @@ Nothing was written to a database or to the model-call cache. Item-by-item answe
 - **L03.** No model reads the list lead-in "The frequency of periodic updation for individual
   customers shall be as follows:" as narrowing RBI's duty for all customers (0 of 3 for each).
   (qwen3:8b's one "narrower" on another L03 item named the wrong words, "following types of
-  transactions", from an unrelated lead-in.) A model-only fix is not in sight here; a code rule comparing the lead-in's subject words with
-  RBI's ("individual customers" against "customers") is the likelier route.
+  transactions", from an unrelated lead-in.) A model-only fix is not in sight here; a code rule
+  comparing the lead-in's subject words with RBI's ("individual customers" against "customers")
+  is the likelier route.
 - **Noise.** Every model also answers "narrower" on items with no planted change (4, 7 and 5 of
   15), mostly by reading a sub-heading or a "Customers other than Individuals" lead-in as a limit.
-  Some of these may be real (the third key's L03 note says that section states no periodicity),
+  Some of these may be real (Dhanlaxmi's L03 key note says that section states no periodicity),
   but without a key they are unscored. This is the same pressure that broke the D2 ceiling.
 
 ## What it means
