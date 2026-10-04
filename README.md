@@ -62,7 +62,7 @@ The system opens gaps. Only a person closes one or accepts a risk.
 
 Measured against the brief's own definitions.
 
-**F3 (at least 8 of the 14 features): 11 of 14: 9 on real policies, plus 6 and 7 on development data with synthetic logs.** In the live demo: 1 regulatory
+**F3 needs at least 8 of the 14 features. We show 11 of 14: 9 on real policies, plus 6 and 7 on development data with synthetic logs.** In the live demo: 1 regulatory
 ingestion, 2 change intelligence, 3 obligation extraction, 5 regulation-to-control mapping,
 6 control effectiveness (design tests of the 213 cited controls; operating tests on synthetic
 logs), 7 evidence-based assessment and monitoring (a new evidence batch is tested live against

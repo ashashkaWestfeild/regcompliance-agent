@@ -7,7 +7,7 @@ was built on. Demo times refer to the video script and are confirmed after recor
 
 **Claim: F3 / D1**, against the brief's definitions (full statement: README, "Grid position").
 
-- **F3:** 11 of 14: 9 on real policies, plus 6 and 7 on development data with synthetic logs (1, 2, 3, 5, 8, 9, 10, 11, 12; then 6 and 7), all in the live
+- **F3.** 11 of 14: 9 on real policies, plus 6 and 7 on development data with synthetic logs (1, 2, 3, 5, 8, 9, 10, 11, 12; then 6 and 7), all in the live
   demo; 4 is partial; 13 and 14 are not claimed.
 - **D1** (acceptable outputs in a majority of situations), three unseen banks, frozen v1, per
   output type: high-confidence findings real in blind samples after the full-policy check 8 of 9, 9 of 9, 4 of 10 (21 of 28 overall); hidden

@@ -485,7 +485,7 @@ gap itself, and a person confirms, dismisses or accepts every finding with a nam
 
 **F3 / D1**, against the brief's definitions.
 
-**F3 (at least 8 of 14 features): 11 of 14: 9 on real policies, plus 6 and 7 on development data with synthetic logs**, all in the live demo: 1, 2, 3, 5,
+**F3 needs at least 8 of 14 features. We show 11 of 14: 9 on real policies, plus 6 and 7 on development data with synthetic logs**, all in the live demo: 1, 2, 3, 5,
 8, 9, 10, 11, 12, then 6 and 7 (see the feature → stage map in §2).
 Partial: 4 (policy text, not a control library). Not claimed: 13, 14.
 
