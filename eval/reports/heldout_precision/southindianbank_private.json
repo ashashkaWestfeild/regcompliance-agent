@@ -1,0 +1,286 @@
+{
+ "policy": "southindianbank",
+ "seed": 20261005,
+ "rows": {
+  "1": {
+   "system_finding": true,
+   "gap_type": "missing_control",
+   "tier": "high",
+   "key": [
+    "65(10)(iv)",
+    108782,
+    108959,
+    -1,
+    -1
+   ],
+   "obligation_id": "4bea60a8-d591-443d-a570-2e31ed5bbd90",
+   "policy_text_shown": "closest passage by embedding"
+  },
+  "2": {
+   "system_finding": false,
+   "gap_type": null,
+   "tier": null,
+   "key": [
+    "45(1)(i)",
+    85366,
+    85495,
+    89376,
+    89583
+   ],
+   "obligation_id": "b8be0634-a16b-4216-a8e7-f51325c154a5",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "3": {
+   "system_finding": false,
+   "gap_type": null,
+   "tier": null,
+   "key": [
+    "59",
+    100923,
+    100982,
+    104953,
+    105227
+   ],
+   "obligation_id": "365ab6a0-c0c2-460b-8c7d-8e59dbd18428",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "4": {
+   "system_finding": false,
+   "gap_type": null,
+   "tier": null,
+   "key": [
+    "65(5)",
+    105637,
+    105790,
+    109490,
+    109630
+   ],
+   "obligation_id": "14d0f73f-11f3-4c31-981b-1fa35a4d40c5",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "5": {
+   "system_finding": true,
+   "gap_type": "weak_modality",
+   "tier": "high",
+   "key": [
+    "17(2)",
+    30211,
+    30546,
+    33488,
+    34086
+   ],
+   "obligation_id": "4e8f213b-5e86-410f-89ce-f17e3bc5d3e2",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "6": {
+   "system_finding": true,
+   "gap_type": "weak_modality",
+   "tier": "high",
+   "key": [
+    "56(4)",
+    97498,
+    97761,
+    101256,
+    101768
+   ],
+   "obligation_id": "d891def9-b3ff-40b6-83a9-e7fb0630ae59",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "7": {
+   "system_finding": true,
+   "gap_type": "missing_control",
+   "tier": "high",
+   "key": [
+    "37(3)",
+    68099,
+    68210,
+    -1,
+    -1
+   ],
+   "obligation_id": "af76acb0-960b-46b3-b891-79f39c64d8f0",
+   "policy_text_shown": "closest passage by embedding"
+  },
+  "8": {
+   "system_finding": false,
+   "gap_type": null,
+   "tier": null,
+   "key": [
+    "42(6)",
+    79507,
+    79768,
+    82405,
+    82890
+   ],
+   "obligation_id": "14919dbe-ccb1-41ae-8a76-be9e176f3c3a",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "9": {
+   "system_finding": false,
+   "gap_type": null,
+   "tier": null,
+   "key": [
+    "77(4)",
+    127787,
+    127912,
+    130508,
+    130740
+   ],
+   "obligation_id": "6790ef97-83ee-4520-96fc-580460ef16c4",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "10": {
+   "system_finding": true,
+   "gap_type": "weak_threshold",
+   "tier": "high",
+   "key": [
+    "41(1)",
+    70585,
+    70814,
+    74075,
+    74252
+   ],
+   "obligation_id": "8f6ea331-7afa-4b3f-a31e-484d7fb77064",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "11": {
+   "system_finding": true,
+   "gap_type": "weak_threshold",
+   "tier": "high",
+   "key": [
+    "42(2)",
+    72128,
+    72400,
+    75161,
+    75853
+   ],
+   "obligation_id": "0f316fa4-42fc-48be-99e7-5eb3d7d85ad0",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "12": {
+   "system_finding": true,
+   "gap_type": "weak_threshold",
+   "tier": "high",
+   "key": [
+    "65(5)",
+    105918,
+    106121,
+    109635,
+    109756
+   ],
+   "obligation_id": "61c40bc9-2ac3-4516-a659-e03d9cae44ce",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "13": {
+   "system_finding": false,
+   "gap_type": null,
+   "tier": null,
+   "key": [
+    "73(3)",
+    115136,
+    115257,
+    117707,
+    117931
+   ],
+   "obligation_id": "3e626842-4b0d-4e03-bab4-02b42952d808",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "14": {
+   "system_finding": false,
+   "gap_type": null,
+   "tier": null,
+   "key": [
+    "12(2)",
+    28606,
+    28695,
+    29443,
+    29532
+   ],
+   "obligation_id": "5f8b758d-3786-4d03-98cd-894c2d0bd6bc",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "15": {
+   "system_finding": true,
+   "gap_type": "narrow_scope",
+   "tier": "high",
+   "key": [
+    "6(4)(i)",
+    24704,
+    24886,
+    75201,
+    75627
+   ],
+   "obligation_id": "c93aafd4-76ed-4feb-902f-0cbcc1d591a8",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "16": {
+   "system_finding": true,
+   "gap_type": "missing_control",
+   "tier": "high",
+   "key": [
+    "42(7)",
+    80986,
+    81070,
+    -1,
+    -1
+   ],
+   "obligation_id": "cb09d399-fd12-4d49-aa7c-4f5ccf298503",
+   "policy_text_shown": "closest passage by embedding"
+  },
+  "17": {
+   "system_finding": false,
+   "gap_type": null,
+   "tier": null,
+   "key": [
+    "27(2)(ii)",
+    54755,
+    54875,
+    53508,
+    53860
+   ],
+   "obligation_id": "a725f79a-107d-4821-8474-4c125d059e38",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "18": {
+   "system_finding": false,
+   "gap_type": null,
+   "tier": null,
+   "key": [
+    "48(1)",
+    88698,
+    88954,
+    92354,
+    92633
+   ],
+   "obligation_id": "235f9185-fcb3-4e9d-abf3-665461d7f83d",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "19": {
+   "system_finding": false,
+   "gap_type": null,
+   "tier": null,
+   "key": [
+    "29",
+    62220,
+    62510,
+    62358,
+    62787
+   ],
+   "obligation_id": "808fa3e3-7cbd-424a-9a29-479eb28461b3",
+   "policy_text_shown": "the passage the system compared"
+  },
+  "20": {
+   "system_finding": true,
+   "gap_type": "narrow_scope",
+   "tier": "high",
+   "key": [
+    "18",
+    32451,
+    32519,
+    45618,
+    45719
+   ],
+   "obligation_id": "6944e43a-acbf-423f-8a59-888da2616f85",
+   "policy_text_shown": "the passage the system compared"
+  }
+ }
+}

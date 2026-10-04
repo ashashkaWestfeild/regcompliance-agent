@@ -312,14 +312,19 @@ scored exactly as its frozen scorecard. Per bank: 10 high-confidence findings ma
 labelled them, with Gemini helping to write the reasons; Claude ran the full-policy text check on every row labelled gap
 ([`summary.json`](../eval/reports/heldout_precision/summary.json), sheets alongside).
 
-| | Central Bank | Dhanlaxmi |
-|---|---|---|
-| Findings labelled gap, of those decided | 8 of 9 | 9 of 9 |
-| After the full-policy check | 8 of 9 | 9 of 9 |
-| Duties only (3 reliefs or permissions not adopted left out) | 6 of 7 | 8 of 8 |
-| Unsure | 1 | 1 |
-| Covered pairs really covered (after the check) | 9 of 10 | 10 of 10 |
-| Control-extraction coverage of the policy text | about 62% | about 8% |
+| | Central Bank | Dhanlaxmi | South Indian Bank |
+|---|---|---|---|
+| Findings labelled gap, of those decided | 8 of 9 | 9 of 9 | 7 of 10 |
+| After the full-policy check | 8 of 9 | 9 of 9 | 2 of 10 |
+| Duties only (reliefs or permissions not adopted left out) | 6 of 7 | 8 of 8 | 2 of 10 |
+| Unsure | 1 | 1 | 0 |
+| Covered pairs really covered (after the check) | 9 of 10 | 10 of 10 | 9 of 10 (the miss is planted gap S01) |
+| Control-extraction coverage of the policy text | about 62% | about 8% | extraction units: 134,634 of 165,629 characters |
+
+South Indian Bank: every high-confidence finding outside the key (12 findings, 10 distinct
+regulation-passage pairs, all 10 on the sheet; plan and seed committed before the run). The check
+overturned 5 of the 7 "gap" labels on findings: the policy, dated March 2026, states those duties
+in another passage.
 
 The check overturned no "gap" label on a finding and two on covered pairs (the policy covered the
 duty elsewhere). Most real gaps are provisions the 2024 policies predate. Several are procedure or
@@ -471,8 +476,8 @@ synthetic evidence logs; results shown, a new batch tested offline). Not claimed
 **D1 (acceptable outputs in a majority of situations)**, three unseen banks, frozen v1, per output
 type:
 
-- reported outputs acceptable: high-confidence findings real in a blind sample, 17 of 18 decided
-  (8 of 9 and 9 of 9; the third bank's sheet is being labelled); hidden instructions caught 3 of 3;
+- reported outputs acceptable: high-confidence findings real in blind samples, 19 of 28 decided
+  after the full-policy check (8 of 9, 9 of 9, 2 of 10); hidden instructions caught 3 of 3;
   decoys left alone 7 of 9 (first scoring 6 of 9, see the third bank's report); real findings
   handled 4 of 4;
 - a majority of planted gaps raised at the right obligation, 11 of 20 (9 of 20 at the exact

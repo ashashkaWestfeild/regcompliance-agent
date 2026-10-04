@@ -19,8 +19,9 @@ minute)
   it would open and close.
 - **Measured on three banks it had never seen**, with answer keys frozen in git before the first
   run and the code run once from a tagged commit: every weakened number found (7 of 7), every
-  hidden instruction caught (3 of 3), and in a blind sample 8 of 9 and 9 of 9 high-confidence
-  findings were real gaps. Deleted duties are its blind spot (0 of 4).
+  hidden instruction caught (3 of 3), and in blind samples 19 of 28 high-confidence findings
+  were real gaps after a full-policy check (8 of 9, 9 of 9 and 2 of 10: the newest policy had
+  most of them covered elsewhere). Deleted duties are its blind spot (0 of 4).
 - **Every finding cited to its source**: the RBI sentence beside the policy sentence, cut from
   the documents by position, with the reference number and three labelled dates.
 
@@ -72,7 +73,8 @@ tested offline). Not claimed: 13 cross-regulation intelligence, 14 contradiction
 seen, frozen v1 (tag `eval-freeze-2026-10-03`), per output type:
 
 - reported outputs acceptable: high-confidence findings that are real gaps, blind sample,
-  17 of 18 decided (8 of 9 and 9 of 9; the third bank's sheet is being labelled); hidden
+  19 of 28 decided after the full-policy check (8 of 9, 9 of 9, 2 of 10; 24 of 28 as first
+  labelled); hidden
   instructions caught 3 of 3; decoys left alone 7 of 9 (see note); real findings handled 4 of 4;
 - planted gaps: a majority raised at the right obligation, 11 of 20 (9 of 20 at the exact passage);
 - blind spot, disclosed: deleted duties 0 of 4.
@@ -128,14 +130,18 @@ Gemini, helped write the reasons); every "gap" label was then checked against th
 
 | | Central Bank | Dhanlaxmi | South Indian Bank |
 |---|---|---|---|
-| Sampled findings that are real gaps (of those decided) | 8 of 9 | 9 of 9 | being labelled |
-| ...counting duties only (leaving out reliefs the policy has not adopted) | 6 of 7 | 8 of 8 | |
-| Unsure | 1 | 1 | |
-| Sampled covered pairs that really are covered | 9 of 10 | 10 of 10 | |
+| Sampled findings that are real gaps (of those decided) | 8 of 9 | 9 of 9 | 2 of 10 (7 of 10 as first labelled) |
+| ...counting duties only (leaving out reliefs the policy has not adopted) | 6 of 7 | 8 of 8 | 2 of 10 |
+| Unsure | 1 | 1 | 0 |
+| Sampled covered pairs that really are covered | 9 of 10 | 10 of 10 | 9 of 10 (the miss is planted gap S01) |
 | Control-extraction coverage of the policy text | about 62% | about 8% | not measured this way; text inside extraction units: 134,634 of 165,629 characters (code only) |
 
 South Indian Bank's sheet holds every high-confidence finding outside the key: 12 findings,
-forming 10 distinct regulation-passage pairs, all 10 on the blind sheet.
+forming 10 distinct regulation-passage pairs, all 10 on the blind sheet. The full-policy check
+overturned 5 of its 7 "gap" labels: the policy (dated March 2026) states those duties in another
+passage, for example "Reason(s) of rejection shall be duly recorded by the officer concerned".
+Like the development bank (3 real of 14 checked), a recent policy leaves the high-confidence tier
+mostly false alarms; on the two older policies it was mostly real gaps.
 
 Most of these real gaps are provisions the 2024 policies predate (for example the December 2025
 CKYCR responsibility and the advance-intimation rules). The samples are small (10 of 14 and 10 of

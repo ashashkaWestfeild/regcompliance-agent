@@ -170,5 +170,77 @@
     "note": "74(3)(i)(a): general wire-transfer information rules, nothing on unregulated entities in the chain"
    }
   }
+ },
+ "southindianbank": {
+  "findings": {
+   "label": {
+    "gap": 7,
+    "no gap": 3
+   },
+   "after_check": {
+    "gap": 2,
+    "no gap": 8
+   }
+  },
+  "covered_pairs": {
+   "label": {
+    "gap": 1,
+    "no gap": 9
+   },
+   "after_check": {
+    "gap": 1,
+    "no gap": 9
+   }
+  },
+  "precision_high_tier": {
+   "labelled_before_check": "7 of 10",
+   "after_full_policy_check": "2 of 10",
+   "duties_only": "2 of 10 (leaving out reliefs and permissions the policy has not adopted)",
+   "unsure": 0
+  },
+  "covered_pairs_really_covered": "9 of 10",
+  "control_extraction_coverage": "not measured this way (extraction units: 134,634 of 165,629 characters)",
+  "checks": {
+   "1": {
+    "outcome": "held",
+    "kind": null,
+    "note": "65(10)(iv): nothing on the uploading entity verifying identity / address; the policy follows the Aug 2025 Master Direction, before the Dec 2025 amendment"
+   },
+   "2": {
+    "outcome": "held",
+    "kind": null,
+    "note": "45(1)(i): no system to determine whether a customer or beneficial owner is a PEP (planted gap S01, judged covered by the system)"
+   },
+   "5": {
+    "outcome": "covered",
+    "kind": null,
+    "note": "17(2): 'shall consider filing an STR, if necessary, when it is unable to comply with the relevant CDD measures' is stated in another passage"
+   },
+   "10": {
+    "outcome": "held",
+    "kind": null,
+    "note": "41(1): no other passage; 'enhanced due diligence measures are put in place' drops 'establish the need'"
+   },
+   "12": {
+    "outcome": "covered",
+    "kind": null,
+    "note": "65(5): that sentence is for REs other than SCBs; the bank's own duty (upload from 1 Jan 2017) is clause (e)"
+   },
+   "15": {
+    "outcome": "covered",
+    "kind": null,
+    "note": "6(4)(i): mobile number changes only after identity is verified face to face or by V-CIP"
+   },
+   "16": {
+    "outcome": "covered",
+    "kind": null,
+    "note": "42(7): the requirement is implemented (three advance intimations, 21(e)), so the deadline is met"
+   },
+   "20": {
+    "outcome": "covered",
+    "kind": null,
+    "note": "18: 'Reason(s) of rejection shall be duly recorded by the officer concerned'"
+   }
+  }
  }
 }

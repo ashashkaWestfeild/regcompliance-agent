@@ -14,7 +14,11 @@ import json
 from pathlib import Path
 
 DIR = Path("eval/reports/heldout_precision")
-EXTRACTION_COVERAGE = {"centralbank": "about 62% of the policy text", "dhanlaxmi": "about 8%"}
+EXTRACTION_COVERAGE = {
+    "centralbank": "about 62% of the policy text",
+    "dhanlaxmi": "about 8%",
+    "southindianbank": "not measured this way (extraction units: 134,634 of 165,629 characters)",
+}
 
 # Full-policy check of every row labelled gap: "held" (no other passage covers the obligation)
 # or "covered" (covered elsewhere: the label does not count). "relief" marks a held row whose
@@ -108,6 +112,55 @@ CHECK = {
             None,
             "74(3)(i)(a): general wire-transfer information rules, nothing on "
             "unregulated entities in the chain",
+        ),
+    },
+    "southindianbank": {
+        "1": (
+            "held",
+            None,
+            "65(10)(iv): nothing on the uploading entity verifying identity / address; the policy "
+            "follows the Aug 2025 Master Direction, before the Dec 2025 amendment",
+        ),
+        "2": (
+            "held",
+            None,
+            "45(1)(i): no system to determine whether a customer or beneficial owner is a PEP "
+            "(planted gap S01, judged covered by the system)",
+        ),
+        "5": (
+            "covered",
+            None,
+            "17(2): 'shall consider filing an STR, if necessary, when it is unable to comply with "
+            "the relevant CDD measures' is stated in another passage",
+        ),
+        "10": (
+            "held",
+            None,
+            "41(1): no other passage; 'enhanced due diligence measures are put in place' drops "
+            "'establish the need'",
+        ),
+        "12": (
+            "covered",
+            None,
+            "65(5): that sentence is for REs other than SCBs; the bank's own duty (upload from "
+            "1 Jan 2017) is clause (e)",
+        ),
+        "15": (
+            "covered",
+            None,
+            "6(4)(i): mobile number changes only after identity is verified face to face or by "
+            "V-CIP",
+        ),
+        "16": (
+            "covered",
+            None,
+            "42(7): the requirement is implemented (three advance intimations, 21(e)), so the "
+            "deadline is met",
+        ),
+        "20": (
+            "covered",
+            None,
+            "18: 'Reason(s) of rejection shall be duly recorded by the officer concerned'",
         ),
     },
 }
