@@ -13,7 +13,8 @@ minute)
 
 **In one minute**
 
-- **About 15 seconds per amendment, against 5 to 10 analyst hours** (our own estimate): on RBI's
+- **1 to 22 seconds per circular on the hosted model, first run included, against 5 to 10
+  analyst hours** (our own estimate): on RBI's
   real 29 Dec 2025 amendment the agent re-checks only the amended paragraph and reports the gaps
   it would open and close.
 - **Measured on two banks it had never seen**, with answer keys frozen in git before the first
@@ -124,10 +125,11 @@ read those policies. Those results will be added here.
 
 ## Business impact (measured time, estimated baseline)
 
-Change agent, dry run, per circular ([timing](eval/reports/change_agent_timing.json)):
-a circular with one new duty took 17 s on one laptop GPU (RTX 4060, local qwen3:8b), about 81 s
-on a first, uncached run; with the hosted open-weights model (what the demo uses) 14 to 22 s; a
-permissive amendment needs no model call (about 2 s). Baseline: 5 to 10 analyst hours per
+Change agent, dry run, per circular, first run included
+([timing](eval/reports/change_agent_timing.json)): with the hosted open-weights model (what the
+demo uses) 1.1 to 22 s; with local qwen3:8b on one laptop GPU (RTX 4060) 1.7 to 81 s. The low end
+is a permissive amendment, which needs no model call; the high end is a circular with one new duty
+on a first, uncached run (17 s locally once cached). Baseline: 5 to 10 analyst hours per
 circular, the author's own estimate, not a measurement. The agent produces a scoped draft
 assessment; a person still reviews it. One caution: on the December 2025 amendment the local 8B
 model extracted no obligations from the amended paragraph, so that run is not counted; the hosted

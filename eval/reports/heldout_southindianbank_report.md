@@ -4,7 +4,7 @@ Procedure note: Corrected tail. The first pass ran three code-only steps without
 
 # Evaluation report: run `ho_southindianbank`, policy `southindianbank` (test3 set)
 
-Answer key: `eval/answer_key_southindianbank.jsonl` at commit unknown; policy text sha256 verified (b2ce07d2bb24...).
+Answer key: `eval/answer_key_southindianbank.jsonl` frozen at commit c556c42 (2026-10-03); the run used the file as at af84d91, which differs only in the theme label of real finding S-R01 (ckycr_upload -> vcip; scoring unchanged, PROBLEMS_LOG P-054). The key was copied into the tag worktree and hash-checked against the committed file (sha256 23b503fde833...); policy text sha256 verified (b2ce07d2bb24...).
 
 ## Against the answer key (counts)
 - planted gaps detected 4/7 (type accepted 3/7; near misses 0/7)
@@ -48,6 +48,7 @@ Answer key: `eval/answer_key_southindianbank.jsonl` at commit unknown; policy te
 - mappings 458: covered 409, partial 46, missing 3
 - judge control citations verified 437/458; auto-accepted 436, escalated 22
 - gaps reported 49 (high-confidence 16, review queue 33); unkeyed (to blind adjudication) 41
-- model time by stage (cache totals): classify_condition: 40 calls, 6.0 model-min, 28357 output tokens; classify_level: 207 calls, 51.2 model-min, 21142 output tokens; compare_numbers: 10 calls, 0.5 model-min, 331 output tokens; draft_remediation: 40 calls, 4.1 model-min, 4953 output tokens; extract_controls: 819 calls, 93.0 model-min, 148394 output tokens; extract_definitions: 102 calls, 7.5 model-min, 8785 output tokens; extract_obligations: 205 calls, 40.2 model-min, 49246 output tokens; judge: 2112 calls, 466.4 model-min, 793891 output tokens; scope_check: 164 calls, 21.2 model-min, 34480 output tokens
+- model time by stage, totals for the whole d2 database cache, not this run (scope_check is the stopped D2 detector and was not part of this run): classify_condition: 40 calls, 6.0 model-min, 28357 output tokens; classify_level: 207 calls, 51.2 model-min, 21142 output tokens; compare_numbers: 10 calls, 0.5 model-min, 331 output tokens; draft_remediation: 40 calls, 4.1 model-min, 4953 output tokens; extract_controls: 819 calls, 93.0 model-min, 148394 output tokens; extract_definitions: 102 calls, 7.5 model-min, 8785 output tokens; extract_obligations: 205 calls, 40.2 model-min, 49246 output tokens; judge: 2112 calls, 466.4 model-min, 793891 output tokens; scope_check: 164 calls, 21.2 model-min, 34480 output tokens
+- model calls made during this run (cache rows created 22:15-23:30 IST on 3 Oct): extract_controls 212 calls, 23.2 model-min; judge 189 calls, 26.2 model-min; compare_numbers 4 calls, 0.2 model-min. Every other call (the regulation side, obligation level, definitions) came from the cache.
 
 Judge confidence and signal records: eval/reports/confidence_table.json (fitted on the development bank). Not yet measured: extraction precision/recall vs the user's labels.

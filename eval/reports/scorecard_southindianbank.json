@@ -8,7 +8,7 @@
  "run": "ho_southindianbank",
  "policy": "southindianbank",
  "split": "test3",
- "key_commit": "unknown",
+ "key_commit": "c556c42 (frozen 2026-10-03); file as at af84d91, which changes only the theme label of real finding S-R01 (scoring unchanged); copied file hash-checked, sha256 23b503fde833dddd7720be0781d5e8dd7450a72a56f2e697c06a7a85b3783208",
  "scored_at": "2026-10-03 23:24",
  "summary": [
   "planted gaps detected 4/7 (type accepted 3/7; near misses 0/7)",
