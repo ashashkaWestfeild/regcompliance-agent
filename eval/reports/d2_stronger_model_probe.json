@@ -1,0 +1,337 @@
+{
+ "what": "C2 probe: the exact cached scope prompts that contained C05 and L03, re-sent to qwen3.5:9b (local) and gpt-oss-120b (Groq). Exploratory, development data.",
+ "run": "2026-10-04, from the scratch probe; nothing written to any database or llm_cache",
+ "items": [
+  {
+   "tag": "C05",
+   "call": "c1aa2620",
+   "item": "1",
+   "planted": false,
+   "regulation": "REs may take note of the following:",
+   "qwen3:8b": "unclear",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "unclear",
+   "qwen3.5:9b s": 63.8,
+   "gpt-oss-120b s": 4.2
+  },
+  {
+   "tag": "C05",
+   "call": "c1aa2620",
+   "item": "2",
+   "planted": false,
+   "regulation": "The bank shall not make payment of cheques / drafts / pay orders/ banker’s cheques, if the",
+   "qwen3:8b": "narrower [Further, the name of the purchaser shall be incorporated on the face of the demand draft, pay order, banker's cheques, etc.]",
+   "qwen3.5:9b": "narrower [(e). Further, the name of the purchaser shall be incorporated on the face of the demand draft, pay order, banker's cheques, etc., by the issuing branch.]",
+   "gpt-oss-120b": "unclear",
+   "qwen3.5:9b s": 63.8,
+   "gpt-oss-120b s": 4.2
+  },
+  {
+   "tag": "C05",
+   "call": "c1aa2620",
+   "item": "3",
+   "planted": true,
+   "regulation": "take appropriate action, including reporting of suspicious transactions to FIU-IND.",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "narrower [savings accounts which are operated as Money Mules]",
+   "qwen3.5:9b s": 63.8,
+   "gpt-oss-120b s": 4.2
+  },
+  {
+   "tag": "C05",
+   "call": "c1aa2620",
+   "item": "4",
+   "planted": false,
+   "regulation": "if it is established that an account opened and operated is that of a Money Mule, but STR ",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "narrower [If it is established that an account opened and operated is that of a Money Mule, it shall be deemed that the branch has not complied with these directions.]",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 63.8,
+   "gpt-oss-120b s": 4.2
+  },
+  {
+   "tag": "C05",
+   "call": "c1aa2620",
+   "item": "5",
+   "planted": true,
+   "regulation": "The bank shall undertake diligence measures and meticulous monitoring to identify accounts",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 63.8,
+   "gpt-oss-120b s": 4.2
+  },
+  {
+   "tag": "C05",
+   "call": "2e9cb30f",
+   "item": "1",
+   "planted": true,
+   "regulation": "The bank shall undertake diligence measures and meticulous monitoring to identify accounts",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "narrower [savings accounts]",
+   "qwen3.5:9b s": 15.2,
+   "gpt-oss-120b s": 3.4
+  },
+  {
+   "tag": "C05",
+   "call": "2e9cb30f",
+   "item": "2",
+   "planted": true,
+   "regulation": "The bank shall strictly adhere to the instructions on opening of accounts and monitoring o",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "narrower [savings]",
+   "gpt-oss-120b": "narrower [savings accounts]",
+   "qwen3.5:9b s": 15.2,
+   "gpt-oss-120b s": 3.4
+  },
+  {
+   "tag": "C05",
+   "call": "2e9cb30f",
+   "item": "3",
+   "planted": true,
+   "regulation": "if it is established that an account opened and operated is that of a Money Mule, but STR ",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 15.2,
+   "gpt-oss-120b s": 3.4
+  },
+  {
+   "tag": "C05",
+   "call": "2e9cb30f",
+   "item": "4",
+   "planted": false,
+   "regulation": "The bank shall not collect account payee cheques for any person other than the payee const",
+   "qwen3:8b": "narrower [transactions involving rupees fifty thousand and above]",
+   "qwen3.5:9b": "narrower [fifty thousand]",
+   "gpt-oss-120b": "unclear",
+   "qwen3.5:9b s": 15.2,
+   "gpt-oss-120b s": 3.4
+  },
+  {
+   "tag": "C05",
+   "call": "2e9cb30f",
+   "item": "5",
+   "planted": false,
+   "regulation": "The bank shall allot Unique Customer Identification Code (UCIC) while entering into new re",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 15.2,
+   "gpt-oss-120b s": 3.4
+  },
+  {
+   "tag": "L03",
+   "call": "743e540f",
+   "item": "1",
+   "planted": false,
+   "regulation": "Deposit of third-party cheques, drafts, etc. in the existing and newly opened accounts fol",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 13.6,
+   "gpt-oss-120b s": 3.1
+  },
+  {
+   "tag": "L03",
+   "call": "743e540f",
+   "item": "2",
+   "planted": false,
+   "regulation": "The bank shall align the extent of monitoring with the risk category of the customer.",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 13.6,
+   "gpt-oss-120b s": 3.1
+  },
+  {
+   "tag": "L03",
+   "call": "743e540f",
+   "item": "3",
+   "planted": false,
+   "regulation": "Explanation: The bank shall subject high-risk accounts to more intensified monitoring.",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 13.6,
+   "gpt-oss-120b s": 3.1
+  },
+  {
+   "tag": "L03",
+   "call": "743e540f",
+   "item": "4",
+   "planted": true,
+   "regulation": "(1) The bank shall adopt a risk-based approach for periodic updation of KYC ensuring that ",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 13.6,
+   "gpt-oss-120b s": 3.1
+  },
+  {
+   "tag": "L03",
+   "call": "743e540f",
+   "item": "5",
+   "planted": false,
+   "regulation": "The bank shall document its policy in this regard as part of the bank’s internal KYC polic",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "narrower [Customers other than Individuals:]",
+   "gpt-oss-120b": "narrower [Customers other than Individuals:]",
+   "qwen3.5:9b s": 13.6,
+   "gpt-oss-120b s": 3.1
+  },
+  {
+   "tag": "L03",
+   "call": "ae9af22a",
+   "item": "1",
+   "planted": true,
+   "regulation": "the bank shall carry out periodic updation at least once in every two years for high-risk ",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 14.5,
+   "gpt-oss-120b s": 2.0
+  },
+  {
+   "tag": "L03",
+   "call": "ae9af22a",
+   "item": "2",
+   "planted": true,
+   "regulation": "the bank shall carry out periodic updation at least once in every two years for high-risk ",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 14.5,
+   "gpt-oss-120b s": 2.0
+  },
+  {
+   "tag": "L03",
+   "call": "ae9af22a",
+   "item": "3",
+   "planted": true,
+   "regulation": "the bank shall carry out periodic updation at least once in every two years for high-risk ",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 14.5,
+   "gpt-oss-120b s": 2.0
+  },
+  {
+   "tag": "L03",
+   "call": "ae9af22a",
+   "item": "4",
+   "planted": false,
+   "regulation": "In case of no change in the KYC information, the bank shall obtain a self-declaration from",
+   "qwen3:8b": "narrower [No Change in KYC Information]",
+   "qwen3.5:9b": "narrower [a. No Change in KYC Information]",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 14.5,
+   "gpt-oss-120b s": 2.0
+  },
+  {
+   "tag": "L03",
+   "call": "ae9af22a",
+   "item": "5",
+   "planted": false,
+   "regulation": "In case of a change only in the address details of the customer, the bank shall obtain a s",
+   "qwen3:8b": "narrower [Change in Address]",
+   "qwen3.5:9b": "narrower [b. Change in Address]",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 14.5,
+   "gpt-oss-120b s": 2.0
+  },
+  {
+   "tag": "L03",
+   "call": "d1afcf4e",
+   "item": "1",
+   "planted": false,
+   "regulation": "Further, the bank shall ensure that it promptly updates the information / documents obtain",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "narrower [Customers other than Individuals]",
+   "qwen3.5:9b s": 14.8,
+   "gpt-oss-120b s": 3.2
+  },
+  {
+   "tag": "L03",
+   "call": "d1afcf4e",
+   "item": "2",
+   "planted": false,
+   "regulation": "(iv) In order to ensure customer convenience, the bank may consider making available the f",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "narrower [Customers other than Individuals]",
+   "qwen3.5:9b s": 14.8,
+   "gpt-oss-120b s": 3.2
+  },
+  {
+   "tag": "L03",
+   "call": "d1afcf4e",
+   "item": "3",
+   "planted": true,
+   "regulation": "(v) The bank shall adopt a risk-based approach with respect to periodic updation of KYC.",
+   "qwen3:8b": "narrower [following types of transactions]",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "same",
+   "qwen3.5:9b s": 14.8,
+   "gpt-oss-120b s": 3.2
+  },
+  {
+   "tag": "L03",
+   "call": "d1afcf4e",
+   "item": "4",
+   "planted": false,
+   "regulation": "The bank shall clearly specify in its internal policy, duly approved by the Board of Direc",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "same",
+   "gpt-oss-120b": "narrower [Customers other than Individuals]",
+   "qwen3.5:9b s": 14.8,
+   "gpt-oss-120b s": 3.2
+  },
+  {
+   "tag": "L03",
+   "call": "d1afcf4e",
+   "item": "5",
+   "planted": false,
+   "regulation": "(7) Due Notices for Periodic Updation of KYC: The bank shall intimate its customers, in ad",
+   "qwen3:8b": "same",
+   "qwen3.5:9b": "narrower [for carrying out periodic updation]",
+   "gpt-oss-120b": "narrower [Customers other than Individuals]",
+   "qwen3.5:9b s": 14.8,
+   "gpt-oss-120b s": 3.2
+  }
+ ],
+ "timing_seconds": {
+  "C05": [
+   {
+    "call": "c1aa2620",
+    "qwen3.5:9b": 63.8,
+    "gpt-oss-120b": 4.2
+   },
+   {
+    "call": "2e9cb30f",
+    "qwen3.5:9b": 15.2,
+    "gpt-oss-120b": 3.4
+   }
+  ],
+  "L03": [
+   {
+    "call": "743e540f",
+    "qwen3.5:9b": 13.6,
+    "gpt-oss-120b": 3.1
+   },
+   {
+    "call": "ae9af22a",
+    "qwen3.5:9b": 14.5,
+    "gpt-oss-120b": 2.0
+   },
+   {
+    "call": "d1afcf4e",
+    "qwen3.5:9b": 14.8,
+    "gpt-oss-120b": 3.2
+   }
+  ]
+ }
+}
