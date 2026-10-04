@@ -12,8 +12,6 @@ mapping verdict is also written to review_override, the record later used to che
 against human corrections.
 """
 
-import hmac
-
 from psycopg.types.json import Jsonb
 
 DECISIONS = {
@@ -90,9 +88,3 @@ def queue(conn, tier: str = "review", limit: int = 50) -> list[dict]:
     ).fetchall()
     keys = ("id", "type", "residual", "priority", "ref", "obligation", "policy", "why", "evidence")
     return [dict(zip(keys, r, strict=True)) for r in rows]
-
-
-def code_matches(code: str, expected: str) -> bool:
-    """Constant-time check of a reviewer code against the configured one. An unset code never
-    matches, so without REVIEWER_CODE every decision in the app is a simulation."""
-    return bool(expected) and bool(code) and hmac.compare_digest(code.encode(), expected.encode())

@@ -41,7 +41,8 @@ from regcomp.db import connect  # noqa: E402
 from regcomp.llm import model_for  # noqa: E402
 from regcomp.monitor import preview_batch  # noqa: E402
 from regcomp.remediation import readable  # noqa: E402
-from regcomp.review import DECISIONS, code_matches, decide  # noqa: E402
+from regcomp.review import DECISIONS, decide  # noqa: E402
+from regcomp.reviewer_code import code_matches  # noqa: E402
 from regcomp.risk import assess  # noqa: E402
 from regcomp.sources import document_fields, regulation_meta_for_file  # noqa: E402
 

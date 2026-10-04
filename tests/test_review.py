@@ -22,7 +22,7 @@ def test_a_decision_needs_a_known_action_a_reviewer_and_a_reason():
 
 
 def test_reviewer_code_check():
-    from regcomp.review import code_matches
+    from regcomp.reviewer_code import code_matches
 
     assert code_matches("s3cret-code", "s3cret-code")
     assert not code_matches("wrong", "s3cret-code")
