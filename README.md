@@ -197,10 +197,22 @@ model extracted three.
 
 ## Run it
 
+**To see results with no setup, use the [live demo](https://regcompliance-agent-gg39o3vts7mzhbtds2u6l7.streamlit.app/?scenario=3).**
+A fresh local database is empty: the app shows results only after the full pipeline below has
+run, which takes about an hour on one laptop GPU.
+
+Prerequisites: Python 3.13 and [uv](https://docs.astral.sh/uv/); Docker for a local database;
+[Ollama](https://ollama.com) and a GPU only for the offline full pipeline.
+
 ```bash
 uv sync                         # core
 uv sync --extra pdf             # adds Docling for PDF parsing (large)
-uv run pytest                   # 138 tests
+uv run pytest                   # 138 tests, no database needed
+cp .env.example .env            # already points at the compose database below
+docker compose up -d            # Postgres 18 + pgvector; db/schema.sql loads on first start
+uv run python scripts/db_init.py  # applies the migrations (safe to re-run)
+ollama pull qwen3:8b            # local models, for the offline pipeline only
+ollama pull bge-m3
 ```
 
 The pipeline, on the development bank (needs Postgres with pgvector, and Ollama with `qwen3:8b`
