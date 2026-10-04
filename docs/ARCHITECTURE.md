@@ -71,8 +71,8 @@ closes the old one in time; nothing is deleted.
 | 3 | Obligation extraction | Stages 2-3 (model + citation gate, level) | Gaps tab; scenario 3 re-extracts live |
 | 4 | Control-framework understanding (partial) | Stage 2 controls, every policy passage | Gaps tab (policy text, not a control library) |
 | 5 | Regulation-to-control mapping | Stages 4-5 (candidates, judge) | Gaps tab; scenario 3 re-maps live |
-| 6 | Control effectiveness (partial) | Stage 6 (design and operating tests, code) | Evidence tab (results) |
-| 7 | Evidence-based assessment (partial) | Stage 6 and the evidence trigger (`scripts/run_evidence.py`) | Evidence tab (results); a new batch is tested offline |
+| 6 | Control effectiveness | Stage 6 (design and operating tests, code) | Evidence tab: design tests of 213 cited controls; operating results |
+| 7 | Evidence-based assessment and monitoring | Stage 6 and the evidence trigger (`scripts/run_evidence.py`, `monitor.preview_batch`) | Evidence tab: a new batch tested live in memory |
 | 8 | Gap identification | Stage 5 gap rules, §3 wording comparison and tiers | Gaps and Review queue |
 | 9 | Risk-based prioritisation | Stage 8 (rubric) | Gaps tab |
 | 10 | Remediation recommendations | Stage 9 (model draft + fidelity check) | Gaps tab |
@@ -109,7 +109,9 @@ control, mapping, gap. A change adds rows and closes the old ones; nothing is de
 `embedding` (vectors for any row, 1,024 dimensions), `llm_cache` (every model call, exact-match),
 the LangGraph checkpoint tables, and bank profiles as YAML files (`data/profiles/`). In the live
 demo database no row has been superseded yet and `change_event` is empty: the demo runs the change
-agent as a dry run only.
+agent as a dry run only. One commit was recorded on a copy of the database (d2) and is shown
+read-only in the Change agent tab: change event `c56ec4c8`, clause 18 (a new duty), 3 obligations
+and 3 mappings closed in time with 4 added beside them, 2 gaps closed and 2 opened.
 
 ## 3. Wording comparison and the two tiers
 
@@ -192,13 +194,14 @@ three held-out banks) used the offline column only.
 | Wording comparison and tiers (`compare_numbers`) | qwen3:8b, only when the wording around a changed number does not decide the direction | stored results | numbers, "shall" against "may", inserted limits, the tier |
 | Control tests, risk ranking | none | stored results | everything |
 | Remediation (`draft_remediation`) | qwen3:8b | stored drafts | owner, due date, the fidelity check |
-| Change agent: diff, classify, scope, plan, compare, commit | none | diff to compare run live; commit never runs (dry run) | everything |
-| Evidence trigger (`run_evidence.py`) | none | not in the demo | everything |
+| Change agent: diff, classify, scope, plan, compare, commit | none | diff to compare run live; commit never runs (dry run); one recorded commit on d2 shown read-only | everything |
+| Evidence trigger (`run_evidence.py`) | none | the October batch tested in memory (`preview_batch`, nothing written) | everything |
 
 **What runs where.** Live in the hosted app (Streamlit Community Cloud, no GPU): reading stored
 results on every tab, the change agent's dry run (code, plus gpt-oss-120b on the Groq free tier for
 re-extraction, level and judging of the changed clauses only), the applicability what-if (code, in
-memory) and the reviewer form (a simulation without the reviewer code). Offline only, on one
+memory), the evidence-batch test (code, in memory) and the reviewer form (a simulation without the
+reviewer code). Offline only, on one
 laptop GPU (local qwen3:8b and bge-m3): the full pipeline for a new regulation or policy, every
 evaluated run, the evidence trigger and the change agent's commit step (tested offline,
 `tests/test_change_agent.py`).
@@ -443,9 +446,10 @@ gap itself, and a person confirms, dismisses or accepts every finding with a nam
 - **Demo:** Streamlit Community Cloud, reading the same database. It has no GPU: model steps use
   the hosted model, and candidate search falls back from embeddings to shared wording. A visitor
   cannot change data; a reviewer decision is saved only with a reviewer code.
-- **The demo is a dry run.** The change agent never commits in the hosted app; the commit step
-  (a new version stored beside the old, old rows closed in time) is tested offline. Evidence
-  re-tests and new analyses also run offline.
+- **The demo never writes.** The change agent runs dry in the hosted app; the commit step (a new
+  version stored beside the old, old rows closed in time) is tested offline, and one commit of the change agent and two reviewer decisions, recorded on a copy of the database (d2, development data), are shown read-only.
+  The evidence batch is tested in memory; new analyses run offline. Evidence is synthetic and
+  covers two controls of the development bank.
 - **Inputs.** One regulation end to end (the RBI KYC Directions, HTML and PDF) and published bank
   KYC/AML policies (PDF). No control libraries, SOPs, RCSA registers or test records, and no
   upload in the hosted app: a new policy runs offline (about 1,190 model calls and about 55
@@ -469,9 +473,9 @@ gap itself, and a person confirms, dismisses or accepts every finding with a nam
 
 **F3 / D1**, against the brief's definitions.
 
-**F3 (at least 8 of 14 features): 9 demonstrated in the live demo**: 1, 2, 3, 5, 8, 9, 10, 11, 12
-(see the feature → stage map in §2). Partial: 4 (policy text, not a control library), 6 and 7 (two
-synthetic evidence logs; results shown, a new batch tested offline). Not claimed: 13, 14.
+**F3 (at least 8 of 14 features): 11 demonstrated in the live demo**: 1, 2, 3, 5, 6, 7, 8, 9, 10,
+11, 12 (see the feature → stage map in §2; 6 and 7 on the development bank with synthetic logs).
+Partial: 4 (policy text, not a control library). Not claimed: 13, 14.
 
 **D1 (acceptable outputs in a majority of situations)**, three unseen banks, frozen v1, per output
 type:

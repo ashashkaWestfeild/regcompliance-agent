@@ -52,8 +52,8 @@ both ends keep changing. Today it is spreadsheet work, redone after every amendm
 | Draft remediation | A model drafts; code sets owner and due date and rejects wording that drops a number or a duty; one remedy per regulation paragraph | Model drafts, code checks |
 | Cite the source | Every finding carries the document, paragraph, RBI reference number, issue date, version date, amendment date and link, read from the stored source record | Code |
 | Say how sure | A note built from checks code can verify (text comparison, citation, evidence test), with the record of that kind of finding as counts; the model's own confidence number is not shown | Code |
-| React to an amendment | A LangGraph agent: diff → classify → scope → re-extract → re-map → compare → commit, with checkpoints and retries; a dry run is the what-if mode (the hosted demo always runs dry; commit is tested offline) | Agent, within fixed rules |
-| Monitor | A new evidence batch is tested against the last result (offline; the demo shows the results); a reviewer confirms, dismisses, resolves or accepts | Code and a person |
+| React to an amendment | A LangGraph agent: diff → classify → scope → re-extract → re-map → compare → commit, with checkpoints and retries; a dry run is the what-if mode (the hosted demo always runs dry; one commit recorded on a copy of the database is shown as version history) | Agent, within fixed rules |
+| Monitor | A new evidence batch is tested against the last result (offline it is saved; the demo tests the October batch in memory); a reviewer confirms, dismisses, resolves or accepts | Code and a person |
 
 The system opens gaps. Only a person closes one or accepts a risk.
 
@@ -61,13 +61,15 @@ The system opens gaps. Only a person closes one or accepts a risk.
 
 Measured against the brief's own definitions.
 
-**F3 (at least 8 of the 14 features): 9 are demonstrated in the live demo:** 1 regulatory
+**F3 (at least 8 of the 14 features): 11 are demonstrated in the live demo:** 1 regulatory
 ingestion, 2 change intelligence, 3 obligation extraction, 5 regulation-to-control mapping,
-8 gap identification, 9 risk-based prioritisation, 10 remediation recommendations, 11 autonomous
-impact analysis, 12 what-if. Partial: 4 control-framework understanding (controls are read from
-published policy text, not a control library), 6 control effectiveness and 7 evidence-based
-assessment (two synthetic evidence logs on the development bank; results shown, a new batch is
-tested offline). Not claimed: 13 cross-regulation intelligence, 14 contradiction detection.
+6 control effectiveness (design tests of the 213 cited controls; operating tests on synthetic
+logs), 7 evidence-based assessment and monitoring (a new evidence batch is tested live against
+each control's last result), 8 gap identification, 9 risk-based prioritisation, 10 remediation
+recommendations, 11 autonomous impact analysis, 12 what-if. Features 6 and 7 run on the
+development bank with synthetic logs. Partial: 4 control-framework understanding (controls are
+read from published policy text, not a control library). Not claimed: 13 cross-regulation
+intelligence, 14 contradiction detection.
 
 **D1 (acceptable outputs in a majority of situations)**, on three banks the system had never
 seen, frozen v1 (tag `eval-freeze-2026-10-03`), per output type:
@@ -280,10 +282,11 @@ rule of this project, and there is no per-event spending cap.
   test records. No upload in the hosted app: a new policy runs offline on the local GPU (about
   1,190 model calls, about 55 minutes on one laptop GPU). A person chooses which policy is checked
   against which Direction.
-- **The demo is a dry run.** The change agent never commits in the hosted app; the commit step (a
-  new version stored beside the old, old rows closed in time) is tested offline. Features 6 and 7
-  are partial: the Evidence tab shows test results on two synthetic logs; a new evidence batch is
-  tested offline.
+- **The demo never writes.** The change agent runs dry in the hosted app; the commit step (a new
+  version stored beside the old, old rows closed in time) is tested offline, and one commit of the change agent and two reviewer decisions, recorded on a copy of the database (d2, development data), are shown read-only
+  (Change agent: version history; Review queue: decision trail). The new evidence batch is tested
+  in memory. Evidence is synthetic (identifiers only) and covers two controls of the development
+  bank.
 - A bank profile lists what the bank's policy mentions. A policy that restates the regulation mentions almost everything, so the applicability step excluded nothing on the banks tested, and no precision gain is claimed from it. The what-if in the app is hypothetical: it shows what would drop out if a bank stated it did not offer something. A profile built from independent facts is on the roadmap.
 - The hosted demo depends on free tiers (a daily token cap for the hosted model).
 - **Tried and stopped: D2.** A pre-registered attempt ([bar](eval/d2_bar.md)) stopped at its own
