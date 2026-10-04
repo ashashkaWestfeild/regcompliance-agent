@@ -17,10 +17,10 @@ minute)
   analyst hours** (our own estimate): on RBI's
   real 29 Dec 2025 amendment the agent re-checks only the amended paragraph and reports the gaps
   it would open and close.
-- **Measured on two banks it had never seen**, with answer keys frozen in git before the first
-  run and the code run once from a tagged commit: every weakened number found (5 of 5), both
-  hidden instructions caught (2 of 2), and in a blind sample 8 of 9 and 9 of 9 high-confidence
-  findings were real gaps.
+- **Measured on three banks it had never seen**, with answer keys frozen in git before the first
+  run and the code run once from a tagged commit: every weakened number found (7 of 7), every
+  hidden instruction caught (3 of 3), and in a blind sample 8 of 9 and 9 of 9 high-confidence
+  findings were real gaps. Deleted duties are its blind spot (0 of 4).
 - **Every finding cited to its source**: the RBI sentence beside the policy sentence, cut from
   the documents by position, with the reference number and three labelled dates.
 
@@ -51,57 +51,91 @@ both ends keep changing. Today it is spreadsheet work, redone after every amendm
 | Draft remediation | A model drafts; code sets owner and due date and rejects wording that drops a number or a duty; one remedy per regulation paragraph | Model drafts, code checks |
 | Cite the source | Every finding carries the document, paragraph, RBI reference number, issue date, version date, amendment date and link, read from the stored source record | Code |
 | Say how sure | A note built from checks code can verify (text comparison, citation, evidence test), with the record of that kind of finding as counts; the model's own confidence number is not shown | Code |
-| React to an amendment | A LangGraph agent: diff → classify → scope → re-extract → re-map → compare → commit, with checkpoints and retries; a dry run is the what-if mode | Agent, within fixed rules |
-| Monitor | A new evidence batch is tested against the last result; a reviewer confirms, dismisses, resolves or accepts | Code and a person |
+| React to an amendment | A LangGraph agent: diff → classify → scope → re-extract → re-map → compare → commit, with checkpoints and retries; a dry run is the what-if mode (the hosted demo always runs dry; commit is tested offline) | Agent, within fixed rules |
+| Monitor | A new evidence batch is tested against the last result (offline; the demo shows the results); a reviewer confirms, dismisses, resolves or accepts | Code and a person |
 
 The system opens gaps. Only a person closes one or accepts a risk.
+
+## Grid position: F3 / D1
+
+Measured against the brief's own definitions.
+
+**F3 (at least 8 of the 14 features): 9 are demonstrated in the live demo:** 1 regulatory
+ingestion, 2 change intelligence, 3 obligation extraction, 5 regulation-to-control mapping,
+8 gap identification, 9 risk-based prioritisation, 10 remediation recommendations, 11 autonomous
+impact analysis, 12 what-if. Partial: 4 control-framework understanding (controls are read from
+published policy text, not a control library), 6 control effectiveness and 7 evidence-based
+assessment (two synthetic evidence logs on the development bank; results shown, a new batch is
+tested offline). Not claimed: 13 cross-regulation intelligence, 14 contradiction detection.
+
+**D1 (acceptable outputs in a majority of situations)**, on three banks the system had never
+seen, frozen v1 (tag `eval-freeze-2026-10-03`), per output type:
+
+- reported outputs acceptable: high-confidence findings that are real gaps, blind sample,
+  17 of 18 decided (8 of 9 and 9 of 9; the third bank's sheet is being labelled); hidden
+  instructions caught 3 of 3; decoys left alone 7 of 9 (see note); real findings handled 4 of 4;
+- planted gaps: a majority raised at the right obligation, 11 of 20 (9 of 20 at the exact passage);
+- blind spot, disclosed: deleted duties 0 of 4.
+
+Not D2: high demonstrable reliability is not shown on omitted duties, and a pre-registered D2
+attempt stopped at its own gate (see Limits).
+
+Note on decoys: the first scoring of the third bank gave 6 of 9. Three code-only steps first ran
+with the development bank's defaults, so its synthetic evidence log flagged a decoy; they were
+re-run with the bank's own setting, as for the other two banks, and no model output changed
+([report](eval/reports/heldout_southindianbank_report.md)).
 
 ## Results (counts)
 
 Known gaps were planted in public bank policies before any model run, together with decoys that
 must not be flagged and one hidden instruction each. The development bank was used to build the
-system. The two other banks were run once, from a clean checkout of the tag
+system. Three other banks were each run once, from a clean checkout of the tag
 `eval-freeze-2026-10-03`, and nothing was tuned afterwards
 ([Central Bank](eval/reports/heldout_centralbank_report.md),
-[Dhanlaxmi](eval/reports/heldout_dhanlaxmi_report.md)).
+[Dhanlaxmi](eval/reports/heldout_dhanlaxmi_report.md),
+[South Indian Bank](eval/reports/heldout_southindianbank_report.md), run on 3 Oct).
 
-**Proven on two banks the system had never seen** (each run once, counts):
+**Proven on three banks the system had never seen** (each run once, counts):
 
-- every weakened number and stale threshold was found: **5 of 5**, all in the high-confidence
-  tier (3 of 5 with the right gap type);
-- hidden instructions in the policy: **2 of 2** caught, both by the code-level scan;
-- real findings in the published policies: **3 of 3** handled correctly;
-- decoys (rewordings and stricter numbers) left alone: **5 of 6**;
+- every weakened number and stale threshold was found: **7 of 7**, all in the high-confidence
+  tier (4 of 7 with the right gap type);
+- hidden instructions in the policy: **3 of 3** caught;
+- real findings in the published policies: **4 of 4** handled correctly;
+- decoys (rewordings and stricter numbers) left alone: **7 of 9** (first scoring 6 of 9, see the
+  note above);
 - change detection against RBI's own amendment markers: **2 of 2** on the KYC Direction and
   **262 of 266** amended clauses on nine other Directions.
 
-**Not yet, the next milestone:** deleted duties 0 of 2, narrowed scope 0 of 2, contradictions
-0 of 2 (one found at the right obligation), a removed owner 0 of 1, a duty made optional 0 of 1
-(found at the right obligation). Overall: 5 of 13 planted gaps at the exact passage, 7 of 13 at
-the right obligation. Claim: **F3 / D1** (see the architecture document for why not D2).
+**Not yet, the next milestone:** deleted duties 0 of 4, narrowed scope 1 of 4, contradictions
+0 of 2 (one found at the right obligation), a removed owner 0 of 1, a duty made optional 1 of 2
+(the other found at the right obligation). Overall: 9 of 20 planted gaps at the exact passage,
+11 of 20 at the right obligation. Claim: **F3 / D1** ([grid position](#grid-position-f3--d1)).
 
-| Measure | Development bank | Central Bank (unseen) | Dhanlaxmi (unseen) |
-|---|---|---|---|
-| Planted gaps found at the exact passage | 5 of 7 | 3 of 7 | 2 of 6 |
-| ...of which in the high-confidence tier | 3 | 3 | 2 |
-| Planted gaps found at the right obligation | 6 of 7 | 4 of 7 | 3 of 6 |
-| Decoys flagged: high-confidence / review | 0 / 1 of 3 | 1 / 0 of 3 | 0 / 0 of 3 |
-| Hidden instruction flagged | 1 of 1 | 1 of 1 | 1 of 1 |
-| Other reports: high-confidence + review | 17 + 38 | 15 + 36 | 42 + 43 |
-| Applicability: obligations excluded | 0 of 458 | 0 of 458 | 0 of 458 |
+| Measure | Development bank | Central Bank (unseen) | Dhanlaxmi (unseen) | South Indian Bank (unseen) |
+|---|---|---|---|---|
+| Planted gaps found at the exact passage | 5 of 7 | 3 of 7 | 2 of 6 | 4 of 7 |
+| ...of which in the high-confidence tier | 3 | 3 | 2 | 2 |
+| Planted gaps found at the right obligation | 6 of 7 | 4 of 7 | 3 of 6 | 4 of 7 |
+| Decoys flagged: high-confidence / review | 0 / 1 of 3 | 1 / 0 of 3 | 0 / 0 of 3 | 0 / 1 of 3 (first scoring 1 / 1) |
+| Hidden instruction flagged | 1 of 1 | 1 of 1 | 1 of 1 | 1 of 1 |
+| Other reports: high-confidence + review | 17 + 38 | 15 + 36 | 42 + 43 | 12 + 29 |
+| Applicability: obligations excluded | 0 of 458 | 0 of 458 | 0 of 458 | 0 of 458 |
 
 **Precision of the high-confidence tier on the unseen banks** (measured after the freeze, not
 tuned on): a blind sample of 10 high-confidence findings per bank, mixed with 10 pairs the system
 judged covered, no verdict shown, seed committed first. The author labelled them (an AI model,
 Gemini, helped write the reasons); every "gap" label was then checked against the whole policy.
 
-| | Central Bank | Dhanlaxmi |
-|---|---|---|
-| Sampled findings that are real gaps (of those decided) | 8 of 9 | 9 of 9 |
-| ...counting duties only (leaving out reliefs the policy has not adopted) | 6 of 7 | 8 of 8 |
-| Unsure | 1 | 1 |
-| Sampled covered pairs that really are covered | 9 of 10 | 10 of 10 |
-| Control-extraction coverage of the policy text | about 62% | about 8% |
+| | Central Bank | Dhanlaxmi | South Indian Bank |
+|---|---|---|---|
+| Sampled findings that are real gaps (of those decided) | 8 of 9 | 9 of 9 | being labelled |
+| ...counting duties only (leaving out reliefs the policy has not adopted) | 6 of 7 | 8 of 8 | |
+| Unsure | 1 | 1 | |
+| Sampled covered pairs that really are covered | 9 of 10 | 10 of 10 | |
+| Control-extraction coverage of the policy text | about 62% | about 8% | not measured this way; text inside extraction units: 134,634 of 165,629 characters (code only) |
+
+South Indian Bank's sheet holds every high-confidence finding outside the key: 12 findings,
+forming 10 distinct regulation-passage pairs, all 10 on the blind sheet.
 
 Most of these real gaps are provisions the 2024 policies predate (for example the December 2025
 CKYCR responsibility and the advance-intimation rules). The samples are small (10 of 14 and 10 of
@@ -218,6 +252,12 @@ docs/                   architecture, plan, how the test sets were built, decisi
 - **Read-only what-if.** A dry run has no path to the step that writes; a large change pauses for
   a person.
 - **Evidence stays in code.** The model never sees evidence rows, only counts.
+- **Bias.** No personal data is processed (public regulations, public bank policies, synthetic
+  evidence logs with identifiers only), so there are no customers or groups to treat unequally.
+  The bias we measured is the model's lean towards "covered": most misses on the unseen banks are
+  false "covered" verdicts (all four deleted duties, a scope narrowed to "savings accounts", a
+  limit stated in a list lead-in). Doubtful findings go to a review queue, and only a person closes
+  or accepts a gap, with a name and a reason.
 
 Not enforced by code: the rule that only public or synthetic data reaches a model is a working
 rule of this project, and there is no per-event spending cap.
@@ -229,7 +269,15 @@ rule of this project, and there is no per-event spending cap.
 - The comparison rules were written after studying development misses.
 - "Policy-level or procedure-level" is a convention: two independent labellers agreed on 30 of 50
   rows. The system routes such items to review rather than deciding.
-- One regulation end to end; text input only. A person chooses which policy is checked against which Direction.
+- **Input scope.** One regulation end to end (the RBI KYC Directions, HTML and PDF); published
+  bank KYC/AML policies (PDF); text input only. No control libraries, SOPs, RCSA registers or
+  test records. No upload in the hosted app: a new policy runs offline on the local GPU (about
+  1,190 model calls, about 55 minutes on one laptop GPU). A person chooses which policy is checked
+  against which Direction.
+- **The demo is a dry run.** The change agent never commits in the hosted app; the commit step (a
+  new version stored beside the old, old rows closed in time) is tested offline. Features 6 and 7
+  are partial: the Evidence tab shows test results on two synthetic logs; a new evidence batch is
+  tested offline.
 - A bank profile lists what the bank's policy mentions. A policy that restates the regulation mentions almost everything, so the applicability step excluded nothing on the banks tested, and no precision gain is claimed from it. The what-if in the app is hypothetical: it shows what would drop out if a bank stated it did not offer something. A profile built from independent facts is on the roadmap.
 - The hosted demo depends on free tiers (a daily token cap for the hosted model).
 - **Tried and stopped: D2.** A pre-registered attempt ([bar](eval/d2_bar.md)) stopped at its own

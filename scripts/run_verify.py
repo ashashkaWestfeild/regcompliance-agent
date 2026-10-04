@@ -21,6 +21,7 @@ Safe to re-run: it first undoes its own earlier changes.
     uv run python scripts/run_verify.py
 """
 
+import argparse
 import json
 import re
 from collections import Counter
@@ -95,6 +96,10 @@ def control_at(controls: list[tuple], start: int, end: int):
 
 
 def main() -> None:
+    # no options; parsing them makes --help print this docstring instead of running the stage
+    argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    ).parse_args()
     regulation = parse_file(REGULATION)
     stats = Counter()
     with connect(autocommit=True) as conn:

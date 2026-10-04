@@ -62,6 +62,55 @@ closes the old one in time; nothing is deleted.
 | 9 | Remediation | Drafted for every open high-confidence gap (dev: 24 gaps, 16 remedies); a draft that fails the fidelity check is replaced by the regulation's own sentence. One remedy is kept per regulation paragraph, and prompt tags never reach the reader. |
 | 10 | Citation | Every finding shows the document, paragraph, RBI reference number, link and three separately labelled dates: first issued, version in force ("updated as on"), and, where RBI marks the paragraph, the amendment and its effective date. The bank side shows the policy title, section and the policy's own stated date, and flags a policy dated before the amendment to the cited paragraph. All fields come from [`data/sources.yaml`](../data/sources.yaml) and the parser ([`citation.py`](../src/regcomp/citation.py)); a test checks them against the source record. |
 
+### Feature → stage map
+
+| # | Brief feature | Where it is built | Demo |
+|---|---|---|---|
+| 1 | Regulatory ingestion | Stage 1 (parse), stage 10 (source metadata) | Overview; the change agent parses v1-v3 live |
+| 2 | Change intelligence | §4 diff and classify (code) | Change agent, scenarios 1 and 3 |
+| 3 | Obligation extraction | Stages 2-3 (model + citation gate, level) | Gaps tab; scenario 3 re-extracts live |
+| 4 | Control-framework understanding (partial) | Stage 2 controls, every policy passage | Gaps tab (policy text, not a control library) |
+| 5 | Regulation-to-control mapping | Stages 4-5 (candidates, judge) | Gaps tab; scenario 3 re-maps live |
+| 6 | Control effectiveness (partial) | Stage 6 (design and operating tests, code) | Evidence tab (results) |
+| 7 | Evidence-based assessment (partial) | Stage 6 and the evidence trigger (`scripts/run_evidence.py`) | Evidence tab (results); a new batch is tested offline |
+| 8 | Gap identification | Stage 5 gap rules, §3 wording comparison and tiers | Gaps and Review queue |
+| 9 | Risk-based prioritisation | Stage 8 (rubric) | Gaps tab |
+| 10 | Remediation recommendations | Stage 9 (model draft + fidelity check) | Gaps tab |
+| 11 | Autonomous impact analysis | §4 change agent | Change agent, with the injected failure |
+| 12 | What-if / simulation | §4 dry run; stage 3b profile what-if | Scenario 2; Applicability tab |
+| 13 | Cross-regulation intelligence | Not built | - |
+| 14 | Contradiction detection | Not built as a feature (the judge has a "conflicting statements" issue; 0 of 2 on the unseen banks) | - |
+
+### Data model
+
+```mermaid
+erDiagram
+  DOCUMENT ||--o{ CLAUSE : has
+  DOCUMENT ||--o{ CONTROL : "policy has"
+  DOCUMENT ||--o| DOCUMENT : supersedes
+  CLAUSE ||--o{ OBLIGATION : states
+  OBLIGATION ||--o{ APPLICABILITY_DECISION : "per bank profile"
+  OBLIGATION ||--o{ MAPPING : "judged against"
+  CONTROL ||--o{ MAPPING : "cited by"
+  CONTROL ||--o{ EVIDENCE : "tested with"
+  CONTROL ||--o{ CONTROL_TEST : "design and operating"
+  MAPPING ||--o{ GAP : opens
+  OBLIGATION ||--o{ GAP : about
+  CONTROL_TEST ||--o{ GAP : "operating failure"
+  GAP ||--o{ REMEDIATION : "remedied by"
+  MAPPING ||--o{ REVIEW_OVERRIDE : "reviewer decision"
+  DOCUMENT ||--o{ CHANGE_EVENT : "old and new version"
+  CHANGE_EVENT ||--o{ CLAUSE_DIFF : lists
+  CHANGE_EVENT ||--o{ GAP : detected
+```
+
+Versioned rows (`effective_from`/`effective_to`, `recorded_at`/`superseded_at`): clause, obligation,
+control, mapping, gap. A change adds rows and closes the old ones; nothing is deleted. Beside these:
+`embedding` (vectors for any row, 1,024 dimensions), `llm_cache` (every model call, exact-match),
+the LangGraph checkpoint tables, and bank profiles as YAML files (`data/profiles/`). In the live
+demo database no row has been superseded yet and `change_event` is empty: the demo runs the change
+agent as a dry run only.
+
 ## 3. Wording comparison and the two tiers
 
 Bank policies restate much of the regulation almost word for word. Where that is so, code compares
@@ -126,11 +175,33 @@ the control's previous result (newly failing, still failing, recovered, healthy)
 
 ## 5. Models
 
-| Use | Model | Where |
-|---|---|---|
-| Extraction, level, judge, remediation | `qwen3:8b` (open weights) | Ollama on a laptop GPU (8 GB) |
-| Embeddings | `bge-m3` | Ollama |
-| Live model steps in the deployed app | `openai/gpt-oss-120b` (open weights) | Groq free plan |
+Every stage, the model it uses and what code decides. The evaluated runs (development bank and the
+three held-out banks) used the offline column only.
+
+| Stage | Model, offline (evaluated runs) | Model, hosted demo | What code decides |
+|---|---|---|---|
+| Parse regulation and policy | none (Docling layout for PDFs) | none; versions parsed live in the change agent | the whole clause tree and every character span |
+| Obligation extraction (`extract_obligations`) | qwen3:8b | gpt-oss-120b, changed clauses only (change agent) | the citation gate cuts the sentence and rejects what it cannot find |
+| Definitions (`extract_definitions`) | qwen3:8b | not used | citation gate |
+| Obligation level (`classify_level`) | qwen3:8b | gpt-oss-120b, re-extracted obligations only | a quantified duty is always policy-level |
+| Control extraction (`extract_controls`) | qwen3:8b | not used (stored results) | citation gate |
+| Hidden-instruction scan | none | stored results | the code-level scan flags instruction-like text |
+| Applicability (`classify_condition`) | off in every evaluated run (optional fallback) | not used | rules match conditions against the bank profile |
+| Candidate search | bge-m3 embeddings + pgvector | no embeddings: ranked by shared wording (no GPU) | deduplication, top 5 |
+| Judge (`judge`) | qwen3:8b | gpt-oss-120b, in-scope obligations only (change agent) | fixed rules turn the verdict and issue into a gap type |
+| Wording comparison and tiers (`compare_numbers`) | qwen3:8b, only when the wording around a changed number does not decide the direction | stored results | numbers, "shall" against "may", inserted limits, the tier |
+| Control tests, risk ranking | none | stored results | everything |
+| Remediation (`draft_remediation`) | qwen3:8b | stored drafts | owner, due date, the fidelity check |
+| Change agent: diff, classify, scope, plan, compare, commit | none | diff to compare run live; commit never runs (dry run) | everything |
+| Evidence trigger (`run_evidence.py`) | none | not in the demo | everything |
+
+**What runs where.** Live in the hosted app (Streamlit Community Cloud, no GPU): reading stored
+results on every tab, the change agent's dry run (code, plus gpt-oss-120b on the Groq free tier for
+re-extraction, level and judging of the changed clauses only), the applicability what-if (code, in
+memory) and the reviewer form (a simulation without the reviewer code). Offline only, on one
+laptop GPU (local qwen3:8b and bge-m3): the full pipeline for a new regulation or policy, every
+evaluated run, the evidence trigger and the change agent's commit step (tested offline,
+`tests/test_change_agent.py`).
 
 Models are chosen per stage by configuration. Every call is cached by an exact hash of stage,
 model, prompt, schema and options; there is no semantic cache, because two clauses that differ
@@ -199,35 +270,38 @@ Not fixed: the contradiction, the duty made optional where the regulation senten
 
 > **Since 3 Oct 2026:** Central Bank and Dhanlaxmi have been studied (the D2 error analysis on
 > the `d2` branch), so the figures below are the v1 result of record and are no longer evidence
-> of anything unseen. A third bank, South Indian Bank (key frozen at `c556c42`), is run once by
-> the same frozen v1 code ([pre-run note](../eval/third_bank_v1_prerun.md)).
+> of anything unseen. A third bank, South Indian Bank (key frozen at `c556c42`), was run once by
+> the same frozen v1 code on 3 Oct ([pre-run note](../eval/third_bank_v1_prerun.md)), after the
+> D2 attempt had stopped and without the D2 detector.
 
 Run once each, from a clean checkout (git worktree) of the tag `eval-freeze-2026-10-03` (commit
-`5cb728b`); answer keys frozen at `350b8e0` (Central Bank) and `da58e66` (Dhanlaxmi). Nothing
-was tuned afterwards. Reports: [`heldout_centralbank_report.md`](../eval/reports/heldout_centralbank_report.md),
-[`heldout_dhanlaxmi_report.md`](../eval/reports/heldout_dhanlaxmi_report.md); scorecards and
+`5cb728b`); answer keys frozen at `350b8e0` (Central Bank), `da58e66` (Dhanlaxmi) and `c556c42`
+(South Indian Bank). Nothing was tuned afterwards. Reports: [`heldout_centralbank_report.md`](../eval/reports/heldout_centralbank_report.md),
+[`heldout_dhanlaxmi_report.md`](../eval/reports/heldout_dhanlaxmi_report.md),
+[`heldout_southindianbank_report.md`](../eval/reports/heldout_southindianbank_report.md); scorecards and
 confidence checks in `eval/reports/` carry the evaluated tag.
 
-| Measure | Central Bank | Dhanlaxmi |
-|---|---|---|
-| Planted gaps, exact passage (all in the high-confidence tier) | 3 of 7 | 2 of 6 |
-| Planted gaps, right obligation | 4 of 7 | 3 of 6 |
-| Decoys flagged | 1 of 3, high-confidence | 0 of 3 |
-| Hidden instruction flagged | 1 of 1, by the code-level scan only | 1 of 1, by the code-level scan only |
-| Other reports: high-confidence + review | 15 + 36 | 42 + 43 |
-| Obligations excluded by applicability | 0 | 0 (3 to confirm) |
+| Measure | Central Bank | Dhanlaxmi | South Indian Bank |
+|---|---|---|---|
+| Planted gaps, exact passage | 3 of 7 (all high-confidence) | 2 of 6 (all high-confidence) | 4 of 7 (2 high-confidence, 2 review) |
+| Planted gaps, right obligation | 4 of 7 | 3 of 6 | 4 of 7 |
+| Decoys flagged | 1 of 3, high-confidence | 0 of 3 | 1 of 3, review (first scoring 2 of 3, see its report) |
+| Hidden instruction flagged | 1 of 1, by the code-level scan only | 1 of 1, by the code-level scan only | 1 of 1, by the code-level scan only |
+| Other reports: high-confidence + review | 15 + 36 | 42 + 43 | 12 + 29 |
+| Obligations excluded by applicability | 0 | 0 (3 to confirm) | 0 |
 
-By type of planted gap (both banks):
+By type of planted gap (three banks):
 
 | Planted change | Found at the exact passage | At the right obligation |
 |---|---|---|
-| Weakened number | 3 of 3 (all high-confidence) | 3 of 3 |
-| Stale threshold (an older value) | 2 of 2 (high-confidence, typed as weakened) | 2 of 2 |
-| Deleted duty | 0 of 2 | 0 of 2 |
-| Narrowed scope | 0 of 2 | 0 of 2 |
+| Weakened number | 4 of 4 (all high-confidence) | 4 of 4 |
+| Stale threshold (an older value) | 3 of 3 (high-confidence, typed as weakened) | 3 of 3 |
+| Deleted duty | 0 of 4 | 0 of 4 |
+| Narrowed scope | 1 of 4 (review) | 1 of 4 |
 | Contradiction | 0 of 2 | 1 of 2 (review) |
-| Duty made optional | 0 of 1 | 1 of 1 (review) |
+| Duty made optional | 1 of 2 (review) | 2 of 2 (review) |
 | Removed owner | 0 of 1 | 0 of 1 |
+| **All planted gaps** | **9 of 20** | **11 of 20** |
 
 
 **Precision of the high-confidence tier on the held-out banks** (measured after the freeze; nothing
@@ -254,9 +328,9 @@ development bank's newer policy gave a much weaker result for the same tier (3 r
 alarms, 4 unclear of 14), so precision depends on how far the policy lags the regulation.
 
 What it shows:
-- **Numbers are found; omissions and contradictions are not.** The hits are changed or stale
-  thresholds. A deleted duty, a narrowed scope, a contradiction and a removed owner were missed on
-  both banks.
+- **Numbers are found; omissions and contradictions are not.** The high-confidence hits are
+  changed or stale thresholds (7 of 7 across the three banks). Deleted duties were missed on all
+  three banks (0 of 4), and contradictions and the removed owner on the first two.
 - **The high-confidence tier is precise about what it finds, not complete.** Every exact hit was
   high-confidence, but that tier also holds 15 and 42 other reports, most of them unchecked.
 - **The code-level scan mattered.** The extraction model flagged neither hidden instruction;
@@ -347,6 +421,15 @@ held-out runs, which are then reported against it.
 | Evidence leaking to a model | Tests run in code; the model sees no rows | Built |
 | Private data reaching a model | Only public or synthetic data is used | A working rule, not enforced by code |
 | Runaway cost | Exact-match cache; time budget per run | No per-event spending cap |
+| Bias | See below | Measured; mitigated by review |
+
+**Bias.** No personal data is processed: the inputs are public regulations, public bank policies
+and synthetic evidence logs that carry identifiers only, so there are no customers or groups to
+treat unequally. The bias we measured is the model's: it leans towards "covered". Most misses on
+the unseen banks are false "covered" verdicts: all four deleted duties, the narrowed scope C05
+("savings accounts" read as "accounts") and the limit in a list lead-in (L03). The system is built
+to fail safe against that lean: doubtful findings go to a review queue, the system never closes a
+gap itself, and a person confirms, dismisses or accepts every finding with a name and a reason.
 
 ## 8. Deployment
 
@@ -355,6 +438,13 @@ held-out runs, which are then reported against it.
 - **Demo:** Streamlit Community Cloud, reading the same database. It has no GPU: model steps use
   the hosted model, and candidate search falls back from embeddings to shared wording. A visitor
   cannot change data; a reviewer decision is saved only with a reviewer code.
+- **The demo is a dry run.** The change agent never commits in the hosted app; the commit step
+  (a new version stored beside the old, old rows closed in time) is tested offline. Evidence
+  re-tests and new analyses also run offline.
+- **Inputs.** One regulation end to end (the RBI KYC Directions, HTML and PDF) and published bank
+  KYC/AML policies (PDF). No control libraries, SOPs, RCSA registers or test records, and no
+  upload in the hosted app: a new policy runs offline (about 1,190 model calls and about 55
+  minutes on one laptop GPU, measured on the third bank).
 - **In a bank:** the same components inside the bank's network: Postgres, an internal model
   server, the policy and evidence never leaving it.
 
@@ -372,15 +462,23 @@ held-out runs, which are then reported against it.
 
 ## 10. Claim
 
-**F3 / D1.** Proven on the unseen banks: every weakened number and stale threshold, 5 of 5; hidden instructions 2 of 2 (code-level scan); real findings 3 of 3; decoys left alone 5 of 6; change detection 2 of 2 on the KYC Direction and 262 of 266 on nine other Directions. Next milestone: deletions, narrowed scope, contradictions, removed owners and duties made optional (0 of 8 at the exact passage).
+**F3 / D1**, against the brief's definitions.
 
-Functional scope (F3): ingestion, change intelligence, obligation extraction,
-control understanding, mapping, gap identification, risk ranking and impact analysis, with
-remediation, evidence testing, applicability and what-if as built extras.
+**F3 (at least 8 of 14 features): 9 demonstrated in the live demo**: 1, 2, 3, 5, 8, 9, 10, 11, 12
+(see the feature → stage map in §2). Partial: 4 (policy text, not a control library), 6 and 7 (two
+synthetic evidence logs; results shown, a new batch tested offline). Not claimed: 13, 14.
 
-Depth (D1, not D2): the input is text and structured data, and the outputs are acceptable and
-traceable: every citation is verbatim by construction, change detection is exact against RBI's
-own markers, hidden instructions were caught on both unseen banks, and 5 of 6 decoys were left
-alone. But the plan's own rule was D2 only if the unseen banks showed high reliability, and gap
-detection did not: 5 of 13 planted gaps at the exact passage, 7 of 13 at the right obligation,
-with many unchecked high-confidence extras. So the claim is D1.
+**D1 (acceptable outputs in a majority of situations)**, three unseen banks, frozen v1, per output
+type:
+
+- reported outputs acceptable: high-confidence findings real in a blind sample, 17 of 18 decided
+  (8 of 9 and 9 of 9; the third bank's sheet is being labelled); hidden instructions caught 3 of 3;
+  decoys left alone 7 of 9 (first scoring 6 of 9, see the third bank's report); real findings
+  handled 4 of 4;
+- a majority of planted gaps raised at the right obligation, 11 of 20 (9 of 20 at the exact
+  passage); every changed number found, 7 of 7;
+- blind spot, disclosed: deleted duties 0 of 4.
+
+**Not D2.** D2 needs a high degree of demonstrable reliability; omitted duties are not found, and a
+pre-registered attempt at D2 stopped at its own gate on development data (closing note on the
+unmerged `d2` branch).
