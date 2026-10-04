@@ -1,0 +1,78 @@
+{
+ "what": "Two reviewer decisions recorded on the d2 copy of the database (not the live demo database) with the app's own decision code. Development data.",
+ "code_commit": "629c76c7857d5ec8bf223e586003c7458ceba869",
+ "decisions": [
+  {
+   "gap": "4b3f3036-ff85-4a1d-8cb0-8ba052f3c0ce",
+   "decision": "confirm",
+   "reviewer": "Claude (demonstration on the d2 copy, on the author's instruction)",
+   "reason": "Planted gap N05 of the development key: the policy limits intensified monitoring to high-risk accounts identified at account opening; RBI 41(2) covers all of them.",
+   "before": {
+    "ref": "41(2)",
+    "obligation": "subject high-risk accounts to more intensified monitoring",
+    "gap_type": "narrow_scope",
+    "status": "open",
+    "tier": "review",
+    "mapping_verdict": "covered",
+    "mapping_status": "auto"
+   },
+   "after": {
+    "ref": "41(2)",
+    "obligation": "subject high-risk accounts to more intensified monitoring",
+    "gap_type": "narrow_scope",
+    "status": "open",
+    "tier": "high",
+    "mapping_verdict": "covered",
+    "mapping_status": "reviewed"
+   },
+   "result": {
+    "gap": "4b3f3036-ff85-4a1d-8cb0-8ba052f3c0ce",
+    "decision": "confirm",
+    "status": "open -> open",
+    "tier": "review -> high",
+    "mapping_verdict": null
+   }
+  },
+  {
+   "gap": "dec948d8-b7fc-4d49-a2f0-c0e8a4fb8914",
+   "decision": "dismiss",
+   "reviewer": "Claude (demonstration on the d2 copy, on the author's instruction)",
+   "reason": "RBI paragraph 2 states when the Directions come into force; it places no duty on the bank to publish an effective date. A false alarm.",
+   "before": {
+    "ref": "2",
+    "obligation": "comply with these directions",
+    "gap_type": "weak_modality",
+    "status": "open",
+    "tier": "high",
+    "mapping_verdict": "partial",
+    "mapping_status": "auto"
+   },
+   "after": {
+    "ref": "2",
+    "obligation": "comply with these directions",
+    "gap_type": "weak_modality",
+    "status": "closed",
+    "tier": "high",
+    "mapping_verdict": "covered",
+    "mapping_status": "reviewed"
+   },
+   "result": {
+    "gap": "dec948d8-b7fc-4d49-a2f0-c0e8a4fb8914",
+    "decision": "dismiss",
+    "status": "open -> closed",
+    "tier": "high -> high",
+    "mapping_verdict": "partial -> covered"
+   }
+  }
+ ],
+ "review_override": [
+  {
+   "ref": "2",
+   "old_verdict": "partial",
+   "new_verdict": "covered",
+   "reason": "RBI paragraph 2 states when the Directions come into force; it places no duty on the bank to publish an effective date. A false alarm.",
+   "reviewer": "Claude (demonstration on the d2 copy, on the author's instruction)",
+   "created_at": "2026-10-04 05:39:57.284122+00"
+  }
+ ]
+}

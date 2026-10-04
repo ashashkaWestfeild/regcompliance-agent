@@ -625,6 +625,80 @@ def batch_simulation() -> None:
     )
 
 
+def version_history() -> None:
+    """'Evolves over time': a recorded commit of the change agent, made on the d2 copy."""
+    path = ROOT / "eval" / "reports" / "version_history_d2.json"
+    if not path.exists():
+        return
+    h = json.loads(path.read_text(encoding="utf-8"))
+    st.divider()
+    st.markdown("**Version history (recorded run on a copy of the database)**")
+    st.caption(
+        "The demo above never writes. To show the commit step, the agent was run once without "
+        "the dry run on a copy of the database (d2), with the synthetic draft circular; this is "
+        f"what it recorded. Code commit `{h['code_commit'][:7]}`. Development data."
+    )
+    e = h["event"]
+    st.write(
+        f"Change event `{e['id'][:8]}`: version `{e['old_version']}` → `{e['new_version']}`, "
+        f"received {e['received_at'][:16]} UTC, gap delta {e['projected_gap_delta']:+d}."
+    )
+    for d in h["clause_diff"]:
+        with st.expander(f"Clause {d['clause_ref']}: {d['change_class']}", expanded=False):
+            st.caption(d["summary"])
+            a, b = st.columns(2)
+            a.markdown("**Before**")
+            a.write(d["before"] or "(none)")
+            b.markdown("**After**")
+            b.write(d["after"] or "(none)")
+    for kind, closed_key, new_key, cols in (
+        ("Obligations", "closed", "added", ("ref", "action", "source_version")),
+        ("Mappings", "closed", "added", ("ref", "verdict", "source_version")),
+        ("Gaps", "closed", "opened", ("ref", "type", "tier")),
+    ):
+        part = h[kind.lower()]
+        st.markdown(f"*{kind}*: {len(part[closed_key])} closed in time, "
+                    f"{len(part[new_key])} added beside them (nothing deleted)")  # fmt: skip
+        rows = [{"": "closed", **{c: r.get(c) for c in cols}} for r in part[closed_key]]
+        rows += [{"": "new", **{c: r.get(c) for c in cols}} for r in part[new_key]]
+        st.dataframe(rows, use_container_width=True, hide_index=True)
+
+
+def review_trail() -> None:
+    """Reviewer decisions, as recorded on the d2 copy (the hosted demo never saves one)."""
+    path = ROOT / "eval" / "reports" / "review_trail_d2.json"
+    if not path.exists():
+        return
+    t = json.loads(path.read_text(encoding="utf-8"))
+    st.divider()
+    st.markdown("**Reviewer decision trail (recorded on a copy of the database)**")
+    st.caption(
+        "Decisions in this demo are simulations unless the reviewer code is given. These two "
+        "were recorded on a copy of the database (d2) with the same decision code, as a "
+        f"demonstration made on the author's instruction. Code commit `{t['code_commit'][:7]}`. "
+        "Development data."
+    )
+    st.dataframe(
+        [
+            {"RBI ref": d["before"]["ref"], "Decision": d["decision"],
+             "Status": d["result"]["status"], "Tier": d["result"]["tier"],
+             "Mapping verdict": d["result"]["mapping_verdict"] or "unchanged",
+             "Reason": d["reason"]}
+            for d in t["decisions"]
+        ],
+        use_container_width=True, hide_index=True,
+    )  # fmt: skip
+    if t["review_override"]:
+        st.caption(
+            "A dismissal also writes a correction record (review_override), later used to check "
+            "the judge against human decisions: "
+            + "; ".join(
+                f"RBI {o['ref']}: {o['old_verdict']} → {o['new_verdict']}"
+                for o in t["review_override"]
+            )  # fmt: skip
+        )
+
+
 def evaluation_page() -> None:
     st.subheader("How well does it work?")
     path = ROOT / "eval" / "reports" / "scorecard_nainital.json"
@@ -703,10 +777,12 @@ try:
         gaps_page("high")
     with tabs[2]:
         gaps_page("review")
+        review_trail()
     with tabs[3]:
         applicability_page()
     with tabs[4]:
         change_page()
+        version_history()
     with tabs[5]:
         evidence_page()
     with tabs[6]:

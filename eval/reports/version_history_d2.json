@@ -1,0 +1,169 @@
+{
+ "what": "Recorded run of the change agent's commit step on the d2 copy of the database (not the live demo database), synthetic draft circular, local qwen3:8b from the model-call cache. Development data.",
+ "code_commit": "629c76c7857d5ec8bf223e586003c7458ceba869",
+ "event": {
+  "id": "c56ec4c8-af20-4dd7-96fa-e4fedf6c08eb",
+  "received_at": "2026-10-04 05:38:05.484672+00",
+  "dry_run": false,
+  "projected_gap_delta": 1,
+  "old_version": "KYCDIR-2025-upd-20260918",
+  "new_version": "kycdir_draft_whatif",
+  "new_title": "RBI (Commercial Banks - KYC) Directions, 2025"
+ },
+ "clause_diff": [
+  {
+   "change_class": "modified",
+   "summary": "[new_duty] The amendment to clause 18 adds or changes a duty. Added: \"The bank shall inform the applicant in writing of the reason(s) for rejection within seven working days.\".",
+   "clause_ref": "18",
+   "before": "18. The Customer Acceptance Policy shall not result in denial of a banking / financial facility to members of the general public, especially those who are financially or socially disadvantaged, including the Persons with Disabilities (PwDs). The bank shall not reject an application for onboarding or periodic updation of KYC without application of mind. The officer concerned shall duly record the reason(s) for rejection.",
+   "after": "18. The Customer Acceptance Policy shall not result in denial of a banking / financial facility to members of the general public, especially those who are financially or socially disadvantaged, including the Persons with Disabilities (PwDs). The bank shall not reject an application for onboarding or periodic updation of KYC without application of mind. The officer concerned shall duly record the reason(s) for rejection. The bank shall inform the applicant in writing of the reason(s) for rejection within seven working days."
+  }
+ ],
+ "obligations": {
+  "closed": [
+   {
+    "ref": "18",
+    "action": "duly record the reason(s) for rejection",
+    "modality": "must",
+    "source_version": "KYCDIR-2025-upd-20260918",
+    "effective_from": "2026-09-18",
+    "effective_to": "2026-10-04",
+    "superseded_at": "2026-10-04 05:38:05.484672+00"
+   },
+   {
+    "ref": "18",
+    "action": "reject an application for onboarding or periodic updation of KYC without application of mind",
+    "modality": "must_not",
+    "source_version": "KYCDIR-2025-upd-20260918",
+    "effective_from": "2026-09-18",
+    "effective_to": "2026-10-04",
+    "superseded_at": "2026-10-04 05:38:05.484672+00"
+   },
+   {
+    "ref": "18",
+    "action": "result in denial of a banking / financial facility",
+    "modality": "must_not",
+    "source_version": "KYCDIR-2025-upd-20260918",
+    "effective_from": "2026-09-18",
+    "effective_to": "2026-10-04",
+    "superseded_at": "2026-10-04 05:38:05.484672+00"
+   }
+  ],
+  "added": [
+   {
+    "ref": "18",
+    "action": "duly record the reason(s) for rejection",
+    "modality": "must",
+    "source_version": "kycdir_draft_whatif",
+    "effective_from": "2026-10-04",
+    "recorded_at": "2026-10-04 05:38:05.484672+00"
+   },
+   {
+    "ref": "18",
+    "action": "inform the applicant in writing of the reason(s) for rejection",
+    "modality": "must",
+    "source_version": "kycdir_draft_whatif",
+    "effective_from": "2026-10-04",
+    "recorded_at": "2026-10-04 05:38:05.484672+00"
+   },
+   {
+    "ref": "18",
+    "action": "reject an application for onboarding or periodic updation of KYC without application of mind",
+    "modality": "must_not",
+    "source_version": "kycdir_draft_whatif",
+    "effective_from": "2026-10-04",
+    "recorded_at": "2026-10-04 05:38:05.484672+00"
+   },
+   {
+    "ref": "18",
+    "action": "result in denial of a banking / financial facility",
+    "modality": "must_not",
+    "source_version": "kycdir_draft_whatif",
+    "effective_from": "2026-10-04",
+    "recorded_at": "2026-10-04 05:38:05.484672+00"
+   }
+  ]
+ },
+ "mappings": {
+  "closed": [
+   {
+    "ref": "18",
+    "verdict": "covered",
+    "source_version": "KYCDIR-2025-upd-20260918",
+    "superseded_at": "2026-10-04 05:38:05.484672+00"
+   },
+   {
+    "ref": "18",
+    "verdict": "partial",
+    "source_version": "KYCDIR-2025-upd-20260918",
+    "superseded_at": "2026-10-04 05:38:05.484672+00"
+   },
+   {
+    "ref": "18",
+    "verdict": "missing",
+    "source_version": "KYCDIR-2025-upd-20260918",
+    "superseded_at": "2026-10-04 05:38:05.484672+00"
+   }
+  ],
+  "added": [
+   {
+    "ref": "18",
+    "verdict": "covered",
+    "source_version": "kycdir_draft_whatif",
+    "recorded_at": "2026-10-04 05:38:05.484672+00"
+   },
+   {
+    "ref": "18",
+    "verdict": "partial",
+    "source_version": "kycdir_draft_whatif",
+    "recorded_at": "2026-10-04 05:38:05.484672+00"
+   },
+   {
+    "ref": "18",
+    "verdict": "missing",
+    "source_version": "kycdir_draft_whatif",
+    "recorded_at": "2026-10-04 05:38:05.484672+00"
+   },
+   {
+    "ref": "18",
+    "verdict": "partial",
+    "source_version": "kycdir_draft_whatif",
+    "recorded_at": "2026-10-04 05:38:05.484672+00"
+   }
+  ]
+ },
+ "gaps": {
+  "closed": [
+   {
+    "ref": "18",
+    "type": "weak_modality",
+    "tier": "high",
+    "status": "open",
+    "superseded_at": "2026-10-04 05:38:05.484672+00"
+   },
+   {
+    "ref": "18",
+    "type": "missing_control",
+    "tier": "review",
+    "status": "open",
+    "superseded_at": "2026-10-04 05:38:05.484672+00"
+   }
+  ],
+  "opened": [
+   {
+    "ref": "18",
+    "type": "weak_modality",
+    "tier": "high",
+    "status": "open",
+    "rationale": "C7 allows for periodic KYC updates but does not explicitly require rejection without mind application."
+   },
+   {
+    "ref": "18",
+    "type": "weak_threshold",
+    "tier": "high",
+    "status": "open",
+    "rationale": "C9 provides more frequent reminders but does not specify the seven working day threshold."
+   }
+  ]
+ }
+}
