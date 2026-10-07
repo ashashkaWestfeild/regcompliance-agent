@@ -511,6 +511,9 @@ gap itself, and a person confirms, dismisses or accepts every finding with a nam
   - **Hidden-instruction scan.** Six English rules, 3 of 3 on three planted sentences. It is the
     second line of defence; the first is structural (no visitor text reaches a model in the
     hosted app, replies are held to a schema, and code decides).
+  - **Key reachability.** Three Dhanlaxmi decoys target references where no obligation was
+    extracted, so they could not be flagged; a key should be checked for this before it is frozen
+    (every target reference must have an extracted obligation). All 20 planted rows pass.
   - **Least-privilege database role.** The hosted app should connect with a role that can read,
     write the model cache and record review decisions, and nothing else.
 - Next: a bank profile built from independent facts (licences, product lists) instead of the policy's own text, so that applicability can exclude; a design check for owners the regulation itself names; a wider comparison for reworded
@@ -530,7 +533,9 @@ type:
 - reported outputs acceptable: high-confidence findings real in blind samples after the
   full-policy check 8 of 9, 9 of 9, 4 of 10 (21 of 28 overall);
   hidden instructions caught 3 of 3;
-  decoys left alone 7 of 9 (first scoring 6 of 9, see the third bank's report); real findings
+  decoys left alone 7 of 9 (6 of 9 location-tolerant, 3 of the 9 unreachable:
+  [details](../eval/reports/decoys_location_tolerant.md); first scoring 6 of 9, see the third
+  bank's report); real findings
   handled 4 of 4;
 - a majority of planted gaps raised at the right obligation, 11 of 20 (9 of 20 at the exact
   passage); every changed number found, 7 of 7;

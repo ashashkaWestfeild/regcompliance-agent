@@ -11,7 +11,7 @@ was built on. Demo times refer to the video script and are confirmed after recor
   demo; 4 is partial; 13 and 14 are not claimed.
 - **D1** (acceptable outputs in a majority of situations), three unseen banks, frozen v1, per
   output type: high-confidence findings real in blind samples after the full-policy check 8 of 9, 9 of 9, 4 of 10 (21 of 28 overall); hidden
-  instructions 3 of 3; decoys left alone 7 of 9 (first scoring 6 of 9: three code-only steps first
+  instructions 3 of 3; decoys left alone 7 of 9 (6 of 9 location-tolerant; 3 of the 9 unreachable, [details](../eval/reports/decoys_location_tolerant.md); first scoring 6 of 9: three code-only steps first
   ran with the development bank's defaults, P-057); real findings 4 of 4; a majority of planted
   gaps at the right obligation, 11 of 20 (9 of 20 exact). Blind spot: deleted duties 0 of 4.
 - **Not D2.** A pre-registered attempt (`eval/d2_bar.md`) was stopped by its own gate on 3 Oct,

@@ -82,9 +82,12 @@ seen, frozen v1 (tag `eval-freeze-2026-10-03`), per output type:
 - planted gaps: a majority raised at the right obligation, 11 of 20 (9 of 20 at the exact passage);
 - blind spot, disclosed: deleted duties 0 of 4.
 
-Decoys are scored strictly (at the exact passage). Under the location-tolerant rule used for 11 of
-20, decoy near hits were not recorded; the strict pair is 9 of 20 planted against 7 of 9 decoys
-left alone.
+Decoys are scored strictly (at the exact passage). Both pairs, complete: strict, 9 of 20 planted
+against 7 of 9 decoys left alone; location-tolerant (any passage at the right obligation), 11 of
+20 against 6 of 9. Three of the nine decoys (Dhanlaxmi) sit at references where no obligation was
+extracted, so they could not have been flagged under either rule: on the six reachable decoys,
+4 of 6 strict and 3 of 6 location-tolerant
+([details](eval/reports/decoys_location_tolerant.md)).
 
 Not D2: high demonstrable reliability is not shown on omitted duties, and a pre-registered D2
 attempt stopped at its own gate (see Limits).
