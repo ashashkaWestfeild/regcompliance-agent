@@ -217,3 +217,38 @@ def test_candidates_fall_back_to_shared_wording_without_an_embedding_service(mon
     found = execute.candidates_for(Conn(), ob)
     # best wording first; c3 repeats c2's policy text (same span) and is dropped; c4 shares nothing
     assert [c["id"] for c in found] == ["c2", "c1"] or [c["id"] for c in found] == ["c2"]
+
+
+def test_a_second_commit_of_the_same_amendment_is_refused():
+    import contextlib
+    from types import SimpleNamespace
+
+    import pytest
+
+    from regcomp.change.commit import AlreadyCommitted, commit
+
+    class Conn:
+        def __init__(self):
+            self.sql = []
+
+        def transaction(self):
+            return contextlib.nullcontext()
+
+        def execute(self, sql, params=None):
+            self.sql.append(sql)
+            if "kind = 'master_direction'" in sql:
+                row = ("old-doc", "RBI", "KYC Directions")
+            elif "WHERE sha256" in sql:
+                row = ("new-doc",)  # this text is already stored
+            elif "FROM change_event" in sql:
+                row = ("c56ec4c8-0000",)  # and it was committed, not just a dry run
+            else:
+                raise AssertionError(f"nothing may be written: {sql[:40]}")
+            return SimpleNamespace(fetchone=lambda: row)
+
+    conn = Conn()
+    doc = SimpleNamespace(text="the same text", clauses=[])
+    state = {"changes": [], "scope": {"direct": [], "by_definition": [], "mappings": []}}
+    with pytest.raises(AlreadyCommitted, match="already committed .*nothing was written"):
+        commit(conn, "data/raw/rbi/kycdir_v3.html", doc, state, None, "t1")
+    assert not any(s.lstrip().startswith(("INSERT", "UPDATE")) for s in conn.sql)

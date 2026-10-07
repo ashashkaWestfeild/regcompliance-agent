@@ -18,6 +18,10 @@ from regcomp.llm import model_for
 from regcomp.risk import assess
 
 
+class AlreadyCommitted(ValueError):
+    """The new version's text was committed before: a second commit is refused."""
+
+
 def _document(conn, new_path: str, doc) -> tuple:
     """(id of the current regulation document, id of the new version's document row)."""
     old = conn.execute(
@@ -27,6 +31,16 @@ def _document(conn, new_path: str, doc) -> tuple:
     sha = hashlib.sha256(doc.text.encode()).hexdigest()
     row = conn.execute("SELECT id FROM document WHERE sha256 = %s", (sha,)).fetchone()
     if row:
+        done = conn.execute(
+            "SELECT id FROM change_event WHERE new_document_id = %s AND NOT dry_run LIMIT 1",
+            (row[0],),
+        ).fetchone()
+        if done:
+            # Committing the same text twice would supersede the rows it added and add copies.
+            raise AlreadyCommitted(
+                f"{Path(new_path).name} is already committed (change event {str(done[0])[:8]});"
+                " nothing was written"
+            )
         return old[0], row[0]
     synthetic = "synthetic" in Path(new_path).parts
     new = conn.execute(
