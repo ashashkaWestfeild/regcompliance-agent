@@ -7,13 +7,14 @@ was built on. Demo times refer to the video script and are confirmed after recor
 
 **Claim: F3 / D1**, against the brief's definitions (full statement: README, "Grid position").
 
-- **F3.** 11 of 14: 9 on real policies, plus 6 and 7 on development data with synthetic logs (1, 2, 3, 5, 8, 9, 10, 11, 12; then 6 and 7), all in the live
-  demo; 4 is partial; 13 and 14 are not claimed.
+- **F3.** F3 needs 8 of the 14 features: 9 are shown on real data (1, 2, 3, 5, 8, 9, 10, 11,
+  12). Partial: 6 and 7 (in the demo, on synthetic logs for two controls of the development bank)
+  and 4. Not claimed: 13 and 14.
 - **D1** (acceptable outputs in a majority of situations), three unseen banks, frozen v1, per
-  output type: high-confidence findings real in blind samples after the full-policy check 8 of 9, 9 of 9, 4 of 10 (21 of 28 overall); hidden
-  instructions 3 of 3; decoys left alone 7 of 9 (4 of 6 that could be flagged; 3 Dhanlaxmi decoys unreachable, [details](../eval/reports/decoys_location_tolerant.md); first scoring 6 of 9: three code-only steps first
-  ran with the development bank's defaults, P-057); real findings 4 of 4; a majority of planted
-  gaps at the right obligation, 11 of 20 (9 of 20 exact). Blind spot: deleted duties 0 of 4.
+  output type: high-confidence findings real 21 of 28 (Central Bank 8 of 9, Dhanlaxmi 9 of 9,
+  South Indian Bank 4 of 10); weakened numbers 7 of 7; hidden instructions 3 of 3; decoys left
+  alone 7 of 9; real findings 4 of 4; a majority of planted gaps at the right obligation, 11 of 20
+  (9 of 20 exact). Blind spot: deleted duties 0 of 4. Caveats: see below.
 - **Not D2.** A pre-registered attempt (`eval/d2_bar.md`) was stopped by its own gate on 3 Oct,
   on development data and before any third-bank run: 1 of 4 target misses found, new-finding
   ceiling broken on all three development banks (local qwen3:8b; closing note on the unmerged
@@ -21,6 +22,26 @@ was built on. Demo times refer to the video script and are confirmed after recor
 - **Scope of the demo.** One regulation (RBI KYC Directions) end to end; published bank policies
   (no control libraries, SOPs or test records); no upload in the hosted app (new inputs run
   offline on the local GPU). The demo never writes: one commit of the change agent and two reviewer decisions, recorded on a copy of the database (d2, development data), are shown read-only.
+
+## Caveats behind the headline numbers
+
+Moved here from the README on 8 Oct 2026, word for word where possible, so the headlines carry one
+number each. Nothing below changes a frozen result.
+
+- **Decoys, 7 of 9.** Scored strictly, at the exact passage, and D1 rests on that rule. Three of
+  the nine (all Dhanlaxmi) sit at references where no obligation was extracted, so they could not
+  have been flagged: of the six that could, 4 were left alone. For completeness, not as D1
+  evidence: under the location-tolerant rule used for 11 of 20, 6 of 9 were left alone (3 of the 6)
+  ([details](../eval/reports/decoys_location_tolerant.md)).
+- **First scoring of the third bank.** It gave decoys 6 of 9 (South Indian Bank 1 high-confidence
+  and 1 review flag): three code-only steps first ran with the development bank's defaults, so its
+  synthetic evidence log flagged a decoy; they were re-run with the bank's own setting, as for the
+  other two banks, and no model output changed
+  ([report](../eval/reports/heldout_southindianbank_report.md), P-057).
+- **Precision as first labelled.** 24 of 28 (South Indian Bank 7 of 10) before the full-policy
+  check; 21 of 28 after it, under the three-part test applied to all three banks
+  ([report](../eval/reports/heldout_precision/report.md)).
+- **Weakened numbers, 7 of 7.** All found, all high-confidence; 4 of 7 with the right gap type.
 
 | # | Feature | Demo | Architecture | Measured |
 |---|---|---|---|---|
@@ -33,8 +54,8 @@ was built on. Demo times refer to the video script and are confirmed after recor
 | 9 | Risk-based gap prioritisation | Gaps tab: residual risk and priority | §2 stage 8 | Rule-based rubric ([`risk_rubric.yaml`](../data/risk_rubric.yaml)); not scored against a key |
 | 11 | Autonomous regulatory impact analysis | Change agent: scope and gaps that would open or close | §4 | 3 of 458 mappings in the scope of each real amendment; wall time per circular (dry run, first run included): hosted model 1.1 to 22 s, local qwen3:8b on one laptop GPU 1.7 to 81 s; analyst baseline 5-10 h is the author's estimate ([timing](../eval/reports/change_agent_timing.json)) |
 | | **Built extras** | | | |
-| 6 | Control effectiveness (design and operating) | Evidence tab: design tests of every cited control; operating tests | §2 stage 6 | Design (rule: owner, frequency and evidence stated, not judged adequate): 213 cited controls of the development policy, 74 design-effective, 139 missing an attribute; not scored against a key. Operating, synthetic logs: 4 of 4 results match the generated exception rates (2 stored, 2 in the October batch) |
-| 7 | Evidence-based assessment and monitoring | Evidence tab: "Test a new evidence batch (simulation)", live in code, nothing written | §4 (second trigger) | October batch against each control's last result: re-KYC 42(1) newly failing (121 of 1,200 overdue, tolerance 5%), CKYCR 65(2) recovered (13 of 600 late); a recovered control waits for a reviewer; the model never sees evidence rows |
+| 6 | Control effectiveness (design and operating), **partial**: synthetic logs, two controls of the development bank | Evidence tab: design tests of every cited control; operating tests | §2 stage 6 | Design (rule: owner, frequency and evidence stated, not judged adequate): 213 cited controls of the development policy, 74 design-effective, 139 missing an attribute; not scored against a key. Operating, synthetic logs: 4 of 4 results match the generated exception rates (2 stored, 2 in the October batch) |
+| 7 | Evidence-based assessment and monitoring, **partial**: synthetic logs, two controls of the development bank | Evidence tab: "Test a new evidence batch (simulation)", live in code, nothing written | §4 (second trigger) | October batch against each control's last result: re-KYC 42(1) newly failing (121 of 1,200 overdue, tolerance 5%), CKYCR 65(2) recovered (13 of 600 late); a recovered control waits for a reviewer; the model never sees evidence rows |
 | 10 | Remediation recommendations | Gaps tab: one remedy per paragraph, owner and due date | §2 stage 9 | Every open high-confidence gap on dev has a remedy: 24 gaps, 16 remedies (one per paragraph, 3 Oct); 11 keep the model's wording, 4 were replaced by the regulation's own sentence after failing the fidelity check, 1 is a rule-written evidence remedy. Remedies follow the gaps, so a false alarm gets a remedy too; appropriateness not rated |
 | 12 | What-if and simulation | Change agent on a draft circular; Applicability tab what-if | §4 | Dry run cannot reach the write step; hypothetical "no V-CIP": 12 obligations stop applying, 6 open gaps drop out (nothing written) |
 | | Applicability by bank profile | Applicability tab | §2 stage 3b | Excluded nothing on the three banks tested; no accuracy number of its own |

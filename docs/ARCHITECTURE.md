@@ -71,8 +71,8 @@ closes the old one in time; nothing is deleted.
 | 3 | Obligation extraction | Stages 2-3 (model + citation gate, level) | Gaps tab; scenario 3 re-extracts live |
 | 4 | Control-framework understanding (partial) | Stage 2 controls, every policy passage | Gaps tab (policy text, not a control library) |
 | 5 | Regulation-to-control mapping | Stages 4-5 (candidates, judge) | Gaps tab; scenario 3 re-maps live |
-| 6 | Control effectiveness | Stage 6 (design and operating tests, code) | Evidence tab: design tests of 213 cited controls; operating results |
-| 7 | Evidence-based assessment and monitoring | Stage 6 and the evidence trigger (`scripts/run_evidence.py`, `monitor.preview_batch`) | Evidence tab: a new batch tested live in memory |
+| 6 | Control effectiveness (partial: synthetic logs) | Stage 6 (design and operating tests, code) | Evidence tab: design tests of 213 cited controls; operating results |
+| 7 | Evidence-based assessment and monitoring (partial: synthetic logs) | Stage 6 and the evidence trigger (`scripts/run_evidence.py`, `monitor.preview_batch`) | Evidence tab: a new batch tested live in memory |
 | 8 | Gap identification | Stage 5 gap rules, §3 wording comparison and tiers | Gaps and Review queue |
 | 9 | Risk-based prioritisation | Stage 8 (rubric) | Gaps tab |
 | 10 | Remediation recommendations | Stage 9 (model draft + fidelity check) | Gaps tab |
@@ -525,9 +525,10 @@ gap itself, and a person confirms, dismisses or accepts every finding with a nam
 
 **F3 / D1**, against the brief's definitions.
 
-**F3 needs at least 8 of 14 features. We show 11 of 14: 9 on real policies, plus 6 and 7 on development data with synthetic logs**, all in the live demo: 1, 2, 3, 5,
-8, 9, 10, 11, 12, then 6 and 7 (see the feature → stage map in §2).
-Partial: 4 (policy text, not a control library). Not claimed: 13, 14.
+**F3 needs 8 of the 14 features: 9 are shown on real data**, in the live demo: 1, 2, 3, 5, 8, 9,
+10, 11, 12 (see the feature → stage map in §2). Partial: 6 and 7 (in the demo, on synthetic logs
+for two controls of the development bank) and 4 (policy text, not a control library). Not
+claimed: 13, 14.
 
 **D1 (acceptable outputs in a majority of situations)**, three unseen banks, frozen v1, per output
 type:

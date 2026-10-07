@@ -17,14 +17,15 @@ minute)
   agent re-checks only the amended paragraph (3 of 458 mappings) and reports the gaps it would
   open and close: 1 to 22 seconds per circular, against 5 to 10 analyst hours by our estimate.
 - **Measured on three banks it had never seen**, with answer keys frozen before the first run:
-  21 of 28 high-confidence findings were real gaps, every weakened number was found (7 of 7) and
-  every hidden instruction caught (3 of 3). Its blind spot: deleted duties (0 of 4).
+  weakened numbers found 7 of 7; hidden instructions caught 3 of 3; decoys left alone 7 of 9;
+  high-confidence findings real 21 of 28 (Central Bank 8 of 9, Dhanlaxmi 9 of 9, South Indian
+  Bank 4 of 10); planted gaps at the right obligation 11 of 20 (at the exact passage 9 of 20).
+  Its blind spot: deleted duties (0 of 4).
 - **Every finding cited to its source**: the RBI sentence beside the policy sentence, cut from
   the documents by position, so a citation cannot be invented.
 
-How each number was measured, per bank and with every caveat: [Grid position](#grid-position-f3--d1)
-and [Results](#results-counts). Every claimed feature, where to see it in the demo, and what was
-measured: the [evidence matrix](docs/EVIDENCE.md).
+Every caveat behind these numbers, one click away: [caveats](docs/EVIDENCE.md#caveats-behind-the-headline-numbers). Every claimed feature,
+where to see it in the demo, and what was measured: the [evidence matrix](docs/EVIDENCE.md).
 
 To try it: open the link, go to the **Change agent** tab and press *Run the agent* (the 29 Dec
 2025 amendment is preselected); then **Gaps** → row 65(10)(iv) → *Source citation*; then
@@ -99,15 +100,14 @@ reviewer does.
 
 Measured against the brief's own definitions.
 
-**F3 needs at least 8 of the 14 features. We show 11 of 14: 9 on real policies, plus 6 and 7 on development data with synthetic logs.** In the live demo: 1 regulatory
+**F3 needs 8 of the 14 features: 9 are shown on real data.** In the live demo: 1 regulatory
 ingestion, 2 change intelligence, 3 obligation extraction, 5 regulation-to-control mapping,
-6 control effectiveness (design tests of the 213 cited controls; operating tests on synthetic
-logs), 7 evidence-based assessment and monitoring (a new evidence batch is tested live against
-each control's last result), 8 gap identification, 9 risk-based prioritisation, 10 remediation
-recommendations, 11 autonomous impact analysis, 12 what-if. Features 6 and 7 run on the
-development bank with synthetic logs. Partial: 4 control-framework understanding (controls are
-read from published policy text, not a control library). Not claimed: 13 cross-regulation
-intelligence, 14 contradiction detection.
+8 gap identification, 9 risk-based prioritisation, 10 remediation recommendations, 11 autonomous
+impact analysis, 12 what-if. Partial: 6 control effectiveness and 7 evidence-based assessment
+and monitoring (both run in the demo, on synthetic logs for two controls of the development
+bank), and 4 control-framework understanding (controls are read from published policy text,
+not a control library). Not claimed: 13 cross-regulation intelligence, 14 contradiction
+detection.
 
 **Supporting features** (the brief counts them on the same axis):
 
@@ -125,25 +125,17 @@ intelligence, 14 contradiction detection.
 **D1 (acceptable outputs in a majority of situations)**, on three banks the system had never
 seen, frozen v1 (tag `eval-freeze-2026-10-03`), per output type:
 
-- reported outputs acceptable: high-confidence findings that are real gaps, blind sample,
-  after the full-policy check 8 of 9, 9 of 9 and 4 of 10 (21 of 28 overall; 24 of 28 as first
-  labelled); hidden
-  instructions caught 3 of 3; decoys left alone 7 of 9 (4 of 6 that could be flagged; see note);
-  real findings handled 4 of 4;
+- reported outputs acceptable: high-confidence findings real 21 of 28 (Central Bank 8 of 9,
+  Dhanlaxmi 9 of 9, South Indian Bank 4 of 10); weakened numbers found 7 of 7; hidden instructions
+  caught 3 of 3; decoys left alone 7 of 9; real findings handled 4 of 4;
 - planted gaps: a majority raised at the right obligation, 11 of 20 (9 of 20 at the exact passage);
 - blind spot, disclosed: deleted duties 0 of 4.
 
+How each figure is scored, and its variants (decoy reachability, first scoring, location-tolerant
+rule, labels as first given): [caveats](docs/EVIDENCE.md#caveats-behind-the-headline-numbers).
+
 Not D2: high demonstrable reliability is not shown on omitted duties, and a pre-registered D2
 attempt stopped at its own gate (see Limits).
-
-Note on decoys: they are scored strictly, at the exact passage, and D1 rests on that rule. Three
-of the nine (all Dhanlaxmi) sit at references where no obligation was extracted, so they could
-not have been flagged: of the six that could, 4 were left alone. For completeness, not as D1
-evidence: under the location-tolerant rule used for 11 of 20, 6 of 9 were left alone (3 of the 6)
-([details](eval/reports/decoys_location_tolerant.md)). The first scoring of the third bank gave
-6 of 9: three code-only steps first ran with the development bank's defaults, so its synthetic
-evidence log flagged a decoy; they were re-run with the bank's own setting, as for the other two
-banks, and no model output changed ([report](eval/reports/heldout_southindianbank_report.md)).
 
 ## Results (counts)
 
@@ -161,8 +153,7 @@ system. Three other banks were each run once, from a clean checkout of the tag
   tier (4 of 7 with the right gap type);
 - hidden instructions in the policy: **3 of 3** caught;
 - real findings in the published policies: **4 of 4** handled correctly;
-- decoys (rewordings and stricter numbers) left alone: **7 of 9**, 4 of the 6 that could be
-  flagged (three Dhanlaxmi decoys were unreachable; first scoring 6 of 9; see the note above);
+- decoys (rewordings and stricter numbers) left alone: **7 of 9** ([caveats](docs/EVIDENCE.md#caveats-behind-the-headline-numbers));
 - change detection against RBI's own amendment markers: **2 of 2** on the KYC Direction and
   **262 of 266** amended clauses on nine other Directions.
 
@@ -176,7 +167,7 @@ system. Three other banks were each run once, from a clean checkout of the tag
 | Planted gaps found at the exact passage | 5 of 7 | 3 of 7 | 2 of 6 | 4 of 7 |
 | ...of which in the high-confidence tier | 3 | 3 | 2 | 2 |
 | Planted gaps found at the right obligation | 6 of 7 | 4 of 7 | 3 of 6 | 4 of 7 |
-| Decoys flagged: high-confidence / review | 0 / 1 of 3 | 1 / 0 of 3 | 0 / 0 of 3 (all 3 unreachable: no obligation at their references) | 0 / 1 of 3 (first scoring 1 / 1) |
+| Decoys flagged: high-confidence / review | 0 / 1 of 3 | 1 / 0 of 3 | 0 / 0 of 3 (unreachable) | 0 / 1 of 3 |
 | Hidden instruction flagged | 1 of 1 | 1 of 1 | 1 of 1 | 1 of 1 |
 | Other reports: high-confidence + review | 17 + 38 | 15 + 36 | 42 + 43 | 12 + 29 |
 | Applicability: obligations excluded | 0 of 458 | 0 of 458 | 0 of 458 | 0 of 458 |
@@ -188,7 +179,7 @@ Gemini, helped write the reasons); every "gap" label was then checked against th
 
 | | Central Bank | Dhanlaxmi | South Indian Bank |
 |---|---|---|---|
-| Sampled findings that are real gaps (of those decided) | 8 of 9 | 9 of 9 | 4 of 10 (7 of 10 as first labelled) |
+| Sampled findings that are real gaps (of those decided) | 8 of 9 | 9 of 9 | 4 of 10 |
 | ...counting duties only (leaving out reliefs the policy has not adopted) | 6 of 7 | 8 of 8 | 4 of 10 |
 | Unsure | 1 | 1 | 0 |
 | Sampled covered pairs that really are covered | 8 of 10 (one miss is planted gap C05) | 9 of 10 | 9 of 10 (the miss is planted gap S01) |
@@ -243,7 +234,7 @@ model extracted three.
   versions (28 Nov 2025, and after the amendments of 29 Dec 2025 and 18 Sep 2026), plus nine other
   RBI Directions used only to test change detection.
 - **Bank policies:** the published KYC/AML policies of Nainital Bank (development), Central Bank
-  of India and Dhanlaxmi Bank (both held out).
+  of India, Dhanlaxmi Bank and South Indian Bank (all three held out).
 - **Evidence:** synthetic logs with identifiers only.
 - **A synthetic draft circular** for the what-if demo: one invented sentence added to the current
   Direction, clearly marked.
@@ -262,7 +253,7 @@ Prerequisites: Python 3.13 and [uv](https://docs.astral.sh/uv/); Docker for a lo
 ```bash
 uv sync                         # core
 uv sync --extra pdf             # adds Docling for PDF parsing (large)
-uv run pytest                   # 138 tests, no database needed
+uv run pytest                   # 152 tests, no database needed
 cp .env.example .env            # already points at the compose database below
 docker compose up -d            # Postgres 18 + pgvector; db/schema.sql loads on first start
 uv run python scripts/db_init.py  # applies the migrations (safe to re-run)
