@@ -32,7 +32,7 @@ from regcomp.ingest.pdf_docling import parse_policy_items
 from regcomp.ingest.rbi_html import parse_file
 from regcomp.llm import STAGE_MODELS, LLMError, embed
 from regcomp.pipeline import rerank as rerank_mod
-from regcomp.pipeline.judge import judge_unit
+from regcomp.pipeline.judge import judge_unit, unclear
 from regcomp.pipeline.passages import passage_controls
 from regcomp.pipeline.rerank import rerank
 from regcomp.policies import policy
@@ -364,13 +364,17 @@ def main() -> int:
                 judged = judge_unit(payload, candidates, conn, think=args.judge_think)
             except LLMError as e:
                 # One unit's judge call failing (e.g. a runaway generation) must not end a
-                # multi-hour run: skip the unit, count it, and report it.
+                # multi-hour run: count it, report it, and send its obligations to review
+                # (never silently "no gap", B1 7 Oct).
                 failed_units.append(obs[0]["unit_ref"])
                 print(
                     f"[{time.strftime('%H:%M:%S')}] judge failed on unit {obs[0]['unit_ref']}: {e}",
                     flush=True,
                 )
-                judged = []
+                judged = [
+                    unclear(p["id"], f"the judge call failed: {e}", (p["candidates"] or [None])[0])
+                    for p in payload
+                ]
             for r in judged:
                 o = obs[int(r["obligation"][1:]) - 1]
                 r["control_uuid"] = local.get(r["control"]) if r["control"] else None
@@ -456,6 +460,24 @@ def write_mappings_and_gaps(conn, obligations, results, hits, run: Path):
             )
             if r["gap_type"] and o["level"] != "policy":
                 not_policy[o["level"]] += 1  # reported, but not a policy gap (user rule)
+            elif r.get("unclear"):
+                # an unusable judgment: an unspecified gap in the review queue, for a person
+                cur.execute(
+                    "INSERT INTO gap (key, source_version, effective_from, type, obligation_id,"
+                    " control_id, mapping_id, inherent_risk, residual_risk, priority_score,"
+                    " rationale, tier, evidence) VALUES"
+                    " (%s,%s,%s,'unspecified',%s,%s,%s,'medium','medium',0.5,%s,'review',%s)",
+                    (
+                        f"GAP:{o['id']}",
+                        REG_VERSION,
+                        REG_EFFECTIVE,
+                        o["id"],
+                        r["control_uuid"],
+                        mid,
+                        r["rationale"],
+                        Jsonb({"check": "judge_unclear", "detail": r["unclear"]}),
+                    ),
+                )
             elif r["gap_type"]:
                 inherent, score = risk.get(r["verdict"], ("medium", 0.5))
                 cur.execute(

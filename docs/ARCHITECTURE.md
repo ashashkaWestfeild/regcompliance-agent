@@ -274,6 +274,17 @@ Not fixed: the contradiction, the duty made optional where the regulation senten
 
 ### Held-out results
 
+> **Code of record.** Every evaluated number comes from the tag `eval-freeze-2026-10-03`. `main`
+> carries fixes made after the freeze (7 Oct 2026): model replies are validated against their
+> schema with one repair retry (B2); the judge fails closed, so an unusable or missing answer goes
+> to the review queue as an unspecified gap instead of silently counting as "no gap" (B1); plus
+> hardening outside the pipeline (database guard, review row lock, no second commit of an
+> amendment, simulated review decisions rolled back as a whole). Audit of the model-call caches
+> on 7 Oct: 0 of 6,829 cached replies miss their schema, and with the evaluated prompts the judge
+> left no obligation out and gave no unknown verdict in 2,112 calls (the only 38 omissions are
+> from one 27 Sep call with an older prompt). So re-running `main` on the cached data reproduces
+> the evaluated results; the result lock is unchanged.
+
 > **Since 3 Oct 2026:** Central Bank and Dhanlaxmi have been studied (the D2 error analysis on
 > the `d2` branch), so the figures below are the v1 result of record and are no longer evidence
 > of anything unseen. A third bank, South Indian Bank (key frozen at `c556c42`), was run once by

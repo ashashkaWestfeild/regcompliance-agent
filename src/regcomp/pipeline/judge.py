@@ -20,6 +20,8 @@ the policy states as an option ("may"). It maps to the gap type weak_modality, p
 set 2 only (user review of that key), so the dev set shows its side effects but not its recall.
 """
 
+import sys
+
 from regcomp.llm import complete_json
 from regcomp.pipeline.extract import sentence_from
 
@@ -109,11 +111,32 @@ def gap_type(verdict: str, issue: str, modality: str = "must") -> str | None:
     return None
 
 
+VERDICTS = ("covered", "partial", "missing")
+
+
+def unclear(obligation: str, why: str, control: str | None = None) -> dict:
+    """A judgment the model did not give in a usable form. Never "no gap": it becomes an
+    unspecified gap that goes to the review queue, and a person decides (B1, 7 Oct 2026)."""
+    return {
+        "obligation": obligation,
+        "verdict": "partial",
+        "control": control,
+        "issue": "unclear",
+        "rationale": f"Unclear judgment, sent to review: {why}.",
+        "control_quote_start": None,
+        "confidence": 0.0,
+        "citation_ok": False,
+        "gap_type": "unspecified",
+        "unclear": why,
+    }
+
+
 def judge_unit(
-    obligations: list[dict], candidates: dict[str, dict], conn, think: bool = False
+    obligations: list[dict], candidates: dict[str, dict], conn, think: bool = False, retry=True
 ) -> list[dict]:
     """obligations: [{id, modality, action, threshold, applies_to, quote}];
-    candidates: {control_id: {quote, owner, frequency, ...}}. Returns gated results."""
+    candidates: {control_id: {quote, owner, frequency, ...}}. Returns gated results, one per
+    obligation: an answer the model left out is asked for once more, then sent to review."""
     lines = ["<obligations>"]
     for o in obligations:
         extras = "; ".join(f"{k}: {o[k]}" for k in ("threshold", "applies_to") if o.get(k))
@@ -131,9 +154,14 @@ def judge_unit(
     known = {o["id"] for o in obligations}
     modality = {o["id"]: o["modality"] for o in obligations}
     top_candidate = {o["id"]: o["candidates"][0] for o in obligations if o.get("candidates")}
-    out = []
+    out, answered = [], set()
     for r in raw.get("results", []):
         if r.get("obligation") not in known:
+            continue
+        answered.add(r["obligation"])
+        if r.get("verdict") not in VERDICTS or r.get("issue") not in ISSUES:
+            why = f"the reply gave verdict {r.get('verdict')!r} and issue {r.get('issue')!r}"
+            out.append(unclear(r["obligation"], why, top_candidate.get(r["obligation"])))
             continue
         r["citation_ok"] = True
         if r["verdict"] == "missing":
@@ -150,4 +178,18 @@ def judge_unit(
             r["verdict"], r["citation_ok"] = "missing", False  # nothing retrievable to cite
         r["gap_type"] = gap_type(r["verdict"], r["issue"], modality[r["obligation"]])
         out.append(r)
+    left_out = [o for o in obligations if o["id"] not in answered]
+    if left_out:
+        ids = ", ".join(o["id"] for o in left_out)
+        print(
+            f"judge: no answer for {len(left_out)} of {len(obligations)} obligations ({ids}); "
+            + ("asking once more" if retry else "sent to review"),
+            file=sys.stderr,
+            flush=True,
+        )
+        if retry:
+            out += judge_unit(left_out, candidates, conn, think, retry=False)
+        else:
+            why = "the model's reply left it out, twice"
+            out += [unclear(o["id"], why, top_candidate.get(o["id"])) for o in left_out]
     return out

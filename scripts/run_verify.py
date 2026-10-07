@@ -86,7 +86,11 @@ def undo(conn) -> None:
         " control_id = (evidence->>'judge_control')::uuid"
         " WHERE evidence ? 'judge_type'"
     )
-    conn.execute("UPDATE gap SET tier = 'high', evidence = NULL WHERE evidence IS NOT NULL")
+    # an unclear judgment (judge_unclear) stays in review: no comparison re-tiers it
+    conn.execute(
+        "UPDATE gap SET tier = 'high', evidence = NULL WHERE evidence IS NOT NULL"
+        " AND evidence->>'check' IS DISTINCT FROM 'judge_unclear'"
+    )
 
 
 def control_at(controls: list[tuple], start: int, end: int):
@@ -119,6 +123,7 @@ def main() -> None:
             " g.id, g.type::text, g.control_id"
             " FROM obligation o JOIN mapping m ON m.obligation_id = o.id"
             " LEFT JOIN gap g ON g.mapping_id = m.id AND g.type <> 'operating_failure'"
+            " WHERE m.judges->0->>'unclear' IS NULL"
         ).fetchall()
         obligations = [dict(zip(FIELDS, r, strict=True)) for r in rows]
 
