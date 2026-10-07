@@ -68,8 +68,8 @@ flowchart TD
     D -->|nothing changed in substance| NC([no_change: end])
     D --> SC["scope<br/>obligations, mappings and gaps the change touches"]
     SC --> G{"gate<br/>over 20% of<br/>mappings?"}
-    G -->|"yes: the run pauses;<br/>a person stops it"| RJ([rejected: end])
-    G -->|"no, a person approves,<br/>or a dry run"| P["plan<br/>re-extract, re-map, advisories"]
+    G -->|"over 20%: pauses;<br/>the person says no"| RJ([rejected: end])
+    G -->|"under 20%, a dry run,<br/>or the person says yes"| P["plan<br/>re-extract, re-map, advisories"]
     P -->|nothing to re-analyse, e.g. an advisory| AD([end])
     P -->|a new duty or a changed number| RX["re_extract<br/>obligations of the changed clauses"]
     RX --> RM["re_map<br/>retrieve and judge only those"]
