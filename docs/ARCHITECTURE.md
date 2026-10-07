@@ -302,7 +302,7 @@ confidence checks in `eval/reports/` carry the evaluated tag.
 |---|---|---|---|
 | Planted gaps, exact passage | 3 of 7 (all high-confidence) | 2 of 6 (all high-confidence) | 4 of 7 (2 high-confidence, 2 review) |
 | Planted gaps, right obligation | 4 of 7 | 3 of 6 | 4 of 7 |
-| Decoys flagged | 1 of 3, high-confidence | 0 of 3 | 1 of 3, review (first scoring 2 of 3, see its report) |
+| Decoys flagged | 1 of 3, high-confidence | 0 of 3 (all 3 unreachable: no obligation at their references) | 1 of 3, review (first scoring 2 of 3, see its report) |
 | Hidden instruction flagged | 1 of 1, by the code-level scan only | 1 of 1, by the code-level scan only | 1 of 1, by the code-level scan only |
 | Other reports: high-confidence + review | 15 + 36 | 42 + 43 | 12 + 29 |
 | Obligations excluded by applicability | 0 | 0 (3 to confirm) | 0 |
@@ -471,8 +471,8 @@ gap itself, and a person confirms, dismisses or accepts every finding with a nam
   covers two controls of the development bank.
 - **Inputs.** One regulation end to end (the RBI KYC Directions, HTML and PDF) and published bank
   KYC/AML policies (PDF). No control libraries, SOPs, RCSA registers or test records, and no
-  upload in the hosted app: a new policy runs offline (about 1,190 model calls and about 55
-  minutes on one laptop GPU, measured on the third bank).
+  upload in the hosted app: a new policy runs offline (on the third bank, 405 new model calls
+  and about 50 model-minutes on one laptop GPU, the regulation side coming from the cache).
 - **In a bank:** the same components inside the bank's network: Postgres, an internal model
   server, the policy and evidence never leaving it.
 
@@ -533,7 +533,7 @@ type:
 - reported outputs acceptable: high-confidence findings real in blind samples after the
   full-policy check 8 of 9, 9 of 9, 4 of 10 (21 of 28 overall);
   hidden instructions caught 3 of 3;
-  decoys left alone 7 of 9 (6 of 9 location-tolerant, 3 of the 9 unreachable:
+  decoys left alone 7 of 9, 4 of the 6 that could be flagged (3 Dhanlaxmi decoys unreachable:
   [details](../eval/reports/decoys_location_tolerant.md); first scoring 6 of 9, see the third
   bank's report); real findings
   handled 4 of 4;

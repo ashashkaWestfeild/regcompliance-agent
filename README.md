@@ -13,18 +13,17 @@ minute)
 
 **In one minute**
 
-- **1 to 22 seconds per circular on the hosted model, first run included, against 5 to 10
-  analyst hours** (our own estimate): on RBI's
-  real 29 Dec 2025 amendment the agent re-checks only the amended paragraph and reports the gaps
-  it would open and close.
-- **Measured on three banks it had never seen**, with answer keys frozen in git before the first
-  run and the code run once from a tagged commit: every weakened number found (7 of 7), every
-  hidden instruction caught (3 of 3), and high-confidence findings that were real gaps in blind
-  samples, after a full-policy check: 8 of 9, 9 of 9 and 4 of 10 (21 of 28 overall). On the
-  third bank most high-confidence findings were duties the policy states in a different passage
-  from the one the system compared. Deleted duties are its blind spot (0 of 4).
+- **An RBI amendment re-checked in seconds, not hours.** On RBI's real 29 Dec 2025 amendment the
+  agent re-checks only the amended paragraph (3 of 458 mappings) and reports the gaps it would
+  open and close: 1 to 22 seconds per circular, against 5 to 10 analyst hours by our estimate.
+- **Measured on three banks it had never seen**, with answer keys frozen before the first run:
+  21 of 28 high-confidence findings were real gaps, every weakened number was found (7 of 7) and
+  every hidden instruction caught (3 of 3). Its blind spot: deleted duties (0 of 4).
 - **Every finding cited to its source**: the RBI sentence beside the policy sentence, cut from
-  the documents by position, with the reference number and three labelled dates.
+  the documents by position, so a citation cannot be invented.
+
+How each number was measured, per bank and with every caveat: [Grid position](#grid-position-f3--d1)
+and [Results](#results-counts).
 
 To try it: open the link, go to the **Change agent** tab and press *Run the agent* (the 29 Dec
 2025 amendment is preselected); then **Gaps** → row 65(10)(iv) → *Source citation*; then
@@ -72,30 +71,41 @@ development bank with synthetic logs. Partial: 4 control-framework understanding
 read from published policy text, not a control library). Not claimed: 13 cross-regulation
 intelligence, 14 contradiction detection.
 
+**Supporting features** (the brief counts them on the same axis):
+
+- *Observability:* every model call is stored with its stage, model, latency and output tokens;
+  each run writes its outputs to a run folder; the change agent shows each step as it runs; every
+  script says which database it is using.
+- *Fault tolerance:* long runs stop at a time budget and resume from the cache; a failed model
+  call is retried, a malformed reply gets one repair, and an unusable answer goes to the review
+  queue rather than being lost; the agent keeps checkpoints and recovers from an injected failure
+  (shown in the demo).
+- *Trainability:* reviewer corrections are stored with the old and new verdict as the record to
+  re-check the judge against; the confidence note's record is fitted from labelled findings; the
+  risk rubric and thresholds are configuration files. No model is fine-tuned.
+
 **D1 (acceptable outputs in a majority of situations)**, on three banks the system had never
 seen, frozen v1 (tag `eval-freeze-2026-10-03`), per output type:
 
 - reported outputs acceptable: high-confidence findings that are real gaps, blind sample,
   after the full-policy check 8 of 9, 9 of 9 and 4 of 10 (21 of 28 overall; 24 of 28 as first
   labelled); hidden
-  instructions caught 3 of 3; decoys left alone 7 of 9 (see note); real findings handled 4 of 4;
+  instructions caught 3 of 3; decoys left alone 7 of 9 (4 of 6 that could be flagged; see note);
+  real findings handled 4 of 4;
 - planted gaps: a majority raised at the right obligation, 11 of 20 (9 of 20 at the exact passage);
 - blind spot, disclosed: deleted duties 0 of 4.
-
-Decoys are scored strictly (at the exact passage). Both pairs, complete: strict, 9 of 20 planted
-against 7 of 9 decoys left alone; location-tolerant (any passage at the right obligation), 11 of
-20 against 6 of 9. Three of the nine decoys (Dhanlaxmi) sit at references where no obligation was
-extracted, so they could not have been flagged under either rule: on the six reachable decoys,
-4 of 6 strict and 3 of 6 location-tolerant
-([details](eval/reports/decoys_location_tolerant.md)).
 
 Not D2: high demonstrable reliability is not shown on omitted duties, and a pre-registered D2
 attempt stopped at its own gate (see Limits).
 
-Note on decoys: the first scoring of the third bank gave 6 of 9. Three code-only steps first ran
-with the development bank's defaults, so its synthetic evidence log flagged a decoy; they were
-re-run with the bank's own setting, as for the other two banks, and no model output changed
-([report](eval/reports/heldout_southindianbank_report.md)).
+Note on decoys: they are scored strictly, at the exact passage, and D1 rests on that rule. Three
+of the nine (all Dhanlaxmi) sit at references where no obligation was extracted, so they could
+not have been flagged: of the six that could, 4 were left alone. For completeness, not as D1
+evidence: under the location-tolerant rule used for 11 of 20, 6 of 9 were left alone (3 of the 6)
+([details](eval/reports/decoys_location_tolerant.md)). The first scoring of the third bank gave
+6 of 9: three code-only steps first ran with the development bank's defaults, so its synthetic
+evidence log flagged a decoy; they were re-run with the bank's own setting, as for the other two
+banks, and no model output changed ([report](eval/reports/heldout_southindianbank_report.md)).
 
 ## Results (counts)
 
@@ -113,8 +123,8 @@ system. Three other banks were each run once, from a clean checkout of the tag
   tier (4 of 7 with the right gap type);
 - hidden instructions in the policy: **3 of 3** caught;
 - real findings in the published policies: **4 of 4** handled correctly;
-- decoys (rewordings and stricter numbers) left alone: **7 of 9** (first scoring 6 of 9, see the
-  note above);
+- decoys (rewordings and stricter numbers) left alone: **7 of 9**, 4 of the 6 that could be
+  flagged (three Dhanlaxmi decoys were unreachable; first scoring 6 of 9; see the note above);
 - change detection against RBI's own amendment markers: **2 of 2** on the KYC Direction and
   **262 of 266** amended clauses on nine other Directions.
 
@@ -128,7 +138,7 @@ system. Three other banks were each run once, from a clean checkout of the tag
 | Planted gaps found at the exact passage | 5 of 7 | 3 of 7 | 2 of 6 | 4 of 7 |
 | ...of which in the high-confidence tier | 3 | 3 | 2 | 2 |
 | Planted gaps found at the right obligation | 6 of 7 | 4 of 7 | 3 of 6 | 4 of 7 |
-| Decoys flagged: high-confidence / review | 0 / 1 of 3 | 1 / 0 of 3 | 0 / 0 of 3 | 0 / 1 of 3 (first scoring 1 / 1) |
+| Decoys flagged: high-confidence / review | 0 / 1 of 3 | 1 / 0 of 3 | 0 / 0 of 3 (all 3 unreachable: no obligation at their references) | 0 / 1 of 3 (first scoring 1 / 1) |
 | Hidden instruction flagged | 1 of 1 | 1 of 1 | 1 of 1 | 1 of 1 |
 | Other reports: high-confidence + review | 17 + 38 | 15 + 36 | 42 + 43 | 12 + 29 |
 | Applicability: obligations excluded | 0 of 458 | 0 of 458 | 0 of 458 | 0 of 458 |
@@ -173,9 +183,9 @@ Read these with two cautions. The wording-comparison rules were written after st
 misses, so they fit it well. And the high-confidence extras are mostly false alarms: of 14
 high-confidence findings that nothing else had settled, the author's check (helped by an AI model,
 with every "gap" label verified against the full policy) found 3 real gaps, 7 false alarms and 4 unclear
-([error analysis](eval/reports/error_analysis_e2e11.md)). Two banks the system
-has never seen are scored once, at the freeze; their answer keys were committed before any model
-read those policies. Those results will be added here.
+([error analysis](eval/reports/error_analysis_e2e11.md)). The three banks the system had never
+seen were each scored once, at the freeze, with answer keys committed before any model read those
+policies (results above).
 
 ## Business impact (measured time, estimated baseline)
 
@@ -303,8 +313,9 @@ rule of this project, and there is no per-event spending cap.
   rows. The system routes such items to review rather than deciding.
 - **Input scope.** One regulation end to end (the RBI KYC Directions, HTML and PDF); published
   bank KYC/AML policies (PDF); text input only. No control libraries, SOPs, RCSA registers or
-  test records. No upload in the hosted app: a new policy runs offline on the local GPU (about
-  1,190 model calls, about 55 minutes on one laptop GPU). A person chooses which policy is checked
+  test records. No upload in the hosted app: a new policy runs offline on the local GPU (on the
+  third bank, 405 new model calls and about 50 model-minutes on one laptop GPU, the regulation
+  side coming from the cache). A person chooses which policy is checked
   against which Direction.
 - **The demo never writes.** The change agent runs dry in the hosted app; the commit step (a new
   version stored beside the old, old rows closed in time) is tested offline, and one commit of the change agent and two reviewer decisions, recorded on a copy of the database (d2, development data), are shown read-only
