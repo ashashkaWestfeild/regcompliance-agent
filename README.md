@@ -23,7 +23,8 @@ minute)
   the documents by position, so a citation cannot be invented.
 
 How each number was measured, per bank and with every caveat: [Grid position](#grid-position-f3--d1)
-and [Results](#results-counts).
+and [Results](#results-counts). Every claimed feature, where to see it in the demo, and what was
+measured: the [evidence matrix](docs/EVIDENCE.md).
 
 To try it: open the link, go to the **Change agent** tab and press *Run the agent* (the 29 Dec
 2025 amendment is preselected); then **Gaps** → row 65(10)(iv) → *Source citation*; then
@@ -56,6 +57,33 @@ both ends keep changing. Today it is spreadsheet work, redone after every amendm
 | Monitor | A new evidence batch is tested against the last result (offline it is saved; the demo tests the October batch in memory); a reviewer confirms, dismisses, resolves or accepts | Code and a person |
 
 The system opens gaps. Only a person closes one or accepts a risk.
+
+**The change agent** (LangGraph; node names as in
+[`src/regcomp/change/agent.py`](src/regcomp/change/agent.py)):
+
+```mermaid
+flowchart TD
+    IN([A new version of the regulation arrives]) --> D
+    D["diff<br/>compare the versions clause by clause,<br/>classify each change"]
+    D -->|nothing changed in substance| NC([no_change: end])
+    D --> SC["scope<br/>obligations, mappings and gaps the change touches"]
+    SC --> G{"gate<br/>over 20% of<br/>mappings?"}
+    G -->|"yes: the run pauses;<br/>a person stops it"| RJ([rejected: end])
+    G -->|"no, a person approves,<br/>or a dry run"| P["plan<br/>re-extract, re-map, advisories"]
+    P -->|nothing to re-analyse, e.g. an advisory| AD([end])
+    P -->|a new duty or a changed number| RX["re_extract<br/>obligations of the changed clauses"]
+    RX --> RM["re_map<br/>retrieve and judge only those"]
+    RM --> C["compare<br/>gaps that would open or close"]
+    C -->|dry run: the what-if| WI([end: projected change, nothing written])
+    C -->|otherwise| CM["commit<br/>new version stored beside the old"]
+    classDef model fill:#F6E7C8,stroke:#8A5A12,color:#14213D
+    class RX,RM model
+```
+
+Shaded nodes call a model; the rest is code. A failed model call in re_extract or re_map is
+tried up to three times in all, and state is checkpointed after every node, so a paused or failed run
+resumes where it stopped. The hosted demo always runs dry. The agent never closes a gap: only a
+reviewer does.
 
 ## Grid position: F3 / D1
 
