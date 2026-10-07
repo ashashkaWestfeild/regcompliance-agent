@@ -237,6 +237,31 @@ assessment; a person still reviews it. One caution: on the December 2025 amendme
 model extracted no obligations from the amended paragraph, so that run is not counted; the hosted
 model extracted three.
 
+Where the 5 to 10 hours go, per circular and per bank policy (our estimate, not measured), and
+what the agent does in each step:
+
+| Step | Analyst (our estimate) | The agent (measured on RBI's two real amendments) |
+|---|---|---|
+| Read the circular, find what changed | 1 to 2 h | compares the versions clause by clause: 1 substantive change in Dec 2025, where a plain line comparison reports 507 |
+| Find the affected obligations and policy clauses | 1 to 2 h | scope: 3 of 458 mappings; the other 455 are left alone |
+| Check each affected policy passage | 2 to 4 h | re-extracts and re-judges only those: 3 obligations in Dec 2025; none in Sep 2026 (a permission, reported as an advisory) |
+| Write the memo: findings, citations, remedies | 1 to 2 h | not done by the agent: its findings arrive cited, and a person reviews them and writes the memo (not timed) |
+
+Cost per bank per amendment, measured in model calls (the hosted demo runs on a free tier, so its
+bill was Rs 0; we have not priced a paid deployment):
+
+- RBI's real amendments: 0 model calls (18 Sep 2026) and 3 (29 Dec 2025), 1.1 s and up to 22 s
+  on the hosted model;
+- worst case, an amendment that re-opens a whole policy: at most what adding a bank policy cost on
+  the third bank, 405 model calls and about 50 model-minutes on one laptop GPU, with the regulation
+  side reused from the cache ([report](eval/reports/heldout_southindianbank_report.md)).
+
+How often: RBI's page for the previous KYC Master Direction (2016) lists 16 update dates between
+29 May 2019 and 14 Aug 2025
+([RBI, Master Directions](https://www.rbi.org.in/Scripts/BS_ViewMasDirections.aspx?id=11566)); the
+2025 Directions that replaced it were amended twice in their first ten months. Each update means
+the steps above again, for every policy that implements the Direction.
+
 ## Data (all public or synthetic)
 
 - **Regulation:** RBI (Commercial Banks – Know Your Customer) Directions, 2025, in three real
