@@ -6,8 +6,10 @@ or hosted (an OpenAI-compatible endpoint, for the deployed app and for judge com
 - Exact-match cache in Postgres (`llm_cache`), keyed on stage, model, messages, schema and
   options. Never a semantic cache: clauses that differ only in "10 days" vs "30 days" must not
   share an answer.
-- Invalid JSON or a schema miss gets one repair retry that tells the model what was wrong;
-  after that the error is raised for the caller to escalate.
+- Every fresh reply is parsed and validated against the stage's JSON schema. Invalid JSON or a
+  schema miss gets one repair retry that tells the model what was wrong; after that the error is
+  raised for the caller to escalate. Only a reply that passes is cached. (Cached replies are
+  returned as stored: on 7 Oct 2026 all 3,130 on live and 3,699 on d2 matched their schemas.)
 """
 
 import contextlib
@@ -18,6 +20,7 @@ import time
 import urllib.error
 import urllib.request
 
+import jsonschema
 import psycopg
 from dotenv import load_dotenv
 from psycopg.types.json import Jsonb
@@ -50,6 +53,21 @@ MAX_RATE_WAIT_S = 120  # a longer wait asked by the provider means a daily cap
 
 class LLMError(RuntimeError):
     pass
+
+
+def _check(content: str, schema: dict) -> tuple[object, str | None]:
+    """(parsed reply, None) when the reply is JSON that matches the schema, else (None, what is
+    wrong, for the repair message)."""
+    try:
+        parsed = json.loads(content)
+    except json.JSONDecodeError as e:
+        return None, f"That was not valid JSON for the schema ({e})."
+    try:
+        jsonschema.validate(parsed, schema)
+    except jsonschema.ValidationError as e:
+        where = "/".join(str(x) for x in e.absolute_path) or "the top level"
+        return None, f"That JSON does not match the schema at {where}: {e.message[:200]}."
+    return parsed, None
 
 
 def _cache_key(payload: dict) -> str:
@@ -191,22 +209,16 @@ def complete_json(
             return row[0]
         started = time.time()
         content, tokens = _chat(model, messages, schema, think)
-        try:
-            parsed = json.loads(content)
-        except json.JSONDecodeError as first_error:
+        parsed, problem = _check(content, schema)
+        if problem:
             repair = messages + [
                 {"role": "assistant", "content": content},
-                {
-                    "role": "user",
-                    "content": f"That was not valid JSON for the schema "
-                    f"({first_error}). Return only the corrected JSON.",
-                },
+                {"role": "user", "content": f"{problem} Return only the corrected JSON."},
             ]
             content, tokens = _chat(model, repair, schema, think)
-            try:
-                parsed = json.loads(content)
-            except json.JSONDecodeError as e:
-                raise LLMError(f"{stage}: invalid JSON after one repair: {e}") from None
+            parsed, problem = _check(content, schema)
+            if problem:
+                raise LLMError(f"{stage}: still wrong after one repair: {problem}")
         _cache(
             "INSERT INTO llm_cache (key, stage, model, request, response, latency_ms, eval_tokens)"
             " VALUES (%s, %s, %s, %s, %s, %s, %s) ON CONFLICT (key) DO NOTHING",

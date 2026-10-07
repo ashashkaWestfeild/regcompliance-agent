@@ -2299,6 +2299,7 @@ source = { editable = "." }
 dependencies = [
     { name = "beautifulsoup4" },
     { name = "flashrank" },
+    { name = "jsonschema" },
     { name = "langgraph" },
     { name = "langgraph-checkpoint-postgres" },
     { name = "lxml" },
@@ -2326,6 +2327,7 @@ requires-dist = [
     { name = "beautifulsoup4", specifier = ">=4.15.0" },
     { name = "docling", marker = "extra == 'pdf'", specifier = ">=2.130.0" },
     { name = "flashrank", specifier = ">=0.2.10" },
+    { name = "jsonschema", specifier = ">=4.26.0" },
     { name = "langgraph", specifier = ">=1.2.12" },
     { name = "langgraph-checkpoint-postgres", specifier = ">=3.1.2" },
     { name = "lxml", specifier = ">=6.1.3" },
