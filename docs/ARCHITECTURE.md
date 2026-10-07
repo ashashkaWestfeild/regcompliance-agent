@@ -492,6 +492,27 @@ gap itself, and a person confirms, dismisses or accepts every finding with a nam
   and flagged nothing else, a best case since its rules were written on those keys
   ([report](../eval/reports/policy_conflicts_dev.md)). Next: conflicts in wording (planted S04),
   then between regulations.
+- From the project review (7 Oct 2026), on the roadmap:
+  - **What the evaluation measures.** The planted gaps are edits of known types written for this
+    project, so the keys measure sensitivity to those changes, not recall on real-world gaps; the
+    blind precision samples and the 4 known real findings are the closest real-world evidence.
+  - **Labels.** The precision sheets were labelled by one person (the author, with an AI model
+    helping to word the reasons) and checked by the assistant that built the system, under one
+    written test; there is no second labeller, so no agreement figure.
+  - **Live demo against the evaluated setup.** The hosted change agent re-extracts and judges with
+    gpt-oss-120b; every keyed number comes from local qwen3:8b. The demo shows the mechanism, the
+    evaluation shows the numbers; the hosted model's judging is not scored against a key.
+  - **Deleted duties (0 of 4) are a design gap.** Mapping each obligation to its best passage
+    finds a related passage even when the duty itself was deleted, so the judge says "covered".
+    The fix is an obligation-side check that each element of the duty is present, not a bigger
+    model (the 7 Oct probe on the `d2` branch points the same way).
+  - **Model pinning.** An Ollama tag can change upstream while the cache key stays the same; the
+    evaluated digests are recorded in §5, and a pipeline run should check them before it starts.
+  - **Hidden-instruction scan.** Six English rules, 3 of 3 on three planted sentences. It is the
+    second line of defence; the first is structural (no visitor text reaches a model in the
+    hosted app, replies are held to a schema, and code decides).
+  - **Least-privilege database role.** The hosted app should connect with a role that can read,
+    write the model cache and record review decisions, and nothing else.
 - Next: a bank profile built from independent facts (licences, product lists) instead of the policy's own text, so that applicability can exclude; a design check for owners the regulation itself names; a wider comparison for reworded
   sentences; more than one development bank.
 
