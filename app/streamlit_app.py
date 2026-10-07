@@ -30,6 +30,7 @@ except Exception:  # no secrets file on a local run
 os.environ.setdefault("REGCOMP_ALLOW_UNLABELLED", "1")
 
 from regcomp import applicability as appl  # noqa: E402
+from regcomp import display  # noqa: E402
 from regcomp.citation import (  # noqa: E402
     DOC_FIELDS,
     day,
@@ -269,10 +270,7 @@ def gap_detail(g: dict) -> None:
     source_block(g["ref"], g["policy_ref"])
     st.markdown(f"**Why it was raised:** {readable(g['why'])}")
     if ev.get("kind") in COMPARISON:
-        note = COMPARISON[ev["kind"]] + (f": {ev['detail']}" if ev.get("detail") else "")
-        st.markdown(
-            f"**Text comparison:** {note}" + (f" ({ev['reason']})" if ev.get("reason") else "")
-        )
+        st.markdown(f"**Text comparison:** {display.comparison_note(ev, COMPARISON)}")
         if compared and g["policy_text"] and compared[:60] not in g["policy_text"]:
             st.caption(f"Compared with: {compared[:400]}")
     if ev.get("check") == "level":
@@ -684,8 +682,9 @@ def version_history() -> None:
     e = h["event"]
     st.write(
         f"Change event `{e['id'][:8]}`: version `{e['old_version']}` → `{e['new_version']}`, "
-        f"received {e['received_at'][:16]} UTC, gap delta {e['projected_gap_delta']:+d}."
+        f"received {e['received_at'][:16]} UTC, projected gap delta {e['projected_gap_delta']:+d}."
     )
+    st.caption(display.gap_delta_line(e["projected_gap_delta"]))
     for d in h["clause_diff"]:
         with st.expander(f"Clause {d['clause_ref']}: {d['change_class']}", expanded=False):
             st.caption(d["summary"])
@@ -756,6 +755,11 @@ def source_label(kind: str, also: str = "") -> None:
 
 def evaluation_page() -> None:
     st.subheader("How well does it work?")
+    precision = ROOT / "eval" / "reports" / "heldout_precision" / "summary.json"
+    if precision.exists():
+        headline = display.precision_headline(json.loads(precision.read_text(encoding="utf-8")))
+        if headline:
+            st.success(headline)
     path = ROOT / "eval" / "reports" / "scorecard_nainital.json"
     if not path.exists():
         st.write("No scorecard has been published yet.")
@@ -766,7 +770,7 @@ def evaluation_page() -> None:
         f"{card['scored_at']}. Known gaps were planted in a public bank policy before any run, "
         "with decoys that must not be flagged. Counts, never percentages: the sets are small."
     )
-    for line in card["summary"]:
+    for line in display.shown_summary(card["summary"]):
         st.write("•", line)
     st.dataframe(card["planted"], use_container_width=True, hide_index=True)
     st.warning(
@@ -796,7 +800,7 @@ def evaluation_page() -> None:
             for line in hc["summary"][:5]:
                 col.write("• " + line)
             if hc.get("procedure_note"):
-                col.caption("Note: " + hc["procedure_note"])
+                col.caption("Note: " + display.procedure_note(hc["procedure_note"]))
     if card.get("applicability"):
         st.markdown("**Applicability (bank profile)**")
         for line in card["applicability"]:

@@ -262,7 +262,7 @@ Prerequisites: Python 3.13 and [uv](https://docs.astral.sh/uv/); Docker for a lo
 ```bash
 uv sync                         # core
 uv sync --extra pdf             # adds Docling for PDF parsing (large)
-uv run pytest                   # 152 tests, no database needed
+uv run pytest                   # 159 tests, no database needed
 cp .env.example .env            # already points at the compose database below
 docker compose up -d            # Postgres 18 + pgvector; db/schema.sql loads on first start
 uv run python scripts/db_init.py  # applies the migrations (safe to re-run)
