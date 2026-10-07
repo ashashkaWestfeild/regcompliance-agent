@@ -2,7 +2,7 @@
 
 One row per claimed feature of Problem 1: where the demo shows it, where the architecture
 document explains it, and what was measured. Counts only. "Unseen" means the three held-out banks,
-each run once from the tag `eval-freeze-2026-10-03`; "dev" means the development bank the system
+each run once from the tag `eval-freeze-2026-10-03` (local models `qwen3:8b` digest `500a1f067a9f`, `bge-m3` `790764642607`); "dev" means the development bank the system
 was built on. Demo times refer to the video script and are confirmed after recording.
 
 **Claim: F3 / D1**, against the brief's definitions (full statement: README, "Grid position").

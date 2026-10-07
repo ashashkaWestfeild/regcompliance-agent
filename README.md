@@ -82,6 +82,10 @@ seen, frozen v1 (tag `eval-freeze-2026-10-03`), per output type:
 - planted gaps: a majority raised at the right obligation, 11 of 20 (9 of 20 at the exact passage);
 - blind spot, disclosed: deleted duties 0 of 4.
 
+Decoys are scored strictly (at the exact passage). Under the location-tolerant rule used for 11 of
+20, decoy near hits were not recorded; the strict pair is 9 of 20 planted against 7 of 9 decoys
+left alone.
+
 Not D2: high demonstrable reliability is not shown on omitted duties, and a pre-registered D2
 attempt stopped at its own gate (see Limits).
 

@@ -178,7 +178,10 @@ the control's previous result (newly failing, still failing, recovered, healthy)
 ## 5. Models
 
 Every stage, the model it uses and what code decides. The evaluated runs (development bank and the
-three held-out banks) used the offline column only.
+three held-out banks) used the offline column only, with these local model builds (Ollama digests;
+pulled 27 Sep 2026, unchanged through the runs): `qwen3:8b` `500a1f067a9f`, `bge-m3`
+`790764642607`. An Ollama tag can change upstream while the cache key stays the same, so the digest
+is the record of which weights produced the numbers.
 
 | Stage | Model, offline (evaluated runs) | Model, hosted demo | What code decides |
 |---|---|---|---|
