@@ -96,6 +96,15 @@ tried up to three times in all, and state is checkpointed after every node, so a
 resumes where it stopped. The hosted demo always runs dry. The agent never closes a gap: only a
 reviewer does.
 
+**What the agent decides on its own:** whether anything changed in substance, and the class of
+each change; the scope and blast radius; the path (an advisory, or re-extract and re-map);
+pausing for a person when a change would re-open more than 20% of mappings; retrying a failed
+step and resuming from its checkpoint; and routing an unclear answer to the review queue.
+
+**What it never decides:** whether a gap is real (a person confirms or dismisses it) and closing
+a gap. A person starts each run; an RBI watcher that starts it when a circular is published is
+on the roadmap.
+
 ## Grid position: F3 / D1
 
 Measured against the brief's own definitions.

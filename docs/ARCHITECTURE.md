@@ -518,6 +518,8 @@ gap itself, and a person confirms, dismisses or accepts every finding with a nam
     write the model cache and record review decisions, and nothing else.
 - Cosmetic, left as is for the submission (no redeploy): the change agent's scope log reads "1 open
   gaps" when one gap is in scope.
+- A person starts each change-agent run. Next: an RBI watcher that starts it when a new circular
+  is published.
 - Next: a bank profile built from independent facts (licences, product lists) instead of the policy's own text, so that applicability can exclude; a design check for owners the regulation itself names; a wider comparison for reworded
   sentences; more than one development bank.
 
