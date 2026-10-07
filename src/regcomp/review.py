@@ -35,7 +35,9 @@ def decide(conn, gap_id: str, decision: str, reviewer: str, reason: str) -> dict
         row = conn.execute(
             "SELECT g.status::text, g.tier, g.mapping_id, m.verdict::text, m.control_id,"
             " g.control_id, coalesce(g.evidence, '{}'::jsonb) FROM gap g"
-            " LEFT JOIN mapping m ON m.id = g.mapping_id WHERE g.id = %s",
+            " LEFT JOIN mapping m ON m.id = g.mapping_id WHERE g.id = %s"
+            # lock the gap row: two reviewers deciding at once cannot both see it open
+            " FOR UPDATE OF g",
             (gap_id,),
         ).fetchone()
         if row is None:

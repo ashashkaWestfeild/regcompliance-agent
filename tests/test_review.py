@@ -29,3 +29,28 @@ def test_reviewer_code_check():
     assert not code_matches("", "s3cret-code")
     assert not code_matches("anything", "")  # no code configured: always a simulation
     assert not code_matches("", "")
+
+
+class _Conn:
+    """Records statements; the gap is open, with no mapping."""
+
+    def __init__(self):
+        self.sql = []
+
+    def transaction(self):
+        import contextlib
+
+        return contextlib.nullcontext()
+
+    def execute(self, sql, params=None):
+        self.sql.append(sql)
+        row = ("open", "review", None, None, None, None, {})
+        return type("C", (), {"fetchone": lambda _self: row})()
+
+
+def test_a_decision_locks_the_gap_row_before_reading_its_status():
+    conn = _Conn()
+    out = decide(conn, "g1", "confirm", "A. Reviewer", "planted gap")
+    assert "FOR UPDATE OF g" in conn.sql[0]  # read and lock in one statement
+    assert conn.sql[1].startswith("UPDATE gap SET status")
+    assert out["status"] == "open -> open" and out["tier"] == "review -> high"

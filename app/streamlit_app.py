@@ -25,6 +25,9 @@ try:  # on Streamlit Cloud the settings come from the app's secrets; locally fro
             os.environ[name] = str(st.secrets[name])
 except Exception:  # no secrets file on a local run
     pass
+# The database guard keeps unlabelled hosts read-only; the hosted app's host has no label and the
+# app writes its model-call cache, so it opts in. Labelled live stays read-only on local runs.
+os.environ.setdefault("REGCOMP_ALLOW_UNLABELLED", "1")
 
 from regcomp import applicability as appl  # noqa: E402
 from regcomp.citation import (  # noqa: E402
@@ -40,8 +43,9 @@ from regcomp.confidence import note as confidence_note  # noqa: E402
 from regcomp.db import connect  # noqa: E402
 from regcomp.llm import model_for  # noqa: E402
 from regcomp.monitor import preview_batch  # noqa: E402
+from regcomp.record_decision import record  # noqa: E402
 from regcomp.remediation import readable  # noqa: E402
-from regcomp.review import DECISIONS, decide  # noqa: E402
+from regcomp.review import DECISIONS  # noqa: E402
 from regcomp.reviewer_code import code_matches  # noqa: E402
 from regcomp.risk import assess  # noqa: E402
 from regcomp.sources import document_fields, regulation_meta_for_file  # noqa: E402
@@ -356,20 +360,17 @@ def review_form(g: dict) -> None:
     if code and not real:
         st.session_state["code_failures"] = failed + 1
     conn = connect()
-    try:
-        out = decide(conn, g["id"], decision, reviewer, reason)
+    try:  # record() keeps the decision only when real; a simulation is rolled back as a whole
+        out = record(conn, g["id"], decision, reviewer, reason, save=real)
         if real:
-            conn.commit()
             st.cache_data.clear()
             st.success("Recorded: " + ", ".join(f"{k} {v}" for k, v in out.items() if v))
         else:
-            conn.rollback()
             st.info(
                 "Simulation only, nothing was saved. It would record: "
                 + ", ".join(f"{k} {v}" for k, v in out.items() if v)
             )
     except ValueError as e:
-        conn.rollback()
         st.error(str(e))
     finally:
         conn.close()
