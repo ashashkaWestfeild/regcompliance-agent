@@ -30,6 +30,16 @@ To try it: open the link, go to the **Change agent** tab and press *Run the agen
 2025 amendment is preselected); then **Gaps** → row 65(10)(iv) → *Source citation*; then
 **Evaluation** → *Banks the system had never seen*.
 
+![A finding for RBI paragraph 65(10)(iv): the RBI sentence beside the bank's policy passage 42(iv), with the source citation open: document, paragraph, RBI reference, first issued, version in force, the amendment date, links, and a warning that the policy's own date is earlier than the amendment](docs/img/gap_citation.png)
+
+*A finding with its source: RBI 65(10)(iv) beside the policy passage, three labelled dates, and a
+warning that the policy predates the amendment.*
+
+![The change agent's dry run on RBI's 29 December 2025 amendment in the hosted app: diff, classify, scope (3 of 458 mappings), plan, re_extract, re_map and compare, ending with 3 gaps that would open, 1 that would close and 1 that needs review](docs/img/change_agent.png)
+
+*The change agent on RBI's 29 Dec 2025 amendment (hosted app, dry run): 3 of 458 mappings
+re-checked; 3 gaps would open, 1 would close, 1 goes to a person for review.*
+
 ## The problem
 
 Regulations → obligations → applicability → internal policies and controls → evidence → testing →
