@@ -167,8 +167,9 @@ def overview() -> None:
         "**Start here: three clicks, about two minutes**\n\n"
         "1. **Change agent** tab: choose *Real amendment, 29 Dec 2025* and press *Run the agent*. "
         "In about 15 seconds from the cache (under half a minute on a first run) it re-checks "
-        "only the amended paragraph and reports the gaps that would open and close (5 to 10 "
-        "analyst hours by our own estimate). Adding `?scenario=3` "
+        "only the amended paragraph and reports the gaps that would open and close (against 4 to "
+        "8 analyst hours for the same three steps, our estimate; a person still reviews the "
+        "findings and writes the memo). Adding `?scenario=3` "
         "to the address preselects it.\n"
         "2. **Gaps** tab: select the row **65(10)(iv)**, then *Source citation*: the RBI sentence "
         "beside the policy sentence, three labelled dates, and a warning that the policy "
@@ -743,7 +744,12 @@ def review_trail() -> None:
 
 SOURCE = {
     "offline": "results computed offline (local qwen3:8b, one laptop GPU), read from the database",
-    "live": "live: runs now, with the hosted model (gpt-oss-120b) for re-extraction and judging",
+    "live": (
+        "live: the agent's graph, diff, scope and comparison run now; for these fixed "
+        "scenarios the model's answers (re-extraction and judging, gpt-oss-120b) come from the "
+        "cache, because the same prompt gives the same stored answer; a prompt not yet in the "
+        "cache calls the hosted model"
+    ),
     "code": "live: computed now by code from stored results (no model)",
 }
 
