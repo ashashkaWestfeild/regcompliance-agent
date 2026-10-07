@@ -15,7 +15,8 @@ minute)
 
 - **An RBI amendment re-checked in seconds, not hours.** On RBI's real 29 Dec 2025 amendment the
   agent re-checks only the amended paragraph (3 of 458 mappings) and reports the gaps it would
-  open and close: 1 to 22 seconds per circular, against 5 to 10 analyst hours by our estimate.
+  open and close: 1 to 22 seconds, against 4 to 8 analyst hours for the same three steps (our
+  estimate); a person still reviews the findings and writes the memo.
 - **Measured on three banks it had never seen**, with answer keys frozen before the first run:
   weakened numbers found 7 of 7; hidden instructions caught 3 of 3; decoys left alone 7 of 9;
   high-confidence findings real 21 of 28 (Central Bank 8 of 9, Dhanlaxmi 9 of 9, South Indian
@@ -231,14 +232,15 @@ Change agent, dry run, per circular, first run included
 ([timing](eval/reports/change_agent_timing.json)): with the hosted open-weights model (what the
 demo uses) 1.1 to 22 s; with local qwen3:8b on one laptop GPU (RTX 4060) 1.7 to 81 s. The low end
 is a permissive amendment, which needs no model call; the high end is a circular with one new duty
-on a first, uncached run (17 s locally once cached). Baseline: 5 to 10 analyst hours per
-circular, the author's own estimate, not a measurement. The agent produces a scoped draft
-assessment; a person still reviews it. One caution: on the December 2025 amendment the local 8B
+on a first, uncached run (17 s locally once cached). Baseline: 4 to 8 analyst hours for the
+same three steps (our estimate, not a measurement; table below); a person still reviews the
+findings and writes the memo. One caution: on the December 2025 amendment the local 8B
 model extracted no obligations from the amended paragraph, so that run is not counted; the hosted
 model extracted three.
 
-Where the 5 to 10 hours go, per circular and per bank policy (our estimate, not measured), and
-what the agent does in each step:
+Where an analyst's time goes, per circular and per bank policy (our estimate, not measured), and
+what the agent does in each step. The agent does the first three, 4 to 8 hours in all; the memo
+stays with a person:
 
 | Step | Analyst (our estimate) | The agent (measured on RBI's two real amendments) |
 |---|---|---|
@@ -247,14 +249,12 @@ what the agent does in each step:
 | Check each affected policy passage | 2 to 4 h | re-extracts and re-judges only those: 3 obligations in Dec 2025; none in Sep 2026 (a permission, reported as an advisory) |
 | Write the memo: findings, citations, remedies | 1 to 2 h | not done by the agent: its findings arrive cited, and a person reviews them and writes the memo (not timed) |
 
-Cost per bank per amendment, measured in model calls (the hosted demo runs on a free tier, so its
-bill was Rs 0; we have not priced a paid deployment):
-
-- RBI's real amendments: 0 model calls (18 Sep 2026) and 3 (29 Dec 2025), 1.1 s and up to 22 s
-  on the hosted model;
-- worst case, an amendment that re-opens a whole policy: at most what adding a bank policy cost on
-  the third bank, 405 model calls and about 50 model-minutes on one laptop GPU, with the regulation
-  side reused from the cache ([report](eval/reports/heldout_southindianbank_report.md)).
+Cost per bank per amendment. Measured: RBI's two real amendments took 0 and 3 model calls. For
+scale, adding a whole new bank policy took 405 calls (about 50 model-minutes on one laptop GPU),
+with the regulation side reused from the cache
+([report](eval/reports/heldout_southindianbank_report.md)). An amendment that rewrote most of the
+Direction would also need the regulation side re-extracted; we have not measured that case. The
+hosted demo runs on a free tier, so its bill was Rs 0; we have not priced a paid deployment.
 
 How often: RBI's page for the previous KYC Master Direction (2016) lists 16 update dates between
 29 May 2019 and 14 Aug 2025
