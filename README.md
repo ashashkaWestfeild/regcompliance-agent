@@ -419,9 +419,7 @@ system itself runs on open-weights models.
 ## Acknowledgements
 
 Some patterns (Docling parsing, retry with fallback, LangGraph Postgres checkpointing) were
-informed by the public "8-hour marathon" RAG sessions and their repositories
-([d-hackmt/8hr-MARATHON](https://github.com/d-hackmt/8hr-MARATHON),
-[sourangshupal/8hr-MARATHON](https://github.com/sourangshupal/8hr-MARATHON)). No code was copied.
+informed by the Krish Naik YouTube channel. No code was copied.
 
 ## Licence
 
