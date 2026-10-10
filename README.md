@@ -78,6 +78,8 @@ both ends keep changing. Today it is spreadsheet work, redone after every amendm
 
 The system opens gaps. Only a person closes one or accepts a risk.
 
+Lineage, table by table: [data model](docs/img/data_model_detailed.png).
+
 **The change agent** (LangGraph; node names as in
 [`src/regcomp/change/agent.py`](src/regcomp/change/agent.py)):
 

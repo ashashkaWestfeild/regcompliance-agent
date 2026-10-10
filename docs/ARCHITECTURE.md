@@ -105,6 +105,9 @@ erDiagram
   CHANGE_EVENT ||--o{ GAP : detected
 ```
 
+Detailed lineage, every table, key column and relation, checked against `db/schema.sql` and the
+migrations: [docs/img/data_model_detailed.png](img/data_model_detailed.png).
+
 Versioned rows (`effective_from`/`effective_to`, `recorded_at`/`superseded_at`): clause, obligation,
 control, mapping, gap. A change adds rows and closes the old ones; nothing is deleted. Beside these:
 `embedding` (vectors for any row, 1,024 dimensions), `llm_cache` (every model call, exact-match),
