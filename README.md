@@ -409,12 +409,26 @@ More detail: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md),
 
 ## AI assistance disclosure
 
-Most of the code was written with **Claude Code** (Anthropic) as a coding assistant, under the
-author's direction; the author made the scope, data and evaluation decisions and reviewed the
-planted-gap answer keys. The 50-pair check sheet was labelled blind by two AI models (Claude and
-Gemini) and the author decided the disputed rows. On the later high-confidence and held-out
-precision sheets the author decided the labels, with Gemini helping to write the reasons. The
-system itself runs on open-weights models.
+The project was built with the help of **Claude Code** (Anthropic), an AI coding assistant. The
+author ran the project as its manager and reviewer:
+
+- **Direction and planning:** chose the problem, the scope and the grid claim; set the plan,
+  the daily priorities and the feature freeze; decided what was cut.
+- **Review:** reviewed every change, figure and document before it was published, and sent work
+  back when it was wrong or overstated: a figure missing its qualifier, diagram labels that did
+  not match the code, a demo narration that did not match the hosted app, a time comparison
+  that was not like for like. Ran two independent reviews of the whole project and decided which
+  findings to act on.
+- **Methods:** set the evaluation and safety rules: answer keys frozen in git before any run;
+  unseen banks run once from a tagged commit; counts, not percentages; the three-part test for
+  precision; the strict decoy rule for D1; a result-lock check and a read-only test against the
+  live database before every push; only public or synthetic data reaches a model.
+- **Ground truth:** reviewed and approved each planted-gap answer key before it was frozen;
+  decided the disputed rows of the 50-pair check sheet (labelled blind by Claude and Gemini);
+  decided every label on the high-confidence and held-out precision sheets, with Gemini helping
+  to write the reasons.
+
+The system itself runs on open-weights models.
 
 ## Acknowledgements
 
