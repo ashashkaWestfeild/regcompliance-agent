@@ -28,6 +28,14 @@ minute)
 Every caveat behind these numbers, one click away: [caveats](docs/EVIDENCE.md#caveats-behind-the-headline-numbers). Every claimed feature,
 where to see it in the demo, and what was measured: the [evidence matrix](docs/EVIDENCE.md).
 
+**System at a glance**
+
+![Sketch of the system: the RBI Direction and the bank's KYC policy are parsed into clause trees; a model extracts obligations and controls; a citation gate rejects and counts any quote not found in the source; candidate search (bge-m3 embeddings, or shared wording in the hosted demo) feeds a model judge; code applies gap rules and the wording comparison, with evidence tests against tolerance; findings split into a high-confidence tier (risk ranking from a rubric, then a remediation draft whose fidelity code checks) and a review queue where a person decides; a LangGraph change agent re-maps only what a new amendment touches and runs dry in the demo; the Streamlit app and Neon Postgres with versioned rows. Legend: model proposes, code decides, gate, agent, person.](docs/img/system_at_a_glance.png)
+
+*A model proposes (orange), code decides (blue), the citation gate stores nothing it cannot find in
+the source (red), only a person closes a finding (green); the hosted demo searches by shared
+wording and runs the agent dry.*
+
 To try it: open the link, go to the **Change agent** tab and press *Run the agent* (the 29 Dec
 2025 amendment is preselected); then **Gaps** → row 65(10)(iv) → *Source citation*; then
 **Evaluation** → *Banks the system had never seen*.

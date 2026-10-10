@@ -2,7 +2,8 @@
 
 RegCompliance Agent checks a bank's KYC policy against an RBI Direction and keeps that check
 current when the Direction is amended. This document describes how it is built, what decides
-what, how it is evaluated, and where it falls short.
+what, how it is evaluated, and where it falls short. The whole system in one picture:
+[system at a glance](img/system_at_a_glance.png).
 
 ## 1. Principle: the model reads, code decides
 
@@ -33,7 +34,7 @@ flowchart LR
   P2 --> PS[Every policy passage<br/>code]
   E1 --> L[Obligation level<br/>model + rule]
   L --> AP[Applicability<br/>bank profile, code]
-  E2 --> RT[Candidate search<br/>bge-m3 + pgvector]
+  E2 --> RT[Candidate search<br/>bge-m3 + pgvector<br/>hosted demo: shared wording]
   PS --> RT
   E1 --> RT
   RT --> J[Judge<br/>model] --> G[Gap rules<br/>code]
@@ -147,21 +148,26 @@ The comparison sorts findings; it never deletes one.
 The one agentic component (LangGraph). A new version of the regulation arrives:
 
 ```mermaid
-flowchart LR
-  A[diff<br/>clause by clause] --> B{anything changed<br/>in substance?}
-  B -- no --> Z[done]
-  B -- yes --> C[classify<br/>advisory / new duty / number / relaxed / repealed]
-  C --> D[scope<br/>obligations, mappings, gaps touched]
-  D --> E{more than 20%<br/>of mappings?}
-  E -- yes --> W[pause for a person] --> F
-  E -- no --> F[plan]
-  F --> G[re-extract<br/>changed clauses]
-  G --> H[re-map<br/>only what is in scope]
-  H --> I[compare<br/>gaps that open or close]
-  I --> J{dry run?}
-  J -- yes --> Z2[report only<br/>what-if]
-  J -- no --> K[commit<br/>new version beside the old]
+flowchart TD
+    IN([A new version of the regulation arrives]) --> D
+    D["diff<br/>compare the versions clause by clause,<br/>classify each change"]
+    D -->|nothing changed in substance| NC([no_change: end])
+    D --> SC["scope<br/>obligations, mappings and gaps the change touches"]
+    SC --> G{"gate<br/>over 20% of<br/>mappings?"}
+    G -->|"over 20%: pauses;<br/>the person says no"| RJ([rejected: end])
+    G -->|"under 20%, a dry run,<br/>or the person says yes"| P["plan<br/>re-extract, re-map, advisories"]
+    P -->|nothing to re-analyse, e.g. an advisory| AD([end])
+    P -->|a new duty or a changed number| RX["re_extract<br/>obligations of the changed clauses"]
+    RX --> RM["re_map<br/>retrieve and judge only those"]
+    RM --> C["compare<br/>gaps that would open or close"]
+    C -->|dry run: the what-if| WI([end: projected change, nothing written])
+    C -->|otherwise| CM["commit<br/>new version stored beside the old"]
+    classDef model fill:#F6E7C8,stroke:#8A5A12,color:#14213D
+    class RX,RM model
 ```
+
+Node names as in [`src/regcomp/change/agent.py`](../src/regcomp/change/agent.py); the shaded
+steps call a model (three tries each). Same diagram as the README.
 
 - **An added option is an advisory, not a gap.** The 18 Sep 2026 amendment lets banks use a
   certified-copy route for one more customer type; it is permissive ("may"). The agent reports
@@ -402,6 +408,22 @@ and 6 are not adjudicated. The table is fitted on the development bank only and 
 held-out runs, which are then reported against it.
 
 ### Integrity disclosures
+
+```mermaid
+flowchart LR
+  SPEC["Hand-written find/replace edits<br/>planted gaps, decoys, injections"] --> MUT["mutate.py<br/>deterministic, exact-once finds"]
+  MUT --> COV["coverage_check.py<br/>no other passage still<br/>satisfies the duty"]
+  COV --> REV{"Author review<br/>realistic? redundant?"}
+  REV -- changes --> SPEC
+  REV -- approved --> FRZ["Keys frozen in git before any<br/>model read the policy:<br/>350b8e0, da58e66, c556c42"]
+  FRZ --> DEV["Development bank<br/>tune here"]
+  FRZ --> TAG["Tag eval-freeze-2026-10-03<br/>each unseen bank run once<br/>from a clean checkout"]
+  DEV --> SC["score.py<br/>counts per row type,<br/>strict decoy rule"]
+  TAG --> SC
+  SC --> BL["Blind samples of high-confidence<br/>findings, labelled by the author"]
+  BL --> PT["Three-part test against<br/>the full policy"]
+  SC --> LK["Result lock<br/>checked after every change"]
+```
 
 - **Same toolchain.** The answer keys were authored with the same AI coding assistant that helped
   build the system. Mitigations: edits are hand-written and applied by a script; every item was
