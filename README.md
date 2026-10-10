@@ -419,7 +419,7 @@ system itself runs on open-weights models.
 ## Acknowledgements
 
 Some patterns (Docling parsing, retry with fallback, LangGraph Postgres checkpointing) were
-informed by the Krish Naik YouTube channel. No code was copied.
+informed by the Krish Naik YouTube channel.
 
 ## Licence
 
